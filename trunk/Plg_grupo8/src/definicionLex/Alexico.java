@@ -1,31 +1,28 @@
 package definicionLex;
 
 import java.io.BufferedReader;
-
-
 import java.io.FileReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.JOptionPane;
-
 
 
 public class Alexico {
 	
-	
-
 	private BufferedReader br;
-	private String[] identificadores;
+	private elemTS[] tablaSimbolos;
 	private int contErrores;
+	
 	
 	public void leerArchivo() {
 		try {
 		
+	  tablaSimbolos= new elemTS[10];
+	 
 	   br = new BufferedReader(new FileReader("datos.txt"));
 	   String line = null;
  	   int i=0; 	
- 	
+ 	   
 		while((line=br.readLine())!=null){
 			
 			//Comprobamos la Cabecera
@@ -35,7 +32,9 @@ public class Alexico {
 		}
 		br.close();	
 		br = new BufferedReader(new FileReader("datos.txt"));
-	    System.out.println("Programa de entrada: ");
+	  
+		
+		System.out.println("Programa de entrada: ");
 	 	while((line=br.readLine())!=null){
 				i++;
 				
@@ -128,17 +127,18 @@ public class Alexico {
 		}
 		
 		//Comprobamos las Declaraciones
-		
-		
+	
 		String line=br.readLine();
 		String[] token = null;
-		
-		while(identificadorValido(line)){
 		token = line.split(" ");
-	    compruebaDeclaraciones(token);
+		int i=0;//Variable que nos indica la posición en la TS
+
+		while(inicioDeclaraciones(token[0])){
+	    compruebaDeclaraciones(token,i);
 	    line=br.readLine();
+	    token = line.split(" ");
+	    i++;
 		}
-		token = line.split(" ");
 		compruebaFinalSecDec(token);
 		}
 		 catch (Exception e) {
@@ -147,11 +147,42 @@ public class Alexico {
 		
 	}
 	
-	private void compruebaDeclaraciones(String[] token) {
+
+	private void compruebaDeclaraciones(String[] token,int i) {
 		
-		if(!token[0].equals("varconst")){
+		// SI ES VARIABLE....
+		if(token[0].equals("var")){
+			
+		if(!token[1].equals("float")){
 			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion Decl", "alert", JOptionPane.ERROR_MESSAGE);
+						}
+		if(!esFinalDecl(token[3])){
+			JOptionPane.showMessageDialog(null, "Error en el final de la declaración ", "alert", JOptionPane.ERROR_MESSAGE);
 		}
+		tablaSimbolos[i]=new elemTS(token[2], token[1], 0, 1);		
+		}
+		
+		// SI ES CONSTANTE....
+		else if(token[0].equals("const")){
+			
+		if(!token[1].equals("float")){
+			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion Decl", "alert", JOptionPane.ERROR_MESSAGE);
+							}
+		if(!esAsigDecl(token[3])){
+			JOptionPane.showMessageDialog(null, "Error en := de la declaración ", "alert", JOptionPane.ERROR_MESSAGE);
+			}
+		
+		if(!esFinalDecl(token[5])){
+			JOptionPane.showMessageDialog(null, "Error en el final de la declaración (;) ", "alert", JOptionPane.ERROR_MESSAGE);
+			}
+			
+		tablaSimbolos[i]=new elemTS(token[2], token[1], 1, 1);	
+		}
+		else{JOptionPane.showMessageDialog(null, "Error en la declaración ", "alert", JOptionPane.ERROR_MESSAGE);}
+		
+		
+		
+		
 		
 	}
 
@@ -220,12 +251,19 @@ public class Alexico {
 		}
 	}
 
-	////////////////////Creación TABLA DE SIMBOLOS////////////////////
+	//////////////////// TABLA DE SIMBOLOS////////////////////
 	
 
 private void mostrarTS() {
 		
+
+	System.out.println("TABLA DE SÍMBOLOS");
 	
+	for ( int i = 0 ; i < tablaSimbolos.length ; i++ ){
+		if(tablaSimbolos[i]!=null){
+		System.out.println(tablaSimbolos[i].toString());
+		}
+	}
 		
 	}
 
@@ -250,6 +288,18 @@ private void mostrarTS() {
 			return false;
 			}
 	}
+	
+
+	private boolean esFinalDecl(String string) {
+		Pattern  p = Pattern.compile("[;]");
+		Matcher m = p.matcher(string);
+		if( m.find()){
+			return true;
+			}else{
+			return false;
+			}
+	}
+	
 	private boolean identificadorValido(String string) {
 		Pattern  p = Pattern.compile("[a-z]");
 		Matcher m = p.matcher(string);
@@ -261,5 +311,23 @@ private void mostrarTS() {
 			}
 	}
 	
+	private boolean inicioDeclaraciones(String string) {
+		if(string.equals("var") || string.equals("const")){
+			return true;
+		}else return false;
+	}
 	
+
+
+	private boolean esAsigDecl(String string) {
+		Pattern  p = Pattern.compile("[:=]");
+		Matcher m = p.matcher(string);
+		// Comprobación de que el primer caracter es letra y minúscula
+		if( m.find() && !Character.isUpperCase(string.charAt(0))){
+			return true;
+			}else{
+			return false;
+			}
+	}
+
 }
