@@ -1,4 +1,8 @@
 program: juan {
-var-const { }
-instructions { }
+var-const { 
+varconst
+}
+instructions {
+instructions
+}
 }
