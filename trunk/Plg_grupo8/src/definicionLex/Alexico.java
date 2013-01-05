@@ -1,11 +1,7 @@
 package definicionLex;
 
-
-
-
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+
 
 import java.io.FileReader;
 import java.util.regex.Matcher;
@@ -14,53 +10,47 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 
-enum estado {e0, e1, e2, e3, e4, e5, e6};
 
 public class Alexico {
 	
 	
-	
-	private estado estadoAct;
-	
+
 	private BufferedReader br;
 	private String[] identificadores;
-	
+	private int contErrores;
 	
 	public void leerArchivo() {
 		try {
 		
-		br = new BufferedReader(new FileReader("datos.txt"));
-		String line = null;
-		
+	   br = new BufferedReader(new FileReader("datos.txt"));
+	   String line = null;
+ 	   int i=0; 	
+ 	
 		while((line=br.readLine())!=null){
 			
 			//Comprobamos la Cabecera
 			String[] tokens = line.split(" ");
-			compruebaProgram(tokens);
-			System.out.println(line);
-			
-			//Comprobamos la Sección de Declaraciones
-			line=br.readLine();
-			tokens = line.split(" ");
-		    compruebaDeclaraciones(tokens);
-			System.out.println(line);
-			
-			//Comprobamos la Sección de Instrucciones
-			line=br.readLine();
-			tokens = line.split(" ");
-		    compruebaInstrucciones(tokens);
-			System.out.println(line);
-			
-			//Comprobamos corchete de fin de programa
-			line=br.readLine();
-			tokens = line.split(" ");
-		    compruebaFinalProgram(tokens);
-			System.out.println(line);
-			
+			compruebaProgram(tokens,br);
+						
 		}
+		br.close();	
+		br = new BufferedReader(new FileReader("datos.txt"));
+	    System.out.println("Programa de entrada: ");
+	 	while((line=br.readLine())!=null){
+				i++;
+				
+				System.out.println("Línea"+i+":"+"  "+line);
+							
+			}
 		
+		br.close();	
 		
-		br.close();		
+		if(contErrores>0){
+			System.out.println("Número de errores="+contErrores);
+		}
+		else{
+			mostrarTS();
+		}
 		}
 		 catch (Exception e) {
 				e.printStackTrace();
@@ -78,53 +68,168 @@ public class Alexico {
 	
 ////////////////////// COMPROBACIONES DE LA GRAMÁTICA INCONTEXTUAL  ///////////////
 	
-	public void compruebaProgram(String[] a){
-		
+	public void compruebaProgram(String[] a, BufferedReader br){
+		try {
 		if(!a[0].equals("program:")){
 			JOptionPane.showMessageDialog(null, "Error en la cabecera del programa", "alert", JOptionPane.ERROR_MESSAGE);
+			contErrores++;
 		}
 		if(!identificadorValido(a[1])){
 			JOptionPane.showMessageDialog(null, "Error en el identificador del programa", "alert", JOptionPane.ERROR_MESSAGE);
+			contErrores++;
 		}
 		if(!escorcheteAbierto(a[2])){
 			JOptionPane.showMessageDialog(null, "Error en el corchete de apertura del programa", "alert", JOptionPane.ERROR_MESSAGE);
+			contErrores++;
 		}
-	}
-
-	private void compruebaDeclaraciones(String[] a) {
-		if(!a[0].equals("var-const")){
-			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion Decl", "alert", JOptionPane.ERROR_MESSAGE);
-		}
-		if(!escorcheteAbierto(a[1])){
-			JOptionPane.showMessageDialog(null, "Error en el corchete de apertura de la sección de Decl", "alert", JOptionPane.ERROR_MESSAGE);
-		}
-		if(!escorcheteCerrado(a[2])){
-			JOptionPane.showMessageDialog(null, "Error en el corchete de clausura de la sección de Decl", "alert", JOptionPane.ERROR_MESSAGE);
-		}
-	}
-	
-	
-	private void compruebaInstrucciones(String[] a) {
+	    
+		//Comprobamos la Sección de Declaraciones
+		String line=br.readLine();
+		String[] tokens = line.split(" ");
+	    compruebaSecDeclaraciones(tokens,br);
 		
-		if(!a[0].equals("instructions")){
+	    		
+		//Comprobamos la Sección de Instrucciones
+		line=br.readLine();
+		tokens = line.split(" ");
+	    compruebaSecInstrucciones(tokens,br);
+		
+		//Comprobamos corchete de fin de programa y que no hay nada escrito antes de el
+		line=br.readLine();
+		tokens = line.split(" ");
+	    compruebaFinalProgram(tokens);
+		
+	    if((line=br.readLine())!=null){
+			JOptionPane.showMessageDialog(null, "Error: Hay algo escrito al fin al del programa", "alert", JOptionPane.ERROR_MESSAGE);
+			contErrores++;
+	    }
+		
+		
+		}
+		 catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+		
+	}
+
+
+	private void compruebaSecDeclaraciones(String[] tokens, BufferedReader br) {
+		
+		try {
+			
+		if(!tokens[0].equals("var-const")){
+			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion Decl", "alert", JOptionPane.ERROR_MESSAGE);
+			contErrores++;
+		}
+		if(!escorcheteAbierto(tokens[1])){
+			JOptionPane.showMessageDialog(null, "Error en el corchete de apertura de la sección de Decl", "alert", JOptionPane.ERROR_MESSAGE);
+			contErrores++;
+		}
+		
+		//Comprobamos las Declaraciones
+		
+		
+		String line=br.readLine();
+		String[] token = null;
+		
+		while(identificadorValido(line)){
+		token = line.split(" ");
+	    compruebaDeclaraciones(token);
+	    line=br.readLine();
+		}
+		token = line.split(" ");
+		compruebaFinalSecDec(token);
+		}
+		 catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+	}
+	
+	private void compruebaDeclaraciones(String[] token) {
+		
+		if(!token[0].equals("varconst")){
 			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion Decl", "alert", JOptionPane.ERROR_MESSAGE);
 		}
-		if(!escorcheteAbierto(a[1])){
+		
+	}
+
+	private void compruebaFinalSecDec(String[] tokens) {
+	if(!escorcheteCerrado(tokens[0])){
+		JOptionPane.showMessageDialog(null, "Error en el corchete de clausura de la Secc. Decl.", "alert", JOptionPane.ERROR_MESSAGE);
+		contErrores++;
+	}
+    }
+	
+	private void compruebaSecInstrucciones(String[] tokens, BufferedReader br) {
+		
+		try {
+			
+		if(!tokens[0].equals("instructions")){
+			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion de Instr", "alert", JOptionPane.ERROR_MESSAGE);
+			contErrores++;
+		}
+		if(!escorcheteAbierto(tokens[1])){
 			JOptionPane.showMessageDialog(null, "Error en el corchete de apertura de la sección de Instr.", "alert", JOptionPane.ERROR_MESSAGE);
+			contErrores++;
 		}
-		if(!escorcheteCerrado(a[2])){
-			JOptionPane.showMessageDialog(null, "Error en el corchete de clausura de la sección de Instr.", "alert", JOptionPane.ERROR_MESSAGE);
+		
+		//Comprobamos las Instrucciones
+		
+		
+				String line=br.readLine();
+				String[] token = null;
+				
+				while(identificadorValido(line)){
+				token = line.split(" ");
+			    compruebaInstrucciones(token);
+			    line=br.readLine();
+				}
+				token = line.split(" ");
+				compruebaFinalSecInst(token);
+				
+					}
+				catch (Exception e) {
+					e.printStackTrace();
+					}
+		}
+    
+
+	private void compruebaInstrucciones(String[] token) {
+		
+		if(!token[0].equals("instructions")){
+			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion Decl", "alert", JOptionPane.ERROR_MESSAGE);
+		}
+		
+	}
+
+	private void compruebaFinalSecInst(String[] tokens) {
+		if(!escorcheteCerrado(tokens[0])){
+			JOptionPane.showMessageDialog(null, "Error en el corchete de clausura de la Secc. Inst.", "alert", JOptionPane.ERROR_MESSAGE);
+			contErrores++;
 		}
 	}
 
 
 
-	private void compruebaFinalProgram(String[] a) {
-		if(!escorcheteCerrado(a[0])){
+	private void compruebaFinalProgram(String[] tokens) {
+		if(!escorcheteCerrado(tokens[0])){
 			JOptionPane.showMessageDialog(null, "Error en el corchete de clausura del programa", "alert", JOptionPane.ERROR_MESSAGE);
+			contErrores++;
 		}
 	}
 
+	////////////////////Creación TABLA DE SIMBOLOS////////////////////
+	
+
+private void mostrarTS() {
+		
+	
+		
+	}
+
+	
 	///////////////////EXPRESIONES REGULARES////////////////////////////
 	
 	private boolean escorcheteAbierto(String string) {
