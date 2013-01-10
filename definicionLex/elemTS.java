@@ -1,5 +1,4 @@
 package definicionLex;
-//prueba
 
 enum tipos {INT,BOOL,STRING,FLOAT}
 public class elemTS {

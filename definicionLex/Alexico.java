@@ -38,14 +38,14 @@ public class Alexico {
 	 	while((line=br.readLine())!=null){
 				i++;
 				
-				System.out.println("Línea"+i+":"+"  "+line);
+				System.out.println("L’nea"+i+":"+"  "+line);
 							
 			}
 		
 		br.close();	
 		
 		if(contErrores>0){
-			System.out.println("Número de errores="+contErrores);
+			System.out.println("Nœmero de errores="+contErrores);
 		}
 		else{
 			mostrarTS();
@@ -65,7 +65,7 @@ public class Alexico {
 		a.leerArchivo();
 	}
 	
-////////////////////// COMPROBACIONES DE LA GRAMÁTICA INCONTEXTUAL  ///////////////
+////////////////////// COMPROBACIONES DE LA GRAMçTICA INCONTEXTUAL  ///////////////
 	
 	public void compruebaProgram(String[] a, BufferedReader br){
 		try {
@@ -118,11 +118,11 @@ public class Alexico {
 		try {
 			
 		if(!tokens[0].equals("var-const")){
-			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion Decl", "alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error en la cabecera de la secci—n Decl", "alert", JOptionPane.ERROR_MESSAGE);
 			contErrores++;
 		}
 		if(!escorcheteAbierto(tokens[1])){
-			JOptionPane.showMessageDialog(null, "Error en el corchete de apertura de la sección de Decl", "alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error en el corchete de apertura de la secci—n de Decl", "alert", JOptionPane.ERROR_MESSAGE);
 			contErrores++;
 		}
 		
@@ -154,10 +154,10 @@ public class Alexico {
 		if(token[0].equals("var")){
 			
 		if(!token[1].equals("float")){
-			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion Decl", "alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error en la cabecera de la secci—n Decl", "alert", JOptionPane.ERROR_MESSAGE);
 						}
 		if(!esFinalDecl(token[3])){
-			JOptionPane.showMessageDialog(null, "Error en el final de la declaración ", "alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error en el final de la declaraci—n ", "alert", JOptionPane.ERROR_MESSAGE);
 		}
 		tablaSimbolos[i]=new elemTS(token[2], token[1], 0, 1);		
 		}
@@ -166,19 +166,19 @@ public class Alexico {
 		else if(token[0].equals("const")){
 			
 		if(!token[1].equals("float")){
-			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion Decl", "alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error en la cabecera de la secci—n Decl", "alert", JOptionPane.ERROR_MESSAGE);
 							}
 		if(!esAsigDecl(token[3])){
-			JOptionPane.showMessageDialog(null, "Error en := de la declaración ", "alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error en := de la declaraci—n ", "alert", JOptionPane.ERROR_MESSAGE);
 			}
 		
 		if(!esFinalDecl(token[5])){
-			JOptionPane.showMessageDialog(null, "Error en el final de la declaración (;) ", "alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error en el final de la declaraci—n (;) ", "alert", JOptionPane.ERROR_MESSAGE);
 			}
 			
 		tablaSimbolos[i]=new elemTS(token[2], token[1], 1, 1);	
 		}
-		else{JOptionPane.showMessageDialog(null, "Error en la declaración ", "alert", JOptionPane.ERROR_MESSAGE);}
+		else{JOptionPane.showMessageDialog(null, "Error en la declaraci—n ", "alert", JOptionPane.ERROR_MESSAGE);}
 		
 		
 		
@@ -198,11 +198,11 @@ public class Alexico {
 		try {
 			
 		if(!tokens[0].equals("instructions")){
-			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion de Instr", "alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error en la cabecera de la secci—n de Instr", "alert", JOptionPane.ERROR_MESSAGE);
 			contErrores++;
 		}
 		if(!escorcheteAbierto(tokens[1])){
-			JOptionPane.showMessageDialog(null, "Error en el corchete de apertura de la sección de Instr.", "alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error en el corchete de apertura de la secci—n de Instr.", "alert", JOptionPane.ERROR_MESSAGE);
 			contErrores++;
 		}
 		
@@ -230,7 +230,7 @@ public class Alexico {
 	private void compruebaInstrucciones(String[] token) {
 		
 		if(!token[0].equals("instructions")){
-			JOptionPane.showMessageDialog(null, "Error en la cabecera de la seccion Decl", "alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error en la cabecera de la secci—n Decl", "alert", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
@@ -257,7 +257,7 @@ public class Alexico {
 private void mostrarTS() {
 		
 
-	System.out.println("TABLA DE SÍMBOLOS");
+	System.out.println("TABLA DE SêMBOLOS");
 	
 	for ( int i = 0 ; i < tablaSimbolos.length ; i++ ){
 		if(tablaSimbolos[i]!=null){
