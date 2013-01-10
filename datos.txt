@@ -1,0 +1,9 @@
+program: prueba {
+var-const {
+var float euros ;
+const float centimos := 5 ;
+}
+instructions {
+instructions
+}
+}
