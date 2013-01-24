@@ -6,6 +6,10 @@ public class ALexico {
 	
 	private Vector<String> palReservadas;
 	
+	public ALexico() {
+		
+	}
+	
 	public void iniciaVecPalReservadas() {
 		palReservadas.clear();
 		
@@ -43,6 +47,10 @@ public class ALexico {
 		palReservadas.add("char");
 		palReservadas.add("nat");
 		palReservadas.add("int");
+
+	}
+	
+	public static void main(String[] args) {
 
 	}
 
