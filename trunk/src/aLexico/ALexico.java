@@ -5,6 +5,7 @@ import java.util.Vector;
 public class ALexico {
 	
 	private Vector<String> palReservadas;
+	private Vector<Token> tokensSalida;
 	
 	public ALexico() {
 		
@@ -52,6 +53,14 @@ public class ALexico {
 	
 	public static void main(String[] args) {
 
+	}
+
+	public Vector<Token> getTokensSalida() {
+		return tokensSalida;
+	}
+
+	public void setTokensSalida(Vector<Token> tokensSalida) {
+		this.tokensSalida = tokensSalida;
 	}
 
 }
