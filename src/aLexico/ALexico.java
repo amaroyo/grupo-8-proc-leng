@@ -64,6 +64,20 @@ public class ALexico {
 		else
 			return false;
 	}
+	
+	public boolean esDigito(char car) {
+		if (car >= '0' && car <= '9')
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean esDigitoNo0(char car) {
+		if (car >= '1' && car <= '9')
+			return true;
+		else
+			return false;
+	}
 
 	public Vector<Token> getTokensSalida() {
 		return tokensSalida;
