@@ -120,6 +120,14 @@ public class ALexico {
 		else
 			return false;
 	}
+	
+	public boolean esE(char car) {
+		if (buff[0] == 'e' || buff[0] == 'E')
+			return true;
+		else
+			return false;
+	}
+
 
 	public Vector<Token> getTokensSalida() {
 		return tokensSalida;
