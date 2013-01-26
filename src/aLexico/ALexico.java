@@ -113,6 +113,13 @@ public class ALexico {
 		else
 			return false;
 	}
+	
+	public boolean esFLin(char car) {
+		if (buff[0] == '\r' || buff[0] == '\n')
+			return true;
+		else
+			return false;
+	}
 
 	public Vector<Token> getTokensSalida() {
 		return tokensSalida;
