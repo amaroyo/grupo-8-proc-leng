@@ -24,6 +24,18 @@ public class ALexico {
 	
 	
 	public ALexico() {
+		buff = new char[1];
+		lex = new String();
+		tokensSalida = new Vector<Token>();
+		contPrograma = 1;
+		errorLex = false;
+		descripError = new String();
+		quedanCar = true;
+		palReservadas = new Vector<String>();
+		iniciaVecPalReservadas();
+		carAntConsumido = new char[1];
+		finFichero = false;
+		estado=est.e0;
 		
 	}
 	
