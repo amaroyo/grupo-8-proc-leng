@@ -106,6 +106,13 @@ public class ALexico {
 		else
 			return false;
 	}
+	
+	public boolean esBlanFLinTab(char car) {
+		if (buff[0] == ' ' || buff[0] == '\r' || buff[0] == '\n' || buff[0] == '\t')
+			return true;
+		else
+			return false;
+	}
 
 	public Vector<Token> getTokensSalida() {
 		return tokensSalida;
