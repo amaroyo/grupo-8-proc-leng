@@ -51,8 +51,18 @@ public class ALexico {
 
 	}
 	
-	public static void main(String[] args) {
-
+	public boolean esLetraMinus(char car) {
+		if ((car >= 'a' && car <= 'z'))
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean esLetra(char car) {
+		if ((car >= 'a' && car <= 'z') || (car >= 'A' && car <= 'Z'))
+			return true;
+		else
+			return false;
 	}
 
 	public Vector<Token> getTokensSalida() {
@@ -62,5 +72,11 @@ public class ALexico {
 	public void setTokensSalida(Vector<Token> tokensSalida) {
 		this.tokensSalida = tokensSalida;
 	}
+	
+	
+	public static void main(String[] args) {
+
+	}
+
 
 }
