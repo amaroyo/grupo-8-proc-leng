@@ -1,5 +1,6 @@
 package aLexico;
 
+import java.io.BufferedReader;
 import java.util.Vector;
 
 enum est {e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, 
@@ -9,7 +10,18 @@ enum est {e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, 
 public class ALexico {
 	
 	private Vector<String> palReservadas;
-	private Vector<Token> tokensSalida;
+	private Vector<Token> tokensSalida;	
+	private char buff[];
+	private String lex;
+	private est estado;
+	private BufferedReader bfr;
+	private int contPrograma;
+	private boolean errorLex;
+	private String descripError;
+	private boolean quedanCar;
+	private char carAntConsumido[];
+	private boolean finFichero;
+	
 	
 	public ALexico() {
 		
