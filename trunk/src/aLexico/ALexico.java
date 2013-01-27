@@ -1,6 +1,7 @@
 package aLexico;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.Vector;
 
 enum est {e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, 
@@ -77,6 +78,18 @@ public class ALexico {
 		palReservadas.add("nat");
 		palReservadas.add("int");
 
+	}
+	
+	public void inicio(String nomFichero) {
+		try {
+			bfr=new BufferedReader(new FileReader(nomFichero));
+			bfr.read(buff);
+			carAntConsumido[0] = ' ';
+			contPrograma = 1;
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	
 	public boolean esLetraMinus(char car) {
