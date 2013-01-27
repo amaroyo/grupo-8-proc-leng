@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Vector;
 
+
 enum est {e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, 
 	e17, e18, e19, e20, e21, e22, e23, e24, e25, e26, e27, e28, e29, e30, e31, e32, 
 	e33, e34, e35, e36, e37, e38};
@@ -183,6 +184,253 @@ public class ALexico {
 							}
 						}
 						break;
+					case e3:
+						if (buff[0] == '=') {
+							tok = new Token(TToken.asigConst, contPrograma);
+							cambiaEstado (est.e38);
+							break;
+						}
+						else {
+							tokensSalida.add(new Token(TToken.dosPuntos, contPrograma));
+							iniciaScanner();
+						}
+						break;
+					case e6:
+						if (buff[0] == '=') {
+							tok = new Token(TToken.igualIgual, contPrograma);
+							cambiaEstado (est.e38);
+							break;
+						}
+						else {
+							tokensSalida.add(new Token(TToken.equals, contPrograma));
+							iniciaScanner();
+						}
+						break;	
+					case e8:
+						if (buff[0] == '=') {
+							tok = new Token(TToken.lessEq, contPrograma);
+							cambiaEstado (est.e38);
+							break;
+						}
+						if (buff[0] == '<') {
+							tok = new Token(TToken.despIzq, contPrograma);
+							cambiaEstado (est.e38);
+							break;
+						}
+						else {
+							tokensSalida.add(new Token(TToken.less, contPrograma));
+							iniciaScanner();
+						}
+						break;
+					case e11:
+						if (buff[0] == '=') {
+							tok = new Token(TToken.greatEq, contPrograma);
+							cambiaEstado (est.e38);
+							break;
+						}
+						if (buff[0] == '>') {
+							tok = new Token(TToken.despDer, contPrograma);
+							cambiaEstado (est.e38);
+							break;
+						}
+						else {
+							tokensSalida.add(new Token(TToken.great, contPrograma));
+							iniciaScanner();
+						}
+						break;
+						
+					case e14:
+						if (buff[0] == '=') {
+							tok = new Token(TToken.distinto, contPrograma);
+							cambiaEstado (est.e38);
+						}
+						else
+							error("Operador de desigualdad mal formado");
+						break;
+					case e16: //comentarios
+						if (esFLin(buff[0])) {
+							cambiaEstado(est.e0);
+							lex = "";
+							break;
+						}
+						if (finFichero) {
+							iniciaScanner();
+							break;
+						}
+						else
+							cambiaEstado(est.e16);
+						break;
+					case e17:
+						carAntConsumido[0] = buff[0];
+						cambiaEstado(est.e18);
+						break;
+					case e18:
+						if (buff[0] != '\'') {
+							error("Se esperaba el caracter `'´.");
+						}
+						else {
+							tokensSalida.add(dameTokenCaracter("" + carAntConsumido[0] + ""));
+							cambiaEstado(est.e0);
+							lex = "";
+						}
+						break;
+					case e29:
+						if (esDigito(buff[0])) {
+							cambiaEstado(est.e29);
+							break;
+						}
+						if (buff[0] == '.') {
+							cambiaEstado(est.e31);
+							break;
+						}
+						if (esE(buff[0])) {
+							cambiaEstado(est.e33);
+							break;
+						}
+						else {
+							realAux = Double.valueOf(lex).doubleValue();
+							if (realAux <= Integer.MAX_VALUE) {
+								tokensSalida.add(new Token(TToken.natural, "" + (int)realAux + "", contPrograma));
+								iniciaScanner();
+								break;
+							}
+							if (realAux <= Double.MAX_VALUE) {
+								tokensSalida.add(new Token(TToken.real, "" + realAux + "", contPrograma));
+								iniciaScanner();
+								break;
+							}
+							error("Número demasiado grande.");
+						}
+						break;
+					case e30:
+						if (buff[0] == '.') {
+							cambiaEstado(est.e31);
+							break;
+						}
+						if (esDigito(buff[0])) {
+							error("No se admiten ceros a la izquierda en los números");
+							break;
+						}
+						else {
+							realAux = Double.valueOf(lex).doubleValue();
+							tokensSalida.add(new Token(TToken.natural, "" + (int)realAux + "", contPrograma));
+							iniciaScanner();
+						}
+						break;
+					 case e31:
+						if (esDigitoNo0(buff[0])) {
+							 cambiaEstado(est.e32);
+							 break;
+						}
+						if (buff[0] == '0') {
+							cambiaEstado(est.e35);
+							break;
+						}
+						 else
+							 error("Después de '.' sólo debe haber dígitos");
+						 break;
+					 case e32:
+						if(esDigitoNo0(buff[0])) {
+							cambiaEstado(est.e32);
+							break;
+						}
+						if (buff[0] == '0') {
+							cambiaEstado(est.e36);
+							break;
+						}
+						if (esE(buff[0])) {
+							cambiaEstado(est.e33);
+							break;
+						}
+						else {
+							realAux = Double.valueOf(lex).doubleValue();
+							if (realAux <= Double.MAX_VALUE) {
+								tokensSalida.add(new Token(TToken.real, "" + realAux + "", contPrograma));
+								iniciaScanner();
+								break;
+							}
+							else
+								error("Número demasiado grande.");
+						}
+						break;
+					 case e33:
+						if(esDigitoNo0(buff[0])) {
+							cambiaEstado(est.e34);
+							break;
+						}
+						if (buff[0] == '-' || buff.toString().equals("-")){
+							cambiaEstado(est.e37);
+								break;
+						}
+						else
+							error("Debería haber dígitos del 1-9 o el signo - después de e");
+						break;
+					 case e34:
+						if(esDigito(buff[0])) {
+							cambiaEstado(est.e34);
+							break;
+						}
+						else {
+							 realAux = Double.valueOf(lex).doubleValue();
+							if (realAux <= Double.MAX_VALUE) {
+								tokensSalida.add(new Token(TToken.real, "" + realAux + "", contPrograma));
+								iniciaScanner();
+								break;
+							}
+							else
+								 error("Número demasiado grande.");
+						}
+						break;
+					case e35:
+						if(esDigitoNo0(buff[0])) {
+							cambiaEstado(est.e32);
+							break;
+						}
+						if (buff[0] == '0') {
+							cambiaEstado(est.e36);
+							break;
+						}
+						if (esE(buff[0])) {
+							cambiaEstado(est.e33);
+							break;
+						}
+						else{
+							realAux = Double.valueOf(lex).doubleValue();
+							if (realAux <= Double.MAX_VALUE) {
+								tokensSalida.add(new Token(TToken.real, "" + realAux + "", contPrograma));
+								iniciaScanner();
+								break;
+							}
+							else
+								error("Número demasiado grande.");
+						}
+						break;
+					case e36:
+						if(esDigitoNo0(buff[0])) {
+							cambiaEstado(est.e32);
+							break;
+						}
+						if (buff[0] == '0') {
+							cambiaEstado(est.e36);
+							break;
+						}
+						else
+							error("No se admiten ceros a la derecha en la parte decimal");
+						break;
+					case e37:
+						if(esDigitoNo0(buff[0])) {
+							cambiaEstado(est.e34);
+							break;
+						}
+						else
+							 error("Número real mal formado");
+						break;
+					case e38:
+						tokensSalida.add(tok);
+						iniciaScanner();
+						break;
+					default:
+						errorLex = true;
 				}
 			}
 		}
