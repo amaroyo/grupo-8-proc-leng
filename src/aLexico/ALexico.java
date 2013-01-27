@@ -1,9 +1,9 @@
 package aLexico;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.Vector;
-
 
 enum est {e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, 
 	e17, e18, e19, e20, e21, e22, e23, e24, e25, e26, e27, e28, e29, e30, e31, e32, 
@@ -503,6 +503,9 @@ public class ALexico {
 	
 	public void inicio(String nomFichero) {
 		try {
+			File appBase = new File("."); //current directory
+			String path = appBase.getAbsolutePath();
+			System.out.println(path);
 			bfr=new BufferedReader(new FileReader(nomFichero));
 			bfr.read(buff);
 			carAntConsumido[0] = ' ';
@@ -764,8 +767,55 @@ public class ALexico {
 		this.tokensSalida = tokensSalida;
 	}
 	
+	public boolean scanFichero(String nombreFichero) {
+		//Inicializamos y preparamos el fichero para su lectura. De hecho se lee el
+		//primer caracter del fichero de entrada
+		inicio(nombreFichero);
+		//Realizamos el escaneo del fichero
+		scan();
+		//Mostramos por pantalla los resultados
+		System.out.println("Fichero de entrada: " + nombreFichero);
+		System.out.println();
+		System.out.println("Resultado");
+		System.out.println("---------");
+		System.out.println();
+		if (!errorLex)
+			System.out.println("El análisis léxico es correcto." + "\n" +
+					"Fueron leidas " + contPrograma + " líneas.");
+		else
+			System.out.println("Ha habido errores durante el análisis léxico:" + "\n" +
+					descripError);
+		System.out.println();
+		System.out.println("Detalle de los tokens reconocidos");
+		System.out.println("---------------------------------");
+		System.out.println();
+		
+		//Para mostrar el numero de línea de cada token
+		for (int i = 0; i < tokensSalida.size(); i++)
+			if (tokensSalida.get(i).getTipoToken() == TToken.puntoyComa) {
+					System.out.println();
+				System.out.print("{" +tokensSalida.get(i).getTipoToken().toString()+" , "+ tokensSalida.get(i).getLinea()+ "} ");
+				System.out.println();
+			}
+			else {
+				if (tokensSalida.get(i).getLexema() == null)
+					System.out.print("{" + tokensSalida.get(i).getTipoToken().toString() + ", "+tokensSalida.get(i).getLinea()+"} ");
+				else
+					System.out.print("{" + tokensSalida.get(i).getTipoToken().toString() + ", " +
+						tokensSalida.get(i).getLexema() + ", "+tokensSalida.get(i).getLinea()+ "} ");
+			}
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		return !errorLex;
+	}
+	
 	
 	public static void main(String[] args) {
+		
+		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
+		ALexico scanner = new ALexico();
+		scanner.scanFichero(nombreFichero);
 
 	}
 
