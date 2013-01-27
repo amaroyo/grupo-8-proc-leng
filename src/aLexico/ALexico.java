@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Vector;
 
+import definicionLex.Token;
+import definicionLex.tToken;
+
 enum est {e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, 
 	e17, e18, e19, e20, e21, e22, e23, e24, e25, e26, e27, e28, e29, e30, e31, e32, 
 	e33, e34, e35, e36, e37, e38};
@@ -166,6 +169,55 @@ public class ALexico {
 			descripError = "Caracter en buffer: '" + buff[0] + "'. Linea: " + contPrograma + '\n' +
 					"Error: " + comentario;
 		errorLex = true;
+	}
+	
+	public void errorCarAnt(String comentario) {
+		if (comentario == null)
+			descripError = "Caracter inesperado en la linea " + contPrograma + " : '" + carAntConsumido[0] + "'\n";
+		else
+			descripError = "Caracter en buffer: '" + carAntConsumido[0] + "'. Linea: " + contPrograma + '\n' +
+					"Error: " + comentario;
+		errorLex = true;
+	}
+	
+	public Token dameToken(char car) {
+		switch (car) {
+		case ';':
+			return new Token(TToken.puntoyComa, contPrograma);
+		case '+':
+			return new Token(TToken.sum, contPrograma);
+		case '-':
+			//Distinguimos el caso del - unario
+			if (!tokensSalida.isEmpty()) 
+				if (tokensSalida.lastElement().getTipoToken() == TToken.natural || 
+						tokensSalida.lastElement().getTipoToken() == TToken.entero ||
+						tokensSalida.lastElement().getTipoToken() == TToken.real ||
+						tokensSalida.lastElement().getTipoToken() == TToken.PC ||
+						tokensSalida.lastElement().getTipoToken() == TToken.ident)
+					return new Token(TToken.rest, contPrograma);
+				else
+					return new Token(TToken.negArit, contPrograma);
+			else
+				errorCarAnt(null);
+			break;
+		case '*':
+			return new Token(TToken.mult, contPrograma);
+		case '/':
+			return new Token(TToken.div, contPrograma);
+		case '%':
+			return new Token(TToken.mod, contPrograma);
+		case '(':
+			return new Token(TToken.PA, contPrograma);
+		case ')':
+			return new Token(TToken.PC, contPrograma);
+		case '{':
+			return new Token(TToken.LA, contPrograma);
+		case '}':
+			return new Token(TToken.LC, contPrograma);
+		case '.':
+			return new Token(TToken.punto, contPrograma);
+		}
+		return new Token();
 	}
 
 
