@@ -1,0 +1,4 @@
+program: errores2{
+
+		cantidad = (int euros;
+}
