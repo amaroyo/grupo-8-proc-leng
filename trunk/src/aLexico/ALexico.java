@@ -41,6 +41,14 @@ public class ALexico {
 		
 	}
 	
+
+	public void iniciaScanner(){
+		//Se usa para volver al estado 0 sin consumir ningún caracter.
+		lex = "";
+		estado = est.e0;
+	}
+	
+	
 	public void cambiaEstado(est estSig) {
 		try {
 			//No añadimos las comillas simples en los tipo character
