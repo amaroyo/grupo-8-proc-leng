@@ -151,6 +151,14 @@ public class ALexico {
 		else
 			return false;
 	}
+	
+	public boolean esOpCast(String lexema) {
+		if (lexema.equals("char") || lexema.equals("int") || lexema.equals("nat") || lexema.equals("float"))
+			return true;
+		else
+			return false;
+	}
+	
 
 
 	public Vector<Token> getTokensSalida() {
