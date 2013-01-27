@@ -159,6 +159,14 @@ public class ALexico {
 			return false;
 	}
 	
+	public void error(String comentario) {
+		if (comentario == null)
+			descripError = "Caracter inesperado en la linea " + contPrograma + " : '" + buff[0] + "'\n";
+		else
+			descripError = "Caracter en buffer: '" + buff[0] + "'. Linea: " + contPrograma + '\n' +
+					"Error: " + comentario;
+		errorLex = true;
+	}
 
 
 	public Vector<Token> getTokensSalida() {
