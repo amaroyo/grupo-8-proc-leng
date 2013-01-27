@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Vector;
 
-
 enum est {e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, 
 	e17, e18, e19, e20, e21, e22, e23, e24, e25, e26, e27, e28, e29, e30, e31, e32, 
 	e33, e34, e35, e36, e37, e38};
@@ -123,6 +122,67 @@ public class ALexico {
 						else
 							error(null);
 						break;	
+					case e1:
+						if (esLetra(buff[0]) || esDigito(buff[0]))
+							cambiaEstado(est.e1);
+						else {
+							if (palReservadas.contains(lex)) {
+								//Resolvemos problemas entre identificadores y las operaciones de cast,
+								if (esOpCast(lex)) {
+									if (buff[0] == ')' && tokensSalida.lastElement().getTipoToken() == TToken.PA && carAntConsumido[0] == '(') {
+										tokensSalida.remove(tokensSalida.size() - 1);
+										tokensSalida.add(dameTokenPalReservada(lex));
+										cambiaEstado(est.e0);
+										lex = "";
+										break;
+									}
+									//Distinguimos aquí también el caso del float como operador y como tipo
+									if (lex.equals("float") &&
+										(tokensSalida.lastElement().getTipoToken() == TToken.dosPuntos || 
+										tokensSalida.lastElement().getTipoToken() == TToken.constante ||
+										tokensSalida.lastElement().getTipoToken() == TToken.PA ||
+										tokensSalida.lastElement().getTipoToken() == TToken.var)) {
+											tokensSalida.add(new Token(TToken.tipoVarReal, contPrograma));
+											iniciaScanner();
+											break;
+									}
+									else{
+										if (lex.equals("float"))
+											error("Operador de 'cast float' mal formado, o declaración incorrecta de tipo 'float'.");
+										else
+											error("Operador de 'cast " + lex + "' mal formado.");
+										tokensSalida.add(new Token());
+										break;
+									}
+								}
+								//Resolvemos problemas entre identificadores y operaciones de entrada salida if (lex == "in") {
+								else {
+									tokensSalida.add(dameTokenPalReservada(lex));
+									iniciaScanner();
+								}
+							}
+							else 
+								if(lex.equals("consts")){
+									if (tokensSalida.lastElement().getTipoToken() == TToken.rest){
+										int tam = tokensSalida.size()-2;
+										if (tokensSalida.get(tam).getTipoToken() == TToken.ident &&
+												tokensSalida.get(tam).getLexema().equals("vars")){
+											tokensSalida.remove(tokensSalida.size() - 1);
+											tokensSalida.remove(tokensSalida.size() - 1);
+											lex="vars-consts";
+											tokensSalida.add(dameTokenPalReservada(lex));
+											iniciaScanner();
+											break;	
+										}
+									}
+								
+								}
+								else{
+									tokensSalida.add(dameTokenIdentificador(lex));
+									iniciaScanner();
+							}
+						}
+						break;
 				}
 			}
 		}
