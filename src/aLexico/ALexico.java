@@ -41,6 +41,92 @@ public class ALexico {
 		
 	}
 	
+	public void scan() {
+		Token tok = new Token();
+		double realAux = 0;
+		
+		quedanCar = true;
+		finFichero = false;
+		iniciaScanner();
+		while (quedanCar && !errorLex) {
+			if (finFichero && estado == est.e0)	{
+				quedanCar = false;
+				tokensSalida.add(new Token(TToken.finDeFichero, contPrograma));
+			}
+			else {
+				switch (estado) {
+					case e0:
+						if (esBlanFLinTab(buff[0])) {
+							carAntConsumido[0] = buff[0];
+							cambiaEstado(est.e0);
+							lex = "";
+							break;
+						}
+						if (esLetraMinus(buff[0])) {
+							cambiaEstado(est.e1);
+							break;
+						}
+						if (buff[0] == '0') {
+							carAntConsumido[0] = buff[0];
+							cambiaEstado(est.e30);
+							break;
+						}
+						if (esDigitoNo0(buff[0])) {
+							carAntConsumido[0] = buff[0];
+							cambiaEstado(est.e29);
+							break;
+						}
+						if (buff[0] == ':') {
+							carAntConsumido[0] = buff[0];
+							cambiaEstado(est.e3);
+							break;
+						}
+						if (buff[0] == ';' || buff[0] == '+' || buff[0] == '-'  || buff.toString().equals("-") ||
+								buff[0] == '*' || buff[0] == '/' || buff[0] == '(' || buff[0] == '|' ||
+								buff[0] == ')' || buff[0] =='{' || buff[0] =='}' || buff[0] =='['|| buff[0] ==']'
+								|| buff[0] =='%') {
+							carAntConsumido[0] = buff[0];
+							tok = dameToken(buff[0]);
+							cambiaEstado(est.e38);
+							break;
+						}
+						if (buff[0] == '=') {
+							carAntConsumido[0] = buff[0];
+							cambiaEstado(est.e6);
+							break;
+						}
+						if (buff[0] == '<') {
+							carAntConsumido[0] = buff[0];
+							cambiaEstado(est.e8);
+							break;
+						}
+						if (buff[0] == '>') {
+							carAntConsumido[0] = buff[0];
+							cambiaEstado(est.e11);
+							break;
+						}
+						if (buff[0] == '!') {
+							carAntConsumido[0] = buff[0];
+							cambiaEstado(est.e14);
+							break;
+						}
+						if (buff[0] == '@') {
+							carAntConsumido[0] = buff[0];
+							cambiaEstado(est.e16);
+							break;
+						}
+						if (buff[0] == '\'') {
+							carAntConsumido[0] = buff[0];
+							cambiaEstado(est.e17);
+							break;
+						}
+						else
+							error(null);
+						break;	
+				}
+			}
+		}
+	}	
 
 	public void iniciaScanner(){
 		//Se usa para volver al estado 0 sin consumir ningún caracter.
