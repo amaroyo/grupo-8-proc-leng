@@ -324,7 +324,17 @@ public class ALexico {
 		return new Token();
 	}
 	
-
+	public Token dameTokenIdentificador(String lexema) {
+		return new Token(TToken.ident, lexema, contPrograma);
+	}
+	
+	public Token dameTokenComentario(String comentario) {
+		return new Token(TToken.comentario,comentario, contPrograma);
+	}
+	
+	public Token dameTokenCaracter(String car) {
+		return new Token(TToken.caracter,car, contPrograma);
+	}
 
 	public Vector<Token> getTokensSalida() {
 		return tokensSalida;
