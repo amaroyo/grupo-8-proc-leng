@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Vector;
 
-import definicionLex.Token;
-import definicionLex.tToken;
 
 enum est {e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, 
 	e17, e18, e19, e20, e21, e22, e23, e24, e25, e26, e27, e28, e29, e30, e31, e32, 
@@ -219,6 +217,113 @@ public class ALexico {
 		}
 		return new Token();
 	}
+	
+	public Token dameTokenPalReservada(String palReservada) {
+		if (palReservada.equals("program")) {
+			return new Token(TToken.program, contPrograma);
+		}
+		//Ninguna de las palabras reservadas debe llevar lexemas
+		if (palReservada.equals("boolean")) {
+			if (tokensSalida.lastElement().getTipoToken() == TToken.constante|| 
+				tokensSalida.lastElement().getTipoToken() == TToken.var)
+				return new Token(TToken.tipoVarBooleano, contPrograma);
+			else {
+				error("Declaración incorrecta de tipo 'boolean'.");
+				return new Token();
+			}
+		}
+		if (palReservada.equals("character")) {
+			if (tokensSalida.lastElement().getTipoToken() == TToken.constante|| 
+				tokensSalida.lastElement().getTipoToken() == TToken.var)
+				return new Token(TToken.tipoVarCaracter, contPrograma);
+			else {
+				error("Declaración incorrecta de tipo 'character'.");
+				return new Token();
+			}
+		}
+		if (palReservada.equals("natural")) {
+			if (tokensSalida.lastElement().getTipoToken() == TToken.constante|| 
+				tokensSalida.lastElement().getTipoToken() == TToken.var)
+				return new Token(TToken.tipoVarNatural, contPrograma);
+			else {
+				error("Declaración incorrecta de tipo 'natural'.");
+				return new Token();
+			}
+		}
+		if (palReservada.equals("integer")) {
+			if (tokensSalida.lastElement().getTipoToken() == TToken.constante|| 
+				tokensSalida.lastElement().getTipoToken() == TToken.var)
+				return new Token(TToken.tipoVarEntero, contPrograma);
+			else {
+				error("Declaración incorrecta de tipo 'integer'.");
+				return new Token();
+			}
+		}
+		if (palReservada.equals("true")) {
+			return new Token(TToken.booleanoCierto,"true",contPrograma);
+		}
+		if (palReservada.equals("false")) {
+			return new Token(TToken.booleanoFalso, "false ",contPrograma);
+		}
+		if (palReservada.equals("or")) {
+			return new Token(TToken.oLogica, contPrograma);
+		}
+		if (palReservada.equals("and")) {
+			return new Token(TToken.yLogica, contPrograma);
+		}
+		if (palReservada.equals("not")) {
+			return new Token(TToken.negLogica, contPrograma);
+		}
+		if (palReservada.equals("in")) {
+			return new Token(TToken.entradaTeclado, contPrograma);
+		}
+		if (palReservada.equals("out")) {
+			return new Token(TToken.salidaPantalla, contPrograma);
+		}
+		if (palReservada.equals("char")) {
+			return new Token(TToken.castChar, contPrograma);
+		}
+		if (palReservada.equals("nat")) {
+			return new Token(TToken.castNat, contPrograma);
+		}
+		if (palReservada.equals("int")) {
+			return new Token(TToken.castInt, contPrograma);
+		}
+		if (palReservada.equals("float")) {
+			return new Token(TToken.castFloat, contPrograma);
+		}
+
+		if (palReservada.equals("vars-consts")) {
+			return new Token(TToken.varsConsts, contPrograma);
+		}
+		
+		if (palReservada.equals("var")) {
+			return new Token(TToken.var, contPrograma);
+		}
+		
+		if (palReservada.equals("const")) {
+			return new Token(TToken.constante, contPrograma);
+		}
+		
+		if (palReservada.equals("instructions")) {
+			return new Token(TToken.instrucciones, contPrograma);
+		}
+		
+		if (palReservada.equals("swap1")) {
+			return new Token(TToken.swap1, contPrograma);
+		}
+		
+		if (palReservada.equals("swap2")) {
+			return new Token(TToken.swap2, contPrograma);
+		}
+
+		if (palReservada.equals("tipo")) {
+			return new Token(TToken.decTipo, contPrograma);
+		}
+
+		return new Token();
+	}
+	
 
 
 	public Vector<Token> getTokensSalida() {
