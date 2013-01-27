@@ -1,0 +1,5 @@
+program: numerosMal{
+	vars-consts{
+		const natural num1 := 02;
+	}
+}
