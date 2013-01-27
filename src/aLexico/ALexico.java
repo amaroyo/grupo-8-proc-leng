@@ -41,6 +41,24 @@ public class ALexico {
 		
 	}
 	
+	public void cambiaEstado(est estSig) {
+		try {
+			//No añadimos las comillas simples en los tipo character
+			if (buff[0] != '\'')
+				lex = lex + buff[0];
+			if (buff[0] == '\n')
+				contPrograma++;
+			if (bfr.read(buff) == -1) {
+				finFichero = true;
+				buff[0] = ' ';
+			}
+			estado = estSig;
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}	
+	
 	public void iniciaVecPalReservadas() {
 		palReservadas.clear();
 		
