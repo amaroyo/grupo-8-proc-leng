@@ -92,6 +92,17 @@ public class ALexico {
 		}
 	}
 	
+	public void resetearFichero() {
+		try {
+			bfr.reset();
+			bfr.read(buff);
+			contPrograma = 1;
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	
 	public boolean esLetraMinus(char car) {
 		if ((car >= 'a' && car <= 'z'))
 			return true;
