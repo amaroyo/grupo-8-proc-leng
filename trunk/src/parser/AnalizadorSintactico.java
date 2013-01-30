@@ -44,6 +44,37 @@ public class AnalizadorSintactico {
 		
 		
 	}
+	
+	
+	
+	public void compilar(){
+		
+		int i = 0;
+		int linea = 0;
+		
+		
+		 if(!entrada.isEmpty()){
+			
+			linea = procesaCabecera(entrada, i);
+			
+			if(!errorCompilacion && linea != -1) {
+				linea = procesaSecVariables(entrada,linea);
+				
+				if(!errorCompilacion && linea != -1) {
+					procesaSecInstrucciones(entrada, linea);
+				}
+				
+			}
+			
+			
+			
+			
+			
+		}
+		else System.out.println("No hay nada que compilar!!!");
+	 
+		
+	}
 
 	
 	
