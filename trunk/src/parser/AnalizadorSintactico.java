@@ -25,10 +25,26 @@ public class AnalizadorSintactico {
 
 	
 	
+	public AnalizadorSintactico(){
 		
-	
+
+		dirMemoria = new HashMap(100);
+		TS = new HashMap(100);
+		errorCompilacion = false;
+		byteOut = new Vector<ByteCode>();
+		posMemoLibre = 0;
 		
-//MAAAAAAIIIIIINNNNNN_____________________________
+		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
+	    scanner = new ALexico();
+		scanner.scanFichero(nombreFichero);
+		entrada = scanner.dameTokens();
+		
+		if(scanner.getErrorLex()) errorCompilacion = true;
+		
+		
+		
+	}
+
 	
 	
 	public static void main(String[] args) {
