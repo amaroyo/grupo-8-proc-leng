@@ -810,6 +810,14 @@ public class ALexico {
 		return !errorLex;
 	}
 	
+	public boolean getErrorLex(){
+		return errorLex;
+	}
+	
+	public int getContPrograma(){
+		return contPrograma;
+	}
+	
 	
 	public static void main(String[] args) {
 		
