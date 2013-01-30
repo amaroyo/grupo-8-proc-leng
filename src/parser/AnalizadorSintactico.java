@@ -76,6 +76,64 @@ public class AnalizadorSintactico {
 		
 	}
 
+
+
+public int procesaCabecera(Vector<Token> VCabecera, int linea){
+		
+		int i = linea;
+		boolean finCabecera = false;
+		
+	   while (!errorCompilacion && !finCabecera){	
+		   
+ 		   if(VCabecera.get(i).getTipoToken() != tToken.program){
+			   error(VCabecera.get(i).getLinea(),"No se reconoce la palabra reservada program!83");
+			   errorCompilacion = true;
+			   break;
+		   }
+		   else {
+			   byteOut.add(new ByteCode(tByteCode.begin));
+			   i++;
+		   }
+		   
+		   if(VCabecera.get(i).getTipoToken() != tToken.dosPuntos){
+			   error(VCabecera.get(i).getLinea(),"Faltan los dos puntos!93");
+			   errorCompilacion = true;
+			   break;
+		   }
+		   else {
+			   i++;
+		   }
+		   
+		   if(VCabecera.get(i).getTipoToken() != tToken.ident){
+			   error(VCabecera.get(i).getLinea(),"Nombre de programa no valido!102");
+			   errorCompilacion = true;
+			   break;
+		   }
+		   else {
+			   //meter el identificador en la posicion 0
+			   i++;
+		   }
+		
+		   if(VCabecera.get(i).getTipoToken() != tToken.LA){
+			   error(VCabecera.get(i).getLinea(),"Falta la llave de apertura!112");
+			   errorCompilacion = true;
+			   break;
+		   }
+		   else {
+			   i++;
+			   finCabecera = true;
+			   return i;
+		   }
+		   
+		
+	   }//while	
+	   return -1;
+	}
+
+
+
+
+
 	
 	
 	public static void main(String[] args) {
