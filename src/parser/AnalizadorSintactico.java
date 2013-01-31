@@ -133,6 +133,67 @@ public int procesaCabecera(Vector<Token> VCabecera, int linea){
 
 
 
+public void error(int i, String comentario) {
+		//if (comentario == null)
+			descripError = "Error en linea " + i+ " de tipo: "  + comentario +   "\n";
+			errorCompilacion = true;
+	
+		
+	}
+	
+	
+	public void printParser(){
+		
+		
+		System.out.println("***********************************************************************");
+		System.out.println("*                           LENGUAJE PILA                             *");
+		System.out.println("***********************************************************************");
+		System.out.println();
+		System.out.println();
+		System.out.println("Resultado");
+		System.out.println("---------");
+		System.out.println();
+		if (!errorCompilacion)
+			System.out.println("La compilacion ha sido satisfactoria." + "\n" +
+					"Fueron leidas " + scanner.getContPrograma() + " lineas.");
+		else{
+			if (descripError == null) System.out.println("Ocurrierron fallos durante el analisis");
+			else
+			System.out.println("Ocurrierron fallos durante el analisis:" + "\n" +
+					descripError);
+		}
+		System.out.println();
+		if (!errorCompilacion){
+			System.out.println("-------------------------------");
+			System.out.println("Detalle del analisis sintactico");
+			System.out.println("-------------------------------");
+			System.out.println();
+			
+			printTablaTS();
+			printTablaMemoria();
+			
+			System.out.println();
+			System.out.println("*Detalle del lenguaje pila");
+			System.out.println("--------------------------");
+			System.out.println();
+			
+		
+			for (int i = 0; i < byteOut.size(); i++){
+			
+				if( byteOut.get(i).getDireccion() == -1){
+					System.out.println( i + ": " + byteOut.get(i).getByteCode().toString());
+				}
+				else System.out.println( i + ": " + byteOut.get(i).getByteCode().toString() + 
+							" " + byteOut.get(i).getDireccion());
+			}	
+		
+		}
+		System.out.println();
+		System.out.println();
+		System.out.println();
+	
+	}
+
 
 	
 	
