@@ -130,6 +130,51 @@ public int procesaCabecera(Vector<Token> VCabecera, int linea){
 	   return -1;
 	}
 
+public int procesaSecVariables(Vector<Token> VVariables, int linea){
+		
+		int i = linea;
+		boolean finVariables = false;
+		
+		while (!errorCompilacion && !finVariables){
+			
+			if(VVariables.get(i).getTipoToken() != tToken.varsConsts){
+				   error(VVariables.get(i).getLinea(),"No se reconoce la palabra reservada vars-consts!");
+				   errorCompilacion = true;
+				   break;
+			 }
+		     else {
+				   i++;
+			 }
+			
+			if(VVariables.get(i).getTipoToken() != tToken.LA){
+				   error(VVariables.get(i).getLinea(),"Falta la llave de apertura!");
+				   errorCompilacion = true;
+				   break;
+			 }
+		     else {
+				   i++;
+			 }
+			
+			int nuevapos = procesaInstVariables(VVariables, i);
+			
+			if (nuevapos != -1){
+				finVariables = true;
+				  //hemos procesado la seccion de las variables debuty
+				   nuevapos++;
+				return nuevapos;
+			}
+			
+		}
+		
+		return -1;
+	}
+	
+	public int procesaSecInstrucciones(Vector<Token> VInstrucciones, int linea){
+		
+		return -1;
+	}
+
+
 
 
 
