@@ -284,6 +284,19 @@ public boolean procesaTipoVariable(Vector<Token> v, int i){
 
 	
 	
+
+	public boolean numNegativo(Vector<Token> v, int i){
+		if (v.get(i).getTipoToken() == tToken.negArit) return true;
+		else return false;
+	}
+	
+	public boolean procesaFinInstruccion(Vector<Token> v, int i){
+		if(v.get(i).getTipoToken() == tToken.puntoyComa) return true;
+		else return false;
+	}
+
+
+	
 	public static void main(String[] args) {
 		
 		AnalizadorSintactico sintetiza = new AnalizadorSintactico();
