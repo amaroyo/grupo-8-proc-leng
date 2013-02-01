@@ -295,7 +295,15 @@ public boolean procesaTipoVariable(Vector<Token> v, int i){
 		else return false;
 	}
 
-
+public void actualizaPunteroMemoriaDatos(){
+		if(posMemoLibre < 10) {
+			posMemoLibre = posMemoLibre + 1;
+		}
+		else {
+			System.out.println("YA NO HAY ESPACIO LIBRE EN LA MEMORIA!!!");
+			errorCompilacion = true;
+		}
+	}
 	
 	public static void main(String[] args) {
 		
