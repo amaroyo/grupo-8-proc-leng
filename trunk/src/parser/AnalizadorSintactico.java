@@ -305,6 +305,20 @@ public void actualizaPunteroMemoriaDatos(){
 		}
 	}
 	
+	public boolean procesaIdentificador(Vector<Token> v, int i) {
+		if (v.get(i).getTipoToken() == tToken.ident) return true;
+		else return false;
+	}
+	
+	
+	
+	public boolean procesaAsignacion(Vector<Token> v, int i){
+		if (v.get(i).getTipoToken() == tToken.asigConst) return true;
+		else return false;
+	}
+
+	
+	
 	public static void main(String[] args) {
 		
 		AnalizadorSintactico sintetiza = new AnalizadorSintactico();
