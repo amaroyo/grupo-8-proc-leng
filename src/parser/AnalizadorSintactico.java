@@ -319,6 +319,40 @@ public void actualizaPunteroMemoriaDatos(){
 
 	
 	
+		
+	public boolean correspondenciaDeTipos(Vector<Token> v, String t, int i){
+		
+		if (t == "tipoVarBooleano"){
+				if (v.get(i).getTipoToken().toString() == "booleanoFalso"
+						|| v.get(i).getTipoToken().toString() == "booleanoCierto") return true;
+		}
+		
+		else if (t == "tipoVarCaracter"){
+			if (v.get(i).getTipoToken().toString() == "caracter") return true;
+		}
+		
+		else if (t == "tipoVarNatural"){
+			//por si acaso metemos un numero negativo al natural!!
+			if (v.get(i-1).getTipoToken().toString() != "negArit" &&
+					v.get(i).getTipoToken().toString() == "natural") return true;
+		}
+		
+		else if (t == "tipoVarEntero"){
+			if (v.get(i).getTipoToken().toString() == "entero"
+					||v.get(i).getTipoToken().toString() == "natural") return true;
+		}
+		
+		else if (t == "tipoVarReal"){
+			if (v.get(i).getTipoToken().toString() == "entero"
+					|| v.get(i).getTipoToken().toString() == "natural"
+					|| v.get(i).getTipoToken().toString() == "real") return true;
+		}
+		
+	 return false;
+	}
+
+	
+	
 	public static void main(String[] args) {
 		
 		AnalizadorSintactico sintetiza = new AnalizadorSintactico();
