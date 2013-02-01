@@ -272,6 +272,16 @@ public void error(int i, String comentario) {
 		System.out.println();
 	}
 
+public boolean procesaTipoVariable(Vector<Token> v, int i){
+		
+		if (v.get(i).getTipoToken() == tToken.tipoVarBooleano
+				|| v.get(i).getTipoToken() == tToken.tipoVarCaracter
+				|| v.get(i).getTipoToken() == tToken.tipoVarNatural
+				|| v.get(i).getTipoToken() == tToken.tipoVarEntero
+				|| v.get(i).getTipoToken() == tToken.tipoVarReal) return true;
+		else return false;
+	}
+
 	
 	
 	public static void main(String[] args) {
