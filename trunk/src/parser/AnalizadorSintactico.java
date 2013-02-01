@@ -241,6 +241,38 @@ public void error(int i, String comentario) {
 
 
 	
+	public void printTablaTS() {
+		System.out.println("*Detalle de la tabla de simbolos");
+		System.out.println("--------------------------------");
+		System.out.println();
+		
+		Iterator it = TS.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry e = (Map.Entry)it.next();
+			System.out.print("El identificador '" + e.getKey() + "' ");
+			TablaInfo info = (TablaInfo) e.getValue();
+			System.out.println(info.print());
+			
+		}
+		
+		System.out.println();
+	}
+	
+	public void printTablaMemoria() {
+		System.out.println("*Detalle de la tabla de memoria");
+		System.out.println("-------------------------------");
+		System.out.println();
+		
+		Iterator it = dirMemoria.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry e = (Map.Entry)it.next();
+			System.out.println("Posicion " + e.getKey() + " : " + e.getValue());
+		}
+		
+		System.out.println();
+	}
+
+	
 	
 	public static void main(String[] args) {
 		
