@@ -11,6 +11,9 @@ program: ejemplo{
 }
 	instructions{
 		in(euros);
+		in(centimos);
+		in(cantidad);
+		in(pesetas);
 		swap1();
 		swap2();
 	}
