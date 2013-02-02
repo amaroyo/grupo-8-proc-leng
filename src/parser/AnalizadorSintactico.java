@@ -417,7 +417,65 @@ public class AnalizadorSintactico {
 			
 			    } 
 			
-	
+///////////////Instrucción de Tipo SWAP1///////////////////////	
+///////////////////////////////////////////////////////////////
+			else 
+				if(v.get(i).getTipoToken()==TToken.swap1){
+					i++;			
+
+		//leo (			
+				if(v.get(i).getTipoToken()==TToken.PA){
+				i++;}
+				else {
+				error(v.get(i).getLinea(),"Falta el (");
+				errorCompilacion = true;
+				break;}
+		//leo )			
+				if(v.get(i).getTipoToken()==TToken.PC){
+				i++;}
+				else {
+				error(v.get(i).getLinea(),"Falta el )");
+				errorCompilacion = true;
+				break;}	
+		//leo ;			
+				if(v.get(i).getTipoToken()==TToken.puntoyComa){
+				byteOut.add(new ByteCode(tByteCode.swap1));
+				i++;}
+				else {
+				error(v.get(i).getLinea(),"Falta el ;");
+				errorCompilacion = true;
+				break;}	
+				
+				    }
+///////////////Instrucción de Tipo SWAP2////////////////////	
+////////////////////////////////////////////////////////////
+				else 
+				if(v.get(i).getTipoToken()==TToken.swap2){
+				i++;			
+		
+		//leo (			
+				if(v.get(i).getTipoToken()==TToken.PA){
+				i++;}
+				else {
+				error(v.get(i).getLinea(),"Falta el (");
+				errorCompilacion = true;
+				break;}
+		//leo )			
+				if(v.get(i).getTipoToken()==TToken.PC){
+				i++;}
+				else {
+				error(v.get(i).getLinea(),"Falta el )");
+				errorCompilacion = true;
+				break;}	
+		//leo ;			
+				if(v.get(i).getTipoToken()==TToken.puntoyComa){
+				byteOut.add(new ByteCode(tByteCode.swap2));
+				i++;}
+				else {
+				error(v.get(i).getLinea(),"Falta el ;");
+				errorCompilacion = true;
+				break;}	
+				}	
 	
 			
 ///////////////Instrucciones Inválidas//////////////////////	
