@@ -355,6 +355,89 @@ public class AnalizadorSintactico {
 	}
 	
 	
+	public int procesaInstInstrucciones(Vector<Token> v, int linea){
+		String identificador;
+		int i = linea;
+		while(v.get(i).getTipoToken() != TToken.LC){
+			
+///////////////Instrucción de Tipo IN///////////////////////	
+////////////////////////////////////////////////////////////
+			if(v.get(i).getTipoToken()==TToken.entradaTeclado){
+				i++;
+
+	//leo (			
+			if(v.get(i).getTipoToken()==TToken.PA){
+			i++;}
+			else {
+			error(v.get(i).getLinea(),"Falta el (");
+			errorCompilacion = true;
+			break;}	
+	//leo iden y compruebo que esta en TS y no es constante			
+			if(v.get(i).getTipoToken()==TToken.ident){		
+			  identificador = v.get(i).getLexema();
+			 	    // si es Identificador de TS
+			 		if(TS.containsKey(identificador)){
+			 			 // si no es Constante
+			 			if(!TS.get(identificador).isConstante()){
+			 				i++;			
+			 			}
+			 			else {
+					 		error(v.get(i).getLinea(),"IN sobre identificador que es una Constante");
+					 		errorCompilacion = true;
+					 		break;}		
+			 				 			
+			 		}
+			 		else {
+			 		error(v.get(i).getLinea(),"Identificador que no está en TS");
+			 		errorCompilacion = true;
+			 		break;}			
+			
+			}
+			else {
+			error(v.get(i).getLinea(),"No es identificador válido");
+			errorCompilacion = true;
+			break;}	
+	//leo )			
+			if(v.get(i).getTipoToken()==TToken.PC){
+			i++;}
+			else {
+			error(v.get(i).getLinea(),"Falta el )");
+			errorCompilacion = true;
+			break;}				
+	//leo ;			
+			if(v.get(i).getTipoToken()==TToken.puntoyComa){
+			byteOut.add(new ByteCode(tByteCode.read));
+			byteOut.add(new ByteCode(tByteCode.desapila_dir,TS.get(identificador).getDireccion()));
+			i++;}
+			else {
+			error(v.get(i).getLinea(),"Falta el ;");
+			errorCompilacion = true;
+			break;}	
+			
+			
+			    } 
+			
+	
+	
+			
+///////////////Instrucciones Inválidas//////////////////////	
+////////////////////////////////////////////////////////////			
+			
+			else {
+			error(v.get(i).getLinea(),"No hay instrucciones válidas");
+			errorCompilacion = true;
+			break;}	
+			
+			
+		}//while
+		
+		if(!errorCompilacion) return i;
+		return -1;
+	}
+	
+	
+	
+	
 	
 	public void error(int i, String comentario) {
 		//if (comentario == null)
