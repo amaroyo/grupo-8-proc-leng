@@ -818,7 +818,9 @@ public class ALexico {
 		return contPrograma;
 	}
 	
-	
+	public Vector<Token> dameTokens(){
+		return tokensSalida;
+	}
 	public static void main(String[] args) {
 		
 		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
