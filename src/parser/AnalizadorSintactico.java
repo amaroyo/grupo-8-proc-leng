@@ -349,7 +349,13 @@ public class AnalizadorSintactico {
 				
 			
 		}//while
-		
+		if(v.get(i).getTipoToken()==TToken.LC){
+		}
+		else {
+		error(v.get(i).getLinea(),"Falta la } de Declaraciones");
+		errorCompilacion = true;
+		}	
+	
 		if(!errorCompilacion) return i;
 		return -1;
 	}
@@ -491,6 +497,20 @@ public class AnalizadorSintactico {
 			
 			
 		}//while
+		
+		if(v.get(i).getTipoToken()==TToken.LC){
+			i++;
+		}
+		else {
+		error(v.get(i).getLinea(),"Falta la } de Instrucciones");
+		errorCompilacion = true;
+		}	
+		if(v.get(i).getTipoToken()==TToken.LC){
+		}
+		else {
+		error(v.get(i).getLinea(),"Falta la } Program");
+		errorCompilacion = true;
+		}	
 		
 		if(!errorCompilacion) return i;
 		return -1;
