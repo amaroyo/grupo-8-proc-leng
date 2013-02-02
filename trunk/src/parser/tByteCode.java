@@ -28,7 +28,7 @@ public enum tByteCode {
 	and,
 	modulo,
 	
-    negacionlógica,
+    negacionlogica,
     restaunitaria,
     desplazamientoderecha,
     desplazamientoizquierda

@@ -1,13 +1,15 @@
 program: numeros{
 	vars-consts{
-		
-		const natural num1 := 2;
+		const natural num1 := 330;
 		const integer num2 := -2;	
-		const float num3 := 2.0;		
+		const float num3 := 5.0;		
 		const float num4 := 2.33;
-		const float num5:= 2.33e2;
-		const float num6 := 2e1;
-		const float num7 := 2E-20;
+		const float num5:= 8.33e2;
+		const float num6 := -2e1;
+		const float num7 := 7E-140;
+		const character num8 := 'a';
+		const boolean num9 := false;
 		
 	}
 }
+		

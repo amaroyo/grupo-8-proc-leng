@@ -7,9 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import definicionLex.AnalizadorLex;
-import definicionLex.Token;
-import definicionLex.tToken;
+import aLexico.ALexico;
+import aLexico.Token;
+import aLexico.TToken;
+
 
 public class AnalizadorSintactico {
 
@@ -19,7 +20,7 @@ public class AnalizadorSintactico {
 	private Vector<Token> entrada;
 	private String descripError;
 	private boolean errorCompilacion;
-	private AnalizadorLex scanner;
+	private ALexico scanner;
 	private int posMemoLibre;
 	
 
@@ -34,8 +35,8 @@ public class AnalizadorSintactico {
 		byteOut = new Vector<ByteCode>();
 		posMemoLibre = 0;
 		
-		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
-	    scanner = new AnalizadorLex();
+		String nombreFichero = "src/aLexico/ejemplos/numerosCorrectos.txt";
+	    scanner = new ALexico();
 		scanner.scanFichero(nombreFichero);
 		entrada = scanner.dameTokens();
 		
@@ -56,7 +57,7 @@ public class AnalizadorSintactico {
 		 if(!entrada.isEmpty()){
              
              //////////////////////////////////////////////////////////////////////////////////
-             /////Programa → Program: ident { var- consts { Decs } instructions { Inst } }/////
+             /////Programa -> Program: ident { var- consts { Decs } instructions { Inst } }/////
              //////////////////////////////////////////////////////////////////////////////////
 			
 			linea = procesaCabecera(entrada, i);
@@ -87,7 +88,7 @@ public class AnalizadorSintactico {
 		
 	   while (!errorCompilacion && !finCabecera){	
 		   
- 		   if(VCabecera.get(i).getTipoToken() != tToken.program){
+ 		   if(VCabecera.get(i).getTipoToken() != TToken.program){
 			   error(VCabecera.get(i).getLinea(),"No se reconoce la palabra reservada program!83");
 			   errorCompilacion = true;
 			   break;
@@ -97,7 +98,7 @@ public class AnalizadorSintactico {
 			   i++;
 		   }
 		   
-		   if(VCabecera.get(i).getTipoToken() != tToken.dosPuntos){
+		   if(VCabecera.get(i).getTipoToken() != TToken.dosPuntos){
 			   error(VCabecera.get(i).getLinea(),"Faltan los dos puntos!93");
 			   errorCompilacion = true;
 			   break;
@@ -106,7 +107,7 @@ public class AnalizadorSintactico {
 			   i++;
 		   }
 		   
-		   if(VCabecera.get(i).getTipoToken() != tToken.ident){
+		   if(VCabecera.get(i).getTipoToken() != TToken.ident){
 			   error(VCabecera.get(i).getLinea(),"Nombre de programa no valido!102");
 			   errorCompilacion = true;
 			   break;
@@ -116,7 +117,7 @@ public class AnalizadorSintactico {
 			   i++;
 		   }
 		
-		   if(VCabecera.get(i).getTipoToken() != tToken.LA){
+		   if(VCabecera.get(i).getTipoToken() != TToken.LA){
 			   error(VCabecera.get(i).getLinea(),"Falta la llave de apertura!112");
 			   errorCompilacion = true;
 			   break;
@@ -139,7 +140,7 @@ public class AnalizadorSintactico {
 		
 		while (!errorCompilacion && !finVariables){
 			
-			if(VVariables.get(i).getTipoToken() != tToken.varsConsts){
+			if(VVariables.get(i).getTipoToken() != TToken.varsConsts){
 				   error(VVariables.get(i).getLinea(),"No se reconoce la palabra reservada vars-consts!135");
 				   errorCompilacion = true;
 				   break;
@@ -148,7 +149,7 @@ public class AnalizadorSintactico {
 				   i++;
 			 }
 			
-			if(VVariables.get(i).getTipoToken() != tToken.LA){
+			if(VVariables.get(i).getTipoToken() != TToken.LA){
 				   error(VVariables.get(i).getLinea(),"Falta la llave de apertura!144");
 				   errorCompilacion = true;
 				   break;
@@ -158,9 +159,9 @@ public class AnalizadorSintactico {
 			 }
             
             ////////////////////////////////////////////////////////////////////
-            ////////////////Decs → Decs Dec | Dec///////////////////////////////
-            ////////////////Dec → var tipo ident;///////////////////////////////
-            ////////////////Dec→ const tipo ident := ValorDec;//////////////////
+            ////////////////Decs -> Decs Dec | Dec///////////////////////////////
+            ////////////////Dec -> var tipo ident;///////////////////////////////
+            ////////////////Dec -> const tipo ident := ValorDec;//////////////////
             ////////////////////////////////////////////////////////////////////
 			
 			int nuevapos = procesaInstVariables(VVariables, i);
@@ -201,12 +202,12 @@ public class AnalizadorSintactico {
                 i++;
             }
             ///////////////////////////////////////////////////////
-            ////////////Inst→ Inst Ins | Ins///////////////////////
-            ////////////Ins → InsAsig;//////////// ////////////////
-            ////////////Ins → InsR; ///////////////////////////////
-            ////////////Ins → InsW; ///////////////////////////////
-            ////////////Ins → SWAP1();/////////////////////////////
-            ////////////Ins → SWAP2();/////////////////////////////
+            ////////////Inst -> Inst Ins | Ins///////////////////////
+            ////////////Ins -> InsAsig;//////////// ////////////////
+            ////////////Ins -> InsR; ///////////////////////////////
+            ////////////Ins -> InsW; ///////////////////////////////
+            ////////////Ins -> SWAP1();/////////////////////////////
+            ////////////Ins -> SWAP2();/////////////////////////////
             ///////////////////////////////////////////////////////
 			
 			int nuevapos = procesaInstInstrucciones(VInstrucciones, i);
@@ -231,13 +232,13 @@ public class AnalizadorSintactico {
 		int i = linea;
 		boolean insFinalizada = false;
 		
-		while(v.get(i).getTipoToken() != tToken.LC){
+		while(v.get(i).getTipoToken() != TToken.LC){
 			insFinalizada = false;
 			
 			
-			if(v.get(i).getTipoToken() == tToken.var || v.get(i).getTipoToken() == tToken.constante){
+			if(v.get(i).getTipoToken() == TToken.var || v.get(i).getTipoToken() == TToken.constante){
 				
-				boolean variable = (v.get(i).getTipoToken() == tToken.var);
+				boolean variable = (v.get(i).getTipoToken() == TToken.var);
 				i++;
 				if(procesaTipoVariable(v,i)){
 					String tipo = v.get(i).getTipoToken().toString();
@@ -453,26 +454,26 @@ public class AnalizadorSintactico {
 
 	public boolean procesaTipoVariable(Vector<Token> v, int i){
 		
-		if (v.get(i).getTipoToken() == tToken.tipoVarBooleano
-				|| v.get(i).getTipoToken() == tToken.tipoVarCaracter
-				|| v.get(i).getTipoToken() == tToken.tipoVarNatural
-				|| v.get(i).getTipoToken() == tToken.tipoVarEntero
-				|| v.get(i).getTipoToken() == tToken.tipoVarReal) return true;
+		if (v.get(i).getTipoToken() == TToken.tipoVarBooleano
+				|| v.get(i).getTipoToken() == TToken.tipoVarCaracter
+				|| v.get(i).getTipoToken() == TToken.tipoVarNatural
+				|| v.get(i).getTipoToken() == TToken.tipoVarEntero
+				|| v.get(i).getTipoToken() == TToken.tipoVarReal) return true;
 		else return false;
 	}
 	
 	public boolean numNegativo(Vector<Token> v, int i){
-		if (v.get(i).getTipoToken() == tToken.negArit) return true;
+		if (v.get(i).getTipoToken() == TToken.negArit) return true;
 		else return false;
 	}
 	
 	public boolean procesaFinInstruccion(Vector<Token> v, int i){
-		if(v.get(i).getTipoToken() == tToken.puntoyComa) return true;
+		if(v.get(i).getTipoToken() == TToken.puntoyComa) return true;
 		else return false;
 	}
 	
 	public boolean procesaIdentificador(Vector<Token> v, int i) {
-		if (v.get(i).getTipoToken() == tToken.ident) return true;
+		if (v.get(i).getTipoToken() == TToken.ident) return true;
 		else return false;
 	}
 	
@@ -487,7 +488,7 @@ public class AnalizadorSintactico {
 	}
 	
 	public boolean procesaAsignacion(Vector<Token> v, int i){
-		if (v.get(i).getTipoToken() == tToken.asigConst) return true;
+		if (v.get(i).getTipoToken() == TToken.asigConst) return true;
 		else return false;
 	}
 	
