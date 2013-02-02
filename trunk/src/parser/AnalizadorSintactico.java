@@ -35,7 +35,7 @@ public class AnalizadorSintactico {
 		byteOut = new Vector<ByteCode>();
 		posMemoLibre = 0;
 		
-		String nombreFichero = "src/aLexico/ejemplos/numerosCorrectos.txt";
+		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
 	    scanner = new ALexico();
 		scanner.scanFichero(nombreFichero);
 		entrada = scanner.dameTokens();
