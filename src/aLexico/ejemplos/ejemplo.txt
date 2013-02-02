@@ -7,7 +7,7 @@ program: ejemplo{
 		var float pesetas;
 		var boolean correcto;
 		const character car := 'a';
-		const float razon := ==  <= 166.386;
+		const float razon := 166.386;
 }
 	instructions{
 		in(euros);
