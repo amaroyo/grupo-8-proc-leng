@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import definicionLex.tToken;
+
 import aLexico.ALexico;
 import aLexico.Token;
 import aLexico.TToken;
@@ -19,7 +21,7 @@ public class AnalizadorSintactico {
 	private Vector<Token> entrada;
 	private String descripError;
 	private boolean errorCompilacion;
-	private AnalizadorLex scanner;
+	private ALexico scanner;
 	private int posMemoLibre;
 	
 
@@ -85,7 +87,7 @@ public int procesaCabecera(Vector<Token> VCabecera, int linea){
 		
 	   while (!errorCompilacion && !finCabecera){	
 		   
- 		   if(VCabecera.get(i).getTipoToken() != tToken.program){
+ 		   if(VCabecera.get(i).getTipoToken() != TToken.program){
 			   error(VCabecera.get(i).getLinea(),"No se reconoce la palabra reservada program!83");
 			   errorCompilacion = true;
 			   break;
@@ -95,7 +97,7 @@ public int procesaCabecera(Vector<Token> VCabecera, int linea){
 			   i++;
 		   }
 		   
-		   if(VCabecera.get(i).getTipoToken() != tToken.dosPuntos){
+		   if(VCabecera.get(i).getTipoToken() != TToken.dosPuntos){
 			   error(VCabecera.get(i).getLinea(),"Faltan los dos puntos!93");
 			   errorCompilacion = true;
 			   break;
@@ -104,7 +106,7 @@ public int procesaCabecera(Vector<Token> VCabecera, int linea){
 			   i++;
 		   }
 		   
-		   if(VCabecera.get(i).getTipoToken() != tToken.ident){
+		   if(VCabecera.get(i).getTipoToken() != TToken.ident){
 			   error(VCabecera.get(i).getLinea(),"Nombre de programa no valido!102");
 			   errorCompilacion = true;
 			   break;
@@ -114,7 +116,7 @@ public int procesaCabecera(Vector<Token> VCabecera, int linea){
 			   i++;
 		   }
 		
-		   if(VCabecera.get(i).getTipoToken() != tToken.LA){
+		   if(VCabecera.get(i).getTipoToken() != TToken.LA){
 			   error(VCabecera.get(i).getLinea(),"Falta la llave de apertura!112");
 			   errorCompilacion = true;
 			   break;
@@ -137,7 +139,7 @@ public int procesaSecVariables(Vector<Token> VVariables, int linea){
 		
 		while (!errorCompilacion && !finVariables){
 			
-			if(VVariables.get(i).getTipoToken() != tToken.varsConsts){
+			if(VVariables.get(i).getTipoToken() != TToken.varsConsts){
 				   error(VVariables.get(i).getLinea(),"No se reconoce la palabra reservada vars-consts!");
 				   errorCompilacion = true;
 				   break;
@@ -146,7 +148,7 @@ public int procesaSecVariables(Vector<Token> VVariables, int linea){
 				   i++;
 			 }
 			
-			if(VVariables.get(i).getTipoToken() != tToken.LA){
+			if(VVariables.get(i).getTipoToken() != TToken.LA){
 				   error(VVariables.get(i).getLinea(),"Falta la llave de apertura!");
 				   errorCompilacion = true;
 				   break;
@@ -170,7 +172,40 @@ public int procesaSecVariables(Vector<Token> VVariables, int linea){
 	}
 	
 	public int procesaSecInstrucciones(Vector<Token> VInstrucciones, int linea){
+		int i = linea;
+		boolean finVariables = false;
 		
+		while (!errorCompilacion && !finVariables){
+			
+			if(VInstrucciones.get(i).getTipoToken() != TToken.instrucciones){
+				   error(VInstrucciones.get(i).getLinea(),"No se reconoce la palabra reservada instructions!");
+				   errorCompilacion = true;
+				   break;
+			 }
+		     else {
+				   i++;
+			 }
+			
+			if(VInstrucciones.get(i).getTipoToken() != TToken.LA){
+				   error(VInstrucciones.get(i).getLinea(),"Falta la llave de apertura del comienzo de las Inst!");
+				   errorCompilacion = true;
+				   break;
+			 }
+		     else {
+				   i++;
+			 }
+			
+			int nuevapos = procesaInstInstrucciones(VInstrucciones, i);
+			
+			if (nuevapos != -1){
+				finVariables = true;
+				  //hemos procesado la seccion de las instrucciones debuty
+				   nuevapos++;
+				return nuevapos;
+			}
+			
+		}
+	
 		return -1;
 	}
 
@@ -274,11 +309,11 @@ public void error(int i, String comentario) {
 
 public boolean procesaTipoVariable(Vector<Token> v, int i){
 		
-		if (v.get(i).getTipoToken() == tToken.tipoVarBooleano
-				|| v.get(i).getTipoToken() == tToken.tipoVarCaracter
-				|| v.get(i).getTipoToken() == tToken.tipoVarNatural
-				|| v.get(i).getTipoToken() == tToken.tipoVarEntero
-				|| v.get(i).getTipoToken() == tToken.tipoVarReal) return true;
+		if (v.get(i).getTipoToken() == TToken.tipoVarBooleano
+				|| v.get(i).getTipoToken() == TToken.tipoVarCaracter
+				|| v.get(i).getTipoToken() == TToken.tipoVarNatural
+				|| v.get(i).getTipoToken() == TToken.tipoVarEntero
+				|| v.get(i).getTipoToken() == TToken.tipoVarReal) return true;
 		else return false;
 	}
 
@@ -286,12 +321,12 @@ public boolean procesaTipoVariable(Vector<Token> v, int i){
 	
 
 	public boolean numNegativo(Vector<Token> v, int i){
-		if (v.get(i).getTipoToken() == tToken.negArit) return true;
+		if (v.get(i).getTipoToken() == TToken.negArit) return true;
 		else return false;
 	}
 	
 	public boolean procesaFinInstruccion(Vector<Token> v, int i){
-		if(v.get(i).getTipoToken() == tToken.puntoyComa) return true;
+		if(v.get(i).getTipoToken() == TToken.puntoyComa) return true;
 		else return false;
 	}
 
@@ -306,14 +341,14 @@ public void actualizaPunteroMemoriaDatos(){
 	}
 	
 	public boolean procesaIdentificador(Vector<Token> v, int i) {
-		if (v.get(i).getTipoToken() == tToken.ident) return true;
+		if (v.get(i).getTipoToken() == TToken.ident) return true;
 		else return false;
 	}
 	
 	
 	
 	public boolean procesaAsignacion(Vector<Token> v, int i){
-		if (v.get(i).getTipoToken() == tToken.asigConst) return true;
+		if (v.get(i).getTipoToken() == TToken.asigConst) return true;
 		else return false;
 	}
 
