@@ -7,7 +7,30 @@ public class TablaInfo {
 	private String tipo;
 	private boolean constante;
 	private int direccion;
-				
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+
+	public boolean isConstante() {
+		return constante;
+	}
+
+
+	public void setConstante(boolean constante) {
+		this.constante = constante;
+	}
+
+
+	public int getDireccion() {
+		return direccion;
+	}
+
+
+	public void setDireccion(int direccion) {
+		this.direccion = direccion;
+	}
 	
 	
 
