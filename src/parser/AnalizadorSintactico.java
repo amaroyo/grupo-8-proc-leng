@@ -7,11 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import definicionLex.AnalizadorLex;
+import definicionLex.Token;
 import definicionLex.tToken;
-
-import aLexico.ALexico;
-import aLexico.Token;
-import aLexico.TToken;
 
 public class AnalizadorSintactico {
 
@@ -21,7 +19,7 @@ public class AnalizadorSintactico {
 	private Vector<Token> entrada;
 	private String descripError;
 	private boolean errorCompilacion;
-	private ALexico scanner;
+	private AnalizadorLex scanner;
 	private int posMemoLibre;
 	
 
@@ -37,7 +35,7 @@ public class AnalizadorSintactico {
 		posMemoLibre = 0;
 		
 		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
-	    scanner = new ALexico();
+	    scanner = new AnalizadorLex();
 		scanner.scanFichero(nombreFichero);
 		entrada = scanner.dameTokens();
 		
@@ -56,11 +54,11 @@ public class AnalizadorSintactico {
 		
 		
 		 if(!entrada.isEmpty()){
-
-//////////////////////////////////////////////////////////////////////////////////			 
-/////Programa → Program: ident { var- consts { Decs } instructions { Inst } }/////
-//////////////////////////////////////////////////////////////////////////////////
-			 
+             
+             //////////////////////////////////////////////////////////////////////////////////
+             /////Programa → Program: ident { var- consts { Decs } instructions { Inst } }/////
+             //////////////////////////////////////////////////////////////////////////////////
+			
 			linea = procesaCabecera(entrada, i);
 			
 			if(!errorCompilacion && linea != -1) {
@@ -81,17 +79,15 @@ public class AnalizadorSintactico {
 	 
 		
 	}
-
-
-
-public int procesaCabecera(Vector<Token> VCabecera, int linea){
+	
+	public int procesaCabecera(Vector<Token> VCabecera, int linea){
 		
 		int i = linea;
 		boolean finCabecera = false;
 		
 	   while (!errorCompilacion && !finCabecera){	
 		   
- 		   if(VCabecera.get(i).getTipoToken() != TToken.program){
+ 		   if(VCabecera.get(i).getTipoToken() != tToken.program){
 			   error(VCabecera.get(i).getLinea(),"No se reconoce la palabra reservada program!83");
 			   errorCompilacion = true;
 			   break;
@@ -101,7 +97,7 @@ public int procesaCabecera(Vector<Token> VCabecera, int linea){
 			   i++;
 		   }
 		   
-		   if(VCabecera.get(i).getTipoToken() != TToken.dosPuntos){
+		   if(VCabecera.get(i).getTipoToken() != tToken.dosPuntos){
 			   error(VCabecera.get(i).getLinea(),"Faltan los dos puntos!93");
 			   errorCompilacion = true;
 			   break;
@@ -110,7 +106,7 @@ public int procesaCabecera(Vector<Token> VCabecera, int linea){
 			   i++;
 		   }
 		   
-		   if(VCabecera.get(i).getTipoToken() != TToken.ident){
+		   if(VCabecera.get(i).getTipoToken() != tToken.ident){
 			   error(VCabecera.get(i).getLinea(),"Nombre de programa no valido!102");
 			   errorCompilacion = true;
 			   break;
@@ -120,7 +116,7 @@ public int procesaCabecera(Vector<Token> VCabecera, int linea){
 			   i++;
 		   }
 		
-		   if(VCabecera.get(i).getTipoToken() != TToken.LA){
+		   if(VCabecera.get(i).getTipoToken() != tToken.LA){
 			   error(VCabecera.get(i).getLinea(),"Falta la llave de apertura!112");
 			   errorCompilacion = true;
 			   break;
@@ -135,17 +131,16 @@ public int procesaCabecera(Vector<Token> VCabecera, int linea){
 	   }//while	
 	   return -1;
 	}
-
-
-public int procesaSecVariables(Vector<Token> VVariables, int linea){
+	
+	public int procesaSecVariables(Vector<Token> VVariables, int linea){
 		
 		int i = linea;
 		boolean finVariables = false;
 		
 		while (!errorCompilacion && !finVariables){
 			
-			if(VVariables.get(i).getTipoToken() != TToken.varsConsts){
-				   error(VVariables.get(i).getLinea(),"No se reconoce la palabra reservada vars-consts!");
+			if(VVariables.get(i).getTipoToken() != tToken.varsConsts){
+				   error(VVariables.get(i).getLinea(),"No se reconoce la palabra reservada vars-consts!135");
 				   errorCompilacion = true;
 				   break;
 			 }
@@ -153,21 +148,20 @@ public int procesaSecVariables(Vector<Token> VVariables, int linea){
 				   i++;
 			 }
 			
-			if(VVariables.get(i).getTipoToken() != TToken.LA){
-				   error(VVariables.get(i).getLinea(),"Falta la llave de apertura!");
+			if(VVariables.get(i).getTipoToken() != tToken.LA){
+				   error(VVariables.get(i).getLinea(),"Falta la llave de apertura!144");
 				   errorCompilacion = true;
 				   break;
 			 }
 		     else {
 				   i++;
 			 }
-
-////////////////////////////////////////////////////////////////////
-////////////////Decs → Decs Dec | Dec///////////////////////////////
-////////////////Dec → var tipo ident;///////////////////////////////
-////////////////Dec→ const tipo ident := ValorDec;////////////////// 
-////////////////////////////////////////////////////////////////////
-			
+            
+            ////////////////////////////////////////////////////////////////////
+            ////////////////Decs → Decs Dec | Dec///////////////////////////////
+            ////////////////Dec → var tipo ident;///////////////////////////////
+            ////////////////Dec→ const tipo ident := ValorDec;//////////////////
+            ////////////////////////////////////////////////////////////////////
 			
 			int nuevapos = procesaInstVariables(VVariables, i);
 			
@@ -183,57 +177,185 @@ public int procesaSecVariables(Vector<Token> VVariables, int linea){
 		return -1;
 	}
 	
-	public int procesaSecInstrucciones(Vector<Token> VInstrucciones, int linea){
+    public int procesaSecInstrucciones(Vector<Token> VInstrucciones, int linea){
 		int i = linea;
 		boolean finVariables = false;
 		
 		while (!errorCompilacion && !finVariables){
 			
 			if(VInstrucciones.get(i).getTipoToken() != TToken.instrucciones){
-				   error(VInstrucciones.get(i).getLinea(),"No se reconoce la palabra reservada instructions!");
-				   errorCompilacion = true;
-				   break;
-			 }
-		     else {
-				   i++;
-			 }
+                error(VInstrucciones.get(i).getLinea(),"No se reconoce la palabra reservada instructions!");
+                errorCompilacion = true;
+                break;
+            }
+            else {
+                i++;
+            }
 			
 			if(VInstrucciones.get(i).getTipoToken() != TToken.LA){
-				   error(VInstrucciones.get(i).getLinea(),"Falta la llave de apertura del comienzo de las Inst!");
-				   errorCompilacion = true;
-				   break;
-			 }
-		     else {
-				   i++;
-			 }
-///////////////////////////////////////////////////////			
-////////////Inst→ Inst Ins | Ins///////////////////////
-////////////Ins → InsAsig;//////////// ////////////////
-////////////Ins → InsR; ///////////////////////////////
-////////////Ins → InsW; ///////////////////////////////
-////////////Ins → SWAP1();/////////////////////////////
-////////////Ins → SWAP2();/////////////////////////////
-///////////////////////////////////////////////////////		
+                error(VInstrucciones.get(i).getLinea(),"Falta la llave de apertura del comienzo de las Inst!");
+                errorCompilacion = true;
+                break;
+            }
+            else {
+                i++;
+            }
+            ///////////////////////////////////////////////////////
+            ////////////Inst→ Inst Ins | Ins///////////////////////
+            ////////////Ins → InsAsig;//////////// ////////////////
+            ////////////Ins → InsR; ///////////////////////////////
+            ////////////Ins → InsW; ///////////////////////////////
+            ////////////Ins → SWAP1();/////////////////////////////
+            ////////////Ins → SWAP2();/////////////////////////////
+            ///////////////////////////////////////////////////////
 			
 			int nuevapos = procesaInstInstrucciones(VInstrucciones, i);
 			
 			if (nuevapos != -1){
 				finVariables = true;
-				  //hemos procesado la seccion de las instrucciones debuty
-				   nuevapos++;
+                //hemos procesado la seccion de las instrucciones debuty
+                nuevapos++;
 				return nuevapos;
 			}
 			
 		}
-	
+        
 		return -1;
 	}
+    
 
-
-
-
-
-public void error(int i, String comentario) {
+	
+	
+	public int procesaInstVariables(Vector<Token> v, int linea){
+		
+		int i = linea;
+		boolean insFinalizada = false;
+		
+		while(v.get(i).getTipoToken() != tToken.LC){
+			insFinalizada = false;
+			
+			
+			if(v.get(i).getTipoToken() == tToken.var || v.get(i).getTipoToken() == tToken.constante){
+				
+				boolean variable = (v.get(i).getTipoToken() == tToken.var);
+				i++;
+				if(procesaTipoVariable(v,i)){
+					String tipo = v.get(i).getTipoToken().toString();
+					i++;
+					if(procesaIdentificador(v,i)) {
+						String identificador = v.get(i).getLexema();
+						i++;
+						if(variable && procesaFinInstruccion(v,i)){
+							//ahora tenemos q mirar si esta duplicada, y si no meterla en la tabla!!
+							//tenemos el identificador, el tipo y si es cte o no!! DELUXE
+							//esta en la tabla TS???
+							
+							if(TS.containsKey(identificador)){
+								error(v.get(i).getLinea(),"VARIABLE DUPLICADA197");
+								errorCompilacion = true;
+								break;
+							}
+							else {
+								//variable no duplicada, la metemos en la TS y la inicializamos en la MEMO
+								//Y SUMAMOS UNO A LA i!!!!
+								TablaInfo novata = new TablaInfo(tipo,false,posMemoLibre);
+								TS.put(identificador, novata);
+								dirMemoria.put(posMemoLibre, "null");
+								actualizaPunteroMemoriaDatos();
+								insFinalizada=true;
+								i++;
+								
+							}
+							
+						}
+						else if (variable){
+							error(v.get(i).getLinea(),"Falta punto y coma!!215");
+							errorCompilacion = true;
+							break;
+						}
+						
+						if(!insFinalizada){
+							if(!variable && procesaAsignacion(v,i)){
+								i++;
+								boolean numeroNegativo = false;
+								if(numNegativo(v,i)) {numeroNegativo = true;i++;}
+								//lo de arriba sirve para ver si es un num negativo
+								if(correspondenciaDeTipos(v,tipo, i)){
+									String valor = "";
+									if (numeroNegativo)  valor = "-" + v.get(i).getLexema();
+									else  valor = v.get(i).getLexema();
+									
+									if(procesaFinInstruccion(v,i+1)){
+										if(TS.containsKey(identificador)){
+											error(v.get(i).getLinea(),"VARIABLE DUPLICADA233");
+											errorCompilacion = true;
+											break;
+										}
+										else {
+											//variable no duplicada, la metemos en la TS y la inicializamos en la MEMO
+											//Y SUMAMOS UNO A LA i!!!!
+											TablaInfo novata = new TablaInfo(tipo,true,posMemoLibre);
+											TS.put(identificador, novata);
+											dirMemoria.put(posMemoLibre, valor);
+											actualizaPunteroMemoriaDatos();
+											insFinalizada=true;
+											i = i+2;// ya q ya sabemos q hay punto y coma!!! :D
+										}
+									}
+									else {
+										error(v.get(i).getLinea(),"Falta punto y coma!!249");
+										errorCompilacion = true;
+										break;
+									}
+									
+								}
+								else{
+									error(v.get(i).getLinea(),"Error de tipos!!!256");
+									errorCompilacion = true;
+									break;
+									
+								}
+								
+							}
+							else{
+								error(v.get(i).getLinea(),"Error en la asignacion de la cte264");
+								errorCompilacion = true;
+								break;
+							}
+						
+						}
+					}
+					else{
+						error(v.get(i).getLinea(),"Identificador erroneo272");
+						errorCompilacion = true;
+						break;
+					}
+				}
+				else {
+					error(v.get(i).getLinea(),"Tipo no reconocido278");
+					errorCompilacion = true;
+					break;
+				}
+				
+			}//if
+			
+			
+			else {
+				error(v.get(i).getLinea(),"Error en linea287");
+				errorCompilacion = true;
+				break;
+			}
+				
+			
+		}//while
+		
+		if(!errorCompilacion) return i;
+		return -1;
+	}
+	
+	
+	
+	public void error(int i, String comentario) {
 		//if (comentario == null)
 			descripError = "Error en linea " + i+ " de tipo: "  + comentario +   "\n";
 			errorCompilacion = true;
@@ -293,8 +415,8 @@ public void error(int i, String comentario) {
 		System.out.println();
 	
 	}
-
-
+	
+	
 	
 	public void printTablaTS() {
 		System.out.println("*Detalle de la tabla de simbolos");
@@ -327,31 +449,35 @@ public void error(int i, String comentario) {
 		System.out.println();
 	}
 
-public boolean procesaTipoVariable(Vector<Token> v, int i){
+
+
+	public boolean procesaTipoVariable(Vector<Token> v, int i){
 		
-		if (v.get(i).getTipoToken() == TToken.tipoVarBooleano
-				|| v.get(i).getTipoToken() == TToken.tipoVarCaracter
-				|| v.get(i).getTipoToken() == TToken.tipoVarNatural
-				|| v.get(i).getTipoToken() == TToken.tipoVarEntero
-				|| v.get(i).getTipoToken() == TToken.tipoVarReal) return true;
+		if (v.get(i).getTipoToken() == tToken.tipoVarBooleano
+				|| v.get(i).getTipoToken() == tToken.tipoVarCaracter
+				|| v.get(i).getTipoToken() == tToken.tipoVarNatural
+				|| v.get(i).getTipoToken() == tToken.tipoVarEntero
+				|| v.get(i).getTipoToken() == tToken.tipoVarReal) return true;
 		else return false;
 	}
-
 	
-	
-
 	public boolean numNegativo(Vector<Token> v, int i){
-		if (v.get(i).getTipoToken() == TToken.negArit) return true;
+		if (v.get(i).getTipoToken() == tToken.negArit) return true;
 		else return false;
 	}
 	
 	public boolean procesaFinInstruccion(Vector<Token> v, int i){
-		if(v.get(i).getTipoToken() == TToken.puntoyComa) return true;
+		if(v.get(i).getTipoToken() == tToken.puntoyComa) return true;
 		else return false;
 	}
-
-public void actualizaPunteroMemoriaDatos(){
-		if(posMemoLibre < 10) {
+	
+	public boolean procesaIdentificador(Vector<Token> v, int i) {
+		if (v.get(i).getTipoToken() == tToken.ident) return true;
+		else return false;
+	}
+	
+	public void actualizaPunteroMemoriaDatos(){
+		if(posMemoLibre < 100) { //mismo numero que la creacion de las tablas hash
 			posMemoLibre = posMemoLibre + 1;
 		}
 		else {
@@ -360,21 +486,11 @@ public void actualizaPunteroMemoriaDatos(){
 		}
 	}
 	
-	public boolean procesaIdentificador(Vector<Token> v, int i) {
-		if (v.get(i).getTipoToken() == TToken.ident) return true;
-		else return false;
-	}
-	
-	
-	
 	public boolean procesaAsignacion(Vector<Token> v, int i){
-		if (v.get(i).getTipoToken() == TToken.asigConst) return true;
+		if (v.get(i).getTipoToken() == tToken.asigConst) return true;
 		else return false;
 	}
-
 	
-	
-		
 	public boolean correspondenciaDeTipos(Vector<Token> v, String t, int i){
 		
 		if (t == "tipoVarBooleano"){
@@ -405,7 +521,8 @@ public void actualizaPunteroMemoriaDatos(){
 		
 	 return false;
 	}
-
+	
+//MAAAAAAIIIIIINNNNNN_____________________________
 	
 	
 	public static void main(String[] args) {
