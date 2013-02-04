@@ -7,13 +7,13 @@ program: ejemplo{
 		var float pesetas;
 		const boolean correcto := true;
 		const character car := 'a';
-		const float razon := 166.386;
+		const integer razon := 166;
 }
 	instructions{
 		in(euros);
 		in(centimos);
 		in(cantidad);
-		out(25);
+		out(razon);
 		euros=25;
 		swap1();
 		swap2();

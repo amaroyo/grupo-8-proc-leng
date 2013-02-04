@@ -617,8 +617,11 @@ public class AnalizadorSintactico {
 		boolean expresionCorrecta = true;
 				
 		
-		if(v.get(i).getTipoToken()==TToken.ident){
-			byteOut.add(new ByteCode(tByteCode.apila,Integer.parseInt(v.get(i).getLexema())));
+		if(v.get(i).getTipoToken()==TToken.ident && TS.get(v.get(i).getLexema()).isConstante()){
+		 	int aux=TS.get(v.get(i).getLexema()).getDireccion();
+	 		String aux2=dirMemoria.get(aux);
+	 		int valor=Integer.parseInt(aux2);
+			byteOut.add(new ByteCode(tByteCode.apila,valor));
 			i++;
 				}
 		else 
