@@ -617,18 +617,24 @@ public class AnalizadorSintactico {
 		boolean expresionCorrecta = true;
 				
 		
-		if(v.get(i).getTipoToken()==TToken.ident && TS.get(v.get(i).getLexema()).isConstante()){
-		 	int aux=TS.get(v.get(i).getLexema()).getDireccion();
-	 		String aux2=dirMemoria.get(aux);
-	 		int valor=Integer.parseInt(aux2);
-			byteOut.add(new ByteCode(tByteCode.apila,valor));
+		if(v.get(i).getTipoToken()==TToken.ident){
+			byteOut.add(new ByteCode(tByteCode.apila_dir,TS.get(v.get(i).getLexema()).getDireccion()));
 			i++;
 				}
 		else 
-		if(v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.entero){
+		if(v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.entero){
 			byteOut.add(new ByteCode(tByteCode.apila,Integer.parseInt(v.get(i).getLexema())));
 			i++;
 				}
+		else 
+			if(v.get(i).getTipoToken()==TToken.real){
+				
+				byteOut.add(new ByteCode(tByteCode.apila,Integer.parseInt(v.get(i).getLexema())));
+				i++;
+					}
+		
+		
+		
 		else 
 		if(v.get(i).getTipoToken()==TToken.booleanoCierto||v.get(i).getTipoToken()==TToken.booleanoFalso){
 			i++;
