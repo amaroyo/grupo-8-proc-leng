@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+
 import aLexico.ALexico;
 import aLexico.Token;
 import aLexico.TToken;
@@ -67,6 +68,7 @@ public class AnalizadorSintactico {
 				
 				if(!errorCompilacion && linea != -1) {
 					procesaSecInstrucciones(entrada, linea);
+					 byteOut.add(new ByteCode(tByteCode.stop));
 				}
 				
 			}
@@ -94,7 +96,6 @@ public class AnalizadorSintactico {
 			   break;
 		   }
 		   else {
-			   byteOut.add(new ByteCode(tByteCode.begin));
 			   i++;
 		   }
 		   
@@ -349,13 +350,15 @@ public class AnalizadorSintactico {
 				
 			
 		}//while
+		
+		if(!errorCompilacion) {
 		if(v.get(i).getTipoToken()==TToken.LC){
 		}
 		else {
 		error(v.get(i).getLinea(),"Falta la } de Declaraciones");
 		errorCompilacion = true;
 		}	
-	
+		}
 		if(!errorCompilacion) return i;
 		return -1;
 	}
@@ -366,9 +369,9 @@ public class AnalizadorSintactico {
 		int i = linea;
 		while(v.get(i).getTipoToken() != TToken.LC){
 			
-///////////////Instrucción de Tipo IN///////////////////////
-///////////////Ins -> InsR; ////////////////////////////////
-////////////////////////////////////////////////////////////
+///////////////Instrucción de Tipo IN//////////////////////
+///////////////InsR->in(ident); ///////////////////////////////
+///////////////////////////////////////////////////////////
 			if(v.get(i).getTipoToken()==TToken.entradaTeclado){
 				i++;
 
@@ -423,6 +426,93 @@ public class AnalizadorSintactico {
 			
 			
 			    } 
+
+			
+///////////////Instrucción de Tipo OUT//////////////////////
+///////////////InsW->out(exp); /////////////////////////////
+////////////////////////////////////////////////////////////
+			else 
+				if(v.get(i).getTipoToken()==TToken.salidaPantalla){
+					i++;			
+
+					//leo (		
+					if(v.get(i).getTipoToken()==TToken.PA){
+						i++;}
+					else {
+						error(v.get(i).getLinea(),"Faltan el(");
+						errorCompilacion = true;
+						break;}
+
+					//leo Expresion	
+					if(procesaExpresion(v,i)){//////Procesa Exp.///////
+						byteOut.add(new ByteCode(tByteCode.write));
+						i++;}
+					else {
+						errorCompilacion = true;
+						break;}	
+					//leo )			
+					if(v.get(i).getTipoToken()==TToken.PC){
+						i++;}
+					else {
+						error(v.get(i).getLinea(),"Falta el )");
+						errorCompilacion = true;
+						break;}	
+					//leo ;	
+					if(v.get(i).getTipoToken()==TToken.puntoyComa){
+						i++;}
+					else {
+						error(v.get(i).getLinea(),"Falta el ;");
+						errorCompilacion = true;
+						break;}	
+
+					}
+///////////////Instrucción de Tipo Asig//////////////////////	
+///////////////InstAsig->iden=Exp;///////////////////////////
+/////////////////////////////////////////////////////////////
+				else 
+					if(v.get(i).getTipoToken()==TToken.ident){		
+						identificador = v.get(i).getLexema();
+// si es Identificador de TS
+						if(TS.containsKey(identificador)){
+// si no es Constante
+							if(!TS.get(identificador).isConstante()){
+								i++;			
+							}
+							else {
+								error(v.get(i).getLinea(),"ASIG sobre identificador que es una Constante");
+								errorCompilacion = true;
+								break;}		
+
+						}
+						else {
+							error(v.get(i).getLinea(),"Identificador que no está en TS");
+							errorCompilacion = true;
+							break;}			
+
+//leo =			
+						if(v.get(i).getTipoToken()==TToken.equals){
+							i++;}
+						else {
+							error(v.get(i).getLinea(),"Falta el = ");
+							errorCompilacion = true;
+							break;}	
+//leo Exp			
+						if(procesaExpresion(v,i)){//////Procesa Exp.///////
+							byteOut.add(new ByteCode(tByteCode.desapila_dir,TS.get(identificador).getDireccion()));
+							i++;}
+						else {
+							errorCompilacion = true;
+							break;}	
+//leo ;			
+						if(v.get(i).getTipoToken()==TToken.puntoyComa){
+							i++;}
+						else {
+							error(v.get(i).getLinea(),"Falta el ;");
+							errorCompilacion = true;
+							break;}	
+
+					}
+
 			
 ///////////////Instrucción de Tipo SWAP1///////////////////////
 ///////////////Ins -> SWAP1();/////////////////////////////////
@@ -498,6 +588,8 @@ public class AnalizadorSintactico {
 			
 		}//while
 		
+		
+		if(!errorCompilacion) {
 		if(v.get(i).getTipoToken()==TToken.LC){
 			i++;
 		}
@@ -511,10 +603,40 @@ public class AnalizadorSintactico {
 		error(v.get(i).getLinea(),"Falta la } Program");
 		errorCompilacion = true;
 		}	
-		
+		}
 		if(!errorCompilacion) return i;
 		return -1;
 	}
+	
+	
+////////////////////////////////////////////////////////	
+///////////////Procesa Expresiones//////////////////////
+////////////////////////////////////////////////////////
+	
+	private boolean procesaExpresion(Vector<Token> v, int i) {
+		boolean expresionCorrecta = true;
+				
+		
+		if(v.get(i).getTipoToken()==TToken.ident){
+			byteOut.add(new ByteCode(tByteCode.apila,Integer.parseInt(v.get(i).getLexema())));
+			i++;
+				}
+		else 
+		if(v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.entero){
+			byteOut.add(new ByteCode(tByteCode.apila,Integer.parseInt(v.get(i).getLexema())));
+			i++;
+				}
+		else 
+		if(v.get(i).getTipoToken()==TToken.booleanoCierto||v.get(i).getTipoToken()==TToken.booleanoFalso){
+			i++;
+		}
+			else {
+			error(v.get(i).getLinea(),"Fallo en el primer miembro de la Expresión");
+			expresionCorrecta = false;
+			}	
+		
+	return expresionCorrecta;
+}
 	
 	
 	
