@@ -13,8 +13,10 @@ program: ejemplo{
 		in(euros);
 		in(centimos);
 		in(cantidad);
-		in(pesetas);
+		out(25);
+		euros=25;
 		swap1();
 		swap2();
-	}
+
+}
 }
