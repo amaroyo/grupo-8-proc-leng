@@ -13,6 +13,8 @@ import aLexico.Token;
 import aLexico.TToken;
 
 
+
+
 public class AnalizadorSintactico {
 
 	private HashMap<Integer,String> dirMemoria;
@@ -417,7 +419,8 @@ public class AnalizadorSintactico {
 	//leo ;			
 			if(v.get(i).getTipoToken()==TToken.puntoyComa){
 			byteOut.add(new ByteCode(tByteCode.read));
-			byteOut.add(new ByteCode(tByteCode.desapila_dir,TS.get(identificador).getDireccion()));
+			String aux=String.valueOf(TS.get(identificador).getDireccion());
+			byteOut.add(new ByteCode(tByteCode.desapila_dir,aux));
 			i++;}
 			else {
 			error(v.get(i).getLinea(),"Falta el ;");
@@ -498,7 +501,8 @@ public class AnalizadorSintactico {
 							break;}	
 //leo Exp			
 						if(procesaExpresion(v,i)){//////Procesa Exp.///////
-							byteOut.add(new ByteCode(tByteCode.desapila_dir,TS.get(identificador).getDireccion()));
+							String aux2=String.valueOf(TS.get(identificador).getDireccion());
+							byteOut.add(new ByteCode(tByteCode.desapila_dir,aux2));
 							i++;}
 						else {
 							errorCompilacion = true;
@@ -615,30 +619,46 @@ public class AnalizadorSintactico {
 	
 	private boolean procesaExpresion(Vector<Token> v, int i) {
 		boolean expresionCorrecta = true;
-				
+
+///////////////Procesa Expresiones//////////////////////
+///////////////Exp->Exp0 Op0 Exp0 | Exp0////////////////
 		
 		if(v.get(i).getTipoToken()==TToken.ident){
-			byteOut.add(new ByteCode(tByteCode.apila_dir,TS.get(v.get(i).getLexema()).getDireccion()));
+			String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
+			byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
 			i++;
 				}
 		else 
-		if(v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.entero){
-			byteOut.add(new ByteCode(tByteCode.apila,Integer.parseInt(v.get(i).getLexema())));
+			if(v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.entero){
+			byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));
 			i++;
 				}
 		else 
 			if(v.get(i).getTipoToken()==TToken.real){
 				
-				byteOut.add(new ByteCode(tByteCode.apila,Integer.parseInt(v.get(i).getLexema())));
+				byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));
 				i++;
 					}
 		
-		
+		else 
+				if(v.get(i).getTipoToken()==TToken.caracter){
+				char arr[]=new char[1];
+				arr[0] = (char)v.get(i).getLexema().charAt(0);
+				//byteOut.add(new ByteCode(tByteCode.apila,aux));
+				i++;
+					}
 		
 		else 
-		if(v.get(i).getTipoToken()==TToken.booleanoCierto||v.get(i).getTipoToken()==TToken.booleanoFalso){
-			i++;
-		}
+			if(v.get(i).getTipoToken()==TToken.booleanoCierto){
+				byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));
+				i++;
+			}
+		else 
+			if(v.get(i).getTipoToken()==TToken.booleanoFalso){
+				byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));
+				i++;
+			}
+		
 			else {
 			error(v.get(i).getLinea(),"Fallo en el primer miembro de la Expresión");
 			expresionCorrecta = false;
@@ -698,7 +718,7 @@ public class AnalizadorSintactico {
 		
 			for (int i = 0; i < byteOut.size(); i++){
 			
-				if( byteOut.get(i).getDireccion() == -1){
+				if( byteOut.get(i).getDireccion().equals("")){
 					System.out.println( i + ": " + byteOut.get(i).getByteCode().toString());
 				}
 				else System.out.println( i + ": " + byteOut.get(i).getByteCode().toString() + 
