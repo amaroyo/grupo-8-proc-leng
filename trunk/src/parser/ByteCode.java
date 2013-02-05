@@ -5,21 +5,21 @@ package parser;
 public class ByteCode {
 
 	private tByteCode tipoByteC;
-	private int direccion;
+	private String direccion;
 	
 	
 
 	ByteCode(tByteCode tipo){
 		this.tipoByteC = tipo;
-		this.direccion = -1;
+		this.direccion = "";
 	}
 	
-	ByteCode(tByteCode tipo, int dir){
+	ByteCode(tByteCode tipo, String dir){
 		this.tipoByteC = tipo;
 		this.direccion = dir;
 	}
 	
-	public int getDireccion(){
+	public String getDireccion(){
 		return direccion;
 	}
 	
