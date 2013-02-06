@@ -445,7 +445,7 @@ public class AnalizadorSintactico {
 						break;}
 
 					//leo Expresion	
-					i=procesaExpresion(v,i);
+					i=procesaExpresionOut(v,i);
 					if(i!=-1){//////Procesa Exp.///////
 						byteOut.add(new ByteCode(tByteCode.write));
 						}
@@ -499,7 +499,7 @@ public class AnalizadorSintactico {
 							errorCompilacion = true;
 							break;}	
 //leo Exp			
-						i=procesaExpresion(v,i);
+						i=procesaExpresionAsig(v,i);
 						if(i!=-1){//////Procesa Exp.///////
 							String aux2=String.valueOf(TS.get(identificador).getDireccion());
 							byteOut.add(new ByteCode(tByteCode.desapila_dir,aux2));
@@ -617,12 +617,12 @@ public class AnalizadorSintactico {
 ///////////////Procesa Expresiones//////////////////////
 ////////////////////////////////////////////////////////
 	
-	private int procesaExpresion(Vector<Token> v, int i) {
+	private int procesaExpresionOut(Vector<Token> v, int i) {
 		int expresionCorrecta = -1;
 
 ///////////////Procesa Expresiones//////////////////////
 ///////////////Exp->Exp0 Op0 Exp0 | Exp0////////////////
-		
+while(v.get(i).getTipoToken()!=TToken.PC){
 		if(v.get(i).getTipoToken()==TToken.ident){
 			String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
 			byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
@@ -657,10 +657,53 @@ public class AnalizadorSintactico {
 			error(v.get(i).getLinea(),"Fallo en el primer miembro de la Expresión");
 			expresionCorrecta = -1;
 			}	
-		
+		}
 	return expresionCorrecta;
 }
-	
+
+	private int procesaExpresionAsig(Vector<Token> v, int i) {
+		int expresionCorrecta = -1;
+
+///////////////Procesa Expresiones//////////////////////
+///////////////Exp->Exp0 Op0 Exp0 | Exp0////////////////
+while(v.get(i).getTipoToken()!=TToken.puntoyComa){
+		if(v.get(i).getTipoToken()==TToken.ident){
+			String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
+			byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
+			i++;
+			expresionCorrecta=i;
+				}
+		else 
+			if(v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.entero||
+					v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.caracter||
+					v.get(i).getTipoToken()==TToken.booleanoCierto||v.get(i).getTipoToken()==TToken.booleanoFalso){
+			byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));
+			i++;
+			expresionCorrecta=i;
+				}
+		
+			else 
+				if(v.get(i).getTipoToken()==TToken.castChar||v.get(i).getTipoToken()==TToken.castInt||
+						v.get(i).getTipoToken()==TToken.castNat||v.get(i).getTipoToken()==TToken.castFloat){
+				byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));	
+				i++;
+				expresionCorrecta=i;
+					}
+		
+				else 
+					if(v.get(i).getTipoToken()==TToken.negLogica||v.get(i).getTipoToken()==TToken.negArit){
+					byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));	
+					i++;
+					expresionCorrecta=i;
+						}
+		
+			else {
+			error(v.get(i).getLinea(),"Fallo en el primer miembro de la Expresión");
+			expresionCorrecta = -1;
+			}	
+		}
+	return expresionCorrecta;
+}
 	
 	
 	
@@ -843,5 +886,7 @@ public class AnalizadorSintactico {
 		
 	}
 }
+
+
 
 
