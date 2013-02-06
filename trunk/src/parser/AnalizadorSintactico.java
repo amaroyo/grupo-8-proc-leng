@@ -452,13 +452,7 @@ public class AnalizadorSintactico {
 					else {
 						errorCompilacion = true;
 						break;}	
-					//leo )			
-					if(v.get(i).getTipoToken()==TToken.PC){
-						i++;}
-					else {
-						error(v.get(i).getLinea(),"Falta el )");
-						errorCompilacion = true;
-						break;}	
+		
 					//leo ;	
 					if(v.get(i).getTipoToken()==TToken.puntoyComa){
 						i++;}
@@ -618,17 +612,17 @@ public class AnalizadorSintactico {
 ////////////////////////////////////////////////////////
 	
 	private int procesaExpresionOut(Vector<Token> v, int i) {
-		int expresionCorrecta = -1;
-
+		int expresionCorrecta = 0;
+		TToken operacion=null;
 ///////////////Procesa Expresiones//////////////////////
 ///////////////Exp->Exp0 Op0 Exp0 | Exp0////////////////
-while(v.get(i).getTipoToken()!=TToken.PC){
+while(v.get(i).getTipoToken()!=TToken.PC || expresionCorrecta==-1){
 		if(v.get(i).getTipoToken()==TToken.ident){
 			String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
 			byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
 			i++;
 			expresionCorrecta=i;
-				}
+			}//if del identificador
 		else 
 			if(v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.entero||
 					v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.caracter||
@@ -645,22 +639,55 @@ while(v.get(i).getTipoToken()!=TToken.PC){
 				i++;
 				expresionCorrecta=i;
 					}
-		
-				else 
+
+					
+				else
 					if(v.get(i).getTipoToken()==TToken.negLogica||v.get(i).getTipoToken()==TToken.negArit){
 					byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));	
 					i++;
 					expresionCorrecta=i;
 						}
 		
+					else if(v.get(i).getTipoToken()==TToken.great||v.get(i).getTipoToken()==TToken.distinto||
+							v.get(i).getTipoToken()==TToken.igualIgual||v.get(i).getTipoToken()==TToken.less||v.get(i).getTipoToken()==TToken.greatEq||v.get(i).getTipoToken()==TToken.lessEq)
+					{
+							operacion=v.get(i).getTipoToken();
+							i++;
+							expresionCorrecta=i;
+						}	
+	//leo )					
+			
 			else {
 			error(v.get(i).getLinea(),"Fallo en el primer miembro de la Expresión");
 			expresionCorrecta = -1;
-			}	
+			}
+
+		
 		}
+if(operacion!=null){
+switch(operacion) { // Eleige la opcion acorde al numero de mes
+case igualIgual:byteOut.add(new ByteCode(tByteCode.igual)); break;
+case great:byteOut.add(new ByteCode(tByteCode.mayor));break;
+case less:byteOut.add(new ByteCode(tByteCode.menor));break;
+case greatEq:byteOut.add(new ByteCode(tByteCode.mayorigual));break;
+case lessEq:byteOut.add(new ByteCode(tByteCode.menorigual));break;
+case distinto:byteOut.add(new ByteCode(tByteCode.distinto));break;
+}
+}
+
+if(v.get(i).getTipoToken()==TToken.PC){
+	i++;
+	expresionCorrecta=i;	
+		}
+else {	
+error(v.get(i).getLinea(),"Fallo falta el ) de final de expresión");
+expresionCorrecta = -1;}
 	return expresionCorrecta;
 }
 
+	
+	
+	
 	private int procesaExpresionAsig(Vector<Token> v, int i) {
 		int expresionCorrecta = -1;
 
@@ -700,6 +727,7 @@ while(v.get(i).getTipoToken()!=TToken.puntoyComa){
 			else {
 			error(v.get(i).getLinea(),"Fallo en el primer miembro de la Expresión");
 			expresionCorrecta = -1;
+			break;
 			}	
 		}
 	return expresionCorrecta;
