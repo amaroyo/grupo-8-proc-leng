@@ -13,9 +13,9 @@ program: ejemplo{
 		in(euros);
 		in(centimos);
 		in(cantidad);
-		out(razon>euros);
+		out(true>euros);
 		out(not correcto);
-		euros=1666.37<razon;
+		euros=133<razon;
 		swap1();
 		swap2();
 
