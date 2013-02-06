@@ -609,7 +609,7 @@ public class AnalizadorSintactico {
 ///////////////Procesa Expresiones//////////////////////
 ///////////////Exp->Exp0 Op0 Exp0 | Exp0////////////////
 while(v.get(i).getTipoToken()!=TToken.PC && expresionCorrecta!=-1){
-		if(v.get(i).getTipoToken()==TToken.ident){
+		if((v.get(i).getTipoToken()==TToken.ident)&&TS.containsKey(v.get(i).getLexema())){
 			String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
 			byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
 			i++;
@@ -648,7 +648,9 @@ while(v.get(i).getTipoToken()!=TToken.PC && expresionCorrecta!=-1){
 		
 		else if((v.get(i).getTipoToken()==TToken.great||v.get(i).getTipoToken()==TToken.distinto||
 						v.get(i).getTipoToken()==TToken.igualIgual||v.get(i).getTipoToken()==TToken.less||v.get(i).getTipoToken()==TToken.greatEq||v.get(i).getTipoToken()==TToken.lessEq) &&
-						(v.get(i-1).getTipoToken()==TToken.ident))
+						(v.get(i-1).getTipoToken()==TToken.ident||v.get(i-1).getTipoToken()==TToken.natural||v.get(i-1).getTipoToken()==TToken.entero||
+						v.get(i-1).getTipoToken()==TToken.real||v.get(i-1).getTipoToken()==TToken.caracter||
+						v.get(i-1).getTipoToken()==TToken.booleanoCierto||v.get(i-1).getTipoToken()==TToken.booleanoFalso))
 				{
 			operacion=v.get(i).getTipoToken();
 			i++;
@@ -697,7 +699,7 @@ return expresionCorrecta;
 ///////////////Procesa Expresiones//////////////////////
 ///////////////Exp->Exp0 Op0 Exp0 | Exp0////////////////
 while(v.get(i).getTipoToken()!=TToken.puntoyComa){
-	if(v.get(i).getTipoToken()==TToken.ident){
+	if((v.get(i).getTipoToken()==TToken.ident)&&TS.containsKey(v.get(i).getLexema())){
 		String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
 		byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
 		i++;
@@ -734,8 +736,11 @@ while(v.get(i).getTipoToken()!=TToken.puntoyComa){
 		expresionCorrecta=i;
 			}
 	
-	else if(v.get(i).getTipoToken()==TToken.great||v.get(i).getTipoToken()==TToken.distinto||
-					v.get(i).getTipoToken()==TToken.igualIgual||v.get(i).getTipoToken()==TToken.less||v.get(i).getTipoToken()==TToken.greatEq||v.get(i).getTipoToken()==TToken.lessEq)
+	else if((v.get(i).getTipoToken()==TToken.great||v.get(i).getTipoToken()==TToken.distinto||
+					v.get(i).getTipoToken()==TToken.igualIgual||v.get(i).getTipoToken()==TToken.less||v.get(i).getTipoToken()==TToken.greatEq||v.get(i).getTipoToken()==TToken.lessEq) &&
+					(v.get(i-1).getTipoToken()==TToken.ident||v.get(i-1).getTipoToken()==TToken.natural||v.get(i-1).getTipoToken()==TToken.entero||
+					v.get(i-1).getTipoToken()==TToken.real||v.get(i-1).getTipoToken()==TToken.caracter||
+					v.get(i-1).getTipoToken()==TToken.booleanoCierto||v.get(i-1).getTipoToken()==TToken.booleanoFalso))
 			{
 		operacion=v.get(i).getTipoToken();
 		i++;
@@ -748,6 +753,7 @@ while(v.get(i).getTipoToken()!=TToken.puntoyComa){
 		expresionCorrecta = -1;
 		}
 
+	
 		}
 
 if(operacion!=null){
