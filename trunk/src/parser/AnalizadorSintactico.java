@@ -608,7 +608,7 @@ public class AnalizadorSintactico {
 		TToken operacion=null;
 ///////////////Procesa Expresiones//////////////////////
 ///////////////Exp->Exp0 Op0 Exp0 | Exp0////////////////
-while(v.get(i).getTipoToken()!=TToken.PC || expresionCorrecta==-1){
+while(v.get(i).getTipoToken()!=TToken.PC && expresionCorrecta!=-1){
 		if(v.get(i).getTipoToken()==TToken.ident){
 			String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
 			byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
@@ -646,8 +646,9 @@ while(v.get(i).getTipoToken()!=TToken.PC || expresionCorrecta==-1){
 			expresionCorrecta=i;
 				}
 		
-		else if(v.get(i).getTipoToken()==TToken.great||v.get(i).getTipoToken()==TToken.distinto||
-						v.get(i).getTipoToken()==TToken.igualIgual||v.get(i).getTipoToken()==TToken.less||v.get(i).getTipoToken()==TToken.greatEq||v.get(i).getTipoToken()==TToken.lessEq)
+		else if((v.get(i).getTipoToken()==TToken.great||v.get(i).getTipoToken()==TToken.distinto||
+						v.get(i).getTipoToken()==TToken.igualIgual||v.get(i).getTipoToken()==TToken.less||v.get(i).getTipoToken()==TToken.greatEq||v.get(i).getTipoToken()==TToken.lessEq) &&
+						(v.get(i-1).getTipoToken()==TToken.ident))
 				{
 			operacion=v.get(i).getTipoToken();
 			i++;
@@ -674,7 +675,7 @@ case lessEq:byteOut.add(new ByteCode(tByteCode.menorigual));break;
 case distinto:byteOut.add(new ByteCode(tByteCode.distinto));break;
 }
 }
-
+if(expresionCorrecta!=-1){
 if(v.get(i).getTipoToken()==TToken.PC){
 	i++;
 	expresionCorrecta=i;	
@@ -682,6 +683,7 @@ if(v.get(i).getTipoToken()==TToken.PC){
 else {	
 error(v.get(i).getLinea(),"Fallo falta el ) de final de expresión");
 expresionCorrecta = -1;}
+}
 
 return expresionCorrecta;
 }
@@ -761,6 +763,7 @@ case distinto:byteOut.add(new ByteCode(tByteCode.distinto));break;
 }
 }
 
+if(expresionCorrecta!=-1){
 if(v.get(i).getTipoToken()==TToken.puntoyComa){
 	i++;
 	expresionCorrecta=i;	
@@ -768,7 +771,7 @@ if(v.get(i).getTipoToken()==TToken.puntoyComa){
 else {	
 error(v.get(i).getLinea(),"Fallo falta el ; de final de expresión");
 expresionCorrecta = -1;}
-
+}
 return expresionCorrecta;
 
 }
