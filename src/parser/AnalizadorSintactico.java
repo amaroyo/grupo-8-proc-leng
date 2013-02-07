@@ -611,8 +611,106 @@ public class AnalizadorSintactico {
 ///////////////Exp->Exp0 Op0 Exp0 | Exp0////////////////
 while(v.get(i).getTipoToken()!=TToken.PC && expresionCorrecta!=-1){
 
-			if((v.get(i).getTipoToken()==TToken.ident)&&TS.containsKey(v.get(i).getLexema())&&(procesaOperacionCero(v.get(i-1).getTipoToken())||procesaOperacionUno(v.get(i-1).getTipoToken())||
-					procesaOperacionDos(v.get(i-1).getTipoToken())||procesaOperacionTres(v.get(i-1).getTipoToken())||v.get(i-1).getTipoToken()==TToken.negArit||v.get(i-1).getTipoToken()==TToken.negLogica))
+//If eres Identificador con una Op0 anterior y )) después...
+	if((v.get(i).getTipoToken()==TToken.ident)&&TS.containsKey(v.get(i).getLexema())  && (procesaOperacionCero(v.get(i-1).getTipoToken()))&&(v.get(i+1).getTipoToken()==TToken.PC)&&(v.get(i+2).getTipoToken()==TToken.PC))
+				{
+		String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
+		byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
+		
+		if(operacion!=null){
+			switch(operacion) { // Elige la opcion acorde al numero de mes
+			case negArit:byteOut.add(new ByteCode(tByteCode.restaunitaria)); break;
+			case negLogica:byteOut.add(new ByteCode(tByteCode.negacionlogica)); break;
+			case igualIgual:byteOut.add(new ByteCode(tByteCode.igual)); break;
+			case great:byteOut.add(new ByteCode(tByteCode.mayor));break;
+			case less:byteOut.add(new ByteCode(tByteCode.menor));break;
+			case greatEq:byteOut.add(new ByteCode(tByteCode.mayorigual));break;
+			case lessEq:byteOut.add(new ByteCode(tByteCode.menorigual));break;
+			case distinto:byteOut.add(new ByteCode(tByteCode.distinto));break;
+			
+			case sum:byteOut.add(new ByteCode(tByteCode.suma)); break;
+			case div:byteOut.add(new ByteCode(tByteCode.divide));break;
+			case mult:byteOut.add(new ByteCode(tByteCode.multiplica));break;
+			case mod:byteOut.add(new ByteCode(tByteCode.modulo));break;
+			}
+			}
+		if(operacion2!=null){
+			switch(operacion2) { // Elige la opcion acorde al numero de mes
+			case negArit:byteOut.add(new ByteCode(tByteCode.restaunitaria)); break;
+			case negLogica:byteOut.add(new ByteCode(tByteCode.negacionlogica)); break;
+			case igualIgual:byteOut.add(new ByteCode(tByteCode.igual)); break;
+			case great:byteOut.add(new ByteCode(tByteCode.mayor));break;
+			case less:byteOut.add(new ByteCode(tByteCode.menor));break;
+			case greatEq:byteOut.add(new ByteCode(tByteCode.mayorigual));break;
+			case lessEq:byteOut.add(new ByteCode(tByteCode.menorigual));break;
+			case distinto:byteOut.add(new ByteCode(tByteCode.distinto));break;
+
+			case sum:byteOut.add(new ByteCode(tByteCode.suma)); break;
+			case div:byteOut.add(new ByteCode(tByteCode.divide));break;
+			case mult:byteOut.add(new ByteCode(tByteCode.multiplica));break;
+			case mod:byteOut.add(new ByteCode(tByteCode.modulo));break;
+			}
+			}
+		i=i+2;
+		expresionCorrecta=i;
+		
+		
+		
+		}//if del identificador
+	else 
+		
+//If eres nat,real,.... con una Op0 anterior y )) después		
+		if((v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.entero||
+				v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.caracter||
+				v.get(i).getTipoToken()==TToken.booleanoCierto||v.get(i).getTipoToken()==TToken.booleanoFalso) && (procesaOperacionCero(v.get(i-1).getTipoToken()))&&(v.get(i+1).getTipoToken()==TToken.PC)&&(v.get(i+2).getTipoToken()==TToken.PC))
+		{
+		byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));
+
+		if(operacion!=null){
+		switch(operacion) { // Elige la opcion acorde al numero de mes
+		case negArit:byteOut.add(new ByteCode(tByteCode.restaunitaria)); break;
+		case negLogica:byteOut.add(new ByteCode(tByteCode.negacionlogica)); break;
+		case igualIgual:byteOut.add(new ByteCode(tByteCode.igual)); break;
+		case great:byteOut.add(new ByteCode(tByteCode.mayor));break;
+		case less:byteOut.add(new ByteCode(tByteCode.menor));break;
+		case greatEq:byteOut.add(new ByteCode(tByteCode.mayorigual));break;
+		case lessEq:byteOut.add(new ByteCode(tByteCode.menorigual));break;
+		case distinto:byteOut.add(new ByteCode(tByteCode.distinto));break;
+	
+		case sum:byteOut.add(new ByteCode(tByteCode.suma)); break;
+		case div:byteOut.add(new ByteCode(tByteCode.divide));break;
+		case mult:byteOut.add(new ByteCode(tByteCode.multiplica));break;
+		case mod:byteOut.add(new ByteCode(tByteCode.modulo));break;
+		}
+		}
+		if(operacion2!=null){
+			switch(operacion2) { // Elige la opcion acorde al numero de mes
+			case negArit:byteOut.add(new ByteCode(tByteCode.restaunitaria)); break;
+			case negLogica:byteOut.add(new ByteCode(tByteCode.negacionlogica)); break;
+			case igualIgual:byteOut.add(new ByteCode(tByteCode.igual)); break;
+			case great:byteOut.add(new ByteCode(tByteCode.mayor));break;
+			case less:byteOut.add(new ByteCode(tByteCode.menor));break;
+			case greatEq:byteOut.add(new ByteCode(tByteCode.mayorigual));break;
+			case lessEq:byteOut.add(new ByteCode(tByteCode.menorigual));break;
+			case distinto:byteOut.add(new ByteCode(tByteCode.distinto));break;
+
+			case sum:byteOut.add(new ByteCode(tByteCode.suma)); break;
+			case div:byteOut.add(new ByteCode(tByteCode.divide));break;
+			case mult:byteOut.add(new ByteCode(tByteCode.multiplica));break;
+			case mod:byteOut.add(new ByteCode(tByteCode.modulo));break;
+			}
+			}
+		
+		
+		
+			i=i+2;
+			expresionCorrecta=i;
+
+		}
+		else	
+	
+//If eres Identificador con una Op0 anterior...
+			if((v.get(i).getTipoToken()==TToken.ident)&&TS.containsKey(v.get(i).getLexema()) && (procesaOperacionCero(v.get(i-1).getTipoToken())))
 						{
 				String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
 				byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
@@ -637,81 +735,77 @@ while(v.get(i).getTipoToken()!=TToken.PC && expresionCorrecta!=-1){
 				
 				i++;
 				expresionCorrecta=i;
-				
-				
-				
 				}//if del identificador
 			else 
-				if((v.get(i).getTipoToken()==TToken.ident)&&TS.containsKey(v.get(i).getLexema())){
-					String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
-					byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
+				
+				
+//If eres nat,real,.... con una Op0 anterior...			
+				if((v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.entero||
+						v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.caracter||
+						v.get(i).getTipoToken()==TToken.booleanoCierto||v.get(i).getTipoToken()==TToken.booleanoFalso) && (procesaOperacionCero(v.get(i-1).getTipoToken())))
+				{
+				byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));
+		
+				if(operacion!=null){
+				switch(operacion) { // Elige la opcion acorde al numero de mes
+				case negArit:byteOut.add(new ByteCode(tByteCode.restaunitaria)); break;
+				case negLogica:byteOut.add(new ByteCode(tByteCode.negacionlogica)); break;
+				case igualIgual:byteOut.add(new ByteCode(tByteCode.igual)); break;
+				case great:byteOut.add(new ByteCode(tByteCode.mayor));break;
+				case less:byteOut.add(new ByteCode(tByteCode.menor));break;
+				case greatEq:byteOut.add(new ByteCode(tByteCode.mayorigual));break;
+				case lessEq:byteOut.add(new ByteCode(tByteCode.menorigual));break;
+				case distinto:byteOut.add(new ByteCode(tByteCode.distinto));break;
+			
+				case sum:byteOut.add(new ByteCode(tByteCode.suma)); break;
+				case div:byteOut.add(new ByteCode(tByteCode.divide));break;
+				case mult:byteOut.add(new ByteCode(tByteCode.multiplica));break;
+				case mod:byteOut.add(new ByteCode(tByteCode.modulo));break;
+				}
+				}
+		
 					i++;
 					expresionCorrecta=i;
+		
+				}
+				else 
+	
+					
+//If identficador apilo						
+				if((v.get(i).getTipoToken()==TToken.ident)&&TS.containsKey(v.get(i).getLexema())){
+					String aux=String.valueOf(TS.get(v.get(i).getLexema()).getDireccion());
+				byteOut.add(new ByteCode(tByteCode.apila_dir,aux));
+				i++;
+				expresionCorrecta=i;
 					}//if del identificador
 				else 
-			if(v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.entero||
+//If eres nat,real,.... apilo
+				if(v.get(i).getTipoToken()==TToken.natural||v.get(i).getTipoToken()==TToken.entero||
 					v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.caracter||
 					v.get(i).getTipoToken()==TToken.booleanoCierto||v.get(i).getTipoToken()==TToken.booleanoFalso){
-			byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));
-			i++;
-			expresionCorrecta=i;
+				byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));
+				i++;
+				expresionCorrecta=i;
 				}
-		
-		else 
-			if(v.get(i).getTipoToken()==TToken.castChar||v.get(i).getTipoToken()==TToken.castInt||
-					v.get(i).getTipoToken()==TToken.castNat||v.get(i).getTipoToken()==TToken.castFloat){
-			byteOut.add(new ByteCode(tByteCode.apila,v.get(i).getLexema()));	
-			i++;
-			expresionCorrecta=i;
-				}
-
-					
-		else
-			if(v.get(i).getTipoToken()==TToken.negArit){
-			operacion=v.get(i).getTipoToken();
-			i++;
-			expresionCorrecta=i;
-				}
-		
-		else if(v.get(i).getTipoToken()==TToken.negLogica){
-			operacion=v.get(i).getTipoToken();
-			i++;
-			expresionCorrecta=i;
-				}
-
-//operaciones intermedias x+y+x
-		else if((procesaOperacionCero(v.get(i).getTipoToken())||procesaOperacionUno(v.get(i).getTipoToken())||
-				procesaOperacionDos(v.get(i).getTipoToken())||procesaOperacionTres(v.get(i).getTipoToken()))&&
-						(v.get(i-1).getTipoToken()==TToken.ident||v.get(i-1).getTipoToken()==TToken.natural||v.get(i-1).getTipoToken()==TToken.entero||
-						v.get(i-1).getTipoToken()==TToken.real||v.get(i-1).getTipoToken()==TToken.caracter||
-						v.get(i-1).getTipoToken()==TToken.booleanoCierto||v.get(i-1).getTipoToken()==TToken.booleanoFalso)&&
-							(v.get(i+1).getTipoToken()==TToken.ident||v.get(i+1).getTipoToken()==TToken.natural||v.get(i+1).getTipoToken()==TToken.entero||
-							v.get(i+1).getTipoToken()==TToken.real||v.get(i+1).getTipoToken()==TToken.caracter||
-							v.get(i+1).getTipoToken()==TToken.booleanoCierto||v.get(i+1).getTipoToken()==TToken.booleanoFalso)&&
-							(procesaOperacionCero(v.get(i-2).getTipoToken())||procesaOperacionUno(v.get(i-2).getTipoToken())||
-							procesaOperacionDos(v.get(i-2).getTipoToken())||procesaOperacionTres(v.get(i-2).getTipoToken())) )
-						{
-						operacion2=v.get(i).getTipoToken();
-						i++;
-						expresionCorrecta=i;
-						}	
-			
+				else
+				
 //operaciones intermedias y+x+(x+2)
-					else if((procesaOperacionCero(v.get(i).getTipoToken())||procesaOperacionUno(v.get(i).getTipoToken())||
-							procesaOperacionDos(v.get(i).getTipoToken())||procesaOperacionTres(v.get(i).getTipoToken()))&&
+					 if((procesaOperacionCero(v.get(i).getTipoToken()))&&
 									(v.get(i-1).getTipoToken()==TToken.ident||v.get(i-1).getTipoToken()==TToken.natural||v.get(i-1).getTipoToken()==TToken.entero||
 									v.get(i-1).getTipoToken()==TToken.real||v.get(i-1).getTipoToken()==TToken.caracter||
 									v.get(i-1).getTipoToken()==TToken.booleanoCierto||v.get(i-1).getTipoToken()==TToken.booleanoFalso)&&
 									(v.get(i+1).getTipoToken()==TToken.PA)){
 						
 						operacion2=v.get(i).getTipoToken();
-						i++;
+						i=i+2;
 						expresionCorrecta=i;
 									
 					}	
+				else 
+					
+					
 //operaciones x+y
-		else if((procesaOperacionCero(v.get(i).getTipoToken())||procesaOperacionUno(v.get(i).getTipoToken())||
-				procesaOperacionDos(v.get(i).getTipoToken())||procesaOperacionTres(v.get(i).getTipoToken()))&&
+					if((procesaOperacionCero(v.get(i).getTipoToken()))&&
 						(v.get(i-1).getTipoToken()==TToken.ident||v.get(i-1).getTipoToken()==TToken.natural||v.get(i-1).getTipoToken()==TToken.entero||
 						v.get(i-1).getTipoToken()==TToken.real||v.get(i-1).getTipoToken()==TToken.caracter||
 						v.get(i-1).getTipoToken()==TToken.booleanoCierto||v.get(i-1).getTipoToken()==TToken.booleanoFalso)&&
@@ -725,7 +819,7 @@ while(v.get(i).getTipoToken()!=TToken.PC && expresionCorrecta!=-1){
 						}	
 					
 		else {
-			error(v.get(i).getLinea(),"Fallo en el primer miembro de la Expresión");
+			error(v.get(i).getLinea(),"Fallo en la Expresión");
 			expresionCorrecta = -1;
 			}
 		}
@@ -737,32 +831,14 @@ if(v.get(i).getTipoToken()==TToken.PC){
 	expresionCorrecta=i;	
 		}
 else {	
-error(v.get(i).getLinea(),"Fallo falta el ) de final de expresión");
+error(v.get(i).getLinea(),"Falta el ) de final de expresión");
 expresionCorrecta = -1;}
 }
-
-if(operacion2!=null){
-	switch(operacion2) { // Elige la opcion acorde al numero de mes
-	case negArit:byteOut.add(new ByteCode(tByteCode.restaunitaria)); break;
-	case negLogica:byteOut.add(new ByteCode(tByteCode.negacionlogica)); break;
-	case igualIgual:byteOut.add(new ByteCode(tByteCode.igual)); break;
-	case great:byteOut.add(new ByteCode(tByteCode.mayor));break;
-	case less:byteOut.add(new ByteCode(tByteCode.menor));break;
-	case greatEq:byteOut.add(new ByteCode(tByteCode.mayorigual));break;
-	case lessEq:byteOut.add(new ByteCode(tByteCode.menorigual));break;
-	case distinto:byteOut.add(new ByteCode(tByteCode.distinto));break;
-
-	case sum:byteOut.add(new ByteCode(tByteCode.suma)); break;
-	case div:byteOut.add(new ByteCode(tByteCode.divide));break;
-	case mult:byteOut.add(new ByteCode(tByteCode.multiplica));break;
-	case mod:byteOut.add(new ByteCode(tByteCode.modulo));break;
-	}
-	}
 return expresionCorrecta;
 }
 
 ///////////////Procesa Operaciones//////////////////////
-///////////////Op0//////////////////////////////////////
+///////////////Op0,Op1,Op2,Op3//////////////////////////
 	
 	
 	private boolean procesaOperacionCero(TToken oper0){
@@ -800,8 +876,7 @@ return expresionCorrecta;
 		
 	}
 	
-	
-	
+
 	
 	private int procesaExpresionAsig(Vector<Token> v, int i) {
 		int expresionCorrecta = 0;

@@ -13,7 +13,9 @@ program: ejemplo{
 		in(euros);
 		in(centimos);
 		in(cantidad);
-		out(true>euros+4);
-		centimos=33+euros+12;
+		out(true>euros==(4<7));
+		out(true>euros==4);
+		out(true>euros);
+		out(true);
 }
 }
