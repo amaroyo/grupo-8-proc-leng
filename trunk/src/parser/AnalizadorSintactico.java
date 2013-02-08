@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.Vector;
 
 
@@ -23,7 +25,7 @@ public class AnalizadorSintactico {
 	private boolean errorCompilacion;
 	private ALexico scanner;
 	private int posMemoLibre;
-	
+	private ArbolBin arbol;
 
 	
 	
@@ -598,10 +600,90 @@ public class AnalizadorSintactico {
 		return -1;
 	}
 	
-	
-////////////////////////////////////////////////////////	
+////////////////////////////////////////////////////////
 ///////////////Procesa Expresiones//////////////////////
 ////////////////////////////////////////////////////////
+
+private int procesaExpresion(Vector<Token> v, int i) {
+
+int expresionCorrecta = 0;
+int primerValor;
+int ultimoValor;
+TToken operacion=null;
+TToken operacion2=null;
+
+//nos hacemos un array auxiliar para meter la expresion  General
+
+Vector<Token> expresion = new Vector<Token>();
+
+while(v.get(i).getTipoToken()!=TToken.puntoyComa){
+	
+	expresion.add(v.get(i));
+	}
+
+	if(expresion.get(i).getTipoToken()==TToken.PA){
+		primerValor=i;
+		i=procesaExpParentesis(v,i);
+		ultimoValor=i-1;
+	}
+	
+	if(procesaOperacionCero(v.get(i).getTipoToken())){
+		
+		//meter raiz arbol binario
+		operacion=v.get(i).getTipoToken();
+		if(operacion!=null){
+		switch(operacion) { // Elige la opcion acorde al numero de mes
+		case igualIgual:arbol=new ArbolBin(new ByteCode(tByteCode.igual)); break;
+		case great:arbol=new ArbolBin(new ByteCode(tByteCode.mayor));break;
+		case less:arbol=new ArbolBin(new ByteCode(tByteCode.menor));break;
+		case greatEq:arbol=new ArbolBin(new ByteCode(tByteCode.mayorigual));break;
+		case lessEq:arbol=new ArbolBin(new ByteCode(tByteCode.menorigual));break;
+		case distinto:arbol=new ArbolBin(new ByteCode(tByteCode.distinto));break;
+		}
+		}
+		//nos hacemos dos subarrays de las expresiones de los lados del operador
+		Vector<Token> expresionIzq = new Vector<Token>();
+		Vector<Token> expresionDer = new Vector<Token>();
+		
+		int inicio = 0;
+		
+		while (procesaOperacionCero(expresion.get(i).getTipoToken())){
+				expresionIzq.add(expresion.get(i));
+		}
+		i++; //este i es del operador de tipo 0
+		while(i != expresion.size()){
+			expresionDer.add(expresion.get(i));
+		}
+
+		i=procesaExpresion0(expresionIzq);	
+		i=procesaExpresion0(expresionDer);	
+	   }
+	else {
+		i=procesaExpresion0(expresion);
+	}
+			
+	return i;
+}
+
+private int procesaExpresion0(Vector<Token> expresionIzq) {
+	// TODO Auto-generated method stub
+	return 0;
+}
+
+
+
+private int procesaExpParentesis(Vector<Token> v, int i) {
+	while(v.get(i).getTipoToken()!=TToken.PC){
+		i++;
+	}
+	return i++;
+}
+
+
+
+////////////////////////////////////////////////////////	
+///////////////Procesa Expresiones//////////////////////
+/////////////////////////////////////{}///////////////////
 	
 	private int procesaExpresionOut(Vector<Token> v, int i) {
 		int expresionCorrecta = 0;
