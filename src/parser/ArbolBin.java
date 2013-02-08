@@ -16,21 +16,14 @@ public class ArbolBin {
           raiz.der=null;
       }
       
-      public void insertarIzq (ByteCode info)
+      public void insertarIzq (Nodo info)
       {
-          Nodo nuevo;
-          nuevo = new Nodo ();
-          nuevo.info = info;
-          raiz.izq=nuevo;
+          raiz.izq=info;
    
       }
-      public void insertarDer (ByteCode info)
+      public void insertarDer (Nodo info)
       {
-          Nodo nuevo;
-          nuevo = new Nodo ();
-          nuevo.info = info;
-          raiz.der=nuevo;
-   
+          raiz.der=info;
       }
       
       
