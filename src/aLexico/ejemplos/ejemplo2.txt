@@ -13,9 +13,6 @@ program: ejemplo{
 		in(euros);
 		in(centimos);
 		in(cantidad);
-		out(true>euros==(4<7));
-		out(true>euros==4);
-		out(true>euros);
-		out(true);
+		pesetas=(3<5)>(4<6);
 }
 }
