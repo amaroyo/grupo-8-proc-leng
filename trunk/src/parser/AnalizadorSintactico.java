@@ -34,7 +34,7 @@ public class AnalizadorSintactico {
 	
 	public AnalizadorSintactico(){
 		
-		arbol=new ArbolBin();
+
 		dirMemoria = new HashMap(100);
 		TS = new HashMap(100);
 		errorCompilacion = false;
@@ -498,6 +498,8 @@ public class AnalizadorSintactico {
 							errorCompilacion = true;
 							break;}	
 //leo Exp			
+// creo aquí el arbol para poder leer otra instruccion
+						arbol=new ArbolBin();
 						i=procesaExpresion(v,i);
 						if(i!=-1){//////Procesa Exp.///////
 							String aux2=String.valueOf(TS.get(identificador).getDireccion());
@@ -704,7 +706,7 @@ if(expresion.size()==1){
 
 while(indice != expresion.size()){
 	//Si encontramos un op0 meter raiz arbol binario
-	if(procesaOperacionCero(expresion.get(indice).getTipoToken())){
+	if((indice < expresion.size())&&(procesaOperacionCero(expresion.get(indice).getTipoToken()))){
 	//Seleccionamos el Op0		
 			operacion=expresion.get(indice).getTipoToken();
 			if(operacion!=null){
@@ -721,7 +723,7 @@ while(indice != expresion.size()){
 	}
 
 //Si encontramos un entero, real , natgural , caracter, true o false = apilo
-	if((expresion.get(indice).getTipoToken()==TToken.natural||expresion.get(indice).getTipoToken()==TToken.entero||
+	if((indice < expresion.size())&&(expresion.get(indice).getTipoToken()==TToken.natural||expresion.get(indice).getTipoToken()==TToken.entero||
 		expresion.get(indice).getTipoToken()==TToken.real||expresion.get(indice).getTipoToken()==TToken.caracter||
 		expresion.get(indice).getTipoToken()==TToken.booleanoCierto||expresion.get(indice).getTipoToken()==TToken.booleanoFalso))
 	{
@@ -735,7 +737,7 @@ while(indice != expresion.size()){
 	}
 
 //Si encontramos un ident apilo_dir	
-	if((expresion.get(indice).getTipoToken()==TToken.ident)&&TS.containsKey(expresion.get(indice).getLexema()))
+	if((indice < expresion.size())&&(expresion.get(indice).getTipoToken()==TToken.ident)&&TS.containsKey(expresion.get(indice).getLexema()))
 	{
 	String aux=String.valueOf(TS.get(expresion.get(indice).getLexema()).getDireccion());
 	if(raizaux.izq==null){
@@ -746,7 +748,7 @@ while(indice != expresion.size()){
 			raizaux.der.info=new ByteCode(tByteCode.apila_dir,aux);}
 	indice++; 
 	}
-	if((expresion.get(indice).getTipoToken()==TToken.PA)||(expresion.get(indice).getTipoToken()==TToken.PC))
+	if(indice < expresion.size()&&((expresion.get(indice).getTipoToken()==TToken.PA)||(expresion.get(indice).getTipoToken()==TToken.PC)))
 	{	indice++; }
 
 	
