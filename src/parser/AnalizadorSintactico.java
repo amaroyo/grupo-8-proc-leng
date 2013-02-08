@@ -25,7 +25,7 @@ public class AnalizadorSintactico {
 	private boolean errorCompilacion;
 	private ALexico scanner;
 	private int posMemoLibre;
-	private ArbolBin arbol;
+
 
 	
 	
@@ -603,8 +603,13 @@ public class AnalizadorSintactico {
 ////////////////////////////////////////////////////////
 ///////////////Procesa Expresiones//////////////////////
 ////////////////////////////////////////////////////////
+private int procesaExpresionGeneral(Vector<Token> v, int i) {
+	ArbolBin arbol=new ArbolBin();
+	arbol.insertarNodo(procesaExpresion(v,i));
+	return i;
+}
 
-private int procesaExpresion(Vector<Token> v, int i) {
+private Nodo procesaExpresion(Vector<Token> v, int i) {
 
 int expresionCorrecta = 0;
 int primerValor;
@@ -612,6 +617,7 @@ int ultimoValor;
 TToken operacion=null;
 TToken operacion2=null;
 
+Nodo aux=new Nodo();
 //nos hacemos un array auxiliar para meter la expresion  General
 
 Vector<Token> expresion = new Vector<Token>();
@@ -630,17 +636,22 @@ while(v.get(i).getTipoToken()!=TToken.puntoyComa){
 	if(procesaOperacionCero(v.get(i).getTipoToken())){
 		
 		//meter raiz arbol binario
+		
 		operacion=v.get(i).getTipoToken();
 		if(operacion!=null){
 		switch(operacion) { // Elige la opcion acorde al numero de mes
-		case igualIgual:arbol=new ArbolBin(new ByteCode(tByteCode.igual)); break;
-		case great:arbol=new ArbolBin(new ByteCode(tByteCode.mayor));break;
-		case less:arbol=new ArbolBin(new ByteCode(tByteCode.menor));break;
-		case greatEq:arbol=new ArbolBin(new ByteCode(tByteCode.mayorigual));break;
-		case lessEq:arbol=new ArbolBin(new ByteCode(tByteCode.menorigual));break;
-		case distinto:arbol=new ArbolBin(new ByteCode(tByteCode.distinto));break;
+		
+		case igualIgual:aux.info=new ByteCode(tByteCode.igual); break;
+		case great:aux.info=new ByteCode(tByteCode.mayor);break;
+		case less:aux.info=new ByteCode(tByteCode.menor);break;
+		case greatEq:aux.info=new ByteCode(tByteCode.mayorigual);break;
+		case lessEq:aux.info=new ByteCode(tByteCode.menorigual);break;
+		case distinto:aux.info=new ByteCode(tByteCode.distinto);break;
+		
 		}
 		}
+		
+		
 		//nos hacemos dos subarrays de las expresiones de los lados del operador
 		Vector<Token> expresionIzq = new Vector<Token>();
 		Vector<Token> expresionDer = new Vector<Token>();
@@ -655,19 +666,19 @@ while(v.get(i).getTipoToken()!=TToken.puntoyComa){
 			expresionDer.add(expresion.get(i));
 		}
 
-		i=procesaExpresion0(expresionIzq);	
-		i=procesaExpresion0(expresionDer);	
+		aux.izq=procesaExpresion0(expresionIzq);	
+		aux.der=procesaExpresion0(expresionDer);	
 	   }
 	else {
-		i=procesaExpresion0(expresion);
+		aux.izq=procesaExpresion0(expresion);
 	}
 			
-	return i;
+	return aux;
 }
 
-private int procesaExpresion0(Vector<Token> expresionIzq) {
+private Nodo procesaExpresion0(Vector<Token> expresionIzq) {
 	// TODO Auto-generated method stub
-	return 0;
+	return null;
 }
 
 

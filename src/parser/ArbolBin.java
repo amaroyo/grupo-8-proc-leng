@@ -4,15 +4,14 @@ import aLexico.TToken;
 
 public class ArbolBin {
 
-    class Nodo
-      {
-    	ByteCode info;
-        Nodo izq, der;
-      }
       Nodo raiz;
 
-      public ArbolBin(ByteCode x) {
-          raiz.info=x;
+      public ArbolBin() {
+          raiz=null;
+      }
+      
+      public void insertarNodo(Nodo x) {
+          raiz=x;
           raiz.izq=null;
           raiz.der=null;
       }
