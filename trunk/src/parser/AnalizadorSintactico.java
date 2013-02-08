@@ -661,7 +661,7 @@ while (indice2!=referencia){
 		expresionIzq.add(expresion.get(indice2));
 		indice2++;
 		}
-		
+indice2++;
 while(indice2 != expresion.size()){
 		expresionDer.add(expresion.get(indice2));
 		indice2++;
@@ -687,6 +687,20 @@ private Nodo procesaExpresion0(Vector<Token> expresion) {
 TToken operacion=null;
 Nodo raizaux=new Nodo();
 int indice=0;
+if(expresion.size()==1){
+	if((expresion.get(indice).getTipoToken()==TToken.natural||expresion.get(indice).getTipoToken()==TToken.entero||
+			expresion.get(indice).getTipoToken()==TToken.real||expresion.get(indice).getTipoToken()==TToken.caracter||
+			expresion.get(indice).getTipoToken()==TToken.booleanoCierto||expresion.get(indice).getTipoToken()==TToken.booleanoFalso))
+		{
+		raizaux.info=new ByteCode(tByteCode.apila,expresion.get(indice).getLexema());
+		}
+	if((expresion.get(indice).getTipoToken()==TToken.ident)&&TS.containsKey(expresion.get(indice).getLexema()))
+	{
+	String aux=String.valueOf(TS.get(expresion.get(indice).getLexema()).getDireccion());
+	raizaux.info=new ByteCode(tByteCode.apila_dir,aux);
+	}
+	indice++;
+}
 
 while(indice != expresion.size()){
 	//Si encontramos un op0 meter raiz arbol binario
