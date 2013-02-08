@@ -14,5 +14,7 @@ program: ejemplo{
 		in(centimos);
 		in(cantidad);
 		pesetas=(3<5)>(4<6);
+		pesetas=3<5>4;
+		pesetas=3<5;
 }
 }
