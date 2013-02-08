@@ -13,7 +13,8 @@ import java.util.Vector;
 import aLexico.ALexico;
 import aLexico.Token;
 import aLexico.TToken;
-
+import parser.ArbolBin;
+import parser.Nodo;
 
 public class AnalizadorSintactico {
 
@@ -26,12 +27,14 @@ public class AnalizadorSintactico {
 	private ALexico scanner;
 	private int posMemoLibre;
 
+// Arbol declarado como Local para poder imprimir
+	private ArbolBin arbol;
 
 	
 	
 	public AnalizadorSintactico(){
 		
-
+		arbol=new ArbolBin();
 		dirMemoria = new HashMap(100);
 		TS = new HashMap(100);
 		errorCompilacion = false;
@@ -495,10 +498,12 @@ public class AnalizadorSintactico {
 							errorCompilacion = true;
 							break;}	
 //leo Exp			
-						i=procesaExpresionAsig(v,i);
+						i=procesaExpresion(v,i);
 						if(i!=-1){//////Procesa Exp.///////
 							String aux2=String.valueOf(TS.get(identificador).getDireccion());
+							arbol.posorden(arbol.raiz,byteOut);
 							byteOut.add(new ByteCode(tByteCode.desapila_dir,aux2));
+							i++;
 							}
 						else {
 							errorCompilacion = true;
@@ -599,102 +604,191 @@ public class AnalizadorSintactico {
 		if(!errorCompilacion) return i;
 		return -1;
 	}
-	
+
+
 ////////////////////////////////////////////////////////
 ///////////////Procesa Expresiones//////////////////////
 ////////////////////////////////////////////////////////
-private int procesaExpresionGeneral(Vector<Token> v, int i) {
-	ArbolBin arbol=new ArbolBin();
-	arbol.insertarNodo(procesaExpresion(v,i));
-	return i;
-}
 
-private Nodo procesaExpresion(Vector<Token> v, int i) {
+private int procesaExpresion(Vector<Token> v, int i) {
 
-int expresionCorrecta = 0;
-int primerValor;
-int ultimoValor;
 TToken operacion=null;
-TToken operacion2=null;
-
-Nodo aux=new Nodo();
-//nos hacemos un array auxiliar para meter la expresion  General
-
+Nodo raiz=new Nodo();
+int indice=0;
+int indice2=0;
+int referencia;
+//Nos hacemos un array auxiliar para meter la expresion  General
 Vector<Token> expresion = new Vector<Token>();
-
 while(v.get(i).getTipoToken()!=TToken.puntoyComa){
-	
 	expresion.add(v.get(i));
+	i++;
 	}
 
-	if(expresion.get(i).getTipoToken()==TToken.PA){
-		primerValor=i;
-		i=procesaExpParentesis(v,i);
-		ultimoValor=i-1;
+//Si encontramos un ( ) nos situamos después de él.
+if(expresion.get(indice).getTipoToken()==TToken.PA){
+	indice=procesaExpParentesis(expresion,indice);
 	}
-	
-	if(procesaOperacionCero(v.get(i).getTipoToken())){
-		
-		//meter raiz arbol binario
-		
-		operacion=v.get(i).getTipoToken();
+
+//Si encontramos un op0 meter raiz arbol binario
+if(procesaOperacionCero(expresion.get(indice).getTipoToken())){
+//Seleccionamos el Op0 y almacenamos su indice en Refenrecia para luego dividir en dos subvectores	
+		referencia=indice;
+		operacion=expresion.get(indice).getTipoToken();
 		if(operacion!=null){
-		switch(operacion) { // Elige la opcion acorde al numero de mes
-		
-		case igualIgual:aux.info=new ByteCode(tByteCode.igual); break;
-		case great:aux.info=new ByteCode(tByteCode.mayor);break;
-		case less:aux.info=new ByteCode(tByteCode.menor);break;
-		case greatEq:aux.info=new ByteCode(tByteCode.mayorigual);break;
-		case lessEq:aux.info=new ByteCode(tByteCode.menorigual);break;
-		case distinto:aux.info=new ByteCode(tByteCode.distinto);break;
-		
+		switch(operacion) { // Elige la opcion acorde al numero de mes	
+		case igualIgual:raiz.info=new ByteCode(tByteCode.igual); break;
+		case great:raiz.info=new ByteCode(tByteCode.mayor);break;
+		case less:raiz.info=new ByteCode(tByteCode.menor);break;
+		case greatEq:raiz.info=new ByteCode(tByteCode.mayorigual);break;
+		case lessEq:raiz.info=new ByteCode(tByteCode.menorigual);break;
+		case distinto:raiz.info=new ByteCode(tByteCode.distinto);break;		
 		}
 		}
 		
-		
-		//nos hacemos dos subarrays de las expresiones de los lados del operador
+//Nos hacemos dos subarrays de las expresiones de los lados del operador
 		Vector<Token> expresionIzq = new Vector<Token>();
 		Vector<Token> expresionDer = new Vector<Token>();
-		
-		int inicio = 0;
-		
-		while (procesaOperacionCero(expresion.get(i).getTipoToken())){
-				expresionIzq.add(expresion.get(i));
+
+while (indice2!=referencia){
+		expresionIzq.add(expresion.get(indice2));
+		indice2++;
 		}
-		i++; //este i es del operador de tipo 0
-		while(i != expresion.size()){
-			expresionDer.add(expresion.get(i));
+		
+while(indice2 != expresion.size()){
+		expresionDer.add(expresion.get(indice2));
+		indice2++;
 		}
 
-		aux.izq=procesaExpresion0(expresionIzq);	
-		aux.der=procesaExpresion0(expresionDer);	
+raiz.izq=procesaExpresion0(expresionIzq);	
+raiz.der=procesaExpresion0(expresionDer);	
 	   }
-	else {
-		aux.izq=procesaExpresion0(expresion);
+// si no e encontrado ningún Op0
+else 
+   {
+		raiz=procesaExpresion0(expresion);
 	}
-			
-	return aux;
-}
 
-private Nodo procesaExpresion0(Vector<Token> expresionIzq) {
-	// TODO Auto-generated method stub
-	return null;
+arbol.insertarNodo(raiz);
+return i;
 }
 
 
+private Nodo procesaExpresion0(Vector<Token> expresion) {
+
+
+TToken operacion=null;
+Nodo raizaux=new Nodo();
+int indice=0;
+
+while(indice != expresion.size()){
+	//Si encontramos un op0 meter raiz arbol binario
+	if(procesaOperacionCero(expresion.get(indice).getTipoToken())){
+	//Seleccionamos el Op0		
+			operacion=expresion.get(indice).getTipoToken();
+			if(operacion!=null){
+			switch(operacion) { // Elige la opcion acorde al numero de mes	
+			case igualIgual:raizaux.info=new ByteCode(tByteCode.igual); break;
+			case great:raizaux.info=new ByteCode(tByteCode.mayor);break;
+			case less:raizaux.info=new ByteCode(tByteCode.menor);break;
+			case greatEq:raizaux.info=new ByteCode(tByteCode.mayorigual);break;
+			case lessEq:raizaux.info=new ByteCode(tByteCode.menorigual);break;
+			case distinto:raizaux.info=new ByteCode(tByteCode.distinto);break;		
+			}
+			}
+	indice++;	
+	}
+
+//Si encontramos un entero, real , natgural , caracter, true o false = apilo
+	if((expresion.get(indice).getTipoToken()==TToken.natural||expresion.get(indice).getTipoToken()==TToken.entero||
+		expresion.get(indice).getTipoToken()==TToken.real||expresion.get(indice).getTipoToken()==TToken.caracter||
+		expresion.get(indice).getTipoToken()==TToken.booleanoCierto||expresion.get(indice).getTipoToken()==TToken.booleanoFalso))
+	{
+			if(raizaux.izq==null){
+		    raizaux.izq=new Nodo();
+		    raizaux.izq.info=new ByteCode(tByteCode.apila,expresion.get(indice).getLexema());
+	        } 
+			else{raizaux.der=new Nodo();
+				raizaux.der.info=new ByteCode(tByteCode.apila,expresion.get(indice).getLexema());}
+	indice++;
+	}
+
+//Si encontramos un ident apilo_dir	
+	if((expresion.get(indice).getTipoToken()==TToken.ident)&&TS.containsKey(expresion.get(indice).getLexema()))
+	{
+	String aux=String.valueOf(TS.get(expresion.get(indice).getLexema()).getDireccion());
+	if(raizaux.izq==null){
+		raizaux.izq=new Nodo();
+		raizaux.izq.info=new ByteCode(tByteCode.apila_dir,aux);
+        } 
+		else{raizaux.der=new Nodo();
+			raizaux.der.info=new ByteCode(tByteCode.apila_dir,aux);}
+	indice++; 
+	}
+	if((expresion.get(indice).getTipoToken()==TToken.PA)||(expresion.get(indice).getTipoToken()==TToken.PC))
+	{	indice++; }
+
+	
+}			
+return raizaux;
+
+}
+
+///////////////Procesa Paréntesis///////////////////////
+////////////////////////////////////////////////////////
 
 private int procesaExpParentesis(Vector<Token> v, int i) {
 	while(v.get(i).getTipoToken()!=TToken.PC){
 		i++;
 	}
-	return i++;
+	i=i+1;
+	return i;
+}
+
+///////////////Procesa Operaciones//////////////////////
+///////////////Op0,Op1,Op2,Op3//////////////////////////
+
+
+private boolean procesaOperacionCero(TToken oper0){
+
+if((oper0==TToken.great||oper0==TToken.distinto||oper0==TToken.igualIgual
+	||oper0==TToken.less||oper0==TToken.greatEq||oper0==TToken.lessEq)){
+return true;
+}
+else return false;
+
+}
+
+private boolean procesaOperacionUno(TToken oper1){//sin or
+
+if((oper1==TToken.sum||oper1==TToken.rest)){
+return true;
+}
+else return false;
+
+}
+private boolean procesaOperacionDos(TToken oper2){
+
+if((oper2==TToken.mult||oper2==TToken.div||oper2==TToken.mod)){
+return true;
+}
+else return false;
+
+}
+private boolean procesaOperacionTres(TToken oper3){
+
+if((oper3==TToken.despIzq||oper3==TToken.despDer)){
+return true;
+}
+else return false;
+
 }
 
 
 
-////////////////////////////////////////////////////////	
-///////////////Procesa Expresiones//////////////////////
-/////////////////////////////////////{}///////////////////
+
+
+/////////////////// ANTIGUO PERO APROVECHABLE
+////////////////////////////////////////////////////////
 	
 	private int procesaExpresionOut(Vector<Token> v, int i) {
 		int expresionCorrecta = 0;
@@ -930,47 +1024,9 @@ expresionCorrecta = -1;}
 return expresionCorrecta;
 }
 
-///////////////Procesa Operaciones//////////////////////
-///////////////Op0,Op1,Op2,Op3//////////////////////////
-	
-	
-	private boolean procesaOperacionCero(TToken oper0){
-		
-		if((oper0==TToken.great||oper0==TToken.distinto||oper0==TToken.igualIgual
-				||oper0==TToken.less||oper0==TToken.greatEq||oper0==TToken.lessEq)){
-			return true;
-		}
-		else return false;
-		
-	}
-	
-	private boolean procesaOperacionUno(TToken oper1){//sin or
-		
-		if((oper1==TToken.sum||oper1==TToken.rest)){
-			return true;
-		}
-		else return false;
-		
-	}
-	private boolean procesaOperacionDos(TToken oper2){
+/////////////////// ANTIGUO PERO APROVECHABLE
+////////////////////////////////////////////////////////
 
-		if((oper2==TToken.mult||oper2==TToken.div||oper2==TToken.mod)){
-			return true;
-		}
-		else return false;
-		
-	}
-	private boolean procesaOperacionTres(TToken oper3){
-
-		if((oper3==TToken.despIzq||oper3==TToken.despDer)){
-			return true;
-		}
-		else return false;
-		
-	}
-	
-
-	
 	private int procesaExpresionAsig(Vector<Token> v, int i) {
 		int expresionCorrecta = 0;
 		TToken operacion=null;
@@ -1128,10 +1184,13 @@ expresionCorrecta = -1;}
 return expresionCorrecta;
 
 }
+
 	
 	
 	
-	
+/////////////////// ERRORES Y MAIN//////////////////////
+////////////////////////////////////////////////////////
+
 	public void error(int i, String comentario) {
 		//if (comentario == null)
 			descripError = "Error en linea " + i+ " de tipo: "  + comentario +   "\n";
@@ -1185,8 +1244,9 @@ return expresionCorrecta;
 				else System.out.println( i + ": " + byteOut.get(i).getByteCode().toString() + 
 							" " + byteOut.get(i).getDireccion());
 			}	
-		
+
 		}
+			
 		System.out.println();
 		System.out.println();
 		System.out.println();
