@@ -629,7 +629,7 @@ if(expresion.get(indice).getTipoToken()==TToken.PA){
 	indice=procesaExpParentesis(expresion,indice);
 	}
 
-//Si encontramos un ( ) nos situamos después de él.
+//Si encontramos un nat,real,... o ident nos situamos después de él.
 if((expresion.get(indice).getTipoToken()==TToken.natural||expresion.get(indice).getTipoToken()==TToken.entero||
 expresion.get(indice).getTipoToken()==TToken.real||expresion.get(indice).getTipoToken()==TToken.caracter||
 expresion.get(indice).getTipoToken()==TToken.booleanoCierto||expresion.get(indice).getTipoToken()==TToken.booleanoFalso||expresion.get(indice).getTipoToken()==TToken.ident))
