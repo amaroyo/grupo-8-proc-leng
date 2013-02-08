@@ -29,11 +29,11 @@ public class ArbolBin {
     
   public void posorden(Nodo x, Vector<ByteCode> byteOut)
       {
-    	  if (raiz!=null)
+    	  if (x!=null)
     	  {
-    	  posorden(raiz.izq,byteOut);
-    	  posorden(raiz.der,byteOut);
-    	  byteOut.add(raiz.info);
+    	  posorden(x.izq,byteOut);
+    	  posorden(x.der,byteOut);
+    	  byteOut.add(x.info);
     	  }
     }
 
