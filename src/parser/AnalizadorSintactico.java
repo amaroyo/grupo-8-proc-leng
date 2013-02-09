@@ -629,12 +629,18 @@ while(v.get(i).getTipoToken()!=TToken.puntoyComa){
 //Si encontramos un ( ) nos situamos después de él.
 if(expresion.get(indice).getTipoToken()==TToken.PA){
 	indice=procesaExpParentesis(expresion,indice);
-	}
+}
 
-//Si encontramos un nat,real,... o ident nos situamos después de él.
+if (indice == -1) {
+	error(v.get(i).getLinea(),"error en los parentesis");
+	return -1;
+}
+
+/*//Si encontramos un nat,real,... o ident nos situamos después de él.
 if(procesaTipo(expresion,indice)){
 	indice++;
 }
+*/
 
 //Si encontramos un op0 meter raiz arbol binario
 if(procesaOperacionCero(expresion.get(indice).getTipoToken())){
@@ -746,10 +752,25 @@ return raizaux;
 ////////////////////////////////////////////////////////
 
 private int procesaExpParentesis(Vector<Token> v, int i) {
-	while(v.get(i).getTipoToken()!=TToken.PC){
+	
+	int parentesisAbiertos = 0; //llegamos con un parentesis abierto.
+	int inicio = i;
+	
+	while(inicio < v.size()){
+		if (v.get(i).getTipoToken() == TToken.PA) parentesisAbiertos++;
+		if (v.get(i).getTipoToken() == TToken.PC) parentesisAbiertos--;
+		if (parentesisAbiertos == 0) break;
+		else {
+			inicio++;
+			i++;
+		}
+	}
+	
+	if (parentesisAbiertos != 0) i = -1;
+	else {
 		i++;
 	}
-	i=i+1;
+	
 	return i;
 }
 
