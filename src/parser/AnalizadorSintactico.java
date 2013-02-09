@@ -632,27 +632,20 @@ if(expresion.get(indice).getTipoToken()==TToken.PA){
 	}
 
 //Si encontramos un nat,real,... o ident nos situamos después de él.
-if((expresion.get(indice).getTipoToken()==TToken.natural||expresion.get(indice).getTipoToken()==TToken.entero||
-expresion.get(indice).getTipoToken()==TToken.real||expresion.get(indice).getTipoToken()==TToken.caracter||
-expresion.get(indice).getTipoToken()==TToken.booleanoCierto||expresion.get(indice).getTipoToken()==TToken.booleanoFalso||expresion.get(indice).getTipoToken()==TToken.ident))
-{
+if(procesaTipo(expresion,indice)){
 	indice++;
-	}
+}
 
 //Si encontramos un op0 meter raiz arbol binario
 if(procesaOperacionCero(expresion.get(indice).getTipoToken())){
 //Seleccionamos el Op0 y almacenamos su indice en Refenrecia para luego dividir en dos subvectores	
 		referencia=indice;
 		operacion=expresion.get(indice).getTipoToken();
+		
 		if(operacion!=null){
-		switch(operacion) { // Elige la opcion acorde al numero de mes	
-		case igualIgual:raiz.info=new ByteCode(tByteCode.igual); break;
-		case great:raiz.info=new ByteCode(tByteCode.mayor);break;
-		case less:raiz.info=new ByteCode(tByteCode.menor);break;
-		case greatEq:raiz.info=new ByteCode(tByteCode.mayorigual);break;
-		case lessEq:raiz.info=new ByteCode(tByteCode.menorigual);break;
-		case distinto:raiz.info=new ByteCode(tByteCode.distinto);break;		
-		}
+			
+			raiz.info=new ByteCode(procesaOperacion(operacion));
+			
 		}
 		
 //Nos hacemos dos subarrays de las expresiones de los lados del operador
@@ -690,10 +683,7 @@ TToken operacion=null;
 Nodo raizaux=new Nodo();
 int indice=0;
 if(expresion.size()==1){
-	if((expresion.get(indice).getTipoToken()==TToken.natural||expresion.get(indice).getTipoToken()==TToken.entero||
-			expresion.get(indice).getTipoToken()==TToken.real||expresion.get(indice).getTipoToken()==TToken.caracter||
-			expresion.get(indice).getTipoToken()==TToken.booleanoCierto||expresion.get(indice).getTipoToken()==TToken.booleanoFalso))
-		{
+	if(procesaTipo(expresion,indice)){
 		raizaux.info=new ByteCode(tByteCode.apila,expresion.get(indice).getLexema());
 		}
 	if((expresion.get(indice).getTipoToken()==TToken.ident)&&TS.containsKey(expresion.get(indice).getLexema()))
@@ -710,22 +700,17 @@ while(indice != expresion.size()){
 	//Seleccionamos el Op0		
 			operacion=expresion.get(indice).getTipoToken();
 			if(operacion!=null){
-			switch(operacion) { // Elige la opcion acorde al numero de mes	
-			case igualIgual:raizaux.info=new ByteCode(tByteCode.igual); break;
-			case great:raizaux.info=new ByteCode(tByteCode.mayor);break;
-			case less:raizaux.info=new ByteCode(tByteCode.menor);break;
-			case greatEq:raizaux.info=new ByteCode(tByteCode.mayorigual);break;
-			case lessEq:raizaux.info=new ByteCode(tByteCode.menorigual);break;
-			case distinto:raizaux.info=new ByteCode(tByteCode.distinto);break;		
-			}
+				if(operacion!=null){
+					
+					raizaux.info=new ByteCode(procesaOperacion(operacion));
+					
+				}
 			}
 	indice++;	
 	}
 
 //Si encontramos un entero, real , natgural , caracter, true o false = apilo
-	if((indice < expresion.size())&&(expresion.get(indice).getTipoToken()==TToken.natural||expresion.get(indice).getTipoToken()==TToken.entero||
-		expresion.get(indice).getTipoToken()==TToken.real||expresion.get(indice).getTipoToken()==TToken.caracter||
-		expresion.get(indice).getTipoToken()==TToken.booleanoCierto||expresion.get(indice).getTipoToken()==TToken.booleanoFalso))
+	if((indice < expresion.size())&&(procesaTipo(expresion,indice)))
 	{
 			if(raizaux.izq==null){
 		    raizaux.izq=new Nodo();
@@ -1382,6 +1367,28 @@ return expresionCorrecta;
 		
 	 return false;
 	}
+	
+	
+public boolean procesaTipo(Vector<Token> expresion, int indice){
+	if((expresion.get(indice).getTipoToken()==TToken.natural||expresion.get(indice).getTipoToken()==TToken.entero||
+			expresion.get(indice).getTipoToken()==TToken.real||expresion.get(indice).getTipoToken()==TToken.caracter||
+			expresion.get(indice).getTipoToken()==TToken.booleanoCierto||expresion.get(indice).getTipoToken()==TToken.booleanoFalso||expresion.get(indice).getTipoToken()==TToken.ident))
+			return true;
+	else return false;
+}
+
+public tByteCode procesaOperacion(TToken operacion){
+	
+	switch(operacion) { // Elige la opcion acorde al numero de mes	
+		case igualIgual: return tByteCode.igual; 
+		case great: return tByteCode.mayor;
+		case less: return tByteCode.menor;
+		case greatEq: return tByteCode.mayorigual;
+		case lessEq: return tByteCode.menorigual;
+		case distinto: return tByteCode.distinto;	
+	}
+	return null;
+}
 	
 //MAAAAAAIIIIIINNNNNN_____________________________
 	
