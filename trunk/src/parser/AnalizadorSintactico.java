@@ -619,6 +619,7 @@ Nodo raiz=new Nodo();
 int indice=0;
 int indice2=0;
 int referencia;
+int lineaActual = v.get(i).getLinea();
 //Nos hacemos un array auxiliar para meter la expresion  General
 Vector<Token> expresion = new Vector<Token>();
 while(v.get(i).getTipoToken()!=TToken.puntoyComa){
@@ -636,22 +637,21 @@ if (indice == -1) {
 	return -1;
 }
 
-/*//Si encontramos un nat,real,... o ident nos situamos después de él.
+//Si encontramos un nat,real,... o ident nos situamos después de él.
 if(procesaTipo(expresion,indice)){
 	indice++;
 }
-*/
+
 
 //Si encontramos un op0 meter raiz arbol binario
 if(procesaOperacionCero(expresion.get(indice).getTipoToken())){
 //Seleccionamos el Op0 y almacenamos su indice en Refenrecia para luego dividir en dos subvectores	
 		referencia=indice;
+		
 		operacion=expresion.get(indice).getTipoToken();
 		
 		if(operacion!=null){
-			
 			raiz.info=new ByteCode(procesaOperacion(operacion));
-			
 		}
 		
 //Nos hacemos dos subarrays de las expresiones de los lados del operador
@@ -666,39 +666,84 @@ indice2++;
 while(indice2 != expresion.size()){
 		expresionDer.add(expresion.get(indice2));
 		indice2++;
-		}
+}
 
-raiz.izq=procesaExpresion0(expresionIzq);	
-raiz.der=procesaExpresion0(expresionDer);	
-	   }
-// si no e encontrado ningún Op0
-else 
-   {
+	try {
+		raiz.izq=procesaExpresion0(expresionIzq);	
+	}
+	catch (Exception e){
+		if (e != null) {
+			error(lineaActual, e.getMessage());
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
+	try {
+		raiz.der=procesaExpresion0(expresionDer);
+	}
+	
+	catch (Exception e){
+		if (e != null) {
+			error(lineaActual, e.getMessage());
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
+}
+// si no e encontrado ningun Op0
+else {
+	try{
 		raiz=procesaExpresion0(expresion);
 	}
+	catch (Exception e){
+		if (e != null) {
+			error(lineaActual, e.getMessage());
+			e.printStackTrace();
+			return -1;
+		}
+	}
+}
+
+
 
 arbol.insertarNodo(raiz);
 return i;
 }
 
 
-private Nodo procesaExpresion0(Vector<Token> expresion) {
+private Nodo procesaExpresion0(Vector<Token> expresion) throws Exception {
 
 
 TToken operacion=null;
 Nodo raizaux=new Nodo();
 int indice=0;
+
+
 if(expresion.size()==1){
+	//si el tama�o es solamente 1, es que tenemos o un numero o un identificador
+	
+	
 	if(procesaTipo(expresion,indice)){
 		raizaux.info=new ByteCode(tByteCode.apila,expresion.get(indice).getLexema());
-		}
-	if((expresion.get(indice).getTipoToken()==TToken.ident)&&TS.containsKey(expresion.get(indice).getLexema()))
-	{
-	String aux=String.valueOf(TS.get(expresion.get(indice).getLexema()).getDireccion());
-	raizaux.info=new ByteCode(tByteCode.apila_dir,aux);
+		//indice++;
 	}
+	else if((expresion.get(indice).getTipoToken()==TToken.ident)
+			&&TS.containsKey(expresion.get(indice).getLexema())){
+		String aux=String.valueOf(TS.get(expresion.get(indice).getLexema()).getDireccion());
+		raizaux.info=new ByteCode(tByteCode.apila_dir,aux);
+		//indice++;
+	}
+	else throw new Exception("Error procesando el elemento");
+	
 	indice++;
+	
+	
 }
+
+
+
 
 while(indice != expresion.size()){
 	//Si encontramos un op0 meter raiz arbol binario
@@ -1410,6 +1455,8 @@ public tByteCode procesaOperacion(TToken operacion){
 	}
 	return null;
 }
+
+
 	
 //MAAAAAAIIIIIINNNNNN_____________________________
 	
