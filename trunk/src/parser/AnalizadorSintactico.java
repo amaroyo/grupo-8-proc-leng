@@ -1,14 +1,9 @@
 package parser;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.Vector;
-
 import aLexico.ALexico;
 import aLexico.Token;
 import aLexico.TToken;
@@ -31,17 +26,15 @@ public class AnalizadorSintactico {
 
 	public AnalizadorSintactico() {
 
-		dirMemoria = new HashMap(100);
-		TS = new HashMap(100);
+		dirMemoria = new HashMap<Integer, String>(100);
+		TS = new HashMap<String, TablaInfo>(100);
 		errorCompilacion = false;
 		byteOut = new Vector<ByteCode>();
 		posMemoLibre = 0;
-
 		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
 		scanner = new ALexico();
 		scanner.scanFichero(nombreFichero);
 		entrada = scanner.dameTokens();
-
 		if (scanner.getErrorLex())
 			errorCompilacion = true;
 
@@ -51,26 +44,15 @@ public class AnalizadorSintactico {
 
 		int i = 0;
 		int linea = 0;
-
 		if (!entrada.isEmpty()) {
-
-			// ////////////////////////////////////////////////////////////////////////////////
-			// ///Programa -> Program: ident { var- consts { Decs } instructions
-			// { Inst } }/////
-			// ////////////////////////////////////////////////////////////////////////////////
-
 			linea = procesaCabecera(entrada, i);
-
 			if (!errorCompilacion && linea != -1) {
 				linea = procesaSecVariables(entrada, linea);
-
 				if (!errorCompilacion && linea != -1) {
 					procesaSecInstrucciones(entrada, linea);
 					byteOut.add(new ByteCode(tByteCode.stop));
 				}
-
 			}
-
 		} else
 			System.out.println("No hay nada que compilar!!!");
 
@@ -80,7 +62,6 @@ public class AnalizadorSintactico {
 
 		int i = linea;
 		boolean finCabecera = false;
-
 		while (!errorCompilacion && !finCabecera) {
 
 			if (VCabecera.get(i).getTipoToken() != TToken.program) {
@@ -93,7 +74,7 @@ public class AnalizadorSintactico {
 			}
 
 			if (VCabecera.get(i).getTipoToken() != TToken.dosPuntos) {
-				error(VCabecera.get(i).getLinea(), "Faltan los dos puntos!93");
+				error(VCabecera.get(i).getLinea(), "Faltan los dos puntos");
 				errorCompilacion = true;
 				break;
 			} else {
@@ -102,7 +83,7 @@ public class AnalizadorSintactico {
 
 			if (VCabecera.get(i).getTipoToken() != TToken.ident) {
 				error(VCabecera.get(i).getLinea(),
-						"Nombre de programa no valido!102");
+						"Nombre de programa no valido");
 				errorCompilacion = true;
 				break;
 			} else {
@@ -112,7 +93,7 @@ public class AnalizadorSintactico {
 
 			if (VCabecera.get(i).getTipoToken() != TToken.LA) {
 				error(VCabecera.get(i).getLinea(),
-						"Falta la llave de apertura!112");
+						"Falta la llave de apertura!");
 				errorCompilacion = true;
 				break;
 			} else {
@@ -121,7 +102,7 @@ public class AnalizadorSintactico {
 				return i;
 			}
 
-		}// while
+		}
 		return -1;
 	}
 
@@ -133,8 +114,7 @@ public class AnalizadorSintactico {
 		while (!errorCompilacion && !finVariables) {
 
 			if (VVariables.get(i).getTipoToken() != TToken.varsConsts) {
-				error(VVariables.get(i).getLinea(),
-						"No se reconoce la palabra reservada vars-consts!135");
+				error(VVariables.get(i).getLinea(),	"No se reconoce la palabra reservada vars-consts");
 				errorCompilacion = true;
 				break;
 			} else {
@@ -180,8 +160,7 @@ public class AnalizadorSintactico {
 		while (!errorCompilacion && !finVariables) {
 
 			if (VInstrucciones.get(i).getTipoToken() != TToken.instrucciones) {
-				error(VInstrucciones.get(i).getLinea(),
-						"No se reconoce la palabra reservada instructions!");
+				error(VInstrucciones.get(i).getLinea(),"No se reconoce la palabra reservada instructions!");
 				errorCompilacion = true;
 				break;
 			} else {
@@ -246,8 +225,7 @@ public class AnalizadorSintactico {
 							// esta en la tabla TS???
 
 							if (TS.containsKey(identificador)) {
-								error(v.get(i).getLinea(),
-										"VARIABLE DUPLICADA197");
+								error(v.get(i).getLinea(),"VARIABLE DUPLICADA");
 								errorCompilacion = true;
 								break;
 							} else {
@@ -266,7 +244,7 @@ public class AnalizadorSintactico {
 
 						} else if (variable) {
 							error(v.get(i).getLinea(),
-									"Falta punto y coma!!215");
+									"Falta punto y coma!");
 							errorCompilacion = true;
 							break;
 						}
@@ -279,8 +257,7 @@ public class AnalizadorSintactico {
 									numeroNegativo = true;
 									i++;
 								}
-								// lo de arriba sirve para ver si es un num
-								// negativo
+								// lo de arriba sirve para ver si es un num negativo
 								if (correspondenciaDeTipos(v, tipo, i)) {
 									String valor = "";
 									if (numeroNegativo)
@@ -290,8 +267,7 @@ public class AnalizadorSintactico {
 
 									if (procesaFinInstruccion(v, i + 1)) {
 										if (TS.containsKey(identificador)) {
-											error(v.get(i).getLinea(),
-													"VARIABLE DUPLICADA233");
+											error(v.get(i).getLinea(),"VARIABLE DUPLICADA");
 											errorCompilacion = true;
 											break;
 										} else {
@@ -305,19 +281,18 @@ public class AnalizadorSintactico {
 											dirMemoria.put(posMemoLibre, valor);
 											actualizaPunteroMemoriaDatos();
 											insFinalizada = true;
-											i = i + 2;// ya q ya sabemos q hay
-														// punto y coma!!! :D
+											i = i + 2;// ya q ya sabemos q hay punto y coma!!! :D
 										}
 									} else {
 										error(v.get(i).getLinea(),
-												"Falta punto y coma!!249");
+												"Falta punto y coma!");
 										errorCompilacion = true;
 										break;
 									}
 
 								} else {
 									error(v.get(i).getLinea(),
-											"Error de tipos!!!256");
+											"Error de tipos!");
 									errorCompilacion = true;
 									break;
 
@@ -325,19 +300,19 @@ public class AnalizadorSintactico {
 
 							} else {
 								error(v.get(i).getLinea(),
-										"Error en la asignacion de la cte264");
+										"Error en la asignacion de la cte");
 								errorCompilacion = true;
 								break;
 							}
 
 						}
 					} else {
-						error(v.get(i).getLinea(), "Identificador erroneo272");
+						error(v.get(i).getLinea(), "Identificador erroneo");
 						errorCompilacion = true;
 						break;
 					}
 				} else {
-					error(v.get(i).getLinea(), "Tipo no reconocido278");
+					error(v.get(i).getLinea(), "Tipo no reconocido");
 					errorCompilacion = true;
 					break;
 				}
@@ -345,7 +320,7 @@ public class AnalizadorSintactico {
 			}// if
 
 			else {
-				error(v.get(i).getLinea(), "Error en linea287");
+				error(v.get(i).getLinea(), "Error en linea");
 				errorCompilacion = true;
 				break;
 			}
@@ -392,15 +367,13 @@ public class AnalizadorSintactico {
 						if (!TS.get(identificador).isConstante()) {
 							i++;
 						} else {
-							error(v.get(i).getLinea(),
-									"IN sobre identificador que es una Constante");
+							error(v.get(i).getLinea(),"IN sobre identificador que es una Constante");
 							errorCompilacion = true;
 							break;
 						}
 
 					} else {
-						error(v.get(i).getLinea(),
-								"Identificador que no está en TS");
+						error(v.get(i).getLinea(),"Identificador que no está en TS");
 						errorCompilacion = true;
 						break;
 					}
@@ -478,15 +451,13 @@ public class AnalizadorSintactico {
 					if (!TS.get(identificador).isConstante()) {
 						i++;
 					} else {
-						error(v.get(i).getLinea(),
-								"ASIG sobre identificador que es una Constante");
+						error(v.get(i).getLinea(),"ASIG sobre identificador que es una Constante");
 						errorCompilacion = true;
 						break;
 					}
 
 				} else {
-					error(v.get(i).getLinea(),
-							"Identificador que no está en TS");
+					error(v.get(i).getLinea(),"Identificador que no está en TS");
 					errorCompilacion = true;
 					break;
 				}
@@ -725,8 +696,7 @@ public class AnalizadorSintactico {
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
-			// si el tama�o es solamente 1, es que tenemos o un numero o un
-			// identificador
+			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
 				raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
@@ -757,9 +727,7 @@ public class AnalizadorSintactico {
 			}
 
 			// Si encontramos un op1 meter raiz arbol binario
-			if ((indice < expresion.size())
-					&& (procesaOperacionUno(expresion.get(indice)
-							.getTipoToken()))) {
+			if ((indice < expresion.size())	&& (procesaOperacionUno(expresion.get(indice).getTipoToken()))) {
 				// Seleccionamos el Op1 y almacenamos su indice en Refenrecia
 				// para luego dividir en dos subvectores
 				referencia = indice;
@@ -837,7 +805,7 @@ public class AnalizadorSintactico {
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
-			// si el tama�o es solamente 1, es que tenemos o un numero o un
+			// si el tamaño es solamente 1, es que tenemos o un numero o un
 			// identificador
 
 			if (procesaTipo(expresion, indice)) {
@@ -869,9 +837,7 @@ public class AnalizadorSintactico {
 			}
 
 			// Si encontramos un op2 meter raiz arbol binario
-			if ((indice < expresion.size())
-					&& (procesaOperacionDos(expresion.get(indice)
-							.getTipoToken()))) {
+			if ((indice < expresion.size()) && (procesaOperacionDos(expresion.get(indice).getTipoToken()))) {
 				// Seleccionamos el Op2 y almacenamos su indice en Refenrecia
 				// para luego dividir en dos subvectores
 				referencia = indice;
@@ -949,8 +915,7 @@ public class AnalizadorSintactico {
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
-			// si el tama�o es solamente 1, es que tenemos o un numero o un
-			// identificador
+			//si el tamaño es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
 				raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
