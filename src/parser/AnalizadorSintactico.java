@@ -598,6 +598,10 @@ public class AnalizadorSintactico {
 		while (v.get(i).getTipoToken() != TToken.puntoyComa) {
 			expresion.add(v.get(i));
 			i++;
+			if (i>=v.size()){
+				error(lineaActual-1, "Se esperaba leer un punto y coma");
+				return -1;
+			}
 		}
 
 		// Si encontramos un ( ) nos situamos después de él.
