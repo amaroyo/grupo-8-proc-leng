@@ -1074,8 +1074,7 @@ public class AnalizadorSintactico {
 		}
 
 		// Si encontramos un ( ) nos situamos después de él.
-		if (expresion.get(indice).getTipoToken() == TToken.PA 
-				&& (expresion.get(expresion.size()-1).getTipoToken() != TToken.PC)) {
+		if (expresion.get(indice).getTipoToken() == TToken.PA) {
 			indice = procesaExpParentesis(expresion, indice);
 		}
 
@@ -1085,12 +1084,12 @@ public class AnalizadorSintactico {
 		}
 
 		// Si encontramos un nat,real,... o ident nos situamos después de él.
-		if (procesaTipo(expresion, indice)) {
+		if ((indice < expresion.size())	&& (procesaTipo(expresion, indice))) {
 			indice++;
 		}
 
 		// Si encontramos un op0 meter raiz arbol binario
-		if (procesaOperacionCero(expresion.get(indice).getTipoToken())) {
+		if ((indice < expresion.size())	&& (procesaOperacionCero(expresion.get(indice).getTipoToken()))) {
 			// Seleccionamos el Op0 y almacenamos su indice en Refenrecia para
 			// luego dividir en dos subvectores
 			referencia = indice;
