@@ -601,8 +601,14 @@ public class AnalizadorSintactico {
 		}
 
 		// Si encontramos un ( ) nos situamos después de él.
-		if (expresion.get(indice).getTipoToken() == TToken.PA) {
-			indice = procesaExpParentesis(expresion, indice);
+		if (expresion.size()>0){
+			if (expresion.get(indice).getTipoToken() == TToken.PA) {
+				indice = procesaExpParentesis(expresion, indice);
+			}
+		}
+		else{
+			error(v.get(i).getLinea(), "Después de la asignacion se espera un identificador o número");
+			return -1;
 		}
 
 		if (indice == -1) {
