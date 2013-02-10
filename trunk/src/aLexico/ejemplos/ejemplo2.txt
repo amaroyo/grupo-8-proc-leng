@@ -4,6 +4,6 @@ program: ejemplo{
 		var float pesetas;
 	}
 	instructions{
-		pesetas=(3+5)<3;
+		pesetas=(3<5)>(7*2);
 }
 }
