@@ -1,18 +1,9 @@
 @ Programa de ejemplo;
 program: ejemplo{
 	vars-consts{
-		var integer cantidad;
-		var float euros;
-		var float centimos;
 		var float pesetas;
-		const boolean correcto := true;
-		const character car := 'a';
-		const float razon := 166.33;
-}
+	}
 	instructions{
-		in(euros);
-		in(centimos);
-		in(cantidad);
 		pesetas=(3+5)<3;
 }
 }
