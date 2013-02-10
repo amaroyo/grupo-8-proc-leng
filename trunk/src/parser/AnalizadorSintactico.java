@@ -755,13 +755,13 @@ else{
 	}
 
 //Si encontramos un nat,real,... o ident nos situamos después de él.
-	if(procesaTipo(expresion,indice)){
+	if((indice<expresion.size())&&(procesaTipo(expresion,indice))){
 	indice++;
 	}
 
 
 //Si encontramos un op1 meter raiz arbol binario
-	if(procesaOperacionUno(expresion.get(indice).getTipoToken())){
+	if((indice<expresion.size())&&(procesaOperacionUno(expresion.get(indice).getTipoToken()))){
 //Seleccionamos el Op1 y almacenamos su indice en Refenrecia para luego dividir en dos subvectores	
 		referencia=indice;
 		operacion=expresion.get(indice).getTipoToken();
@@ -868,13 +868,13 @@ indice=procesaExpParentesis(expresion,indice);
 }
 
 //Si encontramos un nat,real,... o ident nos situamos después de él.
-if(procesaTipo(expresion,indice)){
+if((indice<expresion.size())&&(procesaTipo(expresion,indice))){
 indice++;
 }
 
 
 //Si encontramos un op2 meter raiz arbol binario
-if(procesaOperacionDos(expresion.get(indice).getTipoToken())){
+if((indice<expresion.size())&&(procesaOperacionDos(expresion.get(indice).getTipoToken()))){
 //Seleccionamos el Op2 y almacenamos su indice en Refenrecia para luego dividir en dos subvectores	
 referencia=indice;
 operacion=expresion.get(indice).getTipoToken();
@@ -981,13 +981,13 @@ indice=procesaExpParentesis(expresion,indice);
 }
 
 //Si encontramos un nat,real,... o ident nos situamos después de él.
-if(procesaTipo(expresion,indice)){
+if((indice<expresion.size())&&(procesaTipo(expresion,indice))){
 indice++;
 }
 
 
 //Si encontramos un op3 meter raiz arbol binario
-if(procesaOperacionTres(expresion.get(indice).getTipoToken())){
+if((indice<expresion.size())&&(procesaOperacionTres(expresion.get(indice).getTipoToken()))){
 //Seleccionamos el Op3 y almacenamos su indice en Refenrecia para luego dividir en dos subvectores	
 referencia=indice;
 operacion=expresion.get(indice).getTipoToken();
@@ -1063,7 +1063,7 @@ private Nodo procesaExpresion3(Vector<Token> expresion) throws Exception {
 TToken operacion=null;
 Nodo raizaux=new Nodo();
 int indice=0;
-
+int indice2=0;
 Vector<Token> expresionSinParent = new Vector<Token>();
 
 // Quitamos los () para enviarlo a procesaExpresionRecursivo 
@@ -1082,6 +1082,13 @@ else{
 	}
 
 }
+// Este While no hace nada, solo compruebo que la expresion que pasamos es correcta
+while(indice2 != (expresionSinParent.size())){
+	operacion=expresionSinParent.get(indice2).getTipoToken();
+	indice2++;
+}
+
+
 // Método que hará lo mismo que ProcesaExpresión pero devolviendo un Nodo para construir el arbol
 raizaux=procesaExpresionRecursivo(expresionSinParent);
 
@@ -1104,7 +1111,7 @@ int referencia;
 int lineaActual = expre.get(indice).getLinea();
 //Nos hacemos un array auxiliar para meter la expresion  General
 Vector<Token> expresion = new Vector<Token>();
-while(i<expresion.size()){
+while(i<expre.size()){
 expresion.add(expre.get(i));
 i++;
 }
@@ -1190,11 +1197,6 @@ return null;
 
 return raiz;
 }
-
-
-
-
-
 
 
 
