@@ -1881,6 +1881,15 @@ public class AnalizadorSintactico {
 			return tByteCode.menorigual;
 		case distinto:
 			return tByteCode.distinto;
+		case sum:
+			return tByteCode.suma;
+		case div:
+			return tByteCode.divide;
+		case mult:
+			return tByteCode.multiplica;
+		case mod:
+			return tByteCode.modulo;
+		
 		}
 		return null;
 	}
