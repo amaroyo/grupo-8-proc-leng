@@ -709,9 +709,13 @@ public class AnalizadorSintactico {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
-				raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-						indice).getLexema());
-				// indice++;
+				if (TS.containsKey(expresion.get(indice).getLexema())){
+					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema());
+					}
+					else{
+						error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador" +
+							" que no está en TS en la linea " +lineaActual);
+					}
 			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
 					&& TS.containsKey(expresion.get(indice).getLexema())) {
 				String aux = String.valueOf(TS.get(
