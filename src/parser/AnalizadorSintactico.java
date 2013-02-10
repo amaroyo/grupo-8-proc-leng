@@ -601,7 +601,8 @@ public class AnalizadorSintactico {
 		}
 
 		// Si encontramos un ( ) nos situamos después de él.
-		if (expresion.get(indice).getTipoToken() == TToken.PA) {
+		if (expresion.get(indice).getTipoToken() == TToken.PA && 
+				(expresion.get(expresion.size()-1).getTipoToken() != TToken.PC)) {
 			indice = procesaExpParentesis(expresion, indice);
 		}
 
@@ -611,9 +612,9 @@ public class AnalizadorSintactico {
 		}
 
 		// Si encontramos un nat,real,... o ident nos situamos después de él.
-		if (procesaTipo(expresion, indice)) {
-			indice++;
-		}
+			if (procesaTipo(expresion, indice)) {
+				indice++;
+			}
 
 		// Si encontramos un op0 meter raiz arbol binario
 		if (procesaOperacionCero(expresion.get(indice).getTipoToken())) {
@@ -805,8 +806,7 @@ public class AnalizadorSintactico {
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
-			// si el tamaño es solamente 1, es que tenemos o un numero o un
-			// identificador
+			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
 				raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
@@ -1075,7 +1075,8 @@ public class AnalizadorSintactico {
 		}
 
 		// Si encontramos un ( ) nos situamos después de él.
-		if (expresion.get(indice).getTipoToken() == TToken.PA) {
+		if (expresion.get(indice).getTipoToken() == TToken.PA 
+				&& (expresion.get(expresion.size()-1).getTipoToken() != TToken.PC)) {
 			indice = procesaExpParentesis(expresion, indice);
 		}
 
