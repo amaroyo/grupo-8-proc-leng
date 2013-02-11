@@ -1,36 +1,21 @@
 package parser;
 
 public enum tByteCode {
+
+	begin, stop,
+
+	apila, apila_dir, desapila_dir,
+
+	read, write, swap1, swap2,
+
+	distinto, igual, menor, mayor, mayorigual, menorigual, 
 	
-	begin,
-	stop,
+	resta, suma, or, 
 	
-	apila,
-	apila_dir,
-	desapila_dir,
+	divide, multiplica, and, modulo,
+
+	 desplazamientoderecha, desplazamientoizquierda,
 	
-	read,
-	write,
-	swap1,
-	swap2,
-	
-    distinto,
-    igual,
-    menor,
-    mayor,
-    mayorigual,
-    menorigual,
-	resta,
-	suma,
-	or,
-	divide,
-	multiplica,
-	and,
-	modulo,
-	
-    negacionlogica,
-    restaunitaria,
-    desplazamientoderecha,
-    desplazamientoizquierda
+	negacionlogica, restaunitaria
 
 }
