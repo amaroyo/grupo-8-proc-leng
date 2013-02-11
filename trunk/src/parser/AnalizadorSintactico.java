@@ -1091,7 +1091,7 @@ public class AnalizadorSintactico {
 		Vector<Token> expresionSinParent = new Vector<Token>();
 
 		// Quitamos los () para enviarlo a procesaExpresionRecursivo
-		if ((expresion.get(indice).getTipoToken() == TToken.PA)) {
+		if ((expresion.get(indice).getTipoToken() == TToken.PA)&&(expresion.get(expresion.size()-1).getTipoToken() == TToken.PC) ) {
 			indice++;
 			while (indice != (expresion.size() - 1)) {
 				expresionSinParent.add(expresion.get(indice));
@@ -2031,6 +2031,10 @@ public class AnalizadorSintactico {
 			return tByteCode.or;
 		case yLogica:
 			return tByteCode.and;
+		case despIzq:
+			return tByteCode.desplazamientoizquierda;
+		case despDer:
+			return tByteCode.desplazamientoderecha;
 		}
 		return null;
 	}
