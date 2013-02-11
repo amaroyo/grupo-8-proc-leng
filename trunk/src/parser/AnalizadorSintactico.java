@@ -1224,9 +1224,9 @@ public class AnalizadorSintactico {
 
 	}
 
-	private boolean procesaOperacionUno(TToken oper1) {// sin or
+	private boolean procesaOperacionUno(TToken oper1) {
 
-		if ((oper1 == TToken.sum || oper1 == TToken.rest)) {
+		if ((oper1 == TToken.sum || oper1 == TToken.rest || oper1 == TToken.oLogica )) {
 			return true;
 		} else
 			return false;
@@ -1235,7 +1235,7 @@ public class AnalizadorSintactico {
 
 	private boolean procesaOperacionDos(TToken oper2) {
 
-		if ((oper2 == TToken.mult || oper2 == TToken.div || oper2 == TToken.mod)) {
+		if ((oper2 == TToken.mult || oper2 == TToken.div || oper2 == TToken.mod || oper2 == TToken.yLogica)) {
 			return true;
 		} else
 			return false;
@@ -1273,8 +1273,7 @@ public class AnalizadorSintactico {
 				byteOut.add(new ByteCode(tByteCode.apila_dir, aux));
 
 				if (operacion != null) {
-					switch (operacion) { // Elige la opcion acorde al numero de
-											// mes
+					switch (operacion) { 
 					case negArit:
 						byteOut.add(new ByteCode(tByteCode.restaunitaria));
 						break;
@@ -1299,7 +1298,6 @@ public class AnalizadorSintactico {
 					case distinto:
 						byteOut.add(new ByteCode(tByteCode.distinto));
 						break;
-
 					case sum:
 						byteOut.add(new ByteCode(tByteCode.suma));
 						break;
@@ -1312,11 +1310,17 @@ public class AnalizadorSintactico {
 					case mod:
 						byteOut.add(new ByteCode(tByteCode.modulo));
 						break;
+					case oLogica:
+						byteOut.add(new ByteCode(tByteCode.or));
+						break;
+					case yLogica:
+						byteOut.add(new ByteCode(tByteCode.and));
+							break;
 					}
+					
 				}
 				if (operacion2 != null) {
-					switch (operacion2) { // Elige la opcion acorde al numero de
-											// mes
+					switch (operacion2) { 
 					case negArit:
 						byteOut.add(new ByteCode(tByteCode.restaunitaria));
 						break;
@@ -1354,6 +1358,12 @@ public class AnalizadorSintactico {
 					case mod:
 						byteOut.add(new ByteCode(tByteCode.modulo));
 						break;
+					case oLogica:
+						byteOut.add(new ByteCode(tByteCode.or));
+						break;
+					case yLogica:
+						byteOut.add(new ByteCode(tByteCode.and));
+							break;
 					}
 				}
 				i = i + 2;
@@ -1375,8 +1385,7 @@ public class AnalizadorSintactico {
 				byteOut.add(new ByteCode(tByteCode.apila, v.get(i).getLexema()));
 
 				if (operacion != null) {
-					switch (operacion) { // Elige la opcion acorde al numero de
-											// mes
+					switch (operacion) { 
 					case negArit:
 						byteOut.add(new ByteCode(tByteCode.restaunitaria));
 						break;
@@ -1414,6 +1423,12 @@ public class AnalizadorSintactico {
 					case mod:
 						byteOut.add(new ByteCode(tByteCode.modulo));
 						break;
+					case oLogica:
+						byteOut.add(new ByteCode(tByteCode.or));
+						break;
+					case yLogica:
+						byteOut.add(new ByteCode(tByteCode.and));
+					break;
 					}
 				}
 				if (operacion2 != null) {
@@ -1456,6 +1471,12 @@ public class AnalizadorSintactico {
 					case mod:
 						byteOut.add(new ByteCode(tByteCode.modulo));
 						break;
+					case oLogica:
+						byteOut.add(new ByteCode(tByteCode.or));
+						break;
+					case yLogica:
+						byteOut.add(new ByteCode(tByteCode.and));
+					break;
 					}
 				}
 
@@ -1512,6 +1533,12 @@ public class AnalizadorSintactico {
 					case mod:
 						byteOut.add(new ByteCode(tByteCode.modulo));
 						break;
+					case oLogica:
+						byteOut.add(new ByteCode(tByteCode.or));
+						break;
+					case yLogica:
+						byteOut.add(new ByteCode(tByteCode.and));
+					break;
 					}
 				}
 
@@ -1570,6 +1597,12 @@ public class AnalizadorSintactico {
 					case mod:
 						byteOut.add(new ByteCode(tByteCode.modulo));
 						break;
+					case oLogica:
+						byteOut.add(new ByteCode(tByteCode.or));
+						break;
+					case yLogica:
+						byteOut.add(new ByteCode(tByteCode.and));
+					break;
 					}
 				}
 
@@ -1879,7 +1912,10 @@ public class AnalizadorSintactico {
 			return tByteCode.multiplica;
 		case mod:
 			return tByteCode.modulo;
-		
+		case oLogica:
+			return tByteCode.or;
+		case yLogica:
+			return tByteCode.and;
 		}
 		return null;
 	}
