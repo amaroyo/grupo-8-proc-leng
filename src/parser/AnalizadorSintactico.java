@@ -622,7 +622,15 @@ public class AnalizadorSintactico {
 
 		// Si encontramos un nat,real,... o ident nos situamos después de él.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
-				indice++;
+				if (!(TS.containsKey(expresion.get(indice).getLexema())) && (expresion.get(indice).getTipoToken()==TToken.ident)){ //si es un identificador pero no está en la tabla de símbolos, error
+					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador" +
+							" que no está en TS");
+					return -1;
+				}
+				else{
+					
+					indice++;
+				}
 			}
 
 		// Si encontramos un op0 meter raiz arbol binario
