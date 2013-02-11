@@ -710,27 +710,27 @@ public class AnalizadorSintactico {
 
 		if (expresion.size() == 1) {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
-
 			if (procesaTipo(expresion, indice)) {
-				if (TS.containsKey(expresion.get(indice).getLexema())){
+				if (TS.containsKey(expresion.get(indice).getLexema()) || (expresion.get(indice).getTipoToken()!=TToken.ident)){
 					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema());
-					}
-					else{
-						error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador" +
-							" que no está en TS en la linea " +lineaActual);
-					}
-			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
-					&& TS.containsKey(expresion.get(indice).getLexema())) {
-				String aux = String.valueOf(TS.get(
-						expresion.get(indice).getLexema()).getDireccion());
-				raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-				// indice++;
-			} else
-				throw new Exception("Error procesando el elemento");
+				}
+				else{
+					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador" +
+						" que no está en TS en la linea " +lineaActual);
+				}
+			} 
+			else 
+				if ((expresion.get(indice).getTipoToken() == TToken.ident) && TS.containsKey(expresion.get(indice).getLexema())) {
+					String aux = String.valueOf(TS.get(
+					expresion.get(indice).getLexema()).getDireccion());
+					raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
+				} 
+				else
+					throw new Exception("Error procesando el elemento");
+				indice++;
 
-			indice++;
-
-		} else {
+		} 
+		else {
 
 			// Si encontramos un ( ) nos situamos después de él.
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
@@ -819,6 +819,9 @@ public class AnalizadorSintactico {
 		int indice = 0;
 		int indice2 = 0;
 		int referencia;
+		if (expresion.size()==0){
+			throw new Exception("La expresión de la asignación es incorrecta");
+		}
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
@@ -928,6 +931,9 @@ public class AnalizadorSintactico {
 		int indice = 0;
 		int indice2 = 0;
 		int referencia;
+		if (expresion.size()==0){
+			throw new Exception("La expresión de la asignación es incorrecta");
+		}
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
