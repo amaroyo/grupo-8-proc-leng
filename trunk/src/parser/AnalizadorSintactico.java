@@ -682,7 +682,7 @@ public class AnalizadorSintactico {
 			} catch (Exception e) {
 				if (e != null) {
 					error(lineaActual, e.getMessage());
-					e.printStackTrace();
+					//e.printStackTrace();
 					return -1;
 				}
 			}
@@ -797,7 +797,7 @@ public class AnalizadorSintactico {
 				} catch (Exception e) {
 					if (e != null) {
 						error(lineaActual, e.getMessage());
-						e.printStackTrace();
+						//e.printStackTrace();
 						return null;
 					}
 				}
@@ -900,7 +900,7 @@ public class AnalizadorSintactico {
 				catch (Exception e) {
 					if (e != null) {
 						error(lineaActual, e.getMessage());
-						e.printStackTrace();
+						//e.printStackTrace();
 						return null;
 					}
 				}
