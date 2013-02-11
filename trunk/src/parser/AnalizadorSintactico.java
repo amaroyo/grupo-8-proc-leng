@@ -599,7 +599,7 @@ public class AnalizadorSintactico {
 			expresion.add(v.get(i));
 			i++;
 			if (i>=v.size()){
-				error(lineaActual-1, "Se esperaba leer un punto y coma");
+				error(lineaActual, "Se esperaba leer un punto y coma");
 				return -1;
 			}
 		}
@@ -703,6 +703,9 @@ public class AnalizadorSintactico {
 		int indice = 0;
 		int indice2 = 0;
 		int referencia;
+		if (expresion.size()==0){
+			throw new Exception("La expresión de la asignación es incorrecta");
+		}
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
@@ -770,7 +773,7 @@ public class AnalizadorSintactico {
 				} catch (Exception e) {
 					if (e != null) {
 						error(lineaActual, e.getMessage());
-						e.printStackTrace();
+						//e.printStackTrace();
 						return null;
 					}
 				}
