@@ -712,7 +712,24 @@ public class AnalizadorSintactico {
 					indice++;
 				}
 			}
+			// Si encontramos un op0 anterior  lo bajamos a procesaExp1
+			if ((indice < expresion.size())
+					&& (buscaOperacionCero(indice, expresion) != -1)) {
+				try {
+					raizaux = procesaExpresion1(expresion);
+					indice = expresion.size()-1;
+				} catch (Exception e) {
+					if (e != null) {
+						error(lineaActual, e.getMessage());
+						// e.printStackTrace();
+						return null;
+					}
+				}
 
+			}
+			
+			
+			
 			// Si encontramos un op1 meter raiz arbol binario
 			if ((indice < expresion.size())
 					&& (buscaOperacionUno(indice, expresion) != -1)) {
@@ -840,7 +857,23 @@ public class AnalizadorSintactico {
 					indice++;
 				}
 			}
+			// Si encontramos un op0 o Op1 anterior  lo bajamos a procesaExp2
+			if ((indice < expresion.size())
+					&& ((buscaOperacionCero(indice, expresion) != -1) || (buscaOperacionUno(indice, expresion) != -1))) {
+				try {
+					raizaux = procesaExpresion2(expresion);
+					indice = expresion.size()-1;
+				} catch (Exception e) {
+					if (e != null) {
+						error(lineaActual, e.getMessage());
+						// e.printStackTrace();
+						return null;
+					}
+				}
 
+			}
+			
+			
 			// Si encontramos un op2 meter raiz arbol binario
 			if ((indice < expresion.size())
 					&& (buscaOperacionDos(indice, expresion) != -1)) {
@@ -971,7 +1004,24 @@ public class AnalizadorSintactico {
 					indice++;
 				}
 			}
+			
+			// Si encontramos un op0 ,Op1  o op2 anterior  lo bajamos a procesaExp2
+			if ((indice < expresion.size())
+					&& ((buscaOperacionCero(indice, expresion) != -1) || (buscaOperacionUno(indice, expresion) != -1)|| (buscaOperacionDos(indice, expresion) != -1))) {
+				try {
+					raizaux = procesaExpresion3(expresion);
+					indice = expresion.size()-1;
+				} catch (Exception e) {
+					if (e != null) {
+						error(lineaActual, e.getMessage());
+						// e.printStackTrace();
+						return null;
+					}
+				}
 
+			}
+			
+			
 			// Si encontramos un op3 meter raiz arbol binario
 			if ((indice < expresion.size()) && (buscaOperacionTres(indice, expresion) != -1)) {
 				// Seleccionamos el Op3 y almacenamos su indice en Refenrecia
