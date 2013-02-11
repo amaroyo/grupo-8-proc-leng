@@ -233,13 +233,11 @@ public class AnalizadorSintactico {
 						if (!insFinalizada) {
 							if (!variable && procesaAsignacion(v, i)) {
 								i++;
-								boolean numeroNegativo = false;
+								boolean numeroNegativo = false; //para ver si es un num negativo
 								if (numNegativo(v, i)) {
 									numeroNegativo = true;
 									i++;
 								}
-								// lo de arriba sirve para ver si es un num
-								// negativo
 								if (correspondenciaDeTipos(v, tipo, i)) {
 									String valor = "";
 									if (numeroNegativo)
@@ -249,42 +247,34 @@ public class AnalizadorSintactico {
 
 									if (procesaFinInstruccion(v, i + 1)) {
 										if (TS.containsKey(identificador)) {
-											error(v.get(i).getLinea(),
-													"VARIABLE DUPLICADA");
+											error(v.get(i).getLinea(),"VARIABLE DUPLICADA");
 											errorCompilacion = true;
 											break;
-										} else {
-											// variable no duplicada, la metemos
-											// en la TS y la inicializamos en la
-											// MEMO
-											// Y SUMAMOS UNO A LA i!!!!
-											TablaInfo novata = new TablaInfo(
-													tipo, true, posMemoLibre);
+										} else {// variable no duplicada, la metemos en la TS 
+												//y la inicializamos en la MEMO
+												// Y SUMAMOS UNO A LA i!!!!
+											TablaInfo novata = new TablaInfo(tipo, true, posMemoLibre);
 											TS.put(identificador, novata);
 											dirMemoria.put(posMemoLibre, valor);
 											actualizaPunteroMemoriaDatos();
 											insFinalizada = true;
-											i = i + 2;// ya q ya sabemos q hay
-														// punto y coma!!! :D
+											i = i + 2;// ya q ya sabemos q hay punto y coma!!! :D
 										}
 									} else {
-										error(v.get(i).getLinea(),
-												"Falta punto y coma!");
+										error(v.get(i).getLinea(),"Falta punto y coma");
 										errorCompilacion = true;
 										break;
 									}
 
 								} else {
-									error(v.get(i).getLinea(),
-											"Error de tipos!");
+									error(v.get(i).getLinea(),"Error de tipos!");
 									errorCompilacion = true;
 									break;
 
 								}
 
 							} else {
-								error(v.get(i).getLinea(),
-										"Error en la asignacion de la cte");
+								error(v.get(i).getLinea(),"Error en la asignacion de la cte");
 								errorCompilacion = true;
 								break;
 							}
@@ -331,11 +321,10 @@ public class AnalizadorSintactico {
 			// /////////////Instrucción de Tipo IN//////////////////////
 			// /////////////InsR->in(ident); ///////////////////////////////
 			// /////////////////////////////////////////////////////////
+			
 			if (v.get(i).getTipoToken() == TToken.entradaTeclado) {
 				i++;
-
-				// leo (
-				if (v.get(i).getTipoToken() == TToken.PA) {
+				if (v.get(i).getTipoToken() == TToken.PA) { //leo paréntesis abierto
 					i++;
 				} else {
 					error(v.get(i).getLinea(), "Falta el (");
@@ -351,15 +340,13 @@ public class AnalizadorSintactico {
 						if (!TS.get(identificador).isConstante()) {
 							i++;
 						} else {
-							error(v.get(i).getLinea(),
-									"IN sobre identificador que es una Constante");
+							error(v.get(i).getLinea(),"IN sobre identificador que es una Constante");
 							errorCompilacion = true;
 							break;
 						}
 
 					} else {
-						error(v.get(i).getLinea(),
-								"Identificador que no está en TS");
+						error(v.get(i).getLinea(),"Identificador que no está en TS");
 						errorCompilacion = true;
 						break;
 					}
@@ -369,7 +356,6 @@ public class AnalizadorSintactico {
 					errorCompilacion = true;
 					break;
 				}
-				// leo )
 				if (v.get(i).getTipoToken() == TToken.PC) {
 					i++;
 				} else {
@@ -377,11 +363,9 @@ public class AnalizadorSintactico {
 					errorCompilacion = true;
 					break;
 				}
-				// leo ;
 				if (v.get(i).getTipoToken() == TToken.puntoyComa) {
 					byteOut.add(new ByteCode(tByteCode.read));
-					String aux = String.valueOf(TS.get(identificador)
-							.getDireccion());
+					String aux = String.valueOf(TS.get(identificador).getDireccion());
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux));
 					i++;
 				} else {
@@ -397,8 +381,6 @@ public class AnalizadorSintactico {
 			// //////////////////////////////////////////////////////////
 			else if (v.get(i).getTipoToken() == TToken.salidaPantalla) {
 				i++;
-
-				// leo (
 				if (v.get(i).getTipoToken() == TToken.PA) {
 					i++;
 				} else {
@@ -437,20 +419,17 @@ public class AnalizadorSintactico {
 					if (!TS.get(identificador).isConstante()) {
 						i++;
 					} else {
-						error(v.get(i).getLinea(),
-								"ASIG sobre identificador que es una Constante");
+						error(v.get(i).getLinea(),"ASIG sobre identificador que es una Constante");
 						errorCompilacion = true;
 						break;
 					}
 
 				} else {
-					error(v.get(i).getLinea(),
-							"Identificador que no está en TS");
+					error(v.get(i).getLinea(),"Identificador que no está en TS");
 					errorCompilacion = true;
 					break;
 				}
 
-				// leo =
 				if (v.get(i).getTipoToken() == TToken.equals) {
 					i++;
 				} else {
@@ -463,8 +442,7 @@ public class AnalizadorSintactico {
 				arbol = new ArbolBin();
 				i = procesaExpresion(v, i);
 				if (i != -1) {// ////Procesa Exp.///////
-					String aux2 = String.valueOf(TS.get(identificador)
-							.getDireccion());
+					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
 					i++;
@@ -479,8 +457,6 @@ public class AnalizadorSintactico {
 			// /////////////////////////////////////////////////////////////
 			else if (v.get(i).getTipoToken() == TToken.swap1) {
 				i++;
-
-				// leo (
 				if (v.get(i).getTipoToken() == TToken.PA) {
 					i++;
 				} else {
@@ -488,7 +464,6 @@ public class AnalizadorSintactico {
 					errorCompilacion = true;
 					break;
 				}
-				// leo )
 				if (v.get(i).getTipoToken() == TToken.PC) {
 					i++;
 				} else {
@@ -496,7 +471,6 @@ public class AnalizadorSintactico {
 					errorCompilacion = true;
 					break;
 				}
-				// leo ;
 				if (v.get(i).getTipoToken() == TToken.puntoyComa) {
 					byteOut.add(new ByteCode(tByteCode.swap1));
 					i++;
@@ -512,8 +486,6 @@ public class AnalizadorSintactico {
 			// //////////////////////////////////////////////////////////
 			else if (v.get(i).getTipoToken() == TToken.swap2) {
 				i++;
-
-				// leo (
 				if (v.get(i).getTipoToken() == TToken.PA) {
 					i++;
 				} else {
@@ -521,7 +493,6 @@ public class AnalizadorSintactico {
 					errorCompilacion = true;
 					break;
 				}
-				// leo )
 				if (v.get(i).getTipoToken() == TToken.PC) {
 					i++;
 				} else {
@@ -529,7 +500,6 @@ public class AnalizadorSintactico {
 					errorCompilacion = true;
 					break;
 				}
-				// leo ;
 				if (v.get(i).getTipoToken() == TToken.puntoyComa) {
 					byteOut.add(new ByteCode(tByteCode.swap2));
 					i++;
@@ -610,22 +580,9 @@ public class AnalizadorSintactico {
 		// Si encontramos un nat,real,... o ident nos situamos después de él.
 		if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 			if (!(TS.containsKey(expresion.get(indice).getLexema()))
-					&& (expresion.get(indice).getTipoToken() == TToken.ident)) { // si
-																					// es
-																					// un
-																					// identificador
-																					// pero
-																					// no
-																					// está
-																					// en
-																					// la
-																					// tabla
-																					// de
-																					// símbolos,
-																					// error
-				error(expresion.get(indice).getLinea(),
-						"Se intenta asignar un identificador"
-								+ " que no está en TS");
+					&& (expresion.get(indice).getTipoToken() == TToken.ident)) { // si es un identificador pero no está en
+				error(expresion.get(indice).getLinea(),	"Se intenta asignar un identificador" + // la tabla de símbolos, error
+						" que no está en TS");						
 				return -1;
 			} else {
 				indice++;
@@ -645,8 +602,7 @@ public class AnalizadorSintactico {
 				raiz.info = new ByteCode(procesaOperacion(operacion));
 			}
 
-			// Nos hacemos dos subarrays de las expresiones de los lados del
-			// operador
+			// Nos hacemos dos subarrays de las expresiones de los lados del operador
 			Vector<Token> expresionIzq = new Vector<Token>();
 			Vector<Token> expresionDer = new Vector<Token>();
 
@@ -726,8 +682,7 @@ public class AnalizadorSintactico {
 							indice).getLexema());
 				} else {
 					error(expresion.get(indice).getLinea(),
-							"Se intenta asignar un identificador"
-									+ " que no está en TS");
+							"Se intenta asignar un identificador que no está en TS");
 				}
 			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
 					&& TS.containsKey(expresion.get(indice).getLexema())) {
@@ -749,22 +704,9 @@ public class AnalizadorSintactico {
 			// él.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 				if (!(TS.containsKey(expresion.get(indice).getLexema()))
-						&& (expresion.get(indice).getTipoToken() == TToken.ident)) { // si
-																						// es
-																						// un
-																						// identificador
-																						// pero
-																						// no
-																						// está
-																						// en
-																						// la
-																						// tabla
-																						// de
-																						// símbolos,
-																						// error
+						&& (expresion.get(indice).getTipoToken() == TToken.ident)) { 
 					error(expresion.get(indice).getLinea(),
-							"Se intenta asignar un identificador"
-									+ " que no está en TS");
+							"Se intenta asignar un identificador que no está en TS");
 					return null;
 				} else {
 					indice++;
@@ -854,8 +796,7 @@ public class AnalizadorSintactico {
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
-			// si el tamaño es solamente 1, es que tenemos o un numero o un
-			// identificador
+			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
 			if (procesaTipo(expresion, indice)) {
 				if (TS.containsKey(expresion.get(indice).getLexema())
 						|| (expresion.get(indice).getTipoToken() != TToken.ident)) {
@@ -888,26 +829,12 @@ public class AnalizadorSintactico {
 				}
 			}
 
-			// Si encontramos un nat,real,... o ident nos situamos después de
-			// él.
+			// Si encontramos un nat,real,... o ident nos situamos después de él.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 				if (!(TS.containsKey(expresion.get(indice).getLexema()))
-						&& (expresion.get(indice).getTipoToken() == TToken.ident)) { // si
-																						// es
-																						// un
-																						// identificador
-																						// pero
-																						// no
-																						// está
-																						// en
-																						// la
-																						// tabla
-																						// de
-																						// símbolos,
-																						// error
+						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
 					error(expresion.get(indice).getLinea(),
-							"Se intenta asignar un identificador"
-									+ " que no está en TS");
+							"Se intenta asignar un identificador que no está en TS");
 					return null;
 				} else {
 					indice++;
@@ -1002,21 +929,8 @@ public class AnalizadorSintactico {
 
 			if (procesaTipo(expresion, indice)) {
 				if (!(TS.containsKey(expresion.get(indice).getLexema()))
-						&& (expresion.get(indice).getTipoToken() == TToken.ident)) { // si
-																						// es
-																						// un
-																						// identificador
-																						// pero
-																						// no
-																						// está
-																						// en
-																						// la
-																						// tabla
-																						// de
-																						// símbolos,
-																						// error
-					throw new Exception(
-							"Se intenta asignar un identificador que no está en TS");
+						&& (expresion.get(indice).getTipoToken() == TToken.ident)) { 
+					throw new Exception("Se intenta asignar un identificador que no está en TS");
 
 				} else {
 					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
@@ -1049,22 +963,9 @@ public class AnalizadorSintactico {
 			// él.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 				if (!(TS.containsKey(expresion.get(indice).getLexema()))
-						&& (expresion.get(indice).getTipoToken() == TToken.ident)) { // si
-																						// es
-																						// un
-																						// identificador
-																						// pero
-																						// no
-																						// está
-																						// en
-																						// la
-																						// tabla
-																						// de
-																						// símbolos,
-																						// error
+						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
 					error(expresion.get(indice).getLinea(),
-							"Se intenta asignar un identificador"
-									+ " que no está en TS");
+							"Se intenta asignar un identificador que no está en TS");
 					return null;
 				} else {
 					indice++;
@@ -1072,8 +973,7 @@ public class AnalizadorSintactico {
 			}
 
 			// Si encontramos un op3 meter raiz arbol binario
-			if ((indice < expresion.size())
-					&& (buscaOperacionTres(indice, expresion) != -1)) {
+			if ((indice < expresion.size()) && (buscaOperacionTres(indice, expresion) != -1)) {
 				// Seleccionamos el Op3 y almacenamos su indice en Refenrecia
 				// para luego dividir en dos subvectores
 				referencia = buscaOperacionTres(indice, expresion);
@@ -1082,8 +982,7 @@ public class AnalizadorSintactico {
 					raizaux.info = new ByteCode(procesaOperacion(operacion));
 				}
 
-				// Nos hacemos dos subarrays de las expresiones de los lados del
-				// operador
+				// Nos hacemos dos subarrays de las expresiones de los lados del operador
 				Vector<Token> expresionIzq = new Vector<Token>();
 				Vector<Token> expresionDer = new Vector<Token>();
 
@@ -1212,22 +1111,9 @@ public class AnalizadorSintactico {
 		// Si encontramos un nat,real,... o ident nos situamos después de él.
 		if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 			if (!(TS.containsKey(expresion.get(indice).getLexema()))
-					&& (expresion.get(indice).getTipoToken() == TToken.ident)) { // si
-																					// es
-																					// un
-																					// identificador
-																					// pero
-																					// no
-																					// está
-																					// en
-																					// la
-																					// tabla
-																					// de
-																					// símbolos,
-																					// error
+					&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
 				error(expresion.get(indice).getLinea(),
-						"Se intenta asignar un identificador"
-								+ " que no está en TS");
+						"Se intenta asignar un identificador que no está en TS");
 				return null;
 			} else {
 				indice++;
@@ -1685,8 +1571,7 @@ public class AnalizadorSintactico {
 				byteOut.add(new ByteCode(tByteCode.apila_dir, aux));
 
 				if (operacion != null) {
-					switch (operacion) { // Elige la opcion acorde al numero de
-											// mes
+					switch (operacion) {
 					case negArit:
 						byteOut.add(new ByteCode(tByteCode.restaunitaria));
 						break;
