@@ -716,7 +716,7 @@ public class AnalizadorSintactico {
 				}
 				else{
 					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador" +
-						" que no está en TS en la linea " +lineaActual);
+						" que no está en TS");
 				}
 			} 
 			else 
@@ -826,11 +826,14 @@ public class AnalizadorSintactico {
 
 		if (expresion.size() == 1) {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
-
 			if (procesaTipo(expresion, indice)) {
-				raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-						indice).getLexema());
-				// indice++;
+				if (TS.containsKey(expresion.get(indice).getLexema()) || (expresion.get(indice).getTipoToken()!=TToken.ident)){
+					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema());
+				}
+				else{
+					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador" +
+						" que no está en TS");
+				}
 			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
 					&& TS.containsKey(expresion.get(indice).getLexema())) {
 				String aux = String.valueOf(TS.get(
