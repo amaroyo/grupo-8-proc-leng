@@ -748,7 +748,14 @@ public class AnalizadorSintactico {
 			// Si encontramos un nat,real,... o ident nos situamos después de
 			// él.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
-				indice++;
+				if (!(TS.containsKey(expresion.get(indice).getLexema())) && (expresion.get(indice).getTipoToken()==TToken.ident)){ //si es un identificador pero no está en la tabla de símbolos, error
+						error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador" +
+							" que no está en TS");
+					return null;
+				}
+				else{
+					indice++;
+				}
 			}
 
 			// Si encontramos un op1 meter raiz arbol binario
@@ -863,7 +870,14 @@ public class AnalizadorSintactico {
 			// Si encontramos un nat,real,... o ident nos situamos después de
 			// él.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
-				indice++;
+				if (!(TS.containsKey(expresion.get(indice).getLexema())) && (expresion.get(indice).getTipoToken()==TToken.ident)){ //si es un identificador pero no está en la tabla de símbolos, error
+					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador" +
+							" que no está en TS");
+					return null;
+				}
+				else{
+					indice++;
+				}
 			}
 
 			// Si encontramos un op2 meter raiz arbol binario
@@ -951,17 +965,22 @@ public class AnalizadorSintactico {
 			//si el tamaño es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
-				raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-						indice).getLexema());
-				// indice++;
-			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
-					&& TS.containsKey(expresion.get(indice).getLexema())) {
-				String aux = String.valueOf(TS.get(
-						expresion.get(indice).getLexema()).getDireccion());
-				raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-				// indice++;
-			} else
-				throw new Exception("Error procesando el elemento");
+				if (!(TS.containsKey(expresion.get(indice).getLexema())) && (expresion.get(indice).getTipoToken()==TToken.ident)){ //si es un identificador pero no está en la tabla de símbolos, error
+					throw new Exception("Se intenta asignar un identificador que no está en TS");
+
+				}
+				else{
+					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema());
+				}
+				
+			} 
+			else 
+				if ((expresion.get(indice).getTipoToken() == TToken.ident)&& TS.containsKey(expresion.get(indice).getLexema())) {
+					String aux = String.valueOf(TS.get(expresion.get(indice).getLexema()).getDireccion());
+					raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
+				} 
+				else
+					throw new Exception("Error procesando el elemento");
 
 			indice++;
 
@@ -974,8 +993,15 @@ public class AnalizadorSintactico {
 
 			// Si encontramos un nat,real,... o ident nos situamos después de
 			// él.
-			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
+			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {if (!(TS.containsKey(expresion.get(indice).getLexema())) && (expresion.get(indice).getTipoToken()==TToken.ident)){ //si es un identificador pero no está en la tabla de símbolos, error
+				error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador" +
+						" que no está en TS");
+				return null;
+			}
+			else{
 				indice++;
+
+			}
 			}
 
 			// Si encontramos un op3 meter raiz arbol binario
@@ -1118,8 +1144,15 @@ public class AnalizadorSintactico {
 		}
 
 		// Si encontramos un nat,real,... o ident nos situamos después de él.
-		if ((indice < expresion.size())	&& (procesaTipo(expresion, indice))) {
+		if ((indice < expresion.size())	&& (procesaTipo(expresion, indice))) {if (!(TS.containsKey(expresion.get(indice).getLexema())) && (expresion.get(indice).getTipoToken()==TToken.ident)){ //si es un identificador pero no está en la tabla de símbolos, error
+			error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador" +
+					" que no está en TS");
+			return null;
+		}
+		else{
 			indice++;
+
+		}
 		}
 
 		// Si encontramos un op0 meter raiz arbol binario
