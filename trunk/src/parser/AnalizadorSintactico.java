@@ -665,7 +665,7 @@ public class AnalizadorSintactico {
 			} catch (Exception e) {
 				if (e != null) {
 					error(lineaActual, e.getMessage());
-					e.printStackTrace();
+					//e.printStackTrace();
 					return -1;
 				}
 			}
@@ -677,7 +677,7 @@ public class AnalizadorSintactico {
 			catch (Exception e) {
 				if (e != null) {
 					error(lineaActual, e.getMessage());
-					e.printStackTrace();
+					//e.printStackTrace();
 					return -1;
 				}
 			}
@@ -800,7 +800,7 @@ public class AnalizadorSintactico {
 				catch (Exception e) {
 					if (e != null) {
 						error(lineaActual, e.getMessage());
-						e.printStackTrace();
+						//e.printStackTrace();
 						return null;
 					}
 				}
@@ -867,6 +867,9 @@ public class AnalizadorSintactico {
 				indice = procesaExpParentesis(expresion, indice);
 			}
 
+			if (indice==-1){
+				throw new Exception("La expresión de la asignación es incorrecta debido a los parentesis");
+			}
 			// Si encontramos un nat,real,... o ident nos situamos después de
 			// él.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
@@ -989,6 +992,10 @@ public class AnalizadorSintactico {
 			// Si encontramos un ( ) nos situamos después de él.
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
 				indice = procesaExpParentesis(expresion, indice);
+			}
+			
+			if (indice==-1){
+				throw new Exception("La expresión de la asignación es incorrecta debido a los parentesis");
 			}
 
 			// Si encontramos un nat,real,... o ident nos situamos después de
