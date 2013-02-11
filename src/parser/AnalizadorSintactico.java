@@ -2019,6 +2019,8 @@ public class AnalizadorSintactico {
 			return tByteCode.distinto;
 		case sum:
 			return tByteCode.suma;
+		case rest:
+			return tByteCode.resta;
 		case div:
 			return tByteCode.divide;
 		case mult:
