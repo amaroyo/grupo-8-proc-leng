@@ -604,6 +604,7 @@ public class AnalizadorSintactico {
 			}
 		}
 
+		
 		// Si encontramos un ( ) nos situamos después de él.
 		if (expresion.size()>0){
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
@@ -619,7 +620,6 @@ public class AnalizadorSintactico {
 			error(v.get(i).getLinea(), "error en los parentesis");
 			return -1;
 		}
-
 		// Si encontramos un nat,real,... o ident nos situamos después de él.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 				if (!(TS.containsKey(expresion.get(indice).getLexema())) && (expresion.get(indice).getTipoToken()==TToken.ident)){ //si es un identificador pero no está en la tabla de símbolos, error
@@ -634,12 +634,12 @@ public class AnalizadorSintactico {
 			}
 
 		// Si encontramos un op0 meter raiz arbol binario
-		if ((indice < expresion.size()) && (procesaOperacionCero(expresion.get(indice).getTipoToken()))) {
+		if ((indice < expresion.size()) && (buscaOperacionCero(indice,expresion)!=-1)) {
 			// Seleccionamos el Op0 y almacenamos su indice en Refenrecia para
 			// luego dividir en dos subvectores
-			referencia = indice;
+			referencia = buscaOperacionCero(indice,expresion);
 
-			operacion = expresion.get(indice).getTipoToken();
+			operacion = expresion.get(referencia).getTipoToken();
 
 			if (operacion != null) {
 				raiz.info = new ByteCode(procesaOperacion(operacion));
@@ -759,11 +759,11 @@ public class AnalizadorSintactico {
 			}
 
 			// Si encontramos un op1 meter raiz arbol binario
-			if ((indice < expresion.size())	&& (procesaOperacionUno(expresion.get(indice).getTipoToken()))) {
+			if ((indice < expresion.size())	&& (buscaOperacionUno(indice,expresion)!=-1)) {
 				// Seleccionamos el Op1 y almacenamos su indice en Refenrecia
 				// para luego dividir en dos subvectores
-				referencia = indice;
-				operacion = expresion.get(indice).getTipoToken();
+				referencia = buscaOperacionUno(indice,expresion);
+				operacion = expresion.get(referencia).getTipoToken();
 				if (operacion != null) {
 					raizaux.info = new ByteCode(procesaOperacion(operacion));
 				}
@@ -822,6 +822,8 @@ public class AnalizadorSintactico {
 		return raizaux;
 
 	}
+
+
 
 	// //////////////////////////////////////////////////////
 	// /////////////Procesa Exp1/////////////////////////////
@@ -884,11 +886,11 @@ public class AnalizadorSintactico {
 			}
 
 			// Si encontramos un op2 meter raiz arbol binario
-			if ((indice < expresion.size()) && (procesaOperacionDos(expresion.get(indice).getTipoToken()))) {
+			if ((indice < expresion.size()) && (buscaOperacionDos(indice,expresion)!=-1)) {
 				// Seleccionamos el Op2 y almacenamos su indice en Refenrecia
 				// para luego dividir en dos subvectores
-				referencia = indice;
-				operacion = expresion.get(indice).getTipoToken();
+				referencia = buscaOperacionDos(indice,expresion);
+				operacion = expresion.get(referencia).getTipoToken();
 				if (operacion != null) {
 					raizaux.info = new ByteCode(procesaOperacion(operacion));
 				}
@@ -1012,13 +1014,11 @@ public class AnalizadorSintactico {
 			}
 
 			// Si encontramos un op3 meter raiz arbol binario
-			if ((indice < expresion.size())
-					&& (procesaOperacionTres(expresion.get(indice)
-							.getTipoToken()))) {
+			if ((indice < expresion.size())&& (buscaOperacionTres(indice,expresion)!=-1)) {
 				// Seleccionamos el Op3 y almacenamos su indice en Refenrecia
 				// para luego dividir en dos subvectores
-				referencia = indice;
-				operacion = expresion.get(indice).getTipoToken();
+				referencia = buscaOperacionTres(indice,expresion);
+				operacion = expresion.get(referencia).getTipoToken();
 				if (operacion != null) {
 					raizaux.info = new ByteCode(procesaOperacion(operacion));
 				}
@@ -1163,12 +1163,12 @@ public class AnalizadorSintactico {
 		}
 
 		// Si encontramos un op0 meter raiz arbol binario
-		if ((indice < expresion.size())	&& (procesaOperacionCero(expresion.get(indice).getTipoToken()))) {
+		if ((indice < expresion.size())&& (buscaOperacionCero(indice,expresion)!=-1)) {
 			// Seleccionamos el Op0 y almacenamos su indice en Refenrecia para
 			// luego dividir en dos subvectores
-			referencia = indice;
+			referencia = buscaOperacionCero(indice,expresion);
 
-			operacion = expresion.get(indice).getTipoToken();
+			operacion = expresion.get(referencia).getTipoToken();
 
 			if (operacion != null) {
 				raiz.info = new ByteCode(procesaOperacion(operacion));
@@ -1271,7 +1271,25 @@ public class AnalizadorSintactico {
 			return false;
 
 	}
+	private int buscaOperacionCero(int indice, Vector<Token> expresion) {
 
+	while(indice<expresion.size()){
+		if(procesaExpParentesis(expresion,indice)!=-1){
+			
+			indice=procesaExpParentesis(expresion,indice)-1;
+		}
+		
+		if ((expresion.get(indice).getTipoToken() == TToken.great || expresion.get(indice).getTipoToken() == TToken.distinto
+				|| expresion.get(indice).getTipoToken() == TToken.igualIgual || expresion.get(indice).getTipoToken() == TToken.less
+				|| expresion.get(indice).getTipoToken() == TToken.greatEq || expresion.get(indice).getTipoToken() == TToken.lessEq)) {
+			return indice;
+		} 
+		indice++;
+		}
+	return -1;
+	}
+	
+	
 	private boolean procesaOperacionUno(TToken oper1) {
 
 		if ((oper1 == TToken.sum || oper1 == TToken.rest || oper1 == TToken.oLogica )) {
@@ -1281,6 +1299,20 @@ public class AnalizadorSintactico {
 
 	}
 
+	private int buscaOperacionUno(int indice, Vector<Token> expresion) {
+		while(indice<expresion.size()){
+			if(procesaExpParentesis(expresion,indice)!=-1){
+				
+				indice=procesaExpParentesis(expresion,indice)-1;
+			}
+			if ((expresion.get(indice).getTipoToken() == TToken.sum	|| expresion.get(indice).getTipoToken() ==  TToken.rest || expresion.get(indice).getTipoToken() == TToken.oLogica)) {
+				return indice;
+			} 
+			indice++;
+			}
+		return -1;
+	}
+	
 	private boolean procesaOperacionDos(TToken oper2) {
 
 		if ((oper2 == TToken.mult || oper2 == TToken.div || oper2 == TToken.mod || oper2 == TToken.yLogica)) {
@@ -1290,6 +1322,23 @@ public class AnalizadorSintactico {
 
 	}
 
+	private int buscaOperacionDos(int indice, Vector<Token> expresion) {
+		while(indice<expresion.size()){
+			if(procesaExpParentesis(expresion,indice)!=-1){
+				
+				indice=procesaExpParentesis(expresion,indice)-1;
+			}
+			if ((expresion.get(indice).getTipoToken() == TToken.mult|| 
+					expresion.get(indice).getTipoToken() ==  TToken.div|| 
+					expresion.get(indice).getTipoToken() == TToken.mod|| 
+					expresion.get(indice).getTipoToken() == TToken.yLogica)) {
+				return indice;
+			} 
+			indice++;
+			}
+		return -1;
+	}
+	
 	private boolean procesaOperacionTres(TToken oper3) {
 
 		if ((oper3 == TToken.despIzq || oper3 == TToken.despDer)) {
@@ -1299,6 +1348,22 @@ public class AnalizadorSintactico {
 
 	}
 
+
+	private int buscaOperacionTres(int indice, Vector<Token> expresion) {
+		while(indice<expresion.size()){
+			if(procesaExpParentesis(expresion,indice)!=-1){
+				
+				indice=procesaExpParentesis(expresion,indice)-1;
+			}
+			if ((expresion.get(indice).getTipoToken() == TToken.despIzq|| 
+					expresion.get(indice).getTipoToken() ==  TToken.despDer)) {
+				return indice;
+			} 
+			indice++;
+			}
+		return -1;
+	}
+	
 	// ///////////////// ANTIGUO PERO APROVECHABLE
 	// //////////////////////////////////////////////////////
 
