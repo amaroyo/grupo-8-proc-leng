@@ -690,7 +690,7 @@ public class AnalizadorSintactico {
 				if (TS.containsKey(expresion.get(indice).getLexema())
 						|| (expresion.get(indice).getTipoToken() != TToken.ident)) {
 					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-							indice).getLexema());
+							indice).getLexema(),dameTipoParaBytecode(expresion,indice));
 				} else {
 					error(expresion.get(indice).getLinea(),
 							"Se intenta asignar un identificador que no está en TS");
@@ -831,7 +831,7 @@ public class AnalizadorSintactico {
 				if (TS.containsKey(expresion.get(indice).getLexema())
 						|| (expresion.get(indice).getTipoToken() != TToken.ident)) {
 					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-							indice).getLexema());
+							indice).getLexema(),dameTipoParaBytecode(expresion,indice));
 				} else {
 					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador que no está en TS");
 				}
@@ -972,7 +972,7 @@ public class AnalizadorSintactico {
 
 				} else {
 					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-							indice).getLexema());
+							indice).getLexema(),dameTipoParaBytecode(expresion,indice));
 				}
 
 			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
@@ -1116,7 +1116,7 @@ public class AnalizadorSintactico {
 					throw new Exception("Se intenta asignar un identificador que no esta en TS");
 
 				} else {
-					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema());
+					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema(),dameTipoParaBytecode(expresion,indice));
 				}
 
 			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
@@ -1515,8 +1515,11 @@ public class AnalizadorSintactico {
 
 		arbol.inorden(arbol.raiz, byteOutInorden);
 		descripErrorContextual.add("");
+		String tipo;
+		String tipo1;
 		int i = 0;
 		while (i < byteOutInorden.size()) {
+
 			descripErrorContextual.add(i, byteOutInorden.get(i).toString());
 			i++;
 		}
@@ -1638,6 +1641,18 @@ public class AnalizadorSintactico {
 			return false;
 	}
 
+	private String dameTipoParaBytecode(Vector<Token> expresion, int indice) {
+   	 if ((expresion.get(indice).getTipoToken() == TToken.natural)){return "nat";}
+   	 else  if ((expresion.get(indice).getTipoToken() == TToken.entero)){return "int";}
+   	 else  if ((expresion.get(indice).getTipoToken() == TToken.real)){return "real";}
+   	 else  if ((expresion.get(indice).getTipoToken() == TToken.caracter)){return "char";}
+   	 else  if ((expresion.get(indice).getTipoToken() == TToken.booleanoCierto)){return "bool";}
+   	 else  if ((expresion.get(indice).getTipoToken() == TToken.booleanoFalso)){return "bool";}
+   	 else return null;
+	}
+   
+
+	
 	public boolean numNegativo(Vector<Token> v, int i) {
 		if (v.get(i).getTipoToken() == TToken.negArit)
 			return true;
