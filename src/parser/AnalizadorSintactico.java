@@ -1520,7 +1520,7 @@ public class AnalizadorSintactico {
 
 	}
 
-	private void procesaRestriccionesContextuales(ArbolBin arbol2, int linea) {
+	private void procesaRestriccionesContextuales(ArbolBin arbol, int linea) {
 
 		arbol.inorden(arbol.raiz, byteOutInorden);
 		descripErrorContextual.add("");
