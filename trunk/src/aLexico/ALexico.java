@@ -345,7 +345,7 @@ public class ALexico {
 						else {
 							realAux = Double.valueOf(lex).doubleValue();
 							if (realAux <= Double.MAX_VALUE) {
-								tokensSalida.add(new Token(TToken.real, "" + realAux + "", contPrograma));
+								tokensSalida.add(new Token(TToken.real, "" + lex + "", contPrograma));
 								iniciaScanner();
 								break;
 							}
@@ -373,7 +373,7 @@ public class ALexico {
 						else {
 							 realAux = Double.valueOf(lex).doubleValue();
 							if (realAux <= Double.MAX_VALUE) {
-								tokensSalida.add(new Token(TToken.real, "" + realAux + "", contPrograma));
+								tokensSalida.add(new Token(TToken.real, "" + lex + "", contPrograma));
 								iniciaScanner();
 								break;
 							}
@@ -823,7 +823,7 @@ public class ALexico {
 	}
 	public static void main(String[] args) {
 		
-		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
+		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
 		ALexico scanner = new ALexico();
 		scanner.scanFichero(nombreFichero);
 
