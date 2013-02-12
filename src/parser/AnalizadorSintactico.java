@@ -66,8 +66,7 @@ public class AnalizadorSintactico {
 		while (!errorCompilacion && !finCabecera) {
 
 			if (VCabecera.get(i).getTipoToken() != TToken.program) {
-				error(VCabecera.get(i).getLinea(),
-						"No se reconoce la palabra reservada program");
+				error(VCabecera.get(i).getLinea(),"No se reconoce la palabra reservada program");
 				errorCompilacion = true;
 				break;
 			} else {
@@ -83,8 +82,7 @@ public class AnalizadorSintactico {
 			}
 
 			if (VCabecera.get(i).getTipoToken() != TToken.ident) {
-				error(VCabecera.get(i).getLinea(),
-						"Nombre de programa no valido");
+				error(VCabecera.get(i).getLinea(),"Nombre de programa no valido");
 				errorCompilacion = true;
 				break;
 			} else {// meter el identificador en la posicion 0
@@ -113,8 +111,7 @@ public class AnalizadorSintactico {
 		while (!errorCompilacion && !finVariables) {
 
 			if (VVariables.get(i).getTipoToken() != TToken.varsConsts) {
-				error(VVariables.get(i).getLinea(),
-						"No se reconoce la palabra reservada vars-consts");
+				error(VVariables.get(i).getLinea(), "No se reconoce la palabra reservada vars-consts");
 				errorCompilacion = true;
 				break;
 			} else {
@@ -122,8 +119,7 @@ public class AnalizadorSintactico {
 			}
 
 			if (VVariables.get(i).getTipoToken() != TToken.LA) {
-				error(VVariables.get(i).getLinea(),
-						"Falta la llave de apertura");
+				error(VVariables.get(i).getLinea(),"Falta la llave de apertura");
 				errorCompilacion = true;
 				break;
 			} else {
@@ -157,8 +153,7 @@ public class AnalizadorSintactico {
 		while (!errorCompilacion && !finVariables) {
 
 			if (VInstrucciones.get(i).getTipoToken() != TToken.instrucciones) {
-				error(VInstrucciones.get(i).getLinea(),
-						"No se reconoce la palabra reservada instructions");
+				error(VInstrucciones.get(i).getLinea(),"No se reconoce la palabra reservada instructions");
 				errorCompilacion = true;
 				break;
 			} else {
@@ -166,8 +161,7 @@ public class AnalizadorSintactico {
 			}
 
 			if (VInstrucciones.get(i).getTipoToken() != TToken.LA) {
-				error(VInstrucciones.get(i).getLinea(),
-						"Falta la llave de apertura del comienzo de las Inst");
+				error(VInstrucciones.get(i).getLinea(),"Falta la llave de apertura del comienzo de las Inst");
 				errorCompilacion = true;
 				break;
 			} else {
@@ -1114,8 +1108,7 @@ public class AnalizadorSintactico {
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
-			// si el tama�o es solamente 1, es que tenemos o un numero o un
-			// identificador
+			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
 				if (!(TS.containsKey(expresion.get(indice).getLexema()))
@@ -1206,8 +1199,7 @@ public class AnalizadorSintactico {
 				}
 
 			}
-			// Este While no hace nada, solo compruebo que la expresion que
-			// pasamos es correcta
+			// Este While no hace nada, solo compruebo que la expresion que pasamos es correcta
 			while (indice2 != (expresionSinParent.size())) {
 				operacion = expresionSinParent.get(indice2).getTipoToken();
 				indice2++;
@@ -1275,8 +1267,7 @@ public class AnalizadorSintactico {
 				raiz.info = new ByteCode(procesaOperacion(operacion));
 			}
 
-			// Nos hacemos dos subarrays de las expresiones de los lados del
-			// operador
+			// Nos hacemos dos subarrays de las expresiones de los lados del operador
 			Vector<Token> expresionIzq = new Vector<Token>();
 			Vector<Token> expresionDer = new Vector<Token>();
 
