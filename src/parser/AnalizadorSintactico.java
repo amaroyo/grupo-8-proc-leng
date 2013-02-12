@@ -36,6 +36,8 @@ public class AnalizadorSintactico {
 		scanner = new ALexico();
 		scanner.scanFichero(nombreFichero);
 		entrada = scanner.dameTokens();
+		descripErrorContextual = new Vector<String>();
+
 		if (scanner.getErrorLex())
 			errorCompilacion = true;
 
