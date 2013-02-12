@@ -23,6 +23,7 @@ public class AnalizadorSintactico {
 	private ALexico scanner;
 	private int posMemoLibre;
 	private ArbolBin arbol; // Arbol declarado como Local para poder imprimir
+	private int numVueltas; //variable para controlar que el programa no se queda en bucle infinito
 
 	public AnalizadorSintactico() {
 
@@ -37,6 +38,7 @@ public class AnalizadorSintactico {
 		scanner.scanFichero(nombreFichero);
 		entrada = scanner.dameTokens();
 		descripErrorContextual = new Vector<String>();
+		numVueltas=0;
 
 		if (scanner.getErrorLex())
 			errorCompilacion = true;
@@ -689,7 +691,8 @@ public class AnalizadorSintactico {
 		int indice = 0;
 		int indice2 = 0;
 		int referencia;
-		if (expresion.size() == 0) {
+		numVueltas++;
+		if (expresion.size() == 0 || numVueltas>=50) {
 			throw new Exception("La expresión de la asignación es incorrecta");
 		}
 		int lineaActual = expresion.get(indice).getLinea();
