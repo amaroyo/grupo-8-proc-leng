@@ -32,6 +32,17 @@ public class ArbolBin {
 			byteOut.add(x.info);
 		}
 	}
+	
+	public void inorden(Nodo x, Vector<ByteCode> byteOut) {
+		if (x != null) {
+			byteOut.add(x.info);
+			inorden(x.izq, byteOut);
+			inorden(x.der, byteOut);
+		
+		}
+	}
+	
+	
 
 	private void imprimirPost(Nodo reco) {
 		if (reco != null) {
@@ -45,4 +56,6 @@ public class ArbolBin {
 		imprimirPost(raiz);
 		System.out.println();
 	}
+
+
 }

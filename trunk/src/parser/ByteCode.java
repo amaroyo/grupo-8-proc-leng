@@ -23,4 +23,10 @@ public class ByteCode {
 		return tipoByteC;
 	}
 
+	@Override
+	public String toString() {
+		return "ByteCode [tipoByteC=" + tipoByteC + ", direccion=" + direccion
+				+ "]";
+	}
+
 }
