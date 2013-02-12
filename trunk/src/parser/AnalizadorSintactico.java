@@ -450,12 +450,9 @@ public class AnalizadorSintactico {
 				//aux=Contiene la expresión en sí mediante el metodo procesaExpParaContextuales
 				aux=procesaExpParaContextuales(v,i);
 				i = procesaExpresion(v, i);
-				if (i==-1){
-					return i;
-				}
-				procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),aux);
 
 				if (i != -1) {// ////Procesa Exp.///////
+					procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),aux);
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
