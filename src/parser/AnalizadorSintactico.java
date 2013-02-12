@@ -445,7 +445,6 @@ public class AnalizadorSintactico {
 				// leo Exp
 				// creo aquí el arbol para poder leer otra instruccion
 				arbol = new ArbolBin();
-				descripErrorContextual = new Vector<String>();
 				i = procesaExpresion(v, i);
 
 				if (i != -1) {// ////Procesa Exp.///////
