@@ -17,6 +17,7 @@ public class AnalizadorSintactico {
 	private Vector<ByteCode> byteOut;
 	private Vector<Token> entrada;
 	private String descripError;
+	private Vector<String> descripErrorContextual;
 	private boolean errorCompilacion;
 	private ALexico scanner;
 	private int posMemoLibre;
@@ -390,7 +391,7 @@ public class AnalizadorSintactico {
 				}
 
 				// leo Expresion
-				i = procesaExpresionOut(v, i);
+				i = procesaExpresion(v, i);
 				if (i != -1) {// ////Procesa Exp.///////
 					byteOut.add(new ByteCode(tByteCode.write));
 				} else {
@@ -440,7 +441,9 @@ public class AnalizadorSintactico {
 				// leo Exp
 				// creo aquí el arbol para poder leer otra instruccion
 				arbol = new ArbolBin();
+				descripErrorContextual=new Vector<String>();
 				i = procesaExpresion(v, i);
+				procesaReestriccionesContextuales(arbol,v.get(i).getLinea());
 				if (i != -1) {// ////Procesa Exp.///////
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
@@ -538,6 +541,8 @@ public class AnalizadorSintactico {
 			return i;
 		return -1;
 	}
+
+
 
 	// //////////////////////////////////////////////////////
 	// /////////////Procesa Expresiones//////////////////////
@@ -1107,9 +1112,9 @@ public class AnalizadorSintactico {
 
 		// Quitamos los () para enviarlo a procesaExpresionRecursivo
 		if ((expresion.get(indice).getTipoToken() == TToken.PA)
-				&& (expresion.get(expresion.size() - 1).getTipoToken() == TToken.PC)) {
+				&& (expresion.get(expresion.size()-1).getTipoToken() == TToken.PC)) {
 			indice++;
-			while (indice != (expresion.size() - 1)) {
+			while (indice != (expresion.size()-1)) {
 				expresionSinParent.add(expresion.get(indice));
 				indice++;
 			}
@@ -1385,444 +1390,7 @@ public class AnalizadorSintactico {
 		return -1;
 	}
 
-	// ///////////////// ANTIGUO PERO APROVECHABLE
-	// //////////////////////////////////////////////////////
-
-	private int procesaExpresionOut(Vector<Token> v, int i) {
-		int expresionCorrecta = 0;
-		TToken operacion = null;
-		TToken operacion2 = null;
-		// /////////////Procesa Expresiones//////////////////////
-		// /////////////Exp->Exp0 Op0 Exp0 | Exp0////////////////
-		while (v.get(i).getTipoToken() != TToken.PC && expresionCorrecta != -1) {
-
-			// If eres Identificador con una Op0 anterior y )) después...
-			if ((v.get(i).getTipoToken() == TToken.ident)
-					&& TS.containsKey(v.get(i).getLexema())
-					&& (procesaOperacionCero(v.get(i - 1).getTipoToken()))
-					&& (v.get(i + 1).getTipoToken() == TToken.PC)
-					&& (v.get(i + 2).getTipoToken() == TToken.PC)) {
-				String aux = String.valueOf(TS.get(v.get(i).getLexema())
-						.getDireccion());
-				byteOut.add(new ByteCode(tByteCode.apila_dir, aux));
-
-				if (operacion != null) {
-					switch (operacion) {
-					case negArit:
-						byteOut.add(new ByteCode(tByteCode.restaunitaria));
-						break;
-					case negLogica:
-						byteOut.add(new ByteCode(tByteCode.negacionlogica));
-						break;
-					case igualIgual:
-						byteOut.add(new ByteCode(tByteCode.igual));
-						break;
-					case great:
-						byteOut.add(new ByteCode(tByteCode.mayor));
-						break;
-					case less:
-						byteOut.add(new ByteCode(tByteCode.menor));
-						break;
-					case greatEq:
-						byteOut.add(new ByteCode(tByteCode.mayorigual));
-						break;
-					case lessEq:
-						byteOut.add(new ByteCode(tByteCode.menorigual));
-						break;
-					case distinto:
-						byteOut.add(new ByteCode(tByteCode.distinto));
-						break;
-					case sum:
-						byteOut.add(new ByteCode(tByteCode.suma));
-						break;
-					case div:
-						byteOut.add(new ByteCode(tByteCode.divide));
-						break;
-					case mult:
-						byteOut.add(new ByteCode(tByteCode.multiplica));
-						break;
-					case mod:
-						byteOut.add(new ByteCode(tByteCode.modulo));
-						break;
-					case oLogica:
-						byteOut.add(new ByteCode(tByteCode.or));
-						break;
-					case yLogica:
-						byteOut.add(new ByteCode(tByteCode.and));
-						break;
-					}
-
-				}
-				if (operacion2 != null) {
-					switch (operacion2) {
-					case negArit:
-						byteOut.add(new ByteCode(tByteCode.restaunitaria));
-						break;
-					case negLogica:
-						byteOut.add(new ByteCode(tByteCode.negacionlogica));
-						break;
-					case igualIgual:
-						byteOut.add(new ByteCode(tByteCode.igual));
-						break;
-					case great:
-						byteOut.add(new ByteCode(tByteCode.mayor));
-						break;
-					case less:
-						byteOut.add(new ByteCode(tByteCode.menor));
-						break;
-					case greatEq:
-						byteOut.add(new ByteCode(tByteCode.mayorigual));
-						break;
-					case lessEq:
-						byteOut.add(new ByteCode(tByteCode.menorigual));
-						break;
-					case distinto:
-						byteOut.add(new ByteCode(tByteCode.distinto));
-						break;
-
-					case sum:
-						byteOut.add(new ByteCode(tByteCode.suma));
-						break;
-					case div:
-						byteOut.add(new ByteCode(tByteCode.divide));
-						break;
-					case mult:
-						byteOut.add(new ByteCode(tByteCode.multiplica));
-						break;
-					case mod:
-						byteOut.add(new ByteCode(tByteCode.modulo));
-						break;
-					case oLogica:
-						byteOut.add(new ByteCode(tByteCode.or));
-						break;
-					case yLogica:
-						byteOut.add(new ByteCode(tByteCode.and));
-						break;
-					}
-				}
-				i = i + 2;
-				expresionCorrecta = i;
-
-			}// if del identificador
-			else
-
-			// If eres nat,real,.... con una Op0 anterior y )) después
-			if ((v.get(i).getTipoToken() == TToken.natural
-					|| v.get(i).getTipoToken() == TToken.entero
-					|| v.get(i).getTipoToken() == TToken.real
-					|| v.get(i).getTipoToken() == TToken.caracter
-					|| v.get(i).getTipoToken() == TToken.booleanoCierto || v
-					.get(i).getTipoToken() == TToken.booleanoFalso)
-					&& (procesaOperacionCero(v.get(i - 1).getTipoToken()))
-					&& (v.get(i + 1).getTipoToken() == TToken.PC)
-					&& (v.get(i + 2).getTipoToken() == TToken.PC)) {
-				byteOut.add(new ByteCode(tByteCode.apila, v.get(i).getLexema()));
-
-				if (operacion != null) {
-					switch (operacion) {
-					case negArit:
-						byteOut.add(new ByteCode(tByteCode.restaunitaria));
-						break;
-					case negLogica:
-						byteOut.add(new ByteCode(tByteCode.negacionlogica));
-						break;
-					case igualIgual:
-						byteOut.add(new ByteCode(tByteCode.igual));
-						break;
-					case great:
-						byteOut.add(new ByteCode(tByteCode.mayor));
-						break;
-					case less:
-						byteOut.add(new ByteCode(tByteCode.menor));
-						break;
-					case greatEq:
-						byteOut.add(new ByteCode(tByteCode.mayorigual));
-						break;
-					case lessEq:
-						byteOut.add(new ByteCode(tByteCode.menorigual));
-						break;
-					case distinto:
-						byteOut.add(new ByteCode(tByteCode.distinto));
-						break;
-
-					case sum:
-						byteOut.add(new ByteCode(tByteCode.suma));
-						break;
-					case div:
-						byteOut.add(new ByteCode(tByteCode.divide));
-						break;
-					case mult:
-						byteOut.add(new ByteCode(tByteCode.multiplica));
-						break;
-					case mod:
-						byteOut.add(new ByteCode(tByteCode.modulo));
-						break;
-					case oLogica:
-						byteOut.add(new ByteCode(tByteCode.or));
-						break;
-					case yLogica:
-						byteOut.add(new ByteCode(tByteCode.and));
-						break;
-					}
-				}
-				if (operacion2 != null) {
-					switch (operacion2) { // Elige la opcion acorde al numero de
-											// mes
-					case negArit:
-						byteOut.add(new ByteCode(tByteCode.restaunitaria));
-						break;
-					case negLogica:
-						byteOut.add(new ByteCode(tByteCode.negacionlogica));
-						break;
-					case igualIgual:
-						byteOut.add(new ByteCode(tByteCode.igual));
-						break;
-					case great:
-						byteOut.add(new ByteCode(tByteCode.mayor));
-						break;
-					case less:
-						byteOut.add(new ByteCode(tByteCode.menor));
-						break;
-					case greatEq:
-						byteOut.add(new ByteCode(tByteCode.mayorigual));
-						break;
-					case lessEq:
-						byteOut.add(new ByteCode(tByteCode.menorigual));
-						break;
-					case distinto:
-						byteOut.add(new ByteCode(tByteCode.distinto));
-						break;
-
-					case sum:
-						byteOut.add(new ByteCode(tByteCode.suma));
-						break;
-					case div:
-						byteOut.add(new ByteCode(tByteCode.divide));
-						break;
-					case mult:
-						byteOut.add(new ByteCode(tByteCode.multiplica));
-						break;
-					case mod:
-						byteOut.add(new ByteCode(tByteCode.modulo));
-						break;
-					case oLogica:
-						byteOut.add(new ByteCode(tByteCode.or));
-						break;
-					case yLogica:
-						byteOut.add(new ByteCode(tByteCode.and));
-						break;
-					}
-				}
-
-				i = i + 2;
-				expresionCorrecta = i;
-
-			} else
-
-			// If eres Identificador con una Op0 anterior...
-			if ((v.get(i).getTipoToken() == TToken.ident)
-					&& TS.containsKey(v.get(i).getLexema())
-					&& (procesaOperacionCero(v.get(i - 1).getTipoToken()))) {
-				String aux = String.valueOf(TS.get(v.get(i).getLexema())
-						.getDireccion());
-				byteOut.add(new ByteCode(tByteCode.apila_dir, aux));
-
-				if (operacion != null) {
-					switch (operacion) {
-					case negArit:
-						byteOut.add(new ByteCode(tByteCode.restaunitaria));
-						break;
-					case negLogica:
-						byteOut.add(new ByteCode(tByteCode.negacionlogica));
-						break;
-					case igualIgual:
-						byteOut.add(new ByteCode(tByteCode.igual));
-						break;
-					case great:
-						byteOut.add(new ByteCode(tByteCode.mayor));
-						break;
-					case less:
-						byteOut.add(new ByteCode(tByteCode.menor));
-						break;
-					case greatEq:
-						byteOut.add(new ByteCode(tByteCode.mayorigual));
-						break;
-					case lessEq:
-						byteOut.add(new ByteCode(tByteCode.menorigual));
-						break;
-					case distinto:
-						byteOut.add(new ByteCode(tByteCode.distinto));
-						break;
-
-					case sum:
-						byteOut.add(new ByteCode(tByteCode.suma));
-						break;
-					case div:
-						byteOut.add(new ByteCode(tByteCode.divide));
-						break;
-					case mult:
-						byteOut.add(new ByteCode(tByteCode.multiplica));
-						break;
-					case mod:
-						byteOut.add(new ByteCode(tByteCode.modulo));
-						break;
-					case oLogica:
-						byteOut.add(new ByteCode(tByteCode.or));
-						break;
-					case yLogica:
-						byteOut.add(new ByteCode(tByteCode.and));
-						break;
-					}
-				}
-
-				i++;
-				expresionCorrecta = i;
-			}// if del identificador
-			else
-
-			// If eres nat,real,.... con una Op0 anterior...
-			if ((v.get(i).getTipoToken() == TToken.natural
-					|| v.get(i).getTipoToken() == TToken.entero
-					|| v.get(i).getTipoToken() == TToken.real
-					|| v.get(i).getTipoToken() == TToken.caracter
-					|| v.get(i).getTipoToken() == TToken.booleanoCierto || v
-					.get(i).getTipoToken() == TToken.booleanoFalso)
-					&& (procesaOperacionCero(v.get(i - 1).getTipoToken()))) {
-				byteOut.add(new ByteCode(tByteCode.apila, v.get(i).getLexema()));
-
-				if (operacion != null) {
-					switch (operacion) { // Elige la opcion acorde al numero de
-											// mes
-					case negArit:
-						byteOut.add(new ByteCode(tByteCode.restaunitaria));
-						break;
-					case negLogica:
-						byteOut.add(new ByteCode(tByteCode.negacionlogica));
-						break;
-					case igualIgual:
-						byteOut.add(new ByteCode(tByteCode.igual));
-						break;
-					case great:
-						byteOut.add(new ByteCode(tByteCode.mayor));
-						break;
-					case less:
-						byteOut.add(new ByteCode(tByteCode.menor));
-						break;
-					case greatEq:
-						byteOut.add(new ByteCode(tByteCode.mayorigual));
-						break;
-					case lessEq:
-						byteOut.add(new ByteCode(tByteCode.menorigual));
-						break;
-					case distinto:
-						byteOut.add(new ByteCode(tByteCode.distinto));
-						break;
-
-					case sum:
-						byteOut.add(new ByteCode(tByteCode.suma));
-						break;
-					case div:
-						byteOut.add(new ByteCode(tByteCode.divide));
-						break;
-					case mult:
-						byteOut.add(new ByteCode(tByteCode.multiplica));
-						break;
-					case mod:
-						byteOut.add(new ByteCode(tByteCode.modulo));
-						break;
-					case oLogica:
-						byteOut.add(new ByteCode(tByteCode.or));
-						break;
-					case yLogica:
-						byteOut.add(new ByteCode(tByteCode.and));
-						break;
-					}
-				}
-
-				i++;
-				expresionCorrecta = i;
-
-			} else
-
-			// If identficador apilo
-			if ((v.get(i).getTipoToken() == TToken.ident)
-					&& TS.containsKey(v.get(i).getLexema())) {
-				String aux = String.valueOf(TS.get(v.get(i).getLexema())
-						.getDireccion());
-				byteOut.add(new ByteCode(tByteCode.apila_dir, aux));
-				i++;
-				expresionCorrecta = i;
-			}// if del identificador
-			else
-			// If eres nat,real,.... apilo
-			if (v.get(i).getTipoToken() == TToken.natural
-					|| v.get(i).getTipoToken() == TToken.entero
-					|| v.get(i).getTipoToken() == TToken.real
-					|| v.get(i).getTipoToken() == TToken.caracter
-					|| v.get(i).getTipoToken() == TToken.booleanoCierto
-					|| v.get(i).getTipoToken() == TToken.booleanoFalso) {
-				byteOut.add(new ByteCode(tByteCode.apila, v.get(i).getLexema()));
-				i++;
-				expresionCorrecta = i;
-			} else
-
-			// operaciones intermedias y+x+(x+2)
-			if ((procesaOperacionCero(v.get(i).getTipoToken()))
-					&& (v.get(i - 1).getTipoToken() == TToken.ident
-							|| v.get(i - 1).getTipoToken() == TToken.natural
-							|| v.get(i - 1).getTipoToken() == TToken.entero
-							|| v.get(i - 1).getTipoToken() == TToken.real
-							|| v.get(i - 1).getTipoToken() == TToken.caracter
-							|| v.get(i - 1).getTipoToken() == TToken.booleanoCierto || v
-							.get(i - 1).getTipoToken() == TToken.booleanoFalso)
-					&& (v.get(i + 1).getTipoToken() == TToken.PA)) {
-
-				operacion2 = v.get(i).getTipoToken();
-				i = i + 2;
-				expresionCorrecta = i;
-
-			} else
-
-			// operaciones x+y
-			if ((procesaOperacionCero(v.get(i).getTipoToken()))
-					&& (v.get(i - 1).getTipoToken() == TToken.ident
-							|| v.get(i - 1).getTipoToken() == TToken.natural
-							|| v.get(i - 1).getTipoToken() == TToken.entero
-							|| v.get(i - 1).getTipoToken() == TToken.real
-							|| v.get(i - 1).getTipoToken() == TToken.caracter
-							|| v.get(i - 1).getTipoToken() == TToken.booleanoCierto || v
-							.get(i - 1).getTipoToken() == TToken.booleanoFalso)
-					&& (v.get(i + 1).getTipoToken() == TToken.ident
-							|| v.get(i + 1).getTipoToken() == TToken.natural
-							|| v.get(i + 1).getTipoToken() == TToken.entero
-							|| v.get(i + 1).getTipoToken() == TToken.real
-							|| v.get(i + 1).getTipoToken() == TToken.caracter
-							|| v.get(i + 1).getTipoToken() == TToken.booleanoCierto || v
-							.get(i + 1).getTipoToken() == TToken.booleanoFalso)) {
-				operacion = v.get(i).getTipoToken();
-				i++;
-				expresionCorrecta = i;
-			}
-
-			else {
-				error(v.get(i).getLinea(), "Fallo en la Expresión");
-				expresionCorrecta = -1;
-			}
-		}
-
-		if (expresionCorrecta != -1) {
-			// leo )
-			if (v.get(i).getTipoToken() == TToken.PC) {
-				i++;
-				expresionCorrecta = i;
-			} else {
-				error(v.get(i).getLinea(), "Falta el ) de final de expresión");
-				expresionCorrecta = -1;
-			}
-		}
-		return expresionCorrecta;
-	}
-
+	
 	// ///////////////// ERRORES Y MAIN//////////////////////
 	// //////////////////////////////////////////////////////
 
@@ -1833,6 +1401,14 @@ public class AnalizadorSintactico {
 
 	}
 
+	private void procesaReestriccionesContextuales(ArbolBin arbol2, int linea) {
+		descripErrorContextual.add("");
+		descripErrorContextual.set(0, "");
+		
+		
+		
+	}
+	
 	public void printParser() {
 
 		System.out
@@ -1885,6 +1461,21 @@ public class AnalizadorSintactico {
 			}
 
 		}
+		
+		if (!(descripErrorContextual.get(0).equals(""))) {
+			
+			System.out.println();
+			System.out.println("*Lista de Errores Contextuales");
+			System.out.println("--------------------------");
+			System.out.println();
+
+			for (int i = 0; i < descripErrorContextual.size(); i++) {
+				System.out.println( descripErrorContextual.get(i));
+			}
+
+		}
+		
+		
 
 		System.out.println();
 		System.out.println();
