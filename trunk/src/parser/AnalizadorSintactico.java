@@ -1102,44 +1102,105 @@ public class AnalizadorSintactico {
 	// /////////////Procesa Exp3/////////////////////////////
 	// //////////////////////////////////////////////////////
 
-	private Nodo procesaExpresion3(Vector<Token> expresion) throws Exception {
 
-		TToken operacion = null;
-		Nodo raizaux = new Nodo();
-		int indice = 0;
-		int indice2 = 0;
-		Vector<Token> expresionSinParent = new Vector<Token>();
+		 private Nodo procesaExpresion3(Vector<Token> expresion) throws Exception {
 
-		// Quitamos los () para enviarlo a procesaExpresionRecursivo
-		if ((expresion.get(indice).getTipoToken() == TToken.PA)
-				&& (expresion.get(expresion.size()-1).getTipoToken() == TToken.PC)) {
-			indice++;
-			while (indice != (expresion.size()-1)) {
-				expresionSinParent.add(expresion.get(indice));
-				indice++;
-			}
+             TToken operacion = null;
+             Nodo raizaux = new Nodo();
+             int indice = 0;
+             int indice2 = 0;
+             int referencia=0;
+             Vector<Token> expresionSinParent = new Vector<Token>();
+             if (expresion.size() == 0) {
+                 throw new Exception("La expresión de la asignación es incorrecta");
+         }
+         int lineaActual = expresion.get(indice).getLinea();
+             
+             
+         if (expresion.size() == 1) {
+             // si el tamaño es solamente 1, es que tenemos o un numero o un
+             // identificador
 
-		} else {
-			while (indice != (expresion.size())) {
-				expresionSinParent.add(expresion.get(indice));
-				indice++;
-			}
+             if (procesaTipo(expresion, indice)) {
+                     if (!(TS.containsKey(expresion.get(indice).getLexema()))
+                                     && (expresion.get(indice).getTipoToken() == TToken.ident)) {
+                             throw new Exception("Se intenta asignar un identificador que no está en TS");
 
-		}
-		// Este While no hace nada, solo compruebo que la expresion que pasamos
-		// es correcta
-		while (indice2 != (expresionSinParent.size())) {
-			operacion = expresionSinParent.get(indice2).getTipoToken();
-			indice2++;
-		}
+                     } else {
+                             raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
+                                             indice).getLexema());
+                     }
 
-		// MÃ©todo que harÃ¡ lo mismo que ProcesaExpresiÃ³n pero devolviendo un
-		// Nodo para construir el arbol
-		raizaux = procesaExpresionRecursivo(expresionSinParent);
+             }
+             else if ((expresion.get(indice).getTipoToken() == TToken.ident)
+                     && TS.containsKey(expresion.get(indice).getLexema())) {
+             String aux = String.valueOf(TS.get(
+                             expresion.get(indice).getLexema()).getDireccion());
+             raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
+             } else
+             		throw new Exception("Error procesando el elemento");
 
-		return raizaux;
+             indice++; 
+         }
+         
+         else if ((indice < expresion.size()) && (buscaOperacionCuatroDos(indice, expresion) != -1)) {
+             	
+             	referencia = buscaOperacionCuatroDos(indice, expresion);
+                 operacion = expresion.get(referencia).getTipoToken();
+                 if (operacion != null) {
+                         raizaux.info = new ByteCode(procesaOperacion(operacion));
+                 }
+                 Vector<Token> expresionDer = new Vector<Token>();
+                 indice2=referencia+1;
+                 while (indice2 != expresion.size()) {
+                     expresionDer.add(expresion.get(indice2));
+                     indice2++;
+                 }
 
-	}
+                 try {
+                     raizaux.der = procesaExpresion3(expresionDer);
+                 } catch (Exception e) {
+                     if (e != null) {
+                             error(lineaActual, e.getMessage());
+                             // e.printStackTrace();
+                             return null;
+                     }
+                 }
+             	
+             }
+             
+             
+             
+             // Quitamos los () para enviarlo a procesaExpresionRecursivo
+         else{
+         	if ((indice < expresion.size())&&((expresion.get(indice).getTipoToken() == TToken.PA)
+                             && (expresion.get(expresion.size() - 1).getTipoToken() == TToken.PC))) {
+                     indice++;
+                     while (indice != (expresion.size() - 1)) {
+                             expresionSinParent.add(expresion.get(indice));
+                             indice++;
+                     }
+
+             } else {
+                     while (indice != (expresion.size())) {
+                             expresionSinParent.add(expresion.get(indice));
+                             indice++;
+                     }
+
+             }
+             // Este While no hace nada, solo compruebo que la expresion que pasamos
+             // es correcta
+             while (indice2 != (expresionSinParent.size())) {
+                     operacion = expresionSinParent.get(indice2).getTipoToken();
+                     indice2++;
+             }
+
+             // Método que hará lo mismo que ProcesaExpresión pero devolviendo un
+             // Nodo para construir el arbol
+             raizaux = procesaExpresionRecursivo(expresionSinParent);
+     		}
+         return raizaux;
+}
 
 	// //////////////////////////////////////////////////////
 	// ////////Procesa Expresiones Recursivo/////////////////
@@ -1390,6 +1451,20 @@ public class AnalizadorSintactico {
 		return -1;
 	}
 
+	
+	private int buscaOperacionCuatroDos(int indice, Vector<Token> expresion) {
+   	 while (indice < expresion.size()) {
+            if (procesaExpParentesis(expresion, indice) != -1) {
+
+                    indice = procesaExpParentesis(expresion, indice) - 1;
+            }
+            if (expresion.get(indice).getTipoToken() == TToken.negLogica) {
+                    return indice;
+            }
+            indice++;
+    }
+    return -1;
+	}
 	
 	// ///////////////// ERRORES Y MAIN//////////////////////
 	// //////////////////////////////////////////////////////
@@ -1646,6 +1721,8 @@ public class AnalizadorSintactico {
 			return tByteCode.desplazamientoizquierda;
 		case despDer:
 			return tByteCode.desplazamientoderecha;
+		case negLogica:
+			return tByteCode.negacionlogica;
 		}
 		return null;
 	}
