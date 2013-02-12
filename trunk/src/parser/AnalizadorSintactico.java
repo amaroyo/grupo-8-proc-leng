@@ -448,7 +448,8 @@ public class AnalizadorSintactico {
 				i = procesaExpresion(v, i);
 			
 				if (i != -1) {// ////Procesa Exp.///////
-					//procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),v);
+	//procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),v);
+
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
@@ -569,13 +570,13 @@ public class AnalizadorSintactico {
 				return -1;
 			}
 		}
-
+		
 		// Si encontramos un ( ) nos situamos después de él.
 		if (expresion.size() > 0) {
+
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
-				// if (buscaOperacion(expresion,indice))
-				indice = procesaExpParentesis(expresion, indice);
-				// else quitaParentesis(expresion,indice);
+
+					indice = procesaExpParentesis(expresion, indice);
 				if (indice == -1) {
 					error(v.get(i).getLinea(), "error en los parentesis");
 					return -1;
@@ -682,8 +683,12 @@ public class AnalizadorSintactico {
 		}
 		int lineaActual = expresion.get(indice).getLinea();
 		
-		//if (esPalReservada(expresion.get(indice).getTipoToken()))
-			//throw new Exception("No se puede utilizar aquí esta palabra reservada");
+
+		/*if (esPalReservada(expresion.get(indice).getTipoToken())){
+		
+			throw new Exception("No se puede utilizar aquí esta palabra reservada");
+
+		}*/
 		
 		if (expresion.size() == 1) {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
@@ -1186,7 +1191,8 @@ public class AnalizadorSintactico {
 		else {
 			if ((indice < expresion.size())
 					&& ((expresion.get(indice).getTipoToken() == TToken.PA) && 
-							(expresion.get(expresion.size() - 1).getTipoToken() == TToken.PC))) {
+							//(expresion.get(expresion.size() - 1).getTipoToken() == TToken.PC))) {
+							(procesaExpParentesis(expresion,indice)-1==expresion.size()-1))){
 				indice++;
 				while (indice != (expresion.size() - 1)) {
 					expresionSinParent.add(expresion.get(indice));
@@ -1363,6 +1369,7 @@ public class AnalizadorSintactico {
 							.getTipoToken())) {
 				return true;
 			}
+			indice++;
 		}
 		return false;
 	}
