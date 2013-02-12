@@ -1517,13 +1517,26 @@ public class AnalizadorSintactico {
 
 		arbol.inorden(arbol.raiz, byteOutInorden);
 		descripErrorContextual.add("");
-		String tipo;
-		String tipo1;
+		String tipo="";
+		String tipo1="";
 		int i = 0;
 		while (i < byteOutInorden.size()) {
-
-			descripErrorContextual.add(i, byteOutInorden.get(i).toString());
-			i++;
+			if(byteOutInorden.get(i).getByteCode()==tByteCode.menor){
+				i++;}
+				else
+				if(byteOutInorden.get(i).getByteCode()==tByteCode.apila){
+					if (tipo.equals("")){
+					tipo=byteOutInorden.get(i).getTipoVar();
+					i++;}
+					else{
+					tipo1=byteOutInorden.get(i).getTipoVar();
+					i++;}					
+				
+			}
+		}
+		if(tipo.equals(tipo1)){}
+		else{
+			descripErrorContextual.add("Error contextual en línea "+linea+ " de tipo: EsAsignable=False");	
 		}
 
 	}
