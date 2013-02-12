@@ -687,7 +687,7 @@ public class AnalizadorSintactico {
                                 if (TS.containsKey(expresion.get(indice).getLexema())
                                                 || (expresion.get(indice).getTipoToken() != TToken.ident)) {
                                         raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-                                                        indice).getLexema());
+                                                        indice).getLexema(),dameTipoParaBytecode(expresion, indice));
                                 } else {
                                         error(expresion.get(indice).getLinea(),
                                                         "Se intenta asignar un identificador que no está en TS");
@@ -811,7 +811,8 @@ public class AnalizadorSintactico {
 
         }
 
-        // //////////////////////////////////////////////////////
+
+		// //////////////////////////////////////////////////////
         // /////////////Procesa Exp1/////////////////////////////
         // //////////////////////////////////////////////////////
 
@@ -833,7 +834,7 @@ public class AnalizadorSintactico {
                                 if (TS.containsKey(expresion.get(indice).getLexema())
                                                 || (expresion.get(indice).getTipoToken() != TToken.ident)) {
                                         raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-                                                        indice).getLexema());
+                                                        indice).getLexema(),dameTipoParaBytecode(expresion, indice));
                                 } else {
                                         error(expresion.get(indice).getLinea(),
                                                         "Se intenta asignar un identificador"
@@ -982,7 +983,7 @@ public class AnalizadorSintactico {
 
                                 } else {
                                         raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-                                                        indice).getLexema());
+                                                        indice).getLexema(),dameTipoParaBytecode(expresion, indice));
                                 }
 
                         } else if ((expresion.get(indice).getTipoToken() == TToken.ident)
@@ -1131,7 +1132,7 @@ public class AnalizadorSintactico {
 
                                 } else {
                                         raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-                                                        indice).getLexema());
+                                                        indice).getLexema(),dameTipoParaBytecode(expresion, indice));
                                 }
 
                         } else if ((expresion.get(indice).getTipoToken() == TToken.ident)
@@ -1736,6 +1737,17 @@ public class AnalizadorSintactico {
                         return false;
         }
 
+
+        private String dameTipoParaBytecode(Vector<Token> expresion, int indice) {
+        	 if ((expresion.get(indice).getTipoToken() == TToken.natural)){return "nat";}
+        	 else  if ((expresion.get(indice).getTipoToken() == TToken.entero)){return "int";}
+        	 else  if ((expresion.get(indice).getTipoToken() == TToken.real)){return "real";}
+        	 else  if ((expresion.get(indice).getTipoToken() == TToken.caracter)){return "char";}
+        	 else  if ((expresion.get(indice).getTipoToken() == TToken.booleanoCierto)){return "bool";}
+        	 else  if ((expresion.get(indice).getTipoToken() == TToken.booleanoFalso)){return "bool";}
+        	 else return null;
+		}
+        
         public tByteCode procesaOperacion(TToken operacion) {
 
                 switch (operacion) { // Elige la opcion acorde al numero de mes
