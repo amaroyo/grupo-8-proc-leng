@@ -684,11 +684,11 @@ public class AnalizadorSintactico {
 		int lineaActual = expresion.get(indice).getLinea();
 		
 
-		/*if (esPalReservada(expresion.get(indice).getTipoToken())){
+		if (esPalReservada(expresion.get(indice).getTipoToken())){
 		
 			throw new Exception("No se puede utilizar aquí esta palabra reservada");
 
-		}*/
+		}
 		
 		if (expresion.size() == 1) {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
@@ -1514,8 +1514,8 @@ public class AnalizadorSintactico {
 	private boolean esPalReservada(TToken t){
 		
 		if (t == TToken.var || t == TToken.constante || t == TToken.varsConsts || t == TToken.instrucciones 
-				|| t == TToken.program || t == TToken.booleano || t == TToken.caracter 
-				|| t == TToken.natural || t == TToken.entero || t == TToken.real){
+				|| t == TToken.program || t == TToken.tipoVarBooleano || t == TToken.tipoVarCaracter 
+				|| t == TToken.tipoVarNatural || t == TToken.tipoVarEntero || t == TToken.tipoVarReal){
 			
 			return true;
 		}
@@ -1802,7 +1802,7 @@ public class AnalizadorSintactico {
 
 	public tByteCode procesaOperacion(TToken operacion) {
 
-		switch (operacion) { // Elige la opcion acorde al numero de mes
+		switch (operacion) {
 		case igualIgual:
 			return tByteCode.igual;
 		case great:
