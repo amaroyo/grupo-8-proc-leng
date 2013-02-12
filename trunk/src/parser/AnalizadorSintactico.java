@@ -695,6 +695,13 @@ public class AnalizadorSintactico {
 
 		} else {
 
+			if (expresion.size()==2){ //No puede haber una expresion de dos elementos si el primero es un número
+				if ((expresion.get(indice).getTipoToken() == TToken.entero) ||
+						(expresion.get(indice).getTipoToken() == TToken.natural) ||
+						(expresion.get(indice).getTipoToken() == TToken.real))	
+				throw new Exception("Error procesando el elemento");
+			}
+			
 			// Si encontramos un ( ) nos situamos después de él.
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
 				indice = procesaExpParentesis(expresion, indice);
