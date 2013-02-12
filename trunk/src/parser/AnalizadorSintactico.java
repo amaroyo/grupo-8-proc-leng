@@ -445,11 +445,14 @@ public class AnalizadorSintactico {
 				// leo Exp
 				// creo aquí el arbol para poder leer otra instruccion
 				arbol = new ArbolBin();
+				
+				Vector<Token> aux=new Vector<Token>();
+				//aux=Contiene la expresión en sí mediante el metodo procesaExpParaContextuales
+				aux=procesaExpParaContextuales(v,i);
 				i = procesaExpresion(v, i);
-			
-				if (i != -1) {// ////Procesa Exp.///////
-	//procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),v);
+				procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),aux);
 
+				if (i != -1) {// ////Procesa Exp.///////
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
@@ -547,6 +550,14 @@ public class AnalizadorSintactico {
 		return -1;
 	}
 
+
+	private Vector<Token> procesaExpParaContextuales(Vector<Token> v, int i) {
+		Vector<Token> expresion = new Vector<Token>();
+		while (v.get(i).getTipoToken() != TToken.puntoyComa) {
+			expresion.add(v.get(i));
+			i++;}
+		return expresion;
+	}
 
 	// //////////////////////////////////////////////////////
 	// /////////////Procesa Expresiones//////////////////////
