@@ -445,8 +445,8 @@ public class AnalizadorSintactico {
 				arbol = new ArbolBin();
 				descripErrorContextual=new Vector<String>();
 				i = procesaExpresion(v, i);
-				procesaRestriccionesContextuales(arbol,v.get(i).getLinea());
 				if (i != -1) {// ////Procesa Exp.///////
+					procesaRestriccionesContextuales(arbol,v.get(i).getLinea());
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
@@ -1114,19 +1114,19 @@ public class AnalizadorSintactico {
              int referencia=0;
              Vector<Token> expresionSinParent = new Vector<Token>();
              if (expresion.size() == 0) {
-                 throw new Exception("La expresión de la asignación es incorrecta");
+                 throw new Exception("La expresiï¿½n de la asignaciï¿½n es incorrecta");
          }
          int lineaActual = expresion.get(indice).getLinea();
              
              
          if (expresion.size() == 1) {
-             // si el tamaño es solamente 1, es que tenemos o un numero o un
+             // si el tamaï¿½o es solamente 1, es que tenemos o un numero o un
              // identificador
 
              if (procesaTipo(expresion, indice)) {
                      if (!(TS.containsKey(expresion.get(indice).getLexema()))
                                      && (expresion.get(indice).getTipoToken() == TToken.ident)) {
-                             throw new Exception("Se intenta asignar un identificador que no está en TS");
+                             throw new Exception("Se intenta asignar un identificador que no estï¿½ en TS");
 
                      } else {
                              raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
@@ -1197,7 +1197,7 @@ public class AnalizadorSintactico {
                      indice2++;
              }
 
-             // Método que hará lo mismo que ProcesaExpresión pero devolviendo un
+             // Mï¿½todo que harï¿½ lo mismo que ProcesaExpresiï¿½n pero devolviendo un
              // Nodo para construir el arbol
              raizaux = procesaExpresionRecursivo(expresionSinParent);
      		}
@@ -1549,7 +1549,7 @@ public class AnalizadorSintactico {
 
 		}
 		
-		if (!(descripErrorContextual.get(0).equals(""))) {
+		if ((descripErrorContextual.size()>0)) {
 			
 			System.out.println();
 			System.out.println("*Lista de Errores Contextuales");
