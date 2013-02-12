@@ -15,6 +15,7 @@ public class AnalizadorSintactico {
 	private HashMap<Integer, String> dirMemoria;
 	private HashMap<String, TablaInfo> TS;
 	private Vector<ByteCode> byteOut;
+	private Vector<ByteCode> byteOutInorden;
 	private Vector<Token> entrada;
 	private String descripError;
 	private Vector<String> descripErrorContextual;
@@ -30,6 +31,7 @@ public class AnalizadorSintactico {
 		TS = new HashMap<String, TablaInfo>(100);
 		errorCompilacion = false;
 		byteOut = new Vector<ByteCode>();
+		byteOutInorden = new Vector<ByteCode>();
 		posMemoLibre = 0;
 		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
 		scanner = new ALexico();
@@ -443,7 +445,7 @@ public class AnalizadorSintactico {
 				arbol = new ArbolBin();
 				descripErrorContextual=new Vector<String>();
 				i = procesaExpresion(v, i);
-				procesaReestriccionesContextuales(arbol,v.get(i).getLinea());
+				procesaRestriccionesContextuales(arbol,v.get(i).getLinea());
 				if (i != -1) {// ////Procesa Exp.///////
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
@@ -1476,10 +1478,20 @@ public class AnalizadorSintactico {
 
 	}
 
-	private void procesaReestriccionesContextuales(ArbolBin arbol2, int linea) {
+	private void procesaRestriccionesContextuales(ArbolBin arbol, int linea) {
+		arbol.inorden(arbol.raiz, byteOutInorden);
 		descripErrorContextual.add("");
 		descripErrorContextual.set(0, "");
-		
+		ByteCode actual;
+		int i=0;
+		while(i<byteOutInorden.size()){
+			actual=byteOutInorden.get(i);
+			if(actual.getByteCode()==tByteCode.suma){
+				
+			}
+			descripErrorContextual.add(i,byteOutInorden.get(i).toString());
+			i++;		
+		}
 		
 		
 	}
