@@ -16,6 +16,8 @@ public enum tByteCode {
 
 	 desplazamientoderecha, desplazamientoizquierda,
 	
-	negacionlogica, restaunitaria
+	negacionlogica, restaunitaria,
+	
+	cchar, cnat, cfloat, cint
 
 }

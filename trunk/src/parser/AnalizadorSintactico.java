@@ -1201,6 +1201,33 @@ public class AnalizadorSintactico {
 			}
 
 		}
+		else if ((indice < expresion.size())
+				&& (buscaOperacionCuatroUno(indice, expresion) != -1)) {
+
+			referencia = buscaOperacionCuatroUno(indice, expresion);
+			operacion = expresion.get(referencia).getTipoToken();
+			if (operacion != null) {
+				raizaux.info = new ByteCode(procesaOperacion(operacion));
+			}
+			Vector<Token> expresionDer = new Vector<Token>();
+			indice2 = referencia + 1;
+			while (indice2 != expresion.size()) {
+				expresionDer.add(expresion.get(indice2));
+				indice2++;
+			}
+
+			try {
+				raizaux.der = procesaExpresion3(expresionDer);
+			} catch (Exception e) {
+				if (e != null) {
+					error(lineaActual, e.getMessage());
+					// e.printStackTrace();
+					return null;
+				}
+			}
+		}
+		
+		
 		// Quitamos los () para enviarlo a procesaExpresionRecursivo
 		else {
 			if ((indice < expresion.size())
@@ -1509,6 +1536,24 @@ public class AnalizadorSintactico {
 		return -1;
 	}
 
+	private int buscaOperacionCuatroUno(int indice, Vector<Token> expresion) {
+		while (indice < expresion.size()) {
+			if (procesaExpParentesis(expresion, indice) != -1) {
+
+				indice = procesaExpParentesis(expresion, indice) - 1;
+			}
+			if (expresion.get(indice).getTipoToken() == TToken.castChar ||
+				expresion.get(indice).getTipoToken() == TToken.castNat ||
+				expresion.get(indice).getTipoToken() == TToken.castInt ||
+				expresion.get(indice).getTipoToken() == TToken.castFloat) {
+				return indice;
+			}
+			indice++;
+		}
+		return -1;
+	}
+	
+	
 	private int buscaOperacionMenosUnario(int indice, Vector<Token> expresion) {
 		while (indice < expresion.size()) {
 			if (procesaExpParentesis(expresion, indice) != -1) {
@@ -1851,6 +1896,14 @@ public class AnalizadorSintactico {
 			return tByteCode.negacionlogica;
 		case negArit:
 			return tByteCode.restaunitaria;
+		case castChar:
+			return tByteCode.cchar;
+		case castInt:
+			return tByteCode.cint;
+		case castFloat:
+			return tByteCode.cfloat;
+		case castNat:
+			return tByteCode.cnat;
 		}
 		return null;
 	}
