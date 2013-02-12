@@ -1105,103 +1105,103 @@ public class AnalizadorSintactico {
 	// //////////////////////////////////////////////////////
 
 
-		 private Nodo procesaExpresion3(Vector<Token> expresion) throws Exception {
+	private Nodo procesaExpresion3(Vector<Token> expresion) throws Exception {
 
-             TToken operacion = null;
-             Nodo raizaux = new Nodo();
-             int indice = 0;
-             int indice2 = 0;
-             int referencia=0;
-             Vector<Token> expresionSinParent = new Vector<Token>();
-             if (expresion.size() == 0) {
-                 throw new Exception("La expresi�n de la asignaci�n es incorrecta");
-         }
-         int lineaActual = expresion.get(indice).getLinea();
-             
-             
-         if (expresion.size() == 1) {
-             // si el tama�o es solamente 1, es que tenemos o un numero o un
-             // identificador
+		TToken operacion = null;
+		Nodo raizaux = new Nodo();
+		int indice = 0;
+		int indice2 = 0;
+		int referencia = 0;
+		Vector<Token> expresionSinParent = new Vector<Token>();
+		if (expresion.size() == 0) {
+			throw new Exception("La expresi�n de la asignaci�n es incorrecta");
+		}
+		int lineaActual = expresion.get(indice).getLinea();
 
-             if (procesaTipo(expresion, indice)) {
-                     if (!(TS.containsKey(expresion.get(indice).getLexema()))
-                                     && (expresion.get(indice).getTipoToken() == TToken.ident)) {
-                             throw new Exception("Se intenta asignar un identificador que no est� en TS");
+		if (expresion.size() == 1) {
+			// si el tama�o es solamente 1, es que tenemos o un numero o un
+			// identificador
 
-                     } else {
-                             raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-                                             indice).getLexema());
-                     }
+			if (procesaTipo(expresion, indice)) {
+				if (!(TS.containsKey(expresion.get(indice).getLexema()))
+						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
+					throw new Exception(
+							"Se intenta asignar un identificador que no est� en TS");
 
-             }
-             else if ((expresion.get(indice).getTipoToken() == TToken.ident)
-                     && TS.containsKey(expresion.get(indice).getLexema())) {
-             String aux = String.valueOf(TS.get(
-                             expresion.get(indice).getLexema()).getDireccion());
-             raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-             } else
-             		throw new Exception("Error procesando el elemento");
+				} else {
+					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
+							indice).getLexema());
+				}
 
-             indice++; 
-         }
-         
-         else if ((indice < expresion.size()) && (buscaOperacionCuatroDos(indice, expresion) != -1)) {
-             	
-             	referencia = buscaOperacionCuatroDos(indice, expresion);
-                 operacion = expresion.get(referencia).getTipoToken();
-                 if (operacion != null) {
-                         raizaux.info = new ByteCode(procesaOperacion(operacion));
-                 }
-                 Vector<Token> expresionDer = new Vector<Token>();
-                 indice2=referencia+1;
-                 while (indice2 != expresion.size()) {
-                     expresionDer.add(expresion.get(indice2));
-                     indice2++;
-                 }
+			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
+					&& TS.containsKey(expresion.get(indice).getLexema())) {
+				String aux = String.valueOf(TS.get(
+						expresion.get(indice).getLexema()).getDireccion());
+				raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
+			} else
+				throw new Exception("Error procesando el elemento");
 
-                 try {
-                     raizaux.der = procesaExpresion3(expresionDer);
-                 } catch (Exception e) {
-                     if (e != null) {
-                             error(lineaActual, e.getMessage());
-                             // e.printStackTrace();
-                             return null;
-                     }
-                 }
-             	
-             }
-             
-             
-             
-             // Quitamos los () para enviarlo a procesaExpresionRecursivo
-         else{
-         	if ((indice < expresion.size())&&((expresion.get(indice).getTipoToken() == TToken.PA)
-                             && (expresion.get(expresion.size() - 1).getTipoToken() == TToken.PC))) {
-                     indice++;
-                     while (indice != (expresion.size() - 1)) {
-                             expresionSinParent.add(expresion.get(indice));
-                             indice++;
-                     }
+			indice++;
+		}
 
-             } else {
-                     while (indice != (expresion.size())) {
-                             expresionSinParent.add(expresion.get(indice));
-                             indice++;
-                     }
+		else if ((indice < expresion.size())
+				&& (buscaOperacionCuatroDos(indice, expresion) != -1)) {
 
-             }
-             // Este While no hace nada, solo compruebo que la expresion que pasamos
-             // es correcta
-             while (indice2 != (expresionSinParent.size())) {
-                     operacion = expresionSinParent.get(indice2).getTipoToken();
-                     indice2++;
-             }
+			referencia = buscaOperacionCuatroDos(indice, expresion);
+			operacion = expresion.get(referencia).getTipoToken();
+			if (operacion != null) {
+				raizaux.info = new ByteCode(procesaOperacion(operacion));
+			}
+			Vector<Token> expresionDer = new Vector<Token>();
+			indice2 = referencia + 1;
+			while (indice2 != expresion.size()) {
+				expresionDer.add(expresion.get(indice2));
+				indice2++;
+			}
 
-             // M�todo que har� lo mismo que ProcesaExpresi�n pero devolviendo un
-             // Nodo para construir el arbol
-             raizaux = procesaExpresionRecursivo(expresionSinParent);
-     		}
-         return raizaux;
+			try {
+				raizaux.der = procesaExpresion3(expresionDer);
+			} catch (Exception e) {
+				if (e != null) {
+					error(lineaActual, e.getMessage());
+					// e.printStackTrace();
+					return null;
+				}
+			}
+
+		}
+
+		// Quitamos los () para enviarlo a procesaExpresionRecursivo
+		else {
+			if ((indice < expresion.size())
+					&& ((expresion.get(indice).getTipoToken() == TToken.PA) && (expresion
+							.get(expresion.size() - 1).getTipoToken() == TToken.PC))) {
+				indice++;
+				while (indice != (expresion.size() - 1)) {
+					expresionSinParent.add(expresion.get(indice));
+					indice++;
+				}
+
+			} else {
+				while (indice != (expresion.size())) {
+					expresionSinParent.add(expresion.get(indice));
+					indice++;
+				}
+
+			}
+			// Este While no hace nada, solo compruebo que la expresion que
+			// pasamos
+			// es correcta
+			while (indice2 != (expresionSinParent.size())) {
+				operacion = expresionSinParent.get(indice2).getTipoToken();
+				indice2++;
+			}
+
+			// Método que hara lo mismo que ProcesaExpresion pero devolviendo un
+			// Nodo para construir el arbol
+			raizaux = procesaExpresionRecursivo(expresionSinParent);
+		}
+		return raizaux;
 }
 
 	// //////////////////////////////////////////////////////
@@ -1455,17 +1455,17 @@ public class AnalizadorSintactico {
 
 	
 	private int buscaOperacionCuatroDos(int indice, Vector<Token> expresion) {
-   	 while (indice < expresion.size()) {
-            if (procesaExpParentesis(expresion, indice) != -1) {
+		while (indice < expresion.size()) {
+			if (procesaExpParentesis(expresion, indice) != -1) {
 
-                    indice = procesaExpParentesis(expresion, indice) - 1;
-            }
-            if (expresion.get(indice).getTipoToken() == TToken.negLogica) {
-                    return indice;
-            }
-            indice++;
-    }
-    return -1;
+				indice = procesaExpParentesis(expresion, indice) - 1;
+			}
+			if (expresion.get(indice).getTipoToken() == TToken.negLogica) {
+				return indice;
+			}
+			indice++;
+		}
+		return -1;
 	}
 	
 	// ///////////////// ERRORES Y MAIN//////////////////////
