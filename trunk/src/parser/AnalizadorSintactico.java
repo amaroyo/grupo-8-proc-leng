@@ -15,7 +15,6 @@ public class AnalizadorSintactico {
 	private HashMap<Integer, String> dirMemoria;
 	private HashMap<String, TablaInfo> TS;
 	private Vector<ByteCode> byteOut;
-	private Vector<ByteCode> byteOutInorden;
 	private Vector<Token> entrada;
 	private String descripError;
 	private Vector<String> descripErrorContextual;
@@ -31,7 +30,6 @@ public class AnalizadorSintactico {
 		TS = new HashMap<String, TablaInfo>(100);
 		errorCompilacion = false;
 		byteOut = new Vector<ByteCode>();
-		byteOutInorden = new Vector<ByteCode>();
 		posMemoLibre = 0;
 		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
 		scanner = new ALexico();
@@ -445,8 +443,9 @@ public class AnalizadorSintactico {
 				arbol = new ArbolBin();
 				descripErrorContextual=new Vector<String>();
 				i = procesaExpresion(v, i);
+				procesaReestriccionesContextuales(arbol,v.get(i).getLinea());
+
 				if (i != -1) {// ////Procesa Exp.///////
-					procesaRestriccionesContextuales(arbol,v.get(i).getLinea());
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
@@ -1170,7 +1169,34 @@ public class AnalizadorSintactico {
 			}
 
 		}
+		else if ((indice < expresion.size())
+				&& (buscaOperacionMenosUnario(indice, expresion) != -1)){
+			
+			
+			referencia = buscaOperacionMenosUnario(indice, expresion);
+			operacion = expresion.get(referencia).getTipoToken();
+			if (operacion != null) {
+				raizaux.info = new ByteCode(procesaOperacion(operacion));
+			}
+			Vector<Token> expresionDer = new Vector<Token>();
+			indice2 = referencia + 1;
+			while (indice2 != expresion.size()) {
+				expresionDer.add(expresion.get(indice2));
+				indice2++;
+			}
 
+			try {
+				raizaux.der = procesaExpresion3(expresionDer);
+			} catch (Exception e) {
+				if (e != null) {
+					error(lineaActual, e.getMessage());
+					// e.printStackTrace();
+					return null;
+				}
+			}
+			
+			
+		}
 		// Quitamos los () para enviarlo a procesaExpresionRecursivo
 		else {
 			if ((indice < expresion.size())
@@ -1468,6 +1494,20 @@ public class AnalizadorSintactico {
 		return -1;
 	}
 	
+	private int buscaOperacionMenosUnario(int indice, Vector<Token> expresion) {
+		while (indice < expresion.size()) {
+			if (procesaExpParentesis(expresion, indice) != -1) {
+
+				indice = procesaExpParentesis(expresion, indice) - 1;
+			}
+			if (expresion.get(indice).getTipoToken() == TToken.negArit) {
+				return indice;
+			}
+			indice++;
+		}
+		return -1;
+	}
+	
 	// ///////////////// ERRORES Y MAIN//////////////////////
 	// //////////////////////////////////////////////////////
 
@@ -1478,20 +1518,10 @@ public class AnalizadorSintactico {
 
 	}
 
-	private void procesaRestriccionesContextuales(ArbolBin arbol, int linea) {
-		arbol.inorden(arbol.raiz, byteOutInorden);
+	private void procesaReestriccionesContextuales(ArbolBin arbol2, int linea) {
 		descripErrorContextual.add("");
 		descripErrorContextual.set(0, "");
-		ByteCode actual;
-		int i=0;
-		while(i<byteOutInorden.size()){
-			actual=byteOutInorden.get(i);
-			if(actual.getByteCode()==tByteCode.suma){
-				
-			}
-			descripErrorContextual.add(i,byteOutInorden.get(i).toString());
-			i++;		
-		}
+		
 		
 		
 	}
@@ -1735,9 +1765,12 @@ public class AnalizadorSintactico {
 			return tByteCode.desplazamientoderecha;
 		case negLogica:
 			return tByteCode.negacionlogica;
+		case negArit:
+			return tByteCode.restaunitaria;
 		}
 		return null;
 	}
+	
 
 	// MAAAAAAIIIIIINNNNNN_____________________________
 
