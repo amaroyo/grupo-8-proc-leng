@@ -446,9 +446,9 @@ public class AnalizadorSintactico {
 				// creo aquí el arbol para poder leer otra instruccion
 				arbol = new ArbolBin();
 				i = procesaExpresion(v, i);
-
+			
 				if (i != -1) {// ////Procesa Exp.///////
-					procesaRestriccionesContextuales(arbol, v.get(i).getLinea());
+					//procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),v);
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
@@ -545,6 +545,7 @@ public class AnalizadorSintactico {
 			return i;
 		return -1;
 	}
+
 
 	// //////////////////////////////////////////////////////
 	// /////////////Procesa Expresiones//////////////////////
@@ -664,10 +665,6 @@ public class AnalizadorSintactico {
 		return i;
 	}
 
-	private void quitaParentesis(Vector<Token> expresion, int indice) {
-		// TODO Auto-generated method stub
-
-	}
 
 	// //////////////////////////////////////////////////////
 	// /////////////Procesa Exp0/////////////////////////////
@@ -685,8 +682,8 @@ public class AnalizadorSintactico {
 		}
 		int lineaActual = expresion.get(indice).getLinea();
 		
-		if (esPalReservada(expresion.get(indice).getTipoToken()))
-			throw new Exception("No se puede utilizar aquí esta palabra reservada");
+		//if (esPalReservada(expresion.get(indice).getTipoToken()))
+			//throw new Exception("No se puede utilizar aquí esta palabra reservada");
 		
 		if (expresion.size() == 1) {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
@@ -1529,33 +1526,59 @@ public class AnalizadorSintactico {
 
 	}
 
-	private void procesaRestriccionesContextuales(ArbolBin arbol, int linea) {
-
-		arbol.inorden(arbol.raiz, byteOutInorden);
-		descripErrorContextual.add("");
-		String tipo="";
-		String tipo1="";
-		int i = 0;
-		while (i < byteOutInorden.size()) {
-			if(byteOutInorden.get(i).getByteCode()==tByteCode.menor){
-				i++;}
-				else
-				if(byteOutInorden.get(i).getByteCode()==tByteCode.apila){
-					if (tipo.equals("")){
-					tipo=byteOutInorden.get(i).getTipoVar();
-					i++;}
-					else{
-					tipo1=byteOutInorden.get(i).getTipoVar();
-					i++;}					
-				
+	private void procesaRestriccionesContextuales(String tipo, int linea,Vector<Token> v) {
+		int i=0;
+		if(tipo.equals("tipoVarNatural")){
+			while(i<v.size()){
+				if(procesaOperacionCero(v.get(i).getTipoToken())){
+					descripErrorContextual.add("Error en la linea "+linea+" Operador de tipo0 Asignado a natural");
+					i++;
+				}
+				if(v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.entero||v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
+					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao o caracter Asignado a natural");
+					i++;
+					}
+				i++;
+				}
+		}
+		else if(tipo.equals("tipoVarReal")){
+			while(i<v.size()){
+				if(procesaOperacionCero(v.get(i).getTipoToken())){
+					descripErrorContextual.add("Error en la linea "+linea+" Operador de tipo0 Asignado a real");
+					i++;
+					}
+				if(v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
+					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao o caracter Asignado a real");
+					i++;
+					}
+				i++;
+				}
 			}
-		}
-		if(tipo.equals(tipo1)){}
-		else{
-			descripErrorContextual.add("Error contextual en línea "+linea+ " de tipo: EsAsignable=False");	
-		}
-
+		else if(tipo.equals("tipoVarEntero")){
+			while(i<v.size()){
+				if(procesaOperacionCero(v.get(i).getTipoToken())){
+					descripErrorContextual.add("Error en la linea "+linea+" Operador de tipo0 Asignado a entero");
+					i++;
+					}
+				if(v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
+					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao o caracter Asignado a entero");
+					i++;
+					}
+				i++;
+				}
+			}
+		else if(tipo.equals("tipoVarCaracter")){
+			while(i<v.size()){
+				if(v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.natural||
+						v.get(i).getTipoToken()==TToken.entero||v.get(i).getTipoToken()==TToken.real){
+					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao,entero,natural o real Asignado a caracter");
+					}
+				i++;
+				}
+			}
 	}
+	
+
 
 	public void printParser() {
 
