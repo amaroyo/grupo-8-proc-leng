@@ -443,9 +443,9 @@ public class AnalizadorSintactico {
 				arbol = new ArbolBin();
 				descripErrorContextual=new Vector<String>();
 				i = procesaExpresion(v, i);
-				procesaReestriccionesContextuales(arbol,v.get(i).getLinea());
 
 				if (i != -1) {// ////Procesa Exp.///////
+					procesaReestriccionesContextuales(arbol,v.get(i).getLinea());
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
