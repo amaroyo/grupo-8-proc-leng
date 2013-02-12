@@ -684,7 +684,10 @@ public class AnalizadorSintactico {
 			throw new Exception("La expresión de la asignación es incorrecta");
 		}
 		int lineaActual = expresion.get(indice).getLinea();
-
+		
+		if (esPalReservada(expresion.get(indice).getTipoToken()))
+			throw new Exception("No se puede utilizar aquí esta palabra reservada");
+		
 		if (expresion.size() == 1) {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
 			if (procesaTipo(expresion, indice)) {
@@ -1502,6 +1505,20 @@ public class AnalizadorSintactico {
 		return -1;
 	}
 
+	/*Método que devuelve true si es una palabra reservada que no se puede utilizar en el 
+	 * cuerpo del programa*/
+	private boolean esPalReservada(TToken t){
+		
+		if (t == TToken.var || t == TToken.constante || t == TToken.varsConsts || t == TToken.instrucciones 
+				|| t == TToken.program || t == TToken.booleano || t == TToken.caracter 
+				|| t == TToken.natural || t == TToken.entero || t == TToken.real){
+			
+			return true;
+		}
+		else
+			return false;
+	}
+	
 	// ///////////////// ERRORES Y MAIN//////////////////////
 	// //////////////////////////////////////////////////////
 
