@@ -810,6 +810,46 @@ public class ALexico {
 		return !errorLex;
 	}
 	
+	public String scan(String nombreFichero) {
+		
+		String salida;
+		
+		//Inicializamos y preparamos el fichero para su lectura. De hecho se lee el
+		//primer caracter del fichero de entrada
+		inicio(nombreFichero);
+		//Realizamos el escaneo del fichero
+		scan();
+		//Mostramos por pantalla los resultados
+		salida = "Fichero de entrada: " + nombreFichero+ "\n";
+		salida +="Resultado\n";
+		salida +="---------\n";
+		if (!errorLex)
+			salida += "El análisis léxico es correcto." + "\n" + "Fueron leidas " + contPrograma + " líneas.\n";
+		else
+			salida +="Ha habido errores durante el análisis léxico:" + "\n" + descripError+"\n";
+		salida += "\n";
+		salida += "Detalle de los tokens reconocidos\n";
+		salida +="---------------------------------";
+		salida += "\n";
+		
+		//Para mostrar el numero de línea de cada token
+		for (int i = 0; i < tokensSalida.size(); i++)
+			if (tokensSalida.get(i).getTipoToken() == TToken.puntoyComa) {
+				salida +="{" +tokensSalida.get(i).getTipoToken().toString()+" , "+ tokensSalida.get(i).getLinea()+ "}\n ";
+				salida += "\n";
+			}
+			else {
+				if (tokensSalida.get(i).getLexema() == null)
+					salida +="{" + tokensSalida.get(i).getTipoToken().toString() + ", "+tokensSalida.get(i).getLinea()+"} \n";
+				else
+					salida +="{" + tokensSalida.get(i).getTipoToken().toString() + ", " +
+						tokensSalida.get(i).getLexema() + ", "+tokensSalida.get(i).getLinea()+ "} \n";
+			}
+		salida += "\n";
+		salida += "\n";
+		return salida;
+	}
+	
 	public boolean getErrorLex(){
 		return errorLex;
 	}
