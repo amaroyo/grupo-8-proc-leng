@@ -15,7 +15,7 @@ public class AnalizadorSintactico {
 	private HashMap<Integer, String> dirMemoria;
 	private HashMap<String, TablaInfo> TS;
 	private Vector<ByteCode> byteOut;
-	private Vector<ByteCode> byteOutInorden;
+	private Vector<ByteCode> byteOutConTextual;
 	private Vector<Token> entrada;
 	private String descripError;
 	private Vector<String> descripErrorContextual;
@@ -33,7 +33,7 @@ public class AnalizadorSintactico {
 		TS = new HashMap<String, TablaInfo>(100);
 		errorCompilacion = false;
 		byteOut = new Vector<ByteCode>();
-		byteOutInorden = new Vector<ByteCode>();
+		byteOutConTextual = new Vector<ByteCode>();
 		posMemoLibre = 0;
 		scanner = new ALexico();
 		salida="";
@@ -399,15 +399,12 @@ public class AnalizadorSintactico {
 				// leo Exp
 				// creo aquí el arbol para poder leer otra instruccion
 				arbol = new ArbolBin();
-				
-				Vector<Token> expParaConTextualOut=new Vector<Token>();
-				//aux=Contiene la expresión en sí mediante el metodo procesaExpParaContextuales
-				expParaConTextualOut=procesaExpParaContextuales(v,i);
 				i = procesaExpresion(v, i);
 
 				if (i != -1) {// ////Procesa Exp.///////
-					procesaRestriccionesContextualesExpresion(expParaConTextualOut);
 					arbol.posorden(arbol.raiz, byteOut);
+					arbol.preorden(arbol.raiz, byteOutConTextual);
+					procesaRestriccionesContextualesExpresion(byteOutConTextual);
 					byteOut.add(new ByteCode(tByteCode.write));
 				} else {
 					errorCompilacion = true;
@@ -463,9 +460,10 @@ public class AnalizadorSintactico {
 				i = procesaExpresion(v, i);
 
 				if (i != -1) {// ////Procesa Exp.///////
-					procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),expParaConTextual);
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
+					arbol.preorden(arbol.raiz, byteOutConTextual);
+					procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),expParaConTextual,byteOutConTextual);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
 					i++;
 				} else {
@@ -1602,9 +1600,10 @@ public class AnalizadorSintactico {
 
 	}
 
-	private void procesaRestriccionesContextuales(String tipo, int linea,Vector<Token> v) {
+	private void procesaRestriccionesContextuales(String tipo, int linea,Vector<Token> v, Vector<ByteCode> byteOutConTextual2) {
 		int i=0;
 		boolean encontrado=false;
+		procesaRestriccionesContextualesExpresion(byteOutConTextual2);
 		if(tipo.equals("tipoVarNatural")){
 			while(i<v.size()){
 				if(procesaOperacionCero(v.get(i).getTipoToken())){
@@ -1679,9 +1678,9 @@ public class AnalizadorSintactico {
 	}
 	
 
-	private void procesaRestriccionesContextualesExpresion(Vector<Token> expresion) {
+	private void procesaRestriccionesContextualesExpresion(Vector<ByteCode> byteOutConTextual2) {
 	
-		//arbol.
+		
 		
 	}
 	
