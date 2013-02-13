@@ -1594,12 +1594,17 @@ public class AnalizadorSintactico {
 
 	private void procesaRestriccionesContextuales(String tipo, int linea,Vector<Token> v) {
 		int i=0;
+		boolean encontrado=false;
 		if(tipo.equals("tipoVarNatural")){
 			while(i<v.size()){
 				if(procesaOperacionCero(v.get(i).getTipoToken())){
 					descripErrorContextual.add("Error en la linea "+linea+" Operador de tipo0 Asignado a natural");
 					i++;
 				}
+				i++;
+			}
+			i=0;
+			while(i<v.size()){
 				if(v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.entero||v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
 					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao o caracter Asignado a natural");
 					i++;
@@ -1613,6 +1618,10 @@ public class AnalizadorSintactico {
 					descripErrorContextual.add("Error en la linea "+linea+" Operador de tipo0 Asignado a real");
 					i++;
 					}
+				i++;
+				}
+			i=0;
+			while(i<v.size()){
 				if(v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
 					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao o caracter Asignado a real");
 					i++;
@@ -1626,6 +1635,10 @@ public class AnalizadorSintactico {
 					descripErrorContextual.add("Error en la linea "+linea+" Operador de tipo0 Asignado a entero");
 					i++;
 					}
+				i++;
+			}
+			i=0;
+			while(i<v.size()){
 				if(v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
 					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao o caracter Asignado a entero");
 					i++;
@@ -1638,9 +1651,20 @@ public class AnalizadorSintactico {
 				if(v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.natural||
 						v.get(i).getTipoToken()==TToken.entero||v.get(i).getTipoToken()==TToken.real){
 					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao,entero,natural o real Asignado a caracter");
+					i++;
+				}
+				i++;
+				}
+			}
+		else if(tipo.equals("tipoVarBooleano")){
+			while(i<v.size()){
+				if(procesaOperacionCero(v.get(i).getTipoToken())){
+					encontrado=true;
+					i++;
 					}
 				i++;
 				}
+			if(!encontrado){descripErrorContextual.add("Error en la linea "+linea+" Expresión sin operando de tipo0 asignada a booleano");}
 			}
 	}
 	
