@@ -65,10 +65,16 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String rutaArchivo = textField.getText();
 				analizadorSintactico = new AnalizadorSintactico(rutaArchivo);
-				analizadorSintactico.compilar();
-				generadorFichero=new GeneradorFichero(); 
-				generadorFichero.generaFichero(textField_1.getText(), analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto 
-				analizadorSintactico.printParser();
+				if (!(analizadorSintactico.getSalida().equals("El fichero no existe"))){
+					analizadorSintactico.compilar();
+					generadorFichero=new GeneradorFichero(); 
+					generadorFichero.generaFichero(textField_1.getText(), analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto 
+					analizadorSintactico.printParser();
+					textArea.setText(analizadorSintactico.getSalida());
+				}
+				else{
+					textArea.setText(analizadorSintactico.getSalida());
+				}
 			}
 		});
 		btnAnalizador.setBounds(375, 46, 175, 43);
