@@ -15,12 +15,14 @@ import javax.swing.JLabel;
 import MV.GeneradorFichero;
 import MV.Interprete;
 import parser.AnalizadorSintactico;
+import javax.swing.JScrollPane;
 
 public class Main extends JFrame {
 
 	/**
 	 * 
 	 */
+	
 	private static final long serialVersionUID = 1;
 	private JPanel contentPane;
 	private JTextField textField;
@@ -58,9 +60,9 @@ public class Main extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		
 		JButton btnAnalizador = new JButton("Analizar");
+		btnAnalizador.setBounds(375, 46, 175, 43);
 		btnAnalizador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String rutaArchivo = textField.getText();
@@ -75,19 +77,22 @@ public class Main extends JFrame {
 				else{
 					textArea.setText(analizadorSintactico.getSalida());
 				}
+				textArea.setText(analizadorSintactico.getSalida());
 			}
 		});
-		btnAnalizador.setBounds(375, 46, 175, 43);
+		contentPane.setLayout(null);
 		contentPane.add(btnAnalizador);
 		
 		JButton btnEjecutar = new JButton("Ejecutar");
+		btnEjecutar.setBounds(375, 109, 175, 43);
 		btnEjecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				interprete = new Interprete();
 				interprete.generar(textField_1.getText(), 0);
+				textArea.append(interprete.muestraMemoria());
+				textArea.append(interprete.muestraPila());
 			}
 		});
-		btnEjecutar.setBounds(375, 109, 175, 43);
 		contentPane.add(btnEjecutar);
 		
 		textField = new JTextField();
@@ -95,22 +100,25 @@ public class Main extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		textArea = new JTextArea();
-		textArea.setEditable(false);
-		textArea.setBounds(21, 187, 529, 302);
-		contentPane.add(textArea);
-		
 		JLabel lblIntroduzcaLaRuta = new JLabel("Ruta del archivo del programa a leer:");
 		lblIntroduzcaLaRuta.setBounds(21, 24, 246, 16);
 		contentPane.add(lblIntroduzcaLaRuta);
 		
 		textField_1 = new JTextField();
-		textField_1.setColumns(10);
 		textField_1.setBounds(21, 127, 317, 28);
+		textField_1.setColumns(10);
 		contentPane.add(textField_1);
 		
 		lblIntroduzcaLaRuta_1 = new JLabel("Ruta del archivo del c\u00F3digo compilado:");
 		lblIntroduzcaLaRuta_1.setBounds(21, 99, 281, 16);
 		contentPane.add(lblIntroduzcaLaRuta_1);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(21, 185, 529, 304);
+		contentPane.add(scrollPane);
+		
+		textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
+		textArea.setEditable(false);
 	}
 }
