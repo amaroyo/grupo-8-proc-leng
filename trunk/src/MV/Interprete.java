@@ -29,34 +29,15 @@ public Interprete()
 }
 
 
-
-/*
-public void iniciarMemoria(HashMap<Integer, String> dirMemoria)
-{
-	GeneradorFichero it=new GeneradorFichero();
-	//HashMap<Integer, String> dirMemoria= new HashMap<Integer, String>();
-	dirMemoria.put(0,"int:-30");
-	dirMemoria.put(1,"bool:true");
-	dirMemoria.put(2,"nat:1900");
-	dirMemoria.put(3,"real:186.35");
-	dirMemoria.put(4,"null");
-	dirMemoria.put(5,"char:h");
-	memoria=it.generarMemoria(dirMemoria);
-
-	for (int i=0;i<memoria.size();i++)
-	{
-		System.out.print("dir:" + i+" ");
-		System.out.println(memoria.elementAt(i));
-	}
-}
-*/
-public void generar(String ruta,int modo)
+private Vector <Object> datosParaInterprete;
+public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1)
 {
 	boolean error=false;
 	instr=new Vector<byte[]>();
 	
-	
+	datosParaInterprete=datosParaInterprete1;
 	/** Para probar la memoria(nos lo tiene que pasar)**/
+	/*
 	GeneradorFichero it=new GeneradorFichero();
 	HashMap<Integer, String> dirMemoria= new HashMap<Integer, String>();
 	dirMemoria.put(0,"int:0");
@@ -68,7 +49,22 @@ public void generar(String ruta,int modo)
 	dirMemoria.put(4,"null");
 	dirMemoria.put(5,"char:h");
 	*/
-	Vector <Object> memoria=it.generarMemoria(dirMemoria);
+	int longitud=datosParaInterprete.size()/5;
+	Vector <Object> memoria=new Vector <Object>(longitud);
+	for (int l=0;l<longitud;l++)
+		memoria.add(new Object());
+	
+	//int longitud=datosParaInterprete.size()/5;
+	for(int j=0;j<longitud;j++)
+	{
+		memoria.remove(((Integer)datosParaInterprete.elementAt((j*5)+3)).intValue());
+		memoria.add(((Integer)datosParaInterprete.elementAt((j*5)+3)).intValue(),datosParaInterprete.elementAt((j*5)+4));
+	}
+	
+	//Vector <Object> memoria=it.generarMemoria(dirMemoria);
+	
+	
+	
 	/**fin prueba*/
 	mw=new InstruccionMW(memoria);
 	File archivo = null;
@@ -104,7 +100,7 @@ public void generar(String ruta,int modo)
 		//System.out.println("Numero :"+convertirBinToDec(new byte[]{(byte) 0x8A,(byte) 0x6C}));
 		//System.out.println("Numero float:"+byteArrayToFloatBE(new byte[]{(byte) 0xC2,(byte) 0xED,0x40,0x00}));
 		//System.out.println("Numero double:"+byteArrayToDoubleBE(new byte[]{(byte) 0x7f,(byte) 0xef,(byte)0xFF,(byte)0x00,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF}));
-		imprimirInstr(instr);
+		imprimirInstr(instr,datosParaInterprete);
 		
 		
 	} catch (Exception e) {
@@ -122,7 +118,55 @@ public void generar(String ruta,int modo)
 	} 
 }
 
-private void imprimirInstr(Vector<byte[]> v)
+public String imprimirMemoria()
+{
+	Vector <Object> mem=mw.getMem();
+	boolean enc=false;
+	int k=3;
+	int longitud=datosParaInterprete.size();
+	int i=0;
+	while (i<mem.size())
+	{
+		k=3;
+		while ((!enc)&&(k < longitud))
+		{
+			if ((((Integer)datosParaInterprete.elementAt(k)).intValue())==i)
+			{
+				//datosParaInterprete.remove(k+1);
+				//datosParaInterprete.setElementAt(mem.elementAt(i), k+1);
+				datosParaInterprete.setElementAt(mem.elementAt(i),k+1);
+				enc=true;
+			}
+			k=k+5;
+		}
+		enc=false;
+		i=i+1;
+	}
+	int len=datosParaInterprete.size()/5;
+	String res="";
+	for(int j=0;j<len;j++)
+	{
+		res=res+"Nombre variable: "+datosParaInterprete.elementAt(j*5)+"|";//id
+		res=res+"tipo: "+datosParaInterprete.elementAt(j*5+1)+"|";//tipo
+		res=res+"cte: "+datosParaInterprete.elementAt(j*5+2)+"|";//cte
+		res=res+"Dir: "+datosParaInterprete.elementAt(j*5+3)+"|";//dir
+		
+		if ((datosParaInterprete.elementAt(j*5+1).equals("tipoVarBooleano")))
+		{
+		    if (((Integer)datosParaInterprete.elementAt(j*5+4)).intValue()==0)
+		    	res=res+"Valor: false"+"\n";//valor
+		    else
+		    	res=res+"Valor: true"+"\n";//valor
+		}
+		else
+			res=res+"Valor: "+datosParaInterprete.elementAt(j*5+4)+"\n";//valor
+	}
+		
+	return res;
+	
+}
+
+private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem)
 {
 	int i=0;
 	while (i<v.size())
@@ -420,9 +464,35 @@ private void imprimirInstr(Vector<byte[]> v)
 						mw.apila((double)byteArrayToFloatBE(instr.elementAt(i+2)));
 					}
 					else
-					{						
-						System.out.println(byteArrayToDoubleBE(instr.elementAt(i+2)));
-						mw.apila(byteArrayToDoubleBE(instr.elementAt(i+2)));
+					{		
+						if (convertirBinToDec(instr.elementAt(i+1))==2)//Si es punto flotante doble
+						{
+							System.out.println(byteArrayToDoubleBE(instr.elementAt(i+2)));//Si es punto flotante doble
+							mw.apila(byteArrayToDoubleBE(instr.elementAt(i+2)));
+						}
+						else
+							if (convertirBinToDec(instr.elementAt(i+1))==3)//Si es boolean
+							{
+								if (convertirBinToDec(instr.elementAt(i+2))==0)//si es false
+								{
+									System.out.println("false");//es false
+									mw.apila("false");
+									mw.apila(new Integer(0));
+								}
+								else
+								{
+									System.out.println("true");// es true
+									//mw.apila("true");
+									mw.apila(new Integer(1));
+								}
+								
+			
+							}
+							else//es char
+							{
+								System.out.println(new String(instr.elementAt(i+2)));//Si es char
+								mw.apila(new String(instr.elementAt(i+2)));
+							}
 					}
 				i=i+3;
 				break;
@@ -520,7 +590,22 @@ private void imprimirInstr(Vector<byte[]> v)
 			{
 				System.out.println("STOP");
 				System.out.print("Resultado memoria: "+mw.resultadoMem());
+			
 				//mw.resultadoMem();
+				i++;
+				break;
+			}
+			case Operaciones.SWAP1:
+			{
+				System.out.println("SWAP1");
+				mw.swap1();
+				i++;
+				break;
+			}
+			case Operaciones.SWAP2:
+			{
+				System.out.println("SWAP2");
+				mw.swap2();
 				i++;
 				break;
 			}
@@ -697,7 +782,19 @@ public String muestraMemoria()
 
 public static void main(String[] args) {
 	Interprete inter=new Interprete();
-	inter.generar("ficheroBinario3.txt",0);
+	Vector <Object> datosParaInterprete1=new Vector <Object>();
+	datosParaInterprete1.addElement("ident1");
+	datosParaInterprete1.addElement("int");
+	datosParaInterprete1.addElement(new Boolean(false));
+	datosParaInterprete1.addElement(new Integer(0));
+	datosParaInterprete1.addElement(new Integer(0));
+	datosParaInterprete1.addElement("ident2");
+	datosParaInterprete1.addElement("int");
+	datosParaInterprete1.addElement(new Boolean(false));
+	datosParaInterprete1.addElement(new Integer(1));
+	datosParaInterprete1.addElement(new Integer(0));
+	inter.generar("ficheroBinario3.txt",0,datosParaInterprete1);
+	System.out.println(inter.imprimirMemoria());
 }
 
 }

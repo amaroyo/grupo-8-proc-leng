@@ -33,4 +33,6 @@ public class Operaciones {
 	public static final byte DESAPILA_DIR_FLOAT=0x2D;
 	public static final byte DESAPILA_DIR_CHAR=0x2E;
 	public static final byte STOP=0x2F;
+	public static final byte SWAP1=0x30;
+	public static final byte SWAP2=0x31;
 }

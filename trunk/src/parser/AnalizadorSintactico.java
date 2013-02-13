@@ -3,7 +3,11 @@ package parser;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
+
+import MV.GeneradorFichero;
+import MV.Interprete;
 import aLexico.ALexico;
 import aLexico.Token;
 import aLexico.TToken;
@@ -44,6 +48,61 @@ public class AnalizadorSintactico {
 		if (scanner.getErrorLex())
 			errorCompilacion = true;
 
+	}
+	
+	public Vector <Object> datosParaInterprete()
+	{
+		String resultado="";
+		int longitud=TS.size();
+		Set obKeySet = TS.keySet();
+		Iterator itr = obKeySet.iterator(); 
+		Vector <Object> infoTotal=new Vector<Object>();
+		for(int i=0;i<longitud;i++)
+		{
+			String id=(String) itr.next();
+			resultado=resultado+"Nombre variable:"+id+" -";//nombre variable
+			infoTotal.addElement(id);//id
+			TablaInfo info=TS.get(id);
+			int dir=info.getDireccion();
+			String tipo=info.getTipo();
+			resultado=resultado+"Tipo:"+tipo+" -";//nombre variable
+			infoTotal.addElement(tipo);//tipo
+			
+			boolean cte=info.isConstante();
+			resultado=resultado+"Cte:"+cte+" -";//nombre variable
+			infoTotal.addElement(new Boolean(cte));//cte
+			resultado=resultado+"Dir:"+dir+" -";//nombre variable
+			infoTotal.addElement(new Integer(dir));//dir
+			Object valor=null;
+			//
+		    valor=dirMemoria.get(dir);
+			if (valor!=null && (!valor.equals("null")))
+			{
+				//String[] arrayS=valor.split(":");
+				if (tipo.equals("tipoVarEntero")||tipo.equals("tipoVarNatural"))
+					valor=new Integer(Integer.parseInt((String) valor));
+				else
+					if (tipo.equals("tipoVarReal"))
+						valor=new Double(Double.parseDouble((String) valor));
+					else
+						if (tipo.equals("tipoVarBooleano"))
+							valor=new Boolean(Boolean.parseBoolean((String) valor));
+						else
+							if (tipo.equals("tipoVarCaracter"))
+								valor=valor;//char
+							else
+								valor=new Integer(0);//inicializar con 0
+			}
+			else
+			{
+				valor=new Integer(0);
+			}
+			resultado=resultado+"Valor:"+valor+"\n";//nombre variable
+			infoTotal.addElement(valor);//valor
+			//
+		
+		}
+		return infoTotal;
 	}
 	
 	public void compilar() {
@@ -2278,9 +2337,15 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 
 	public static void main(String[] args) {
 
-		String nombreFichero = "src/aLexico/ejemplos/Ej3.txt";
+		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
 		AnalizadorSintactico sintetiza = new AnalizadorSintactico(nombreFichero);
 		sintetiza.compilar();
+		GeneradorFichero gen=new GeneradorFichero();
+		gen.generaFichero("binario10.txt", sintetiza.getByteOut());
+		Interprete inter= new Interprete();
+		inter.generar("binario10.txt", 0, sintetiza.datosParaInterprete());
+		System.out.println(inter.imprimirMemoria());
+		
 		sintetiza.printParser();
 		System.out.println(salida);
 
