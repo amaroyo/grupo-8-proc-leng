@@ -45,6 +45,24 @@ public class AnalizadorSintactico {
 
 	}
 
+	public AnalizadorSintactico(String nombreFichero) {
+
+		dirMemoria = new HashMap<Integer, String>(100);
+		TS = new HashMap<String, TablaInfo>(100);
+		errorCompilacion = false;
+		byteOut = new Vector<ByteCode>();
+		byteOutInorden = new Vector<ByteCode>();
+		posMemoLibre = 0;
+		scanner = new ALexico();
+		scanner.scanFichero(nombreFichero);
+		entrada = scanner.dameTokens();
+		descripErrorContextual = new Vector<String>();
+		numVueltas=0;
+		if (scanner.getErrorLex())
+			errorCompilacion = true;
+
+	}
+	
 	public void compilar() {
 
 		int i = 0;
@@ -1930,6 +1948,10 @@ public class AnalizadorSintactico {
 			return tByteCode.cnat;
 		}
 		return null;
+	}
+	
+	public Vector<ByteCode> getByteOut() {
+		return this.byteOut;
 	}
 
 	// MAAAAAAIIIIIINNNNNN_____________________________
