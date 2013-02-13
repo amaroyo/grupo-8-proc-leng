@@ -22,7 +22,5 @@ program: ejemplo{
 		correcto = false or true;
 		correcto = not false;
 		pesetas = 1000 % 50;
-		mayor = 5 >= 2;
-		
 	}
 }

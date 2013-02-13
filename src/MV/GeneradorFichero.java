@@ -195,7 +195,7 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 				{
 					try 
 					{
-						fich.write(bytesToString(new byte[]{(byte)0xFF}));
+						fich.write(bytesToString(new byte[]{(byte)0x30}));
 						fich.write("\n");//salto linea
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -208,7 +208,7 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 				{
 					try 
 					{
-						fich.write(bytesToString(new byte[]{(byte)0xFF}));
+						fich.write(bytesToString(new byte[]{(byte)0x31}));
 						fich.write("\n");//salto linea
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
