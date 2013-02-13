@@ -1649,7 +1649,7 @@ public class AnalizadorSintactico {
 			}
 			i=0;
 			while(i<v.size()){
-				if(v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
+				if(v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
 					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao o caracter Asignado a entero");
 					i++;
 					}
