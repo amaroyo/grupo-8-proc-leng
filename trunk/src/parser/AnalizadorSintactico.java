@@ -1690,7 +1690,7 @@ public class AnalizadorSintactico {
 		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
 		    		//else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo booleano con operandos de distinto tipo");
 				}
-				if (aux==tByteCode.suma || aux==tByteCode.resta || aux==tByteCode.multiplica || aux==tByteCode.divide)
+				if (aux==tByteCode.suma || aux==tByteCode.resta || aux==tByteCode.multiplica || aux==tByteCode.divide )
 				{
 					tipoRaiz = "sobreNumeros";
 		    		String tipoHijoIzq = procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
@@ -1740,7 +1740,47 @@ public class AnalizadorSintactico {
 		    		//else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo sobreBooleanos con operandos de distinto tipo");
 				
 				}
-			
+				if (aux==tByteCode.restaunitaria)
+				{
+					tipoRaiz = "menosUnario";
+		    		String tipoHijoIzq = "";//procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer(),linea);
+		    		
+		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
+		    		//else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo sobreBooleanos con operandos de distinto tipo");
+				
+				}
+				if (aux==tByteCode.cnat) 
+				{
+					tipoRaiz = "castingNat";
+					String tipoHijoIzq = "";//procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer(),linea);
+		    		
+		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
+				}
+				if (aux==tByteCode.cchar) 
+				{
+					tipoRaiz = "castingChar";
+					String tipoHijoIzq = "";//procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer(),linea);
+		    		
+		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
+				}
+				if (aux==tByteCode.cint) 
+				{
+					tipoRaiz = "castingInt";
+					String tipoHijoIzq = "";//procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer(),linea);
+		    		
+		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
+				}if (aux==tByteCode.cfloat) 
+				{
+					tipoRaiz = "castingReal";
+					String tipoHijoIzq = "";//procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer(),linea);
+		    		
+		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
+				}
 		}
 		
 		
@@ -1753,6 +1793,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 		tByteCode aux = nodo.getInfo().getTipoByteC();
 		String tipoRaiz = "";
 		String tipoDevuelto = "";
+		if(nodo==null) return "";
 		if(nodo.izq==null && nodo.der==null){
 			if (nodo.info.getTipoByteC()==tByteCode.apila)	
 			return nodo.info.getTipoVar();
@@ -1791,7 +1832,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 			
 			if (aux==tByteCode.distinto || aux==tByteCode.igual || aux==tByteCode.menor ||
 		    		aux==tByteCode.mayor || aux==tByteCode.mayorigual || aux==tByteCode.menorigual
-		    		|| aux==tByteCode.or || aux==tByteCode.and || aux == tByteCode.negacionlogica)
+		    		|| aux==tByteCode.or || aux==tByteCode.and )
 				{
 		    		tipoRaiz = "booleanos";
 		    		
@@ -1806,16 +1847,33 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 				{
 					tipoRaiz = "sobreNaturales";
 				}
-				if (aux==tByteCode.cnat || aux==tByteCode.cchar || aux==tByteCode.cfloat || aux==tByteCode.cint)
+				if (aux==tByteCode.cnat) 
 				{
-					tipoRaiz = "casting";
+					tipoRaiz = "castingNat";
+				}
+				if (aux==tByteCode.cchar) 
+				{
+					tipoRaiz = "castingChar";
+				}
+				if (aux==tByteCode.cint) 
+				{
+					tipoRaiz = "castingInt";
+				}if (aux==tByteCode.cfloat) 
+				{
+					tipoRaiz = "castingReal";
 				}
 				if (aux==tByteCode.negacionlogica)
 				{
 					tipoRaiz = "not";
 				}
+				if (aux==tByteCode.restaunitaria)
+				{
+					tipoRaiz = "menosUnario";
+				}
+				String hijoIzq=null;
 			//+++++++++++++++++++++++++++++++++++++++++++++++++++
-			String hijoIzq = procesaRestriccionesContxRecursiva(nodo.getIzq(),linea);
+			if(nodo.getIzq()==null){ hijoIzq="";}
+			else{ hijoIzq = procesaRestriccionesContxRecursiva(nodo.getIzq(),linea);}
 			String hijoDer = procesaRestriccionesContxRecursiva(nodo.getDer(),linea);
 	
 			if(!sePermite(tipoRaiz, hijoIzq,hijoDer,linea).equals("error")) {tipoDevuelto=sePermite(tipoRaiz, hijoIzq,hijoDer,linea);}
@@ -1880,6 +1938,40 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 			if(tipoHijoIzq.equals("") && tipoHijoDer.equals("bool"))
 				return "bool";
 			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo not con operandos de distinto tipo(no bool)");
+			return "error";}
+		}
+		else if (tipoRaiz.equals("menosUnario")){//<<,>>
+			if(tipoHijoIzq.equals("") && tipoHijoDer.equals("nat"))
+				return "nat";
+			else if(tipoHijoIzq.equals("") && tipoHijoDer.equals("int"))
+				return "int";
+			else if(tipoHijoIzq.equals("") && tipoHijoDer.equals("real"))
+				return "real";
+			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo menosUnario con operandos de distinto tipo no numerico");
+			return "error";}
+		}
+		else if (tipoRaiz.equals("castingNat")){//cchar,cnat,cint,creal
+			if(tipoHijoIzq.equals(""))
+				return "nat";
+			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo castingNat con operandos de distinto tipo no numerico");
+			return "error";}
+		}
+		else if (tipoRaiz.equals("castingInt")){//cchar,cnat,cint,creal
+			if(tipoHijoIzq.equals(""))
+				return "int";
+			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo castingInt con operandos de distinto tipo no numerico");
+			return "error";}
+		}
+		else if (tipoRaiz.equals("castingReal")){//cchar,cnat,cint,creal
+			if(tipoHijoIzq.equals(""))
+				return "real";
+			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo castingReal con operandos de distinto tipo no numerico");
+			return "error";}
+		}
+		else if (tipoRaiz.equals("castingChar")){//cchar,cnat,cint,creal
+			if(tipoHijoIzq.equals(""))
+				return "char";
+			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo castingChar con operandos de distinto tipo no numerico");
 			return "error";}
 		}
 	return "error";
