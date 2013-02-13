@@ -404,7 +404,7 @@ public class AnalizadorSintactico {
 				if (i != -1) {// ////Procesa Exp.///////
 					arbol.posorden(arbol.raiz, byteOut);
 					arbol.preorden(arbol.raiz, byteOutConTextual);
-					procesaRestriccionesContextualesExpresion(byteOutConTextual);
+					procesaRestriccionesContextualesExpresion(byteOutConTextual,v.get(i).getLinea());
 					byteOut.add(new ByteCode(tByteCode.write));
 				} else {
 					errorCompilacion = true;
@@ -1603,7 +1603,7 @@ public class AnalizadorSintactico {
 	private void procesaRestriccionesContextuales(String tipo, int linea,Vector<Token> v, Vector<ByteCode> byteOutConTextual2) {
 		int i=0;
 		boolean encontrado=false;
-		procesaRestriccionesContextualesExpresion(byteOutConTextual2);
+		procesaRestriccionesContextualesExpresion(byteOutConTextual2,linea);
 		if(tipo.equals("tipoVarNatural")){
 			while(i<v.size()){
 				if(procesaOperacionCero(v.get(i).getTipoToken())){
@@ -1678,8 +1678,10 @@ public class AnalizadorSintactico {
 	}
 	
 
-	private void procesaRestriccionesContextualesExpresion(Vector<ByteCode> byteOutConTextual2) {
+	private void procesaRestriccionesContextualesExpresion(Vector<ByteCode> byteOutConTextual2, int linea) {
 	
+		
+		descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao,entero,natural o real Asignado a caracter");
 		
 		
 	}
