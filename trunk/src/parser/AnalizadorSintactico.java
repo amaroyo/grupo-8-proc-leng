@@ -717,17 +717,18 @@ public class AnalizadorSintactico {
 						String aux = String.valueOf(TS.get(
 								expresion.get(indice).getLexema()).getDireccion());
 						raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-					} else
-						throw new Exception("Error procesando el elemento");
+					//} else
+						//throw new Exception("Error procesando el elemento");
 				}
 				
 				 else if (!(TS.containsKey(expresion.get(indice).getLexema()))
 						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
 					throw new Exception("Se intenta asignar un identificador que no esta en TS");
 
-				} else  {
+				} else {
 					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema(),dameTipoParaBytecode(expresion,indice));
 				} 
+			}//PROCESA TIPO
 
 			indice++;
 		}
@@ -863,17 +864,18 @@ public class AnalizadorSintactico {
 						String aux = String.valueOf(TS.get(
 								expresion.get(indice).getLexema()).getDireccion());
 						raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-					} else
-						throw new Exception("Error procesando el elemento");
+					//} else
+						//throw new Exception("Error procesando el elemento");
 				}
 				
 				 else if (!(TS.containsKey(expresion.get(indice).getLexema()))
 						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
 					throw new Exception("Se intenta asignar un identificador que no esta en TS");
 
-				} else  {
+				} else {
 					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema(),dameTipoParaBytecode(expresion,indice));
 				} 
+			}//PROCESA TIPO
 
 			indice++;
 		}
@@ -1006,17 +1008,18 @@ public class AnalizadorSintactico {
 						String aux = String.valueOf(TS.get(
 								expresion.get(indice).getLexema()).getDireccion());
 						raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-					} else
-						throw new Exception("Error procesando el elemento");
+					//} else
+						//throw new Exception("Error procesando el elemento");
 				}
 				
 				 else if (!(TS.containsKey(expresion.get(indice).getLexema()))
 						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
 					throw new Exception("Se intenta asignar un identificador que no esta en TS");
 
-				} else  {
+				} else {
 					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema(),dameTipoParaBytecode(expresion,indice));
 				} 
+			}//PROCESA TIPO
 
 			indice++;
 		}
@@ -1151,25 +1154,24 @@ public class AnalizadorSintactico {
 				
 				 if ((expresion.get(indice).getTipoToken() == TToken.ident)
 							&& TS.containsKey(expresion.get(indice).getLexema())) {
-						String aux = String.valueOf(TS.get(
-								expresion.get(indice).getLexema()).getDireccion());
+						String aux = String.valueOf(TS.get(expresion.get(indice).getLexema()).getDireccion());
 						raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-					} else
-						throw new Exception("Error procesando el elemento");
-				}
-				
+					} 
+
 				 else if (!(TS.containsKey(expresion.get(indice).getLexema()))
 						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
 					throw new Exception("Se intenta asignar un identificador que no esta en TS");
-
-				} else  {
+					}
+				 else  {
 					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema(),dameTipoParaBytecode(expresion,indice));
 				} 
-
+				 
+			}
 			indice++;
-		}
+		}//EXPRESION TIPO 1
 
-		else if ((indice < expresion.size())
+		
+		 if ((indice < expresion.size())
 				&& (buscaOperacionCuatroDos(indice, expresion) != -1)) {
 
 			referencia = buscaOperacionCuatroDos(indice, expresion);
@@ -1248,34 +1250,29 @@ public class AnalizadorSintactico {
 		
 		
 		// Quitamos los () para enviarlo a procesaExpresionRecursivo
-		else {
-			if ((indice < expresion.size())
+		else if ((indice < expresion.size())
 					&& ((expresion.get(indice).getTipoToken() == TToken.PA) && 
-							//(expresion.get(expresion.size() - 1).getTipoToken() == TToken.PC))) {
 							(procesaExpParentesis(expresion,indice)-1==expresion.size()-1))){
+						indice++;
+						while (indice != (expresion.size() - 1)) {
+							expresionSinParent.add(expresion.get(indice));
+							indice++;
+							}
+						raizaux = procesaExpresionRecursivo(expresionSinParent);
+
+			} 
+		else if (indice < expresion.size()){
+			
+				while (indice < (expresion.size())) {
+				expresionSinParent.add(expresion.get(indice));
 				indice++;
-				while (indice != (expresion.size() - 1)) {
-					expresionSinParent.add(expresion.get(indice));
-					indice++;
-				}
-
-			} else {
-				while (indice != (expresion.size())) {
-					expresionSinParent.add(expresion.get(indice));
-					indice++;
-				}
+							}
+				raizaux = procesaExpresionRecursivo(expresionSinParent);
 
 			}
-			// Este While no hace nada, solo compruebo que la expresion que pasamos es correcta
-			while (indice2 != (expresionSinParent.size())) {
-				operacion = expresionSinParent.get(indice2).getTipoToken();
-				indice2++;
-			}
-
+			
 			// Método que hara lo mismo que ProcesaExpresion pero devolviendo un
 			// Nodo para construir el arbol
-			raizaux = procesaExpresionRecursivo(expresionSinParent);
-		}
 		return raizaux;
 	}
 
