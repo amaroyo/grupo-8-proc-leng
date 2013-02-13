@@ -10,25 +10,7 @@ import javax.swing.JLabel;
 
 public class InstruccionMW {
 
-	/*
-	 * Atributos de la clase:
-	 * 
-	 * pila: La pila de los operandos de la maquina. PC: Contador de programa.
-	 * Al final de la ejecucion nos dice cuantas lineas tiene dicho programa. H:
-	 * Indica si la maquina esta en ejecucion, parada por error, o acabo su
-	 * ejecuci?n. ST: Puntero a la cima de la pila. Prog:Memoria de programas.
-	 * Aqui habia puesto el nombre del fichero pero quizas deberia ser el codigo
-	 * del programa. Mem: Memoria de datos estatica. fichero: Fichero donde se
-	 * encuetra el codigo que va a ejecutar la MaquinaP. pasos: String con todos
-	 * los pasos que ejecuta la MaquinaP.
-	 */
-
-	/*
-	 * private Stack pila; private int PC; private int H; private int ST;
-	 * private Vector Prog; private Vector Mem; private FileReader fichero;
-	 * private String pasos; private int tamMem;
-	 */
-
+	
 	private Stack<Object> pila = new Stack<Object>();
 	private int PC = 0;
 	private int H = 0;
@@ -42,25 +24,11 @@ public class InstruccionMW {
 	private boolean haciendoSumaInvertido = false;
 	private boolean haciendoMultInvertido = false;
 
-	/**
-	 * El constructor de la clase MaquinaP que solo tiene el buffer de lectura
-	 * del fichero como parametro de entrada.
-	 * 
-	 * @param file
-	 *            Recibe como parametro el fichero a ejecutar para poder
-	 *            inicializar todo.
-	 * 
-	 */
 	
 	public InstruccionMW (Vector<Object> mem) 
 	{
 		Mem = mem;
 	}
-	/*
-	public InstruccionMW () 
-	{
-	}
-	*/
 
 	/**
 	 * Accesor para el atributo de la clase, Mem. Que indica el estado de la
@@ -208,19 +176,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 	
-	/**
-	 * Metodo que realiza una operacion de suma. Se desapilan los dos primeros
-	 * elementos de la pila y se suman. Despues se apila en la cima el
-	 * resultado, disminuye en 1 el puntero a la cima ya que habra un elemento
-	 * menos. Tambien se aumenta en uno el contador del programa.
-	 * 
-	 * (R1) suma: Pila[ST-1] <-- Pila[ST-1] + Pila[ST] ST <-- ST -1 PC <-- PC +
-	 * 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
-
 	public void suma() throws Exception {
 		if ((sumaInvertido) && (!haciendoSumaInvertido))
 		{
@@ -256,18 +211,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion de resta. Se desapilan los dos primeros
-	 * elementos de la pila y se restan. Despues se apila en la cima el
-	 * resultado, disminuye en 1 el puntero a la cima ya que habra un elemento
-	 * menos. Tambien se aumenta en uno el contador del programa.
-	 * 
-	 * (R2) resta: Pila[ST-1] <-- Pila[ST-1] - Pila[ST] ST <-- ST -1 PC <-- PC +
-	 * 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void resta() throws Exception {
 		if ((sumaInvertido) && (!haciendoSumaInvertido))
 		{
@@ -303,18 +246,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion de multiplicacion. Se desapilan los dos
-	 * primeros elementos de la pila y se multiplican. Despues se apila en la
-	 * cima el resultado, disminuye en 1 el puntero a la cima ya que habra un
-	 * elemento menos. Tambien se aumenta en uno el contador del programa.
-	 * 
-	 * (R3) multiplica: Pila[ST-1] <-- Pila[ST-1] * Pila[ST] ST <-- ST -1 PC <--
-	 * PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void multiplica() throws Exception {
 		if ((multInvertido) && (!haciendoMultInvertido))
 		{
@@ -350,18 +281,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion de division. Se desapilan los dos
-	 * primeros elementos de la pila y se dividen. Despues se apila en la cima
-	 * el resultado, disminuye en 1 el puntero a la cima ya que habra un
-	 * elemento menos. Tambien se aumenta en uno el contador del programa.
-	 * 
-	 * (R4) divide: Pila[ST-1] <-- Pila[ST-1] DIV Pila[ST] ST <-- ST -1 PC <--
-	 * PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void divide() throws Exception {
 		if ((multInvertido) && (!haciendoMultInvertido))
 		{
@@ -401,18 +320,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * La instruccion modulo se realiza entre la cima de la pila y el siguiente
-	 * elemento. Se almacena el resultado en la cima de la pila, se disminuye en
-	 * 1 el puntero a la cima ya que habra un elemento menos. Tambien se aumenta
-	 * en uno el contador del programa.
-	 * 
-	 * (R27) mod: Pila[ST-1] <-- Pila [ST-1 ] % Pila [ST] ST <-- ST - 1 PC <--
-	 * PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void modulo() throws Exception {
 		if (traza)
 			System.out.println("modulo");
@@ -443,15 +350,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que apila un entero en la pila. Se aumenta en uno el tamao de la
-	 * pila y se apila el entero que recibe como parametro. Tambien se aumenta
-	 * en uno el contador del programa.
-	 * 
-	 * ST <-- ST + 1 Pila[ST] <-- n PC <-- PC + 1
-	 * 
-	 * @param n
-	 */
 	public void apila(int n) {
 		if (traza)
 			System.out.println("apila");
@@ -460,15 +358,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 	
-	/**
-	 * Metodo que apila un real en la pila. Se aumenta en uno el tamao de la
-	 * pila y se apila el real que recibe como parametro. Tambien se aumenta
-	 * en uno el contador del programa.
-	 * 
-	 * ST <-- ST + 1 Pila[ST] <-- n PC <-- PC + 1
-	 * 
-	 * @param n
-	 */
 	public void apila(double n) {
 		if (traza)
 			System.out.println("apila");
@@ -485,21 +374,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 	
-	/**
-	 * Metodo que apila en la cima de la pila el valor que contiene la direccion
-	 * de memoria que recibe como parametro. Se comprueba antes si la direccion
-	 * de memoria pertenece a memoria estatica o memoria dinamica. Tambien se
-	 * aumenta en uno el contador del programa.
-	 * 
-	 * (R6) apila-dir(d): ST <-- ST + 1 Pila[ST] <-- Mem[d] PC <-- PC + 1
-	 * 
-	 * @param d
-	 *            direcion de la que se va a obtener el valor que apilar en la
-	 *            cima.
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void apila_dir(int d) throws Exception {
 		if (traza)
 			System.out.println("apila-dir");
@@ -522,21 +396,6 @@ public class InstruccionMW {
 		}
 	}
 
-	/**
-	 * Metodo que desapila la cima de la pila y lo guarda en la direccion de
-	 * memoria que recibe como parametro. Se disminuye en uno el tamao de la
-	 * pila y se comprueba si es memoria dinamica o estatica. Tambien se aumenta
-	 * en uno el contador del programa.
-	 * 
-	 * (R7) desapila-dir(d): Mem[d] <-- Pila[ST] ST <-- ST -1 PC <-- PC + 1
-	 * 
-	 * @param d
-	 *            Direccion de la memoria donde se almacenara el valor que hay
-	 *            en la cima de la pila.
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void desapila_dir(int d) throws Exception {
 		// Primero comprobamos que la memoria sea suficiente.
 		// Sino lo es aumentamos el tama?o del vector.
@@ -560,43 +419,16 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que para la ejecucion de la mquina P cuando se recibe un final de
-	 * fichero.
-	 * 
-	 * (R8) EOF: H <-- 1
-	 */
 	public void eof() {
 		System.out.println("eof");
 		H = 1;
 	}
 
-	/**
-	 * Metodo que indica a la pila que pare la ejecucion con un error.
-	 * 
-	 * (R9) En cualquier otro caso, la m?quina entra en estado de error y se
-	 * detiene la ejecuci?n. H <-- -1
-	 */
 	public void error() {
 		System.out.println("error");
 		H = -1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion and. Se desapilan los dos primeros
-	 * elementos de la pila y se realiza una and. Despues se apila en la cima el
-	 * resultado, disminuye en 1 el puntero a la cima ya que habra un elemento
-	 * menos. Tambien se aumenta en uno el contador del programa.
-	 * 
-	 * (R13) And:
-	 * 
-	 * si pila[ST-1] == 0 pila[ST-1] <-- 0 si no pila[ST-1] <-- pila[ST] fsi
-	 * 
-	 * ST <-- ST - 1 PC <-- PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void and() throws Exception {
 		if (traza)
 			System.out.println("and");
@@ -615,21 +447,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion or. Se desapilan los dos primeros
-	 * elementos de la pila y se realiza la operacion. Despues se apila en la
-	 * cima el resultado, disminuye en 1 el puntero a la cima ya que habra un
-	 * elemento menos. Tambien se aumenta en uno el contador del programa.
-	 * 
-	 * (R14) Or:
-	 * 
-	 * si pila[ST-1] == 0 pila[ST-1] <-- pila[ST] si no pila[ST-1] <-- 1 fsi
-	 * 
-	 * ST <-- ST - 1 PC <-- PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void or() throws Exception {
 		if (traza)
 			System.out.println("or");
@@ -648,18 +465,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion de negacion. Se desapila la cima de la
-	 * pila y se realiza una negacion. Despues se apila en la cima el resultado.
-	 * Tambien se aumenta en uno el contador del programa.
-	 * 
-	 * (R15) Not: si pila[ST] = 0 pila[ST] <-- 1 si no pila[ST] <-- 0 fsi
-	 * 
-	 * PC <-- PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void not() throws Exception {
 		if (traza)
 			System.out.println("not");
@@ -676,17 +481,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion negacion de un entero. Se desapilan los
-	 * dos primeros elementos de la pila y se realiza una and. Despues se apila
-	 * en la cima el resultado, disminuye en 1 el puntero a la cima ya que habra
-	 * un elemento menos. Tambien se aumenta en uno el contador del programa.
-	 * 
-	 * (R16) Neg: Pila[ST] <-- - Pila[ST] PC <-- PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void menos() throws Exception {
 		if (traza)
 			System.out.println("menos");
@@ -712,18 +506,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion de menor con dos operandos. Se desapilan
-	 * los dos primeros elementos de la pila y se realiza la operacion. Despues
-	 * se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya
-	 * que habra un elemento menos. Tambien se aumenta en uno el contador del
-	 * programa.
-	 * 
-	 * (R17) Menor: si pila[ST-1] < pila[ST] pila[ST-1] <-- 1 si no pila[ST-1]
-	 * <-- 0 fsi
-	 * 
-	 * ST <-- ST - 1 PC <-- PC + 1
-	 */
 	public void menor() throws Exception {
 		if (traza)
 			System.out.println("menor");
@@ -767,21 +549,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion de menor o igual con dos operandos. Se
-	 * desapilan los dos primeros elementos de la pila y se realiza la
-	 * operacion. Despues se apila en la cima el resultado, disminuye en 1 el
-	 * puntero a la cima ya que habra un elemento menos. Tambien se aumenta en
-	 * uno el contador del programa.
-	 * 
-	 * (R18) MenorIgual: si pila[ST-1] <= pila[ST] pila[ST-1] <-- 1 si no
-	 * pila[ST-1] <-- 0 fsi
-	 * 
-	 * ST <-- ST - 1 PC <-- PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void menorIgual() throws Exception {
 		if (traza)
 			System.out.println("menorIgual");
@@ -824,21 +591,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion de myor con dos operandos. Se desapilan
-	 * los dos primeros elementos de la pila y se realiza la operacion. Despues
-	 * se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya
-	 * que habra un elemento menos. Tambien se aumenta en uno el contador del
-	 * programa.
-	 * 
-	 * (R19) Mayor: si pila[ST-1] <= pila[ST] pila[ST-1] <-- 0 si no pila[ST-1]
-	 * <-- 1 fsi
-	 * 
-	 * ST <-- ST - 1 PC <-- PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void mayor() throws Exception {
 		if (traza)
 			System.out.println("mayor");
@@ -881,21 +633,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion de mayor o igual con dos operandos. Se
-	 * desapilan los dos primeros elementos de la pila y se realiza la
-	 * operacion. Despues se apila en la cima el resultado, disminuye en 1 el
-	 * puntero a la cima ya que habra un elemento menos. Tambien se aumenta en
-	 * uno el contador del programa.
-	 * 
-	 * (R20) MayorIgual: si pila[ST-1] < pila[ST] pila[ST-1] <-- 0 si no
-	 * pila[ST-1] <-- 1 fsi
-	 * 
-	 * ST <-- ST - 1 PC <-- PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void mayorIgual() throws Exception {
 		if (traza)
 			System.out.println("mayorIgual");
@@ -938,21 +675,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion de igual con dos operandos. Se desapilan
-	 * los dos primeros elementos de la pila y se realiza la operacion. Despues
-	 * se apila en la cima el resultado, disminuye en 1 el puntero a la cima ya
-	 * que habra un elemento menos. Tambien se aumenta en uno el contador del
-	 * programa.
-	 * 
-	 * (R21) Igual: si pila[ST-1] = pila[ST] pila[ST-1] <-- 1 si no pila[ST-1]
-	 * <-- 0 fsi
-	 * 
-	 * ST <-- ST - 1 PC <-- PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void igual() throws Exception {
 		if (traza)
 			System.out.println("igual");
@@ -995,21 +717,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que realiza una operacion de distinto con dos operandos. Se
-	 * desapilan los dos primeros elementos de la pila y se realiza la
-	 * operacion. Despues se apila en la cima el resultado, disminuye en 1 el
-	 * puntero a la cima ya que habra un elemento menos. Tambien se aumenta en
-	 * uno el contador del programa.
-	 * 
-	 * (R22) Distinto: si pila[ST-1] = pila[ST] pila[ST-1] <-- 0 si no
-	 * pila[ST-1] <-- 1 fsi
-	 * 
-	 * ST <-- ST - 1 PC <-- PC + 1
-	 * 
-	 * @throws Exception
-	 *             Propaga una excepcion que haya sucedido en otro lugar.
-	 */
 	public void distinto() throws Exception {
 		if (traza)
 			System.out.println("distinto");
@@ -1052,12 +759,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que lee un dato de entrada
-	 * 
-	 * (R23) Read: ST <-- ST+1 pila[ST] <-- READ PC <-- PC+1
-	 * 
-	 */
 	public void read(String line) throws Exception {
 		if (traza)
 			System.out.println("read");
@@ -1090,12 +791,6 @@ public class InstruccionMW {
 		PC++;
 	}
 
-	/**
-	 * Metodo que muestra un dato por pantalla
-	 * 
-	 * (R23) Write: WRITE pila[ST] ST <-- ST-1 PC <-- PC+1
-	 * 
-	 */
 	public void write() throws Exception {
 		if (traza)
 			System.out.println("write");
@@ -1291,12 +986,6 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
-	/**
-	 * Metodo que obtiene el contenido de la pila en un String para ver su
-	 * contenido.
-	 * 
-	 * @return String con el contenido de la Pila
-	 */
 	public String muestraPila() {
 		// System.out.println("muestraPila");
 		Stack<Object> aux = new Stack<Object>();
