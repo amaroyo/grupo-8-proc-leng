@@ -165,7 +165,7 @@ public class ALexico {
 									iniciaScanner();
 								}
 							}
-							else 
+							else{ 
 								if(lex.equals("consts")){
 									if (tokensSalida.lastElement().getTipoToken() == TToken.rest){
 										int tam = tokensSalida.size()-2;
@@ -179,11 +179,16 @@ public class ALexico {
 											break;	
 										}
 									}
+									else{
+										tokensSalida.add(dameTokenIdentificador(lex));
+										iniciaScanner();
+									}
 								
 								}
 								else{
 									tokensSalida.add(dameTokenIdentificador(lex));
 									iniciaScanner();
+								}
 							}
 						}
 						break;
