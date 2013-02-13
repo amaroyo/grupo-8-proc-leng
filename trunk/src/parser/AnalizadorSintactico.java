@@ -129,6 +129,11 @@ public class AnalizadorSintactico {
 				break;
 			} else {
 				i++;
+				if(VVariables.get(i).getTipoToken() == TToken.LC){
+					error(VVariables.get(i).getLinea(),"No hay variables declaradas en la seccion de variables");
+					errorCompilacion = true;
+					break;
+				}
 			}
 
 			// //////////////////////////////////////////////////////////////////
@@ -143,6 +148,7 @@ public class AnalizadorSintactico {
 			int nuevapos = procesaInstVariables(VVariables, i);
 
 			if (nuevapos != -1) {
+				
 				finVariables = true; // hemos procesado la seccion de las variables debuty
 				nuevapos++;
 				return nuevapos;
@@ -171,6 +177,11 @@ public class AnalizadorSintactico {
 				break;
 			} else {
 				i++;
+				if(VInstrucciones.get(i).getTipoToken() == TToken.LC){
+					error(VInstrucciones.get(i).getLinea(),"No hay instrucciones en la seccion de instrucciones");
+					errorCompilacion = true;
+					break;
+				}
 			}
 			// /////////////////////////////////////////////////////
 			// //////////Inst -> Inst Ins | Ins///////////////////////
@@ -233,7 +244,7 @@ public class AnalizadorSintactico {
 							}
 
 						} else if (variable) {
-							error(v.get(i).getLinea(), "Falta punto y coma!");
+							error(v.get(i).getLinea(), "Fallo en el punto y coma o se intenta asignar un valor a una variable!");
 							errorCompilacion = true;
 							break;
 						}
@@ -301,9 +312,16 @@ public class AnalizadorSintactico {
 			}// if
 
 			else {
-				error(v.get(i).getLinea(), "Error en linea");
-				errorCompilacion = true;
-				break;
+				if(v.get(i).getTipoToken() == TToken.instrucciones && v.get(i-1).getTipoToken() != TToken.LC){
+					error(v.get(i).getLinea(), "Falta la llave de cierre de la seccion de las variables");
+					errorCompilacion = true;
+					break;
+				}
+				else{
+					error(v.get(i).getLinea(), "Error en linea");
+					errorCompilacion = true;
+					break;
+				}
 			}
 
 		}// while
@@ -2260,7 +2278,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 
 	public static void main(String[] args) {
 
-		String nombreFichero = "src/aLexico/ejemplos/Ej1.txt";
+		String nombreFichero = "src/aLexico/ejemplos/Ej3.txt";
 		AnalizadorSintactico sintetiza = new AnalizadorSintactico(nombreFichero);
 		sintetiza.compilar();
 		sintetiza.printParser();
