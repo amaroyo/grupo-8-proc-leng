@@ -390,16 +390,24 @@ public class AnalizadorSintactico {
 			else if (v.get(i).getTipoToken() == TToken.salidaPantalla) {
 				i++;
 				if (v.get(i).getTipoToken() == TToken.PA) {
-					i++;
 				} else {
 					error(v.get(i).getLinea(), "Faltan el(");
 					errorCompilacion = true;
 					break;
 				}
 
-				// leo Expresion
+				// leo Exp
+				// creo aquí el arbol para poder leer otra instruccion
+				arbol = new ArbolBin();
+				
+				Vector<Token> expParaConTextualOut=new Vector<Token>();
+				//aux=Contiene la expresión en sí mediante el metodo procesaExpParaContextuales
+				expParaConTextualOut=procesaExpParaContextuales(v,i);
 				i = procesaExpresion(v, i);
+
 				if (i != -1) {// ////Procesa Exp.///////
+					procesaRestriccionesContextualesExpresion(expParaConTextualOut);
+					arbol.posorden(arbol.raiz, byteOut);
 					byteOut.add(new ByteCode(tByteCode.write));
 				} else {
 					errorCompilacion = true;
@@ -449,13 +457,13 @@ public class AnalizadorSintactico {
 				// creo aquí el arbol para poder leer otra instruccion
 				arbol = new ArbolBin();
 				
-				Vector<Token> aux=new Vector<Token>();
+				Vector<Token> expParaConTextual=new Vector<Token>();
 				//aux=Contiene la expresión en sí mediante el metodo procesaExpParaContextuales
-				aux=procesaExpParaContextuales(v,i);
+				expParaConTextual=procesaExpParaContextuales(v,i);
 				i = procesaExpresion(v, i);
 
 				if (i != -1) {// ////Procesa Exp.///////
-					procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),aux);
+					procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),expParaConTextual);
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
@@ -552,6 +560,7 @@ public class AnalizadorSintactico {
 			return i;
 		return -1;
 	}
+
 
 
 	private Vector<Token> procesaExpParaContextuales(Vector<Token> v, int i) {
@@ -1668,6 +1677,14 @@ public class AnalizadorSintactico {
 			if(!encontrado){descripErrorContextual.add("Error en la linea "+linea+" Expresión sin operando de tipo0 asignada a booleano");}
 			}
 	}
+	
+
+	private void procesaRestriccionesContextualesExpresion(Vector<Token> expresion) {
+	
+		//arbol.
+		
+	}
+	
 	
 
 
