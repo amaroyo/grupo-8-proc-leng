@@ -1109,7 +1109,7 @@ public class InstruccionMW {
 		JDialog jd = new JDialog();
 		jd.setBounds(200, 400, 100, 80);
 		jd.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		jd.setTitle(ob.toString());
+		jd.setTitle("OUT");
 		jd.setModal(false);
 		
 		JLabel lblOut = new JLabel(ob.toString());
