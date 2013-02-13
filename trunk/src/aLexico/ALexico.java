@@ -535,7 +535,14 @@ public class ALexico {
 	}
 	
 	public boolean esLetra(char car) {
-		if ((car >= 'a' && car <= 'z') || (car >= 'A' && car <= 'Z'))
+		if ((car >= 'a' && car <= 'z') || (car >= 'A' && car <= 'Z') || letraAcento(car))
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean letraAcento(char car){
+		if (car == 'á' || car == 'é' || car == 'í' || car == 'ó' || car == 'ú')
 			return true;
 		else
 			return false;
