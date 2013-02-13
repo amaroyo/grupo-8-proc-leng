@@ -1607,7 +1607,7 @@ public class AnalizadorSintactico {
 			i=0;
 			while(i<v.size()){
 				if(v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.entero||v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
-					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao o caracter Asignado a natural");
+					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo booleano,entero,real o caracter Asignado a natural");
 					i++;
 					}
 				i++;
@@ -1624,7 +1624,7 @@ public class AnalizadorSintactico {
 			i=0;
 			while(i<v.size()){
 				if(v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
-					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao o caracter Asignado a real");
+					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo booleano o caracter Asignado a real");
 					i++;
 					}
 				i++;
@@ -1641,7 +1641,7 @@ public class AnalizadorSintactico {
 			i=0;
 			while(i<v.size()){
 				if(v.get(i).getTipoToken()==TToken.real||v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.caracter){
-					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao o caracter Asignado a entero");
+					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo booleano o caracter Asignado a entero");
 					i++;
 					}
 				i++;
@@ -1651,7 +1651,7 @@ public class AnalizadorSintactico {
 			while(i<v.size()){
 				if(v.get(i).getTipoToken()==TToken.booleano||v.get(i).getTipoToken()==TToken.natural||
 						v.get(i).getTipoToken()==TToken.entero||v.get(i).getTipoToken()==TToken.real){
-					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao,entero,natural o real Asignado a caracter");
+					descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo booleano,entero,natural o real Asignado a caracter");
 					i++;
 				}
 				i++;
@@ -1681,28 +1681,52 @@ public class AnalizadorSintactico {
 			if (aux==tByteCode.distinto || aux==tByteCode.igual || aux==tByteCode.menor ||
 		    		aux==tByteCode.mayor || aux==tByteCode.mayorigual || aux==tByteCode.menorigual)
 				{
-		    		tipoRaiz = "boleanos";
-		    		String tipoHijoIzq = procesaRestriccionesContxRecursiva(a.raiz.getIzq());
-		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer());
+		    		tipoRaiz = "booleanos";
+		    		String tipoHijoIzq = procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer(),linea);
 		    		
-		    		if(tipoRaiz == tipoHijoIzq && tipoRaiz == tipoHijoDer) {}
-		    		else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao con operandos de distinto tipo");
+		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
+		    		//else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo booleano con operandos de distinto tipo");
 				}
-				if (aux==tByteCode.suma || aux==tByteCode.resta || aux==tByteCode.or)
+				if (aux==tByteCode.suma || aux==tByteCode.resta || aux==tByteCode.multiplica || aux==tByteCode.divide)
 				{
-		    	
+					tipoRaiz = "sobreNumeros";
+		    		String tipoHijoIzq = procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer(),linea);
+		    		
+		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
+		    		//else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo sobreNumeros con operandos de distinto tipo");
+				
 				}
-				if (aux==tByteCode.multiplica || aux==tByteCode.divide || aux==tByteCode.and || aux==tByteCode.modulo)
+				if (aux==tByteCode.and || aux==tByteCode.or)
 				{
-					
+					tipoRaiz = "sobreBooleanos";
+		    		String tipoHijoIzq = procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer(),linea);
+		    		
+		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
+		    		//else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo sobreBooleanos con operandos de distinto tipo");
+				
 				}
 				if (aux==tByteCode.desplazamientoizquierda || aux==tByteCode.desplazamientoderecha)
 				{
-					
+					tipoRaiz = "sobreDesplazamiento";
+		    		String tipoHijoIzq = procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer(),linea);
+		    		
+		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
+		    		//else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo sobreDesplazamiento con operandos de distinto tipo");
+				
 				}
-				if (aux==tByteCode.cnat || aux==tByteCode.cchar || aux==tByteCode.cfloat || aux==tByteCode.cint)
+				if (aux==tByteCode.modulo)
 				{
-					
+					tipoRaiz = "sobreModulo";
+		    		String tipoHijoIzq = procesaRestriccionesContxRecursiva(a.raiz.getIzq(),linea);
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer(),linea);
+		    		
+		    		if(!sePermite(tipoRaiz, tipoHijoIzq,tipoHijoDer,linea).equals("error")) {}
+		    		//else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo sobreModulo con operandos de distinto tipo");
+				
 				}
 			
 		}
@@ -1712,14 +1736,135 @@ public class AnalizadorSintactico {
 		
 		
 	}
-	
-	
+private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
+		
+		tByteCode aux = nodo.getInfo().getTipoByteC();
+		String tipoRaiz = "";
+		String tipoDevuelto = "";
+		if(nodo.izq==null && nodo.der==null){
+			if (nodo.info.getTipoByteC()==tByteCode.apila)	
+			return nodo.info.getTipoVar();
+			else {
+				String direccion=nodo.info.getDireccion();
+				int direc=Integer.parseInt(direccion);
+				Iterator it = TS.entrySet().iterator();
+				while (it.hasNext()) {
+					Map.Entry e = (Map.Entry) it.next();
+					TablaInfo info = (TablaInfo) e.getValue();
+					int direcTS=info.getDireccion();
+					if(direcTS==direc){
+						String tipo=info.getTipo();
+						if(tipo.equals("tipoVarBooleano")){
+							return "bool";
+						}
+						else if(tipo.equals("tipoVarCaracter")){
+							return "char";
+						}
+						else if(tipo.equals("tipoVarEntero")){
+							return "int";
+						}
+						else if(tipo.equals("tipoVarNatural")){
+							return "nat";
+						}
+						else if(tipo.equals("tipoVarReal")){
+							return "real";
+						}
+						
+					}
 
-
-	private String procesaRestriccionesContxRecursiva(Nodo izq) {
-		// TODO Auto-generated method stub
-		return null;
+				}			
+			}
+		}
+		else {
+			
+			if (aux==tByteCode.distinto || aux==tByteCode.igual || aux==tByteCode.menor ||
+		    		aux==tByteCode.mayor || aux==tByteCode.mayorigual || aux==tByteCode.menorigual
+		    		|| aux==tByteCode.or || aux==tByteCode.and || aux == tByteCode.negacionlogica)
+				{
+		    		tipoRaiz = "booleanos";
+		    		
+				}
+				if (aux==tByteCode.suma || aux==tByteCode.resta ||
+						aux==tByteCode.multiplica || aux==tByteCode.divide || aux==tByteCode.modulo || aux == tByteCode.restaunitaria)
+				{
+					tipoRaiz = "sobreNumeros";
+				}
+				
+				if (aux==tByteCode.desplazamientoizquierda || aux==tByteCode.desplazamientoderecha)
+				{
+					tipoRaiz = "sobreNaturales";
+				}
+				if (aux==tByteCode.cnat || aux==tByteCode.cchar || aux==tByteCode.cfloat || aux==tByteCode.cint)
+				{
+					tipoRaiz = "casting";
+				}
+			//+++++++++++++++++++++++++++++++++++++++++++++++++++
+			String hijoIzq = procesaRestriccionesContxRecursiva(nodo.getIzq(),linea);
+			String hijoDer = procesaRestriccionesContxRecursiva(nodo.getDer(),linea);
+	
+			if(!sePermite(tipoRaiz, hijoIzq,hijoDer,linea).equals("error")) {tipoDevuelto=sePermite(tipoRaiz, hijoIzq,hijoDer,linea);}
+    		//else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo "+ tipoRaiz + "con operandos de distinto tipo");
+		
+		}
+		
+		
+		return tipoDevuelto;
 	}
+
+	private String sePermite(String tipoRaiz, String tipoHijoIzq,String tipoHijoDer, int linea) {
+		if (tipoHijoIzq.equals("error") || tipoHijoDer.equals("error"))
+			return "error";
+		if (tipoRaiz.equals("booleanos")) {//<,>,=,!=,<=,>=
+			
+			if 	(tipoHijoIzq.equals("bool") && tipoHijoDer.equals("bool")) 
+				return "bool";
+			
+			if (tipoHijoIzq.equals("char") && tipoHijoDer.equals("char")) 
+				return "bool";
+			
+			if ((tipoHijoIzq.equals("nat") || tipoHijoIzq.equals("int") || tipoHijoIzq.equals("real"))
+			&& (tipoHijoDer.equals("nat") || tipoHijoDer.equals("int") || tipoHijoDer.equals("real")))
+				return "bool";
+			
+			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao con operandos de distinto tipo");
+				return "error";}
+		}
+		else if (tipoRaiz.equals("sobreNumeros")){//+,-,*,/
+			if(tipoHijoIzq.equals("real") || tipoHijoDer.equals("real"))
+				return "real";
+			if(tipoHijoIzq.equals("int") || tipoHijoDer.equals("int"))
+				return "int";
+			if(tipoHijoIzq.equals("nat") && tipoHijoDer.equals("nat"))
+				return "nat";
+			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo sobreNumeros con operandos de distinto tipo");
+				return "error";
+				}
+		}
+		else if (tipoRaiz.equals("sobreModulo")){//%
+			if(tipoHijoIzq.equals("int") && tipoHijoDer.equals("nat"))
+				return "int";
+			if(tipoHijoIzq.equals("nat") && tipoHijoDer.equals("nat"))
+				return "nat";
+			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo sobreModulo con operandos de distinto tipo");
+			return "error";}
+		}
+		else if (tipoRaiz.equals("sobreBooleanos")){//AND,OR
+			if(tipoHijoIzq.equals("bool") && tipoHijoDer.equals("bool"))
+				return "bool";
+			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo sobreBooleanos con operandos de distinto tipo");
+			return "error";}
+		}
+		else if (tipoRaiz.equals("sobreDesplazamiento")){//<<,>>
+			if(tipoHijoIzq.equals("nat") && tipoHijoDer.equals("nat"))
+				return "nat";
+			else {descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo sobreDesplazamiento con operandos de distinto tipo");
+			return "error";}
+		}
+		
+	return "error";
+	}
+
+	
 
 	public void printParser() {
 
