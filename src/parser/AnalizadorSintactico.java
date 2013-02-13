@@ -36,12 +36,11 @@ public class AnalizadorSintactico {
 		byteOutInorden = new Vector<ByteCode>();
 		posMemoLibre = 0;
 		scanner = new ALexico();
-		String salidaConsola=scanner.scan(nombreFichero);
-		System.out.println(salidaConsola); //comentar si no queremos ver la salida por consola
+		salida="";
+		salida+=scanner.scan(nombreFichero);
 		entrada = scanner.dameTokens();
 		descripErrorContextual = new Vector<String>();
 		numVueltas=0;
-		salida="";
 		if (scanner.getErrorLex())
 			errorCompilacion = true;
 
