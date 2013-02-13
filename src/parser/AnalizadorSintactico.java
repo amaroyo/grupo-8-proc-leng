@@ -457,7 +457,8 @@ public class AnalizadorSintactico {
 					arbol.posorden(arbol.raiz, byteOut);
 					arbol.preorden(arbol.raiz, byteOutConTextual);
 					if (!errorCompilacion){
-					procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),expParaConTextual,byteOutConTextual,arbol);}
+					procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),expParaConTextual,byteOutConTextual,arbol);
+						}
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
 					i++;
 				} else {
@@ -708,24 +709,29 @@ public class AnalizadorSintactico {
 		
 		if (expresion.size() == 1) {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
-			if (procesaTipo(expresion, indice)) {
-				if (TS.containsKey(expresion.get(indice).getLexema())
-						|| (expresion.get(indice).getTipoToken() != TToken.ident)) {
-					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-							indice).getLexema(),dameTipoParaBytecode(expresion,indice));
-				} else {
-					error(expresion.get(indice).getLinea(),
-							"Se intenta asignar un identificador que no está en TS");
-				}
-			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
-					&& TS.containsKey(expresion.get(indice).getLexema())) {
-				String aux = String.valueOf(TS.get(expresion.get(indice).getLexema()).getDireccion());
-				raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-			} else
-				throw new Exception("Error procesando el elemento");
-			indice++;
 
-		} else {
+			if (procesaTipo(expresion, indice)) {
+				
+				 if ((expresion.get(indice).getTipoToken() == TToken.ident)
+							&& TS.containsKey(expresion.get(indice).getLexema())) {
+						String aux = String.valueOf(TS.get(
+								expresion.get(indice).getLexema()).getDireccion());
+						raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
+					} else
+						throw new Exception("Error procesando el elemento");
+				}
+				
+				 else if (!(TS.containsKey(expresion.get(indice).getLexema()))
+						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
+					throw new Exception("Se intenta asignar un identificador que no esta en TS");
+
+				} else  {
+					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema(),dameTipoParaBytecode(expresion,indice));
+				} 
+
+			indice++;
+		}
+		else {
 
 			if (expresion.size() == 2) { // No puede haber una expresion de dos elementos si el primero es un número
 				if ((expresion.get(indice).getTipoToken() == TToken.entero)
@@ -849,24 +855,30 @@ public class AnalizadorSintactico {
 
 		if (expresion.size() == 1) {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
+
 			if (procesaTipo(expresion, indice)) {
-				if (TS.containsKey(expresion.get(indice).getLexema())
-						|| (expresion.get(indice).getTipoToken() != TToken.ident)) {
-					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-							indice).getLexema(),dameTipoParaBytecode(expresion,indice));
-				} else {
-					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador que no está en TS");
+				
+				 if ((expresion.get(indice).getTipoToken() == TToken.ident)
+							&& TS.containsKey(expresion.get(indice).getLexema())) {
+						String aux = String.valueOf(TS.get(
+								expresion.get(indice).getLexema()).getDireccion());
+						raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
+					} else
+						throw new Exception("Error procesando el elemento");
 				}
-			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
-					&& TS.containsKey(expresion.get(indice).getLexema())) {
-				String aux = String.valueOf(TS.get(expresion.get(indice).getLexema()).getDireccion());
-				raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-			} else
-				throw new Exception("Error procesando el elemento");
+				
+				 else if (!(TS.containsKey(expresion.get(indice).getLexema()))
+						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
+					throw new Exception("Se intenta asignar un identificador que no esta en TS");
+
+				} else  {
+					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema(),dameTipoParaBytecode(expresion,indice));
+				} 
 
 			indice++;
+		}
 
-		} else {
+		 else {
 
 			// Si encontramos un ( ) nos situamos después de él.
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
@@ -988,25 +1000,28 @@ public class AnalizadorSintactico {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
-				if (!(TS.containsKey(expresion.get(indice).getLexema()))
-						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
-					throw new Exception("Se intenta asignar un identificador que no está en TS");
-
-				} else {
-					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(
-							indice).getLexema(),dameTipoParaBytecode(expresion,indice));
+				
+				 if ((expresion.get(indice).getTipoToken() == TToken.ident)
+							&& TS.containsKey(expresion.get(indice).getLexema())) {
+						String aux = String.valueOf(TS.get(
+								expresion.get(indice).getLexema()).getDireccion());
+						raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
+					} else
+						throw new Exception("Error procesando el elemento");
 				}
+				
+				 else if (!(TS.containsKey(expresion.get(indice).getLexema()))
+						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
+					throw new Exception("Se intenta asignar un identificador que no esta en TS");
 
-			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
-					&& TS.containsKey(expresion.get(indice).getLexema())) {
-				String aux = String.valueOf(TS.get(expresion.get(indice).getLexema()).getDireccion());
-				raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-			} else
-				throw new Exception("Error procesando el elemento");
+				} else  {
+					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema(),dameTipoParaBytecode(expresion,indice));
+				} 
 
 			indice++;
+		}
 
-		} else {
+		 else {
 
 			// Si encontramos un ( ) nos situamos después de él.
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
@@ -1133,21 +1148,23 @@ public class AnalizadorSintactico {
 			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
-				if (!(TS.containsKey(expresion.get(indice).getLexema()))
+				
+				 if ((expresion.get(indice).getTipoToken() == TToken.ident)
+							&& TS.containsKey(expresion.get(indice).getLexema())) {
+						String aux = String.valueOf(TS.get(
+								expresion.get(indice).getLexema()).getDireccion());
+						raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
+					} else
+						throw new Exception("Error procesando el elemento");
+				}
+				
+				 else if (!(TS.containsKey(expresion.get(indice).getLexema()))
 						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
 					throw new Exception("Se intenta asignar un identificador que no esta en TS");
 
-				} else {
+				} else  {
 					raizaux.info = new ByteCode(tByteCode.apila, expresion.get(indice).getLexema(),dameTipoParaBytecode(expresion,indice));
-				}
-
-			} else if ((expresion.get(indice).getTipoToken() == TToken.ident)
-					&& TS.containsKey(expresion.get(indice).getLexema())) {
-				String aux = String.valueOf(TS.get(
-						expresion.get(indice).getLexema()).getDireccion());
-				raizaux.info = new ByteCode(tByteCode.apila_dir, aux);
-			} else
-				throw new Exception("Error procesando el elemento");
+				} 
 
 			indice++;
 		}
@@ -2246,7 +2263,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 
 	public static void main(String[] args) {
 
-		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
+		String nombreFichero = "src/aLexico/ejemplos/Ej1.txt";
 		AnalizadorSintactico sintetiza = new AnalizadorSintactico(nombreFichero);
 		sintetiza.compilar();
 		sintetiza.printParser();
