@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.util.Stack;
 import java.util.Vector;
 
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+
 public class InstruccionMW {
 
 	/*
@@ -1055,12 +1058,12 @@ public class InstruccionMW {
 	 * (R23) Read: ST <-- ST+1 pila[ST] <-- READ PC <-- PC+1
 	 * 
 	 */
-	public void read() throws Exception {
+	public void read(String line) throws Exception {
 		if (traza)
 			System.out.println("read");
-		InputStreamReader converter = new InputStreamReader(System.in);
+		/*InputStreamReader converter = new InputStreamReader(System.in);
 		BufferedReader in = new BufferedReader(converter);
-		String line = in.readLine();
+		String line = in.readLine();*/
 		
 		try
 		{
@@ -1102,6 +1105,19 @@ public class InstruccionMW {
 		}
 		Object ob = pila.pop();
 		System.out.println(ob.toString());
+		
+		JDialog jd = new JDialog();
+		jd.setBounds(200, 400, 100, 80);
+		jd.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		jd.setTitle(ob.toString());
+		jd.setModal(false);
+		
+		JLabel lblOut = new JLabel(ob.toString());
+		lblOut.setBounds(10, 5, 30, 20);
+		jd.add(lblOut);
+		
+		jd.setVisible(true);
+		
 		ST--;
 		PC++;
 	}

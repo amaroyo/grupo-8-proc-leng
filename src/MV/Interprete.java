@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import parser.ByteCode;
 import parser.tByteCode;
 
@@ -376,7 +379,13 @@ private void imprimirInstr(Vector<byte[]> v)
 			{
 				System.out.println("LEER");
 				try {
-					mw.read();
+				    // a jframe here isn't strictly necessary, but it makes the example a little more real
+				    JFrame frame = new JFrame("InputDialog Example #1");
+
+				    // prompt the user to enter their name
+				    String valor = JOptionPane.showInputDialog(frame, "Input");
+				    
+					mw.read(valor);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -673,6 +682,16 @@ private static byte[] longToByteArrayBE( long data ) {
     return new byte[]{(byte) ((data >> 56) & 0xff), (byte) ((data >> 48) & 0xff), (byte) ((data >> 40) & 0xff),
             (byte) ((data >> 32) & 0xff), (byte) ((data >> 24) & 0xff), (byte) ((data >> 16) & 0xff),
             (byte) ((data >> 8) & 0xff), (byte) ((data >> 0) & 0xff),};
+}
+
+public String muestraPila()
+{
+	return mw.muestraPila();
+}
+
+public String muestraMemoria()
+{
+	return mw.resultadoMem();
 }
 
 
