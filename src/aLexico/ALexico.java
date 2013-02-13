@@ -766,50 +766,7 @@ public class ALexico {
 	public void setTokensSalida(Vector<Token> tokensSalida) {
 		this.tokensSalida = tokensSalida;
 	}
-	
-	public boolean scanFichero(String nombreFichero) {
-		//Inicializamos y preparamos el fichero para su lectura. De hecho se lee el
-		//primer caracter del fichero de entrada
-		inicio(nombreFichero);
-		//Realizamos el escaneo del fichero
-		scan();
-		//Mostramos por pantalla los resultados
-		System.out.println("Fichero de entrada: " + nombreFichero);
-		System.out.println();
-		System.out.println("Resultado");
-		System.out.println("---------");
-		System.out.println();
-		if (!errorLex)
-			System.out.println("El análisis léxico es correcto." + "\n" +
-					"Fueron leidas " + contPrograma + " líneas.");
-		else
-			System.out.println("Ha habido errores durante el análisis léxico:" + "\n" +
-					descripError);
-		System.out.println();
-		System.out.println("Detalle de los tokens reconocidos");
-		System.out.println("---------------------------------");
-		System.out.println();
-		
-		//Para mostrar el numero de línea de cada token
-		for (int i = 0; i < tokensSalida.size(); i++)
-			if (tokensSalida.get(i).getTipoToken() == TToken.puntoyComa) {
-					System.out.println();
-				System.out.print("{" +tokensSalida.get(i).getTipoToken().toString()+" , "+ tokensSalida.get(i).getLinea()+ "} ");
-				System.out.println();
-			}
-			else {
-				if (tokensSalida.get(i).getLexema() == null)
-					System.out.print("{" + tokensSalida.get(i).getTipoToken().toString() + ", "+tokensSalida.get(i).getLinea()+"} ");
-				else
-					System.out.print("{" + tokensSalida.get(i).getTipoToken().toString() + ", " +
-						tokensSalida.get(i).getLexema() + ", "+tokensSalida.get(i).getLinea()+ "} ");
-			}
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		return !errorLex;
-	}
-	
+
 	public String scan(String nombreFichero) {
 		
 		String salida;
@@ -834,16 +791,16 @@ public class ALexico {
 		
 		//Para mostrar el numero de línea de cada token
 		for (int i = 0; i < tokensSalida.size(); i++)
-			if (tokensSalida.get(i).getTipoToken() == TToken.puntoyComa) {
+			if (tokensSalida.get(i).getTipoToken() == TToken.puntoyComa ||
+					tokensSalida.get(i).getTipoToken() == TToken.LA) {
 				salida +="{" +tokensSalida.get(i).getTipoToken().toString()+" , "+ tokensSalida.get(i).getLinea()+ "}\n ";
-				salida += "\n";
 			}
 			else {
 				if (tokensSalida.get(i).getLexema() == null)
-					salida +="{" + tokensSalida.get(i).getTipoToken().toString() + ", "+tokensSalida.get(i).getLinea()+"} \n";
+					salida +="{" + tokensSalida.get(i).getTipoToken().toString() + ", "+tokensSalida.get(i).getLinea()+"}";
 				else
 					salida +="{" + tokensSalida.get(i).getTipoToken().toString() + ", " +
-						tokensSalida.get(i).getLexema() + ", "+tokensSalida.get(i).getLinea()+ "} \n";
+						tokensSalida.get(i).getLexema() + ", "+tokensSalida.get(i).getLinea()+ "}";
 			}
 		salida += "\n";
 		salida += "\n";
@@ -863,9 +820,10 @@ public class ALexico {
 	}
 	public static void main(String[] args) {
 		
-		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
+		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
 		ALexico scanner = new ALexico();
-		scanner.scanFichero(nombreFichero);
+		String salida=scanner.scan(nombreFichero);
+		System.out.println(salida);
 
 	}
 
