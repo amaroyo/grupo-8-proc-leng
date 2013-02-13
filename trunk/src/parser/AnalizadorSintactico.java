@@ -406,16 +406,8 @@ public class AnalizadorSintactico {
 					arbol.preorden(arbol.raiz, byteOutConTextual);
 					procesaRestriccionesContextualesExpresion(byteOutConTextual,v.get(i).getLinea());
 					byteOut.add(new ByteCode(tByteCode.write));
-				} else {
-					errorCompilacion = true;
-					break;
-				}
-
-				// leo ;
-				if (v.get(i).getTipoToken() == TToken.puntoyComa) {
 					i++;
 				} else {
-					error(v.get(i).getLinea(), "Falta el ;");
 					errorCompilacion = true;
 					break;
 				}
@@ -1680,7 +1672,31 @@ public class AnalizadorSintactico {
 
 	private void procesaRestriccionesContextualesExpresion(Vector<ByteCode> byteOutConTextual2, int linea) {
 	
-		
+		if (byteOutConTextual2.firstElement().getByteCode()!=tByteCode.apila &&
+				byteOutConTextual2.firstElement().getByteCode()!=tByteCode.apila_dir){
+			tByteCode aux = byteOutConTextual2.firstElement().getByteCode();	
+			if (aux==tByteCode.distinto || aux==tByteCode.igual || aux==tByteCode.menor ||
+	    		aux==tByteCode.mayor || aux==tByteCode.mayorigual || aux==tByteCode.menorigual)
+			{
+	    	
+			}
+			if (aux==tByteCode.suma || aux==tByteCode.resta || aux==tByteCode.or)
+			{
+	    	
+			}
+			if (aux==tByteCode.multiplica || aux==tByteCode.divide || aux==tByteCode.and || aux==tByteCode.modulo)
+			{
+				
+			}
+			if (aux==tByteCode.desplazamientoizquierda || aux==tByteCode.desplazamientoderecha)
+			{
+				
+			}
+			if (aux==tByteCode.cnat || aux==tByteCode.cchar || aux==tByteCode.cfloat || aux==tByteCode.cint)
+			{
+				
+			}
+		}
 		descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao,entero,natural o real Asignado a caracter");
 		
 		
