@@ -81,10 +81,13 @@ public class ALexico {
 							cambiaEstado(est.e3);
 							break;
 						}
-						if (buff[0] == ';' || buff[0] == '+' || buff[0] == '-'  || buff.toString().equals("-") ||
-								buff[0] == '*' || buff[0] == '/' || buff[0] == '(' || buff[0] == '|' ||
-								buff[0] == ')' || buff[0] =='{' || buff[0] =='}' || buff[0] =='['|| buff[0] ==']'
-								|| buff[0] =='%') {
+					if (buff[0] == ';' || buff[0] == '+' || buff[0] == '-'
+							|| buff.toString().equals("-") || buff[0] == '*'
+							|| buff[0] == '/' || buff[0] == '('
+							|| buff[0] == '|' || buff[0] == ')'
+							|| buff[0] == '{' || buff[0] == '}'
+							|| buff[0] == '[' || buff[0] == ']'
+							|| buff[0] == '%') {
 							carAntConsumido[0] = buff[0];
 							tok = dameToken(buff[0]);
 							cambiaEstado(est.e38);
@@ -528,7 +531,7 @@ public class ALexico {
 	}
 	
 	public boolean esLetraMinus(char car) {
-		if ((car >= 'a' && car <= 'z'))
+		if ((car >= 'a' && car <= 'z') || letraAcento(car))
 			return true;
 		else
 			return false;
@@ -542,7 +545,7 @@ public class ALexico {
 	}
 	
 	public boolean letraAcento(char car){
-		if (car == 'á' || car == 'é' || car == 'í' || car == 'ó' || car == 'ú')
+		if (car == '\u00e1' || car == '\u00e9' || car == '\u00ed' || car == '\u00f3' || car == '\u00fa')
 			return true;
 		else
 			return false;
@@ -827,7 +830,7 @@ public class ALexico {
 	}
 	public static void main(String[] args) {
 		
-		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
+		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
 		ALexico scanner = new ALexico();
 		String salida=scanner.scan(nombreFichero);
 		System.out.println(salida);
