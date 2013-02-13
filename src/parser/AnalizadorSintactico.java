@@ -404,7 +404,7 @@ public class AnalizadorSintactico {
 				if (i != -1) {// ////Procesa Exp.///////
 					arbol.posorden(arbol.raiz, byteOut);
 					arbol.preorden(arbol.raiz, byteOutConTextual);
-					procesaRestriccionesContextualesExpresion(byteOutConTextual,v.get(i).getLinea());
+					procesaRestriccionesContextualesExpresion(arbol,byteOutConTextual,v.get(i).getLinea());
 					byteOut.add(new ByteCode(tByteCode.write));
 					i++;
 				} else {
@@ -455,7 +455,7 @@ public class AnalizadorSintactico {
 					String aux2 = String.valueOf(TS.get(identificador).getDireccion());
 					arbol.posorden(arbol.raiz, byteOut);
 					arbol.preorden(arbol.raiz, byteOutConTextual);
-					procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),expParaConTextual,byteOutConTextual);
+					procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),expParaConTextual,byteOutConTextual,arbol);
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
 					i++;
 				} else {
@@ -1592,10 +1592,10 @@ public class AnalizadorSintactico {
 
 	}
 
-	private void procesaRestriccionesContextuales(String tipo, int linea,Vector<Token> v, Vector<ByteCode> byteOutConTextual2) {
+	private void procesaRestriccionesContextuales(String tipo, int linea,Vector<Token> v, Vector<ByteCode> byteOutConTextual2,ArbolBin a) {
 		int i=0;
 		boolean encontrado=false;
-		procesaRestriccionesContextualesExpresion(byteOutConTextual2,linea);
+		procesaRestriccionesContextualesExpresion(a,byteOutConTextual2,linea);
 		if(tipo.equals("tipoVarNatural")){
 			while(i<v.size()){
 				if(procesaOperacionCero(v.get(i).getTipoToken())){
@@ -1670,40 +1670,56 @@ public class AnalizadorSintactico {
 	}
 	
 
-	private void procesaRestriccionesContextualesExpresion(Vector<ByteCode> byteOutConTextual2, int linea) {
+	private void procesaRestriccionesContextualesExpresion(ArbolBin a, Vector<ByteCode> byteOutConTextual2, int linea) {
 	
-		if (byteOutConTextual2.firstElement().getByteCode()!=tByteCode.apila &&
-				byteOutConTextual2.firstElement().getByteCode()!=tByteCode.apila_dir){
-			tByteCode aux = byteOutConTextual2.firstElement().getByteCode();	
+		tByteCode aux = a.getRaiz().getInfo().getTipoByteC();
+		String tipoRaiz;
+		
+		if(aux!=tByteCode.apila || aux != tByteCode.apila_dir){
+			//entonces sabemos que tiene q ser una operacion
+			
 			if (aux==tByteCode.distinto || aux==tByteCode.igual || aux==tByteCode.menor ||
-	    		aux==tByteCode.mayor || aux==tByteCode.mayorigual || aux==tByteCode.menorigual)
-			{
-	    	
-			}
-			if (aux==tByteCode.suma || aux==tByteCode.resta || aux==tByteCode.or)
-			{
-	    	
-			}
-			if (aux==tByteCode.multiplica || aux==tByteCode.divide || aux==tByteCode.and || aux==tByteCode.modulo)
-			{
-				
-			}
-			if (aux==tByteCode.desplazamientoizquierda || aux==tByteCode.desplazamientoderecha)
-			{
-				
-			}
-			if (aux==tByteCode.cnat || aux==tByteCode.cchar || aux==tByteCode.cfloat || aux==tByteCode.cint)
-			{
-				
-			}
+		    		aux==tByteCode.mayor || aux==tByteCode.mayorigual || aux==tByteCode.menorigual)
+				{
+		    		tipoRaiz = "boleanos";
+		    		String tipoHijoIzq = procesaRestriccionesContxRecursiva(a.raiz.getIzq());
+		    		String tipoHijoDer = procesaRestriccionesContxRecursiva(a.raiz.getDer());
+		    		
+		    		if(tipoRaiz == tipoHijoIzq && tipoRaiz == tipoHijoDer) {}
+		    		else descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao con operandos de distinto tipo");
+				}
+				if (aux==tByteCode.suma || aux==tByteCode.resta || aux==tByteCode.or)
+				{
+		    	
+				}
+				if (aux==tByteCode.multiplica || aux==tByteCode.divide || aux==tByteCode.and || aux==tByteCode.modulo)
+				{
+					
+				}
+				if (aux==tByteCode.desplazamientoizquierda || aux==tByteCode.desplazamientoderecha)
+				{
+					
+				}
+				if (aux==tByteCode.cnat || aux==tByteCode.cchar || aux==tByteCode.cfloat || aux==tByteCode.cint)
+				{
+					
+				}
+			
 		}
-		descripErrorContextual.add("Error en la linea "+linea+" Operando de tipo boolenao,entero,natural o real Asignado a caracter");
+		
+		
+		
 		
 		
 	}
 	
 	
 
+
+	private String procesaRestriccionesContxRecursiva(Nodo izq) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	public void printParser() {
 

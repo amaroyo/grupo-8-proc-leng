@@ -56,6 +56,11 @@ public class ArbolBin {
 		imprimirPost(raiz);
 		System.out.println();
 	}
+	
+	public Nodo getRaiz(){
+		return raiz;
+	
+	}
 
 
 }

@@ -10,4 +10,17 @@ public class Nodo {
 		der = null;
 
 	}
+	
+	public ByteCode getInfo(){
+		return info;
+	}
+	
+	public Nodo getDer(){
+		return der;
+	}
+	
+	public Nodo getIzq(){
+		return izq;
+	}
+	
 }
