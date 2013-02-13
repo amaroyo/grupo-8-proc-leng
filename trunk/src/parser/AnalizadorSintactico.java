@@ -24,26 +24,8 @@ public class AnalizadorSintactico {
 	private int posMemoLibre;
 	private ArbolBin arbol; // Arbol declarado como Local para poder imprimir
 	private int numVueltas; //variable para controlar que el programa no se queda en bucle infinito
+	private static String salida; 
 
-	public AnalizadorSintactico() {
-
-		dirMemoria = new HashMap<Integer, String>(100);
-		TS = new HashMap<String, TablaInfo>(100);
-		errorCompilacion = false;
-		byteOut = new Vector<ByteCode>();
-		byteOutInorden = new Vector<ByteCode>();
-		posMemoLibre = 0;
-		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
-		scanner = new ALexico();
-		scanner.scanFichero(nombreFichero);
-		entrada = scanner.dameTokens();
-		descripErrorContextual = new Vector<String>();
-		numVueltas=0;
-
-		if (scanner.getErrorLex())
-			errorCompilacion = true;
-
-	}
 
 	public AnalizadorSintactico(String nombreFichero) {
 
@@ -54,10 +36,12 @@ public class AnalizadorSintactico {
 		byteOutInorden = new Vector<ByteCode>();
 		posMemoLibre = 0;
 		scanner = new ALexico();
-		scanner.scanFichero(nombreFichero);
+		String salidaConsola=scanner.scan(nombreFichero);
+		System.out.println(salidaConsola); //comentar si no queremos ver la salida por consola
 		entrada = scanner.dameTokens();
 		descripErrorContextual = new Vector<String>();
 		numVueltas=0;
+		salida="";
 		if (scanner.getErrorLex())
 			errorCompilacion = true;
 
@@ -77,7 +61,7 @@ public class AnalizadorSintactico {
 				}
 			}
 		} else
-			System.out.println("¡No hay nada que compilar!");
+			salida+="¡No hay nada que compilar!\n";
 
 	}
 
@@ -1690,105 +1674,97 @@ public class AnalizadorSintactico {
 
 	public void printParser() {
 
-		System.out
-				.println("***********************************************************************");
-		System.out
-				.println("*                           LENGUAJE PILA                             *");
-		System.out
-				.println("***********************************************************************");
-		System.out.println();
-		System.out.println();
-		System.out.println("Resultado");
-		System.out.println("---------");
-		System.out.println();
+		salida+="***********************************************************************\n";
+		salida+="*                           LENGUAJE PILA                             *\n";
+		salida+="***********************************************************************\n";
+		salida += "\n";
+		salida += "\n";
+		salida +="Resultado\n";
+		salida +="---------\n";
+		salida += "\n";
 		if (!errorCompilacion)
-			System.out
-					.println("La compilacion ha sido satisfactoria." + "\n"
-							+ "Fueron leidas " + scanner.getContPrograma()
-							+ " lineas.");
+			salida += "La compilacion ha sido satisfactoria." + "\n"
+							+ "Fueron leidas " + scanner.getContPrograma()+ " lineas.\n";
 		else {
 			if (descripError == null)
-				System.out.println("Ocurrierron fallos durante el analisis");
+				salida += "Ocurrierron fallos durante el analisis\n";
 			else
-				System.out.println("Ocurrierron fallos durante el analisis:"
-						+ "\n" + descripError);
+				salida +="Ocurrierron fallos durante el analisis:"
+						+ "\n" + descripError+ "\n";
 		}
-		System.out.println();
+		salida += "\n";
 		if (!errorCompilacion) {
-			System.out.println("-------------------------------");
-			System.out.println("Detalle del analisis sintactico");
-			System.out.println("-------------------------------");
-			System.out.println();
+			salida+="-------------------------------\n";
+			salida+="Detalle del analisis sintactico\n";
+			salida+="-------------------------------\n";
+			salida += "\n";
 
 			printTablaTS();
 			printTablaMemoria();
 
-			System.out.println();
-			System.out.println("*Detalle del lenguaje pila");
-			System.out.println("--------------------------");
-			System.out.println();
+			salida += "\n";
+			salida +="*Detalle del lenguaje pila\n";
+			salida += "\n";
 
 			for (int i = 0; i < byteOut.size(); i++) {
 
 				if (byteOut.get(i).getDireccion().equals("")) {
-					System.out.println(i + ": "
-							+ byteOut.get(i).getByteCode().toString());
+					salida +=i + ": "	+ byteOut.get(i).getByteCode().toString()+"\n";
 				} else
-					System.out.println(i + ": "
+					salida +=i + ": "
 							+ byteOut.get(i).getByteCode().toString() + " "
-							+ byteOut.get(i).getDireccion());
+							+ byteOut.get(i).getDireccion()+"\n";
 			}
 
 		}
 
 		if ((descripErrorContextual.size() > 0)) {
 
-			System.out.println();
-			System.out.println("*Lista de Errores Contextuales");
-			System.out.println("--------------------------");
-			System.out.println();
+			salida += "\n";
+			salida +="*Lista de Errores Contextuales\n";
+			salida += "--------------------------\n";
+			salida += "\n";
 
 			for (int i = 0; i < descripErrorContextual.size(); i++) {
-				System.out.println(descripErrorContextual.get(i));
+				salida += descripErrorContextual.get(i)+ "\n";
 			}
 
 		}
 
-		System.out.println();
-		System.out.println();
-		System.out.println();
+		salida += "\n";
+		salida += "\n";
 
 	}
 
 	public void printTablaTS() {
-		System.out.println("*Detalle de la tabla de simbolos");
-		System.out.println("--------------------------------");
-		System.out.println();
+		salida +="*Detalle de la tabla de simbolos\n";
+		salida +="--------------------------------\n";
+		salida += "\n";
 
 		Iterator it = TS.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry e = (Map.Entry) it.next();
-			System.out.print("El identificador '" + e.getKey() + "' ");
+			salida +="El identificador '" + e.getKey() + "' \n";
 			TablaInfo info = (TablaInfo) e.getValue();
-			System.out.println(info.print());
+			salida +=info.print()+"\n";
 
 		}
 
-		System.out.println();
+		salida += "\n";
 	}
 
 	public void printTablaMemoria() {
-		System.out.println("*Detalle de la tabla de memoria");
-		System.out.println("-------------------------------");
-		System.out.println();
+		salida +="*Detalle de la tabla de memoria\n";
+		salida +="-------------------------------\n";
+		salida += "\n";
 
 		Iterator it = dirMemoria.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry e = (Map.Entry) it.next();
-			System.out.println("Posicion " + e.getKey() + " : " + e.getValue());
+			salida +="Posicion " + e.getKey() + " : " + e.getValue()+"\n";
 		}
 
-		System.out.println();
+		salida += "\n";
 	}
 
 	public boolean procesaTipoVariable(Vector<Token> v, int i) {
@@ -1840,7 +1816,7 @@ public class AnalizadorSintactico {
 		if (posMemoLibre < 100) { // mismo numero que la creacion de las tablas hash
 			posMemoLibre = posMemoLibre + 1;
 		} else {
-			System.out.println("YA NO HAY ESPACIO LIBRE EN LA MEMORIA!!!");
+			salida +="YA NO HAY ESPACIO LIBRE EN LA MEMORIA\n";
 			errorCompilacion = true;
 		}
 	}
@@ -1954,13 +1930,22 @@ public class AnalizadorSintactico {
 		return this.byteOut;
 	}
 
+
+	public String getSalida() {
+		return salida;
+	}
+	
 	// MAAAAAAIIIIIINNNNNN_____________________________
 
 	public static void main(String[] args) {
 
-		AnalizadorSintactico sintetiza = new AnalizadorSintactico();
+		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
+		AnalizadorSintactico sintetiza = new AnalizadorSintactico(nombreFichero);
 		sintetiza.compilar();
 		sintetiza.printParser();
+		System.out.println(salida);
 
 	}
+
+
 }
