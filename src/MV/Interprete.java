@@ -30,7 +30,7 @@ public Interprete()
 
 
 private Vector <Object> datosParaInterprete;
-public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1)
+public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1) throws Exception 
 {
 	boolean error=false;
 	instr=new Vector<byte[]>();
@@ -71,8 +71,7 @@ public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1)
 	FileReader fr= null;
 	BufferedReader br = null;
 	archivo = new File (ruta);
-	try 
-	{
+	
 		fr = new FileReader (archivo);	
 		br=new BufferedReader(fr);
 		String linea="";
@@ -103,11 +102,7 @@ public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1)
 		imprimirInstr(instr,datosParaInterprete);
 		
 		
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();	
-	}
-	finally {
+
 		try {
 			if (fr != null)
 				fr.close();
@@ -115,7 +110,7 @@ public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1)
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	} 
+	
 }
 
 public String imprimirMemoria()
@@ -153,7 +148,7 @@ public String imprimirMemoria()
 		
 		if ((datosParaInterprete.elementAt(j*5+1).equals("tipoVarBooleano")))
 		{
-		    if (((Integer)datosParaInterprete.elementAt(j*5+4)).intValue()==0)
+		    if (((Boolean)datosParaInterprete.elementAt(j*5+4)).booleanValue()==false)
 		    	res=res+"Valor: false"+"\n";//valor
 		    else
 		    	res=res+"Valor: true"+"\n";//valor
@@ -166,7 +161,7 @@ public String imprimirMemoria()
 	
 }
 
-private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem)
+private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exception 
 {
 	int i=0;
 	while (i<v.size())
@@ -272,12 +267,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem)
 			case Operaciones.DIVISION:
 			{
 				System.out.println("DIVISION");
-				try {
-					mw.divide();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				mw.divide();
 				i++;
 				break;
 			}
@@ -422,7 +412,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem)
 			case Operaciones.LEER:
 			{
 				System.out.println("LEER");
-				try {
+		
 				    // a jframe here isn't strictly necessary, but it makes the example a little more real
 				    JFrame frame = new JFrame("InputDialog Example #1");
 
@@ -430,10 +420,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem)
 				    String valor = JOptionPane.showInputDialog(frame, "Input");
 				    
 					mw.read(valor);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			
 				i++;
 				break;
 			}
@@ -476,14 +463,16 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem)
 								if (convertirBinToDec(instr.elementAt(i+2))==0)//si es false
 								{
 									System.out.println("false");//es false
-									mw.apila("false");
-									mw.apila(new Integer(0));
+									//mw.apila("false");
+									//mw.apila(new Integer(0));
+									mw.apila(new Boolean(false));
 								}
 								else
 								{
 									System.out.println("true");// es true
 									//mw.apila("true");
-									mw.apila(new Integer(1));
+									//mw.apila(new Integer(1));
+									mw.apila(new Boolean(true));
 								}
 								
 			
@@ -514,12 +503,10 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem)
 			{
 				System.out.print("DESAPILA ");
 				System.out.println(convertirBinToDec(instr.elementAt(i+1)));
-				try {
+				//try {
 					mw.desapila_dir((int)convertirBinToDec(instr.elementAt(i+1)));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		
+				
 				i=i+2;
 				break;
 			}
@@ -793,7 +780,7 @@ public static void main(String[] args) {
 	datosParaInterprete1.addElement(new Boolean(false));
 	datosParaInterprete1.addElement(new Integer(1));
 	datosParaInterprete1.addElement(new Integer(0));
-	inter.generar("ficheroBinario3.txt",0,datosParaInterprete1);
+	//inter.generar("ficheroBinario3.txt",0,datosParaInterprete1);
 	System.out.println(inter.imprimirMemoria());
 }
 

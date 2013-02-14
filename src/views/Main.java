@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
@@ -73,7 +75,24 @@ public class Main extends JFrame {
 					
 					generadorFichero.generaFichero("binario.txt", analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto
 					Interprete inter= new Interprete();
-					inter.generar("binario.txt", 0, analizadorSintactico.datosParaInterprete());
+					try {
+						inter.generar("binario.txt", 0, analizadorSintactico.datosParaInterprete());
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						//e1.printStackTrace();
+						try {
+						    // a jframe here isn't strictly necessary, but it makes the example a little more real
+						    JFrame frame = new JFrame("Error de ejecucion");
+
+						    // prompt the user to enter their name
+						    JOptionPane.showMessageDialog(frame, "Error en tiempo de ejecucion");
+						    textArea.setText(inter.imprimirMemoria());
+						
+						} catch (Exception e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
+					}
 					analizadorSintactico.printParser();
 					textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria());
 					

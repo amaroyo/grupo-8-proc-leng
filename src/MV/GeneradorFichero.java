@@ -109,7 +109,7 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 								{
 									fich.write(bytesToString(new byte[]{0x03}));//boolean
 									fich.write(" ");
-									if ((byteOut.elementAt(i)).getDireccion().equals("false"))
+									if ((byteOut.elementAt(i)).getDireccion().equals("false "))
 										fich.write(bytesToString(new byte[]{0x00}));// valor false
 									else
 										fich.write(bytesToString(new byte[]{0x01}));// valor true
@@ -443,6 +443,62 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 					try 
 					{
 						fich.write(bytesToString(new byte[]{Operaciones.STOP}));
+						fich.write("\n");//salto linea
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						res=false;
+					}//instruccion				
+					break;
+					
+				}
+				case cint:
+				{
+					try 
+					{
+						fich.write(bytesToString(new byte[]{Operaciones.CONVERSION_INT}));
+						fich.write("\n");//salto linea
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						res=false;
+					}//instruccion				
+					break;
+					
+				}
+				case cfloat:
+				{
+					try 
+					{
+						fich.write(bytesToString(new byte[]{Operaciones.CONVERSION_FLOAT}));
+						fich.write("\n");//salto linea
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						res=false;
+					}//instruccion				
+					break;
+					
+				}
+				case cnat:
+				{
+					try 
+					{
+						fich.write(bytesToString(new byte[]{Operaciones.CONVERSION_NAT}));
+						fich.write("\n");//salto linea
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						res=false;
+					}//instruccion				
+					break;
+					
+				}
+				case cchar:
+				{
+					try 
+					{
+						fich.write(bytesToString(new byte[]{Operaciones.CONVERSION_CHAR}));
 						fich.write("\n");//salto linea
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
