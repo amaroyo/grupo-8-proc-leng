@@ -85,7 +85,7 @@ public class Main extends JFrame {
 
 					    // prompt the user to enter their name
 					    JOptionPane.showMessageDialog(frame, "Error en tiempo de ejecucion");
-					    textArea.append("\n" + inter.imprimirMemoria());
+					    //textArea.append("\n" + inter.imprimirMemoria());
 					
 					} catch (Exception e2) {
 						// TODO Auto-generated catch block
