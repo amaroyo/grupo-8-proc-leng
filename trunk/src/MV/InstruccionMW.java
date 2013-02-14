@@ -6,7 +6,9 @@ import java.util.Stack;
 import java.util.Vector;
 
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class InstruccionMW {
 
@@ -123,7 +125,7 @@ public class InstruccionMW {
 	}
 
 	/**
-	 * Aumenta el tama̱o del vector memoria segun las necesidades del
+	 * Aumenta el tamaÌ±o del vector memoria segun las necesidades del
 	 * programa que va a ejecutar.
 	 * 
 	 * @param tam
@@ -301,16 +303,31 @@ public class InstruccionMW {
 		if (esReal(ob.toString()) || esReal(ob2.toString())){
 			Double s1 = new Double(ob.toString());
 			Double s2 = new Double(ob2.toString());
-			if (s1.doubleValue() == 0)
+			//
+			
+			if (s1.doubleValue() == 0){
+				JFrame frame = new JFrame("Error operacion");
+
+			    // prompt the user to enter their name
+			    JOptionPane.showMessageDialog(frame, "ERROR: Estas tratando de dividir por 0.");
 				throw new Exception("ERROR: Estas tratando de dividir por 0.");
+			}
 			Double s = new Double(s2.doubleValue() / s1.doubleValue());
+
 			pila.push(s);
 		}
 		else{
 			Integer s1 = (Integer) ob;
 			Integer s2 = (Integer) ob2;
-			if (s1.intValue() == 0)
+			
+			
+			if (s1.intValue() == 0){
+				JFrame frame = new JFrame("Error operacion");
+
+			    // prompt the user to enter their name
+			    JOptionPane.showMessageDialog(frame, "ERROR: Estas tratando de dividir por 0.");
 				throw new Exception("ERROR: Estas tratando de dividir por 0.");
+			}
 			Integer s = new Integer(s2.intValue() / s1.intValue());
 			pila.push(s);
 		}
@@ -355,6 +372,13 @@ public class InstruccionMW {
 			System.out.println("apila");
 		ST = ST + 1;
 		pila.push(new Integer(n));
+		PC = PC + 1;
+	}
+	public void apila(boolean n) {
+		if (traza)
+			System.out.println("apila");
+		ST = ST + 1;
+		pila.push(new Boolean(n));
 		PC = PC + 1;
 	}
 	
@@ -409,9 +433,55 @@ public class InstruccionMW {
 			if (d >= 0) {
 				if (d >= Mem.size()) {
 					aumentoMem(d);
-					Mem.set(d, pila.pop());
+					
+					//----------------------------------
+					Object o=Mem.elementAt(d);
+					Object cima=pila.pop();
+					if (( cima instanceof String)&&( o instanceof String))
+						Mem.set(d, cima);
+					else
+						if (( cima instanceof Integer)&&( o instanceof Integer))
+							Mem.set(d, cima);
+						else
+							if (( cima instanceof Double)&&( o instanceof Double))
+								Mem.set(d, cima);
+							else
+								if (( cima instanceof Boolean)&&( o instanceof Boolean))
+									Mem.set(d, cima);
+								else{
+									JFrame frame = new JFrame("Error de Tipos");
+
+								    // prompt the user to enter their name
+								    JOptionPane.showMessageDialog(frame, "Tipo de datos incompatibles");
+									throw new Exception("Tipo de datos incompatibles");
+								}
+					//--------------------------------------------------------------
+ 					//Mem.set(d, pila.pop());
 				} else {
-					Mem.set(d, pila.pop());
+					//----------------------------------
+					Object o=Mem.elementAt(d);
+					Object cima=pila.pop();
+					if (( cima instanceof String)&&( o instanceof String))
+						Mem.set(d, cima);
+					else
+						if (( cima instanceof Integer)&&( o instanceof Integer))
+							Mem.set(d, cima);
+						else
+							if (( cima instanceof Double)&&( o instanceof Double))
+								Mem.set(d, cima);
+							else
+								if (( cima instanceof Boolean)&&( o instanceof Boolean))
+									Mem.set(d, cima);
+								else
+								{
+									JFrame frame = new JFrame("Error de Tipos");
+
+								    // prompt the user to enter their name
+								    JOptionPane.showMessageDialog(frame, "Tipo de datos incompatibles");
+									throw new Exception("Tipo de datos incompatibles");
+								}
+					//-----------------------------------------------
+					//Mem.set(d, pila.pop());
 				}
 			}
 		}
@@ -436,6 +506,14 @@ public class InstruccionMW {
 			throw new Exception(
 					"ERROR: And. La pila no contiene los datos necesarios.");
 		}
+		boolean a1 = ((Boolean) pila.pop()).booleanValue();
+		boolean a2 = ((Boolean) pila.pop()).booleanValue();
+		if (a2 == false) {
+			pila.push(new Boolean (false));
+		} else {
+			pila.push(new Boolean (a1));
+		}
+		/*
 		int a1 = ((Integer) pila.pop()).intValue();
 		int a2 = ((Integer) pila.pop()).intValue();
 		if (a2 == 0) {
@@ -443,6 +521,8 @@ public class InstruccionMW {
 		} else {
 			pila.push(a1);
 		}
+		
+		*/
 		ST = ST - 1;
 		PC = PC + 1;
 	}
@@ -454,6 +534,16 @@ public class InstruccionMW {
 			throw new Exception(
 					"ERROR: Or. La pila no contiene los datos necesarios.");
 		}
+		//
+		boolean o1 = ((Boolean) pila.pop()).booleanValue();
+		boolean o2 = ((Boolean) pila.pop()).booleanValue();
+		if (o2 == false) {
+			pila.push(new Boolean (o1));
+		} else {
+			pila.push(new Boolean (true));
+		}
+		//
+		/*
 		int o1 = ((Integer) pila.pop()).intValue();
 		int o2 = ((Integer) pila.pop()).intValue();
 		if (o2 == 0) {
@@ -461,6 +551,8 @@ public class InstruccionMW {
 		} else {
 			pila.push(1);
 		}
+		*/
+		
 		ST = ST - 1;
 		PC = PC + 1;
 	}
@@ -472,12 +564,23 @@ public class InstruccionMW {
 			throw new Exception(
 					"ERROR: Not. La pila no contiene los datos necesarios.");
 		}
+		boolean n = ((Boolean) pila.pop()).booleanValue();
+		
+		if (n == false) {
+			pila.push(new Boolean (true));
+			
+		} else {
+			pila.push(new Boolean (false));
+		}
+		/*
 		int n = ((Integer) pila.pop()).intValue();
 		if (n == 0) {
 			pila.push(new Integer(1));
 		} else {
 			pila.push(new Integer(0));
 		}
+		
+		*/
 		PC = PC + 1;
 	}
 
@@ -759,6 +862,7 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 
+	//Esto debe hacer push con el objeto correcto. Si mete un nat o int, meterlo en un Integer, si char, meterlo en un string, si es real meterlo en un double. Si es booleano, meterlo en un Boolean.
 	public void read(String line) throws Exception {
 		if (traza)
 			System.out.println("read");

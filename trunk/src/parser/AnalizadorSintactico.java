@@ -95,7 +95,17 @@ public class AnalizadorSintactico {
 			}
 			else
 			{
-				valor=new Integer(0);
+				if (tipo.equals("tipoVarEntero")||tipo.equals("tipoVarNatural"))
+					valor=new Integer(0);
+				else
+					if (tipo.equals("tipoVarReal"))
+						valor=new Double(0.0);
+					else
+						if (tipo.equals("tipoVarBooleano"))
+							valor=new Boolean(false);
+						else
+							if (tipo.equals("tipoVarCaracter"))
+								valor="";//char
 			}
 			resultado=resultado+"Valor:"+valor+"\n";//nombre variable
 			infoTotal.addElement(valor);//valor
@@ -119,7 +129,7 @@ public class AnalizadorSintactico {
 				}
 			}
 		} else
-			salida+="¡No hay nada que compilar!\n";
+			salida+="Â¡No hay nada que compilar!\n";
 
 	}
 
@@ -402,7 +412,7 @@ public class AnalizadorSintactico {
 		int i = linea;
 		while (v.get(i).getTipoToken() != TToken.LC) {
 
-			// /////////////Instrucción de Tipo IN//////////////////////
+			// /////////////InstrucciÃ³n de Tipo IN//////////////////////
 			// /////////////InsR->in(ident); ///////////////////////////////
 			// /////////////////////////////////////////////////////////
 
@@ -430,13 +440,13 @@ public class AnalizadorSintactico {
 						}
 
 					} else {
-						error(v.get(i).getLinea(),"Identificador que no está en TS");
+						error(v.get(i).getLinea(),"Identificador que no estÃ¡ en TS");
 						errorCompilacion = true;
 						break;
 					}
 
 				} else {
-					error(v.get(i).getLinea(), "No es identificador válido");
+					error(v.get(i).getLinea(), "No es identificador vÃ¡lido");
 					errorCompilacion = true;
 					break;
 				}
@@ -461,7 +471,7 @@ public class AnalizadorSintactico {
 
 			}
 
-			// /////////////Instrucción de Tipo OUT//////////////////////
+			// /////////////InstrucciÃ³n de Tipo OUT//////////////////////
 			// /////////////InsW->out(exp); /////////////////////////////
 			// //////////////////////////////////////////////////////////
 			else if (v.get(i).getTipoToken() == TToken.salidaPantalla) {
@@ -474,7 +484,7 @@ public class AnalizadorSintactico {
 				}
 
 				// leo Exp
-				// creo aquí el arbol para poder leer otra instruccion
+				// creo aquÃ­ el arbol para poder leer otra instruccion
 				arbol = new ArbolBin();
 				i = procesaExpresion(v, i);
 
@@ -491,7 +501,7 @@ public class AnalizadorSintactico {
 				}
 
 			}
-			// /////////////Instrucción de Tipo Asig//////////////////////
+			// /////////////InstrucciÃ³n de Tipo Asig//////////////////////
 			// /////////////InstAsig->iden=Exp;///////////////////////////
 			// ///////////////////////////////////////////////////////////
 			else if (v.get(i).getTipoToken() == TToken.ident) {
@@ -508,7 +518,7 @@ public class AnalizadorSintactico {
 					}
 
 				} else {
-					error(v.get(i).getLinea(),"Identificador que no está en TS");
+					error(v.get(i).getLinea(),"Identificador que no estÃ¡ en TS");
 					errorCompilacion = true;
 					break;
 				}
@@ -521,11 +531,11 @@ public class AnalizadorSintactico {
 					break;
 				}
 				// leo Exp
-				// creo aquí el arbol para poder leer otra instruccion
+				// creo aquÃ­ el arbol para poder leer otra instruccion
 				arbol = new ArbolBin();
 				
 				Vector<Token> expParaConTextual=new Vector<Token>();
-				//aux=Contiene la expresión en sí mediante el metodo procesaExpParaContextuales
+				//aux=Contiene la expresiÃ³n en sÃ­ mediante el metodo procesaExpParaContextuales
 				expParaConTextual=procesaExpParaContextuales(v,i);
 				i = procesaExpresion(v, i);
 
@@ -544,7 +554,7 @@ public class AnalizadorSintactico {
 				}
 			}
 
-			// /////////////Instrucción de Tipo SWAP1///////////////////////
+			// /////////////InstrucciÃ³n de Tipo SWAP1///////////////////////
 			// /////////////Ins -> SWAP1();/////////////////////////////////
 			// /////////////////////////////////////////////////////////////
 			else if (v.get(i).getTipoToken() == TToken.swap1) {
@@ -573,7 +583,7 @@ public class AnalizadorSintactico {
 				}
 
 			}
-			// /////////////Instrucción de Tipo SWAP2////////////////////
+			// /////////////InstrucciÃ³n de Tipo SWAP2////////////////////
 			// /////////////Ins -> SWAP2();//////////////////////////////
 			// //////////////////////////////////////////////////////////
 			else if (v.get(i).getTipoToken() == TToken.swap2) {
@@ -602,11 +612,11 @@ public class AnalizadorSintactico {
 				}
 			}
 
-			// /////////////Instrucciones Inválidas//////////////////////
+			// /////////////Instrucciones InvÃ¡lidas//////////////////////
 			// //////////////////////////////////////////////////////////
 
 			else {
-				error(v.get(i).getLinea(), "No hay instrucciones válidas");
+				error(v.get(i).getLinea(), "No hay instrucciones vÃ¡lidas");
 				errorCompilacion = true;
 				break;
 			}
@@ -664,7 +674,7 @@ public class AnalizadorSintactico {
 			}
 		}
 		
-		// Si encontramos un ( ) nos situamos después de él.
+		// Si encontramos un ( ) nos situamos despuÃ©s de Ã©l.
 		if (expresion.size() > 0) {
 
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
@@ -676,16 +686,16 @@ public class AnalizadorSintactico {
 				}
 			}
 		} else {
-			error(v.get(i).getLinea(),"Después de la asignacion se espera un identificador o número");
+			error(v.get(i).getLinea(),"DespuÃ©s de la asignacion se espera un identificador o nÃºmero");
 			return -1;
 		}
 
-		// Si encontramos un nat,real,... o ident nos situamos después de él.
+		// Si encontramos un nat,real,... o ident nos situamos despuÃ©s de Ã©l.
 		if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 			if (!(TS.containsKey(expresion.get(indice).getLexema()))
 					&& (expresion.get(indice).getTipoToken() == TToken.ident)) { 
 				error(expresion.get(indice).getLinea(),
-						"Se intenta asignar un identificador que no está en TS");
+						"Se intenta asignar un identificador que no estÃ¡ en TS");
 				return -1;
 			} else {
 				indice++;
@@ -773,19 +783,19 @@ public class AnalizadorSintactico {
 		int referencia;
 		numVueltas++;
 		if (expresion.size() == 0 || numVueltas>=50) {
-			throw new Exception("La expresión de la asignación es incorrecta");
+			throw new Exception("La expresiÃ³n de la asignaciÃ³n es incorrecta");
 		}
 		int lineaActual = expresion.get(indice).getLinea();
 		
 
 		if (esPalReservada(expresion.get(indice).getTipoToken())){
 		
-			throw new Exception("No se puede utilizar aquí esta palabra reservada");
+			throw new Exception("No se puede utilizar aquÃ­ esta palabra reservada");
 
 		}
 		
 		if (expresion.size() == 1) {
-			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
+			// si el tamaÃ±o es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
 				
@@ -811,24 +821,24 @@ public class AnalizadorSintactico {
 		}
 		else {
 
-			if (expresion.size() == 2) { // No puede haber una expresion de dos elementos si el primero es un número
+			if (expresion.size() == 2) { // No puede haber una expresion de dos elementos si el primero es un nÃºmero
 				if ((expresion.get(indice).getTipoToken() == TToken.entero)
 						|| (expresion.get(indice).getTipoToken() == TToken.natural)
 						|| (expresion.get(indice).getTipoToken() == TToken.real))
 					throw new Exception("Error procesando el elemento");
 			}
 
-			// Si encontramos un ( ) nos situamos después de él.
+			// Si encontramos un ( ) nos situamos despuÃ©s de Ã©l.
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
 				indice = procesaExpParentesis(expresion, indice);
 			}
 
-			// Si encontramos un nat,real,... o ident nos situamos después de él.
+			// Si encontramos un nat,real,... o ident nos situamos despuÃ©s de Ã©l.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 				if (!(TS.containsKey(expresion.get(indice).getLexema()))
 						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
 					error(expresion.get(indice).getLinea(),
-							"Se intenta asignar un identificador que no está en TS");
+							"Se intenta asignar un identificador que no estÃ¡ en TS");
 					return null;
 				} else {
 					indice++;
@@ -927,12 +937,12 @@ public class AnalizadorSintactico {
 		int indice2 = 0;
 		int referencia;
 		if (expresion.size() == 0) {
-			throw new Exception("La expresión de la asignación es incorrecta");
+			throw new Exception("La expresiÃ³n de la asignaciÃ³n es incorrecta");
 		}
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
-			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
+			// si el tamaÃ±o es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
 				
@@ -959,19 +969,19 @@ public class AnalizadorSintactico {
 
 		 else {
 
-			// Si encontramos un ( ) nos situamos después de él.
+			// Si encontramos un ( ) nos situamos despuÃ©s de Ã©l.
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
 				indice = procesaExpParentesis(expresion, indice);
 				if (indice == -1) {
-					throw new Exception("La expresión de la asignación es incorrecta debido a los parentesis");
+					throw new Exception("La expresiÃ³n de la asignaciÃ³n es incorrecta debido a los parentesis");
 				}
 			}
 
-			// Si encontramos un nat,real,... o ident nos situamos después de él.
+			// Si encontramos un nat,real,... o ident nos situamos despuÃ©s de Ã©l.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 				if (!(TS.containsKey(expresion.get(indice).getLexema()))
 						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
-					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador que no está en TS");
+					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador que no estÃ¡ en TS");
 					return null;
 				} else {
 					indice++;
@@ -1071,12 +1081,12 @@ public class AnalizadorSintactico {
 		int indice2 = 0;
 		int referencia;
 		if (expresion.size() == 0) {
-			throw new Exception("La expresión de la asignación es incorrecta");
+			throw new Exception("La expresiÃ³n de la asignaciÃ³n es incorrecta");
 		}
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
-			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
+			// si el tamaÃ±o es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
 				
@@ -1103,21 +1113,21 @@ public class AnalizadorSintactico {
 
 		 else {
 
-			// Si encontramos un ( ) nos situamos después de él.
+			// Si encontramos un ( ) nos situamos despuÃ©s de Ã©l.
 			if (expresion.get(indice).getTipoToken() == TToken.PA) {
 				indice = procesaExpParentesis(expresion, indice);
 			}
 
 			if (indice == -1) {
 				throw new Exception(
-						"La expresión de la asignación es incorrecta debido a los parentesis");
+						"La expresiÃ³n de la asignaciÃ³n es incorrecta debido a los parentesis");
 			}
 
-			// Si encontramos un nat,real,... o ident nos situamos después de él.
+			// Si encontramos un nat,real,... o ident nos situamos despuÃ©s de Ã©l.
 			if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 				if (!(TS.containsKey(expresion.get(indice).getLexema()))
 						&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
-					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador que no está en TS");
+					error(expresion.get(indice).getLinea(),"Se intenta asignar un identificador que no estÃ¡ en TS");
 					return null;
 				} else {
 					indice++;
@@ -1220,12 +1230,12 @@ public class AnalizadorSintactico {
 		int referencia = 0;
 		Vector<Token> expresionSinParent = new Vector<Token>();
 		if (expresion.size() == 0) {
-			throw new Exception("La expresión de la asignación es incorrecta");
+			throw new Exception("La expresiÃ³n de la asignaciÃ³n es incorrecta");
 		}
 		int lineaActual = expresion.get(indice).getLinea();
 
 		if (expresion.size() == 1) {
-			// si el tamaño es solamente 1, es que tenemos o un numero o un identificador
+			// si el tamaÃ±o es solamente 1, es que tenemos o un numero o un identificador
 
 			if (procesaTipo(expresion, indice)) {
 				
@@ -1348,7 +1358,7 @@ public class AnalizadorSintactico {
 
 			}
 			
-			// Método que hara lo mismo que ProcesaExpresion pero devolviendo un
+			// MÃ©todo que hara lo mismo que ProcesaExpresion pero devolviendo un
 			// Nodo para construir el arbol
 		return raizaux;
 	}
@@ -1373,7 +1383,7 @@ public class AnalizadorSintactico {
 			i++;
 		}
 
-		// Si encontramos un ( ) nos situamos después de él.
+		// Si encontramos un ( ) nos situamos despuÃ©s de Ã©l.
 		if (expresion.get(indice).getTipoToken() == TToken.PA) {
 			indice = procesaExpParentesis(expresion, indice);
 			if (indice == -1) {
@@ -1382,12 +1392,12 @@ public class AnalizadorSintactico {
 			}
 		}
 
-		// Si encontramos un nat,real,... o ident nos situamos después de él.
+		// Si encontramos un nat,real,... o ident nos situamos despuÃ©s de Ã©l.
 		if ((indice < expresion.size()) && (procesaTipo(expresion, indice))) {
 			if (!(TS.containsKey(expresion.get(indice).getLexema()))
 					&& (expresion.get(indice).getTipoToken() == TToken.ident)) {
 				error(expresion.get(indice).getLinea(),
-						"Se intenta asignar un identificador que no está en TS");
+						"Se intenta asignar un identificador que no estÃ¡ en TS");
 				return null;
 			} else {
 				indice++;
@@ -1461,7 +1471,7 @@ public class AnalizadorSintactico {
 		return raiz;
 	}
 
-	// /////////////Procesa Paréntesis///////////////////////
+	// /////////////Procesa ParÃ©ntesis///////////////////////
 	// //////////////////////////////////////////////////////
 
 	private int procesaExpParentesis(Vector<Token> v, int i) {
@@ -1661,7 +1671,7 @@ public class AnalizadorSintactico {
 		return -1;
 	}
 
-	/*Método que devuelve true si es una palabra reservada que no se puede utilizar en el 
+	/*MÃ©todo que devuelve true si es una palabra reservada que no se puede utilizar en el 
 	 * cuerpo del programa*/
 	private boolean esPalReservada(TToken t){
 		
@@ -1758,7 +1768,7 @@ public class AnalizadorSintactico {
 					}
 				i++;
 				}
-			if(!encontrado){descripErrorContextual.add("Error en la linea "+linea+" Expresión sin operando de tipo0 asignada a booleano");}
+			if(!encontrado){descripErrorContextual.add("Error en la linea "+linea+" ExpresiÃ³n sin operando de tipo0 asignada a booleano");}
 			}
 	}
 	
