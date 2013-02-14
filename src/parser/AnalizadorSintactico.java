@@ -520,7 +520,7 @@ public class AnalizadorSintactico {
 					if (!TS.get(identificador).isConstante()) {
 						i++;
 					} else {
-						error(v.get(i).getLinea(),"ASIG sobre identificador que es una Constante");
+						error(v.get(i).getLinea(),"Instrucción de asignación sobre identificador que es una Constante");
 						errorCompilacion = true;
 						break;
 					}
