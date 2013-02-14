@@ -1,5 +1,6 @@
 package parser;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class AnalizadorSintactico {
 	private static String salida; 
 
 
-	public AnalizadorSintactico(String nombreFichero) {
+	public AnalizadorSintactico(File archivo) {
 
 		dirMemoria = new HashMap<Integer, String>(100);
 		TS = new HashMap<String, TablaInfo>(100);
@@ -41,7 +42,7 @@ public class AnalizadorSintactico {
 		posMemoLibre = 0;
 		scanner = new ALexico();
 		salida="";
-		salida+=scanner.scan(nombreFichero);
+		salida+=scanner.scan(archivo);
 		entrada = scanner.dameTokens();
 		descripErrorContextual = new Vector<String>();
 		numVueltas=0;
@@ -2163,7 +2164,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 	}
 
 	public void printTablaMemoria() {
-/*		salida +="*Detalle de la tabla de memoria\n";
+		salida +="*Detalle de la tabla de memoria\n";
 		salida +="-------------------------------\n";
 		salida += "\n";
 
@@ -2173,7 +2174,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 			salida +="Posicion " + e.getKey() + " : " + e.getValue()+"\n";
 		}
 
-		salida += "\n";*/
+		salida += "\n";
 	}
 
 	public boolean procesaTipoVariable(Vector<Token> v, int i) {
@@ -2346,7 +2347,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 	
 	// MAAAAAAIIIIIINNNNNN_____________________________
 
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 
 		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
 		AnalizadorSintactico sintetiza = new AnalizadorSintactico(nombreFichero);
@@ -2354,7 +2355,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 		sintetiza.printParser();
 		System.out.println(salida);
 
-	}
+	}*/
 
 
 }

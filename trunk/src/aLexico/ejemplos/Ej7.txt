@@ -1,0 +1,13 @@
+@ Programa de ejemplo
+program: ejemplo{
+      vars-consts{
+var integer cantidad;
+var float euros;
+var float centimos;
+var float pesetas;
+const float razon := 166.386;
+}
+instructions{
+}
+}
+

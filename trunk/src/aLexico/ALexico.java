@@ -509,14 +509,13 @@ public class ALexico {
 
 	}
 	
-	public void inicio(String nomFichero) throws Exception {
+	public void inicio(File f) throws Exception {
 		
 //			File appBase = new File("."); //current directory
 //			String path = appBase.getAbsolutePath();
 //			System.out.println(path);
-		File f = new File(nomFichero);
 		if (f.exists()){
-			bfr=new BufferedReader(new FileReader(nomFichero));
+			bfr=new BufferedReader(new FileReader(f));
 			bfr.read(buff);
 			carAntConsumido[0] = ' ';
 			contPrograma = 1;
@@ -784,18 +783,18 @@ public class ALexico {
 		this.tokensSalida = tokensSalida;
 	}
 
-	public String scan(String nombreFichero) {
+	public String scan(File archivo) {
 		
 		String salida;
 		
 		//Inicializamos y preparamos el fichero para su lectura. De hecho se lee el
 		//primer caracter del fichero de entrada
 		try {
-			inicio(nombreFichero);
+			inicio(archivo);
 			//Realizamos el escaneo del fichero
 			scan();
 			//Mostramos por pantalla los resultados
-			salida = "Fichero de entrada: " + nombreFichero+ "\n";
+			salida = "Fichero de entrada: " + archivo+ "\n";
 			salida +="Resultado\n";
 			salida +="---------\n";
 			if (!errorLex)
@@ -841,14 +840,14 @@ public class ALexico {
 	public Vector<Token> dameTokens(){
 		return tokensSalida;
 	}
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		
 		String nombreFichero = "src/aLexico/ejemplos/ejemplo2.txt";
 		ALexico scanner = new ALexico();
 		String salida=scanner.scan(nombreFichero);
 		System.out.println(salida);
 
-	}
+	}*/
 
 
 }
