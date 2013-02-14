@@ -152,7 +152,7 @@ public class ALexico {
 									}
 									else{
 										if (lex.equals("float"))
-											error("Operador de 'cast float' mal formado, o declaración incorrecta de tipo 'float'.");
+											error("Operador de 'cast float' mal formado o variable de tipo var o declaración incorrecta de tipo 'float'.");
 										else
 											error("Operador de 'cast " + lex + "' mal formado.");
 										tokensSalida.add(new Token());
@@ -301,7 +301,7 @@ public class ALexico {
 								if (tokensSalida.lastElement().getTipoToken() == TToken.negArit) {
 									tokensSalida.remove(tokensSalida.size() - 1);
 									tokensSalida.add(new Token(TToken.entero, "-"+lex, contPrograma));
-									cambiaEstado(est.e0);
+									iniciaScanner();
 									lex = "";
 									break;
 								}
@@ -329,9 +329,18 @@ public class ALexico {
 							break;
 						}
 						else {
-							realAux = Double.valueOf(lex).doubleValue();
-							tokensSalida.add(new Token(TToken.natural, "" + (int)realAux + "", contPrograma));
-							iniciaScanner();
+							if (tokensSalida.lastElement().getTipoToken() == TToken.negArit) {
+								tokensSalida.remove(tokensSalida.size() - 1);
+								tokensSalida.add(new Token(TToken.entero, "-"+lex, contPrograma));
+								iniciaScanner();
+								lex = "";
+								break;
+							}
+							else{
+								realAux = Double.valueOf(lex).doubleValue();
+								tokensSalida.add(new Token(TToken.natural, "" + (int)realAux + "", contPrograma));
+								iniciaScanner();
+							}
 						}
 						break;
 					 case e31:
@@ -362,9 +371,18 @@ public class ALexico {
 						else {
 							realAux = Double.valueOf(lex).doubleValue();
 							if (realAux <= Double.MAX_VALUE) {
-								tokensSalida.add(new Token(TToken.real, "" + lex + "", contPrograma));
-								iniciaScanner();
-								break;
+								if (tokensSalida.lastElement().getTipoToken() == TToken.negArit) {
+									tokensSalida.remove(tokensSalida.size() - 1);
+									tokensSalida.add(new Token(TToken.real, "-"+lex, contPrograma));
+									iniciaScanner();
+									lex = "";
+									break;
+								}
+								else{
+									tokensSalida.add(new Token(TToken.real, "" + lex + "", contPrograma));
+									iniciaScanner();
+									break;
+								}
 							}
 							else
 								error("Número demasiado grande.");
@@ -390,10 +408,19 @@ public class ALexico {
 						else {
 							 realAux = Double.valueOf(lex).doubleValue();
 							if (realAux <= Double.MAX_VALUE) {
-								tokensSalida.add(new Token(TToken.real, "" + lex + "", contPrograma));
-								iniciaScanner();
-								break;
-							}
+								if (tokensSalida.lastElement().getTipoToken() == TToken.negArit) {
+									tokensSalida.remove(tokensSalida.size() - 1);
+									tokensSalida.add(new Token(TToken.real, "-"+lex, contPrograma));
+									iniciaScanner();
+									lex = "";
+									break;
+								}
+								else{
+									tokensSalida.add(new Token(TToken.real, "" + lex + "", contPrograma));
+									iniciaScanner();
+									break;
+								}
+								}
 							else
 								 error("Número demasiado grande.");
 						}
@@ -414,9 +441,20 @@ public class ALexico {
 						else{
 							realAux = Double.valueOf(lex).doubleValue();
 							if (realAux <= Double.MAX_VALUE) {
-								tokensSalida.add(new Token(TToken.real, "" + realAux + "", contPrograma));
-								iniciaScanner();
-								break;
+								if (tokensSalida.lastElement().getTipoToken() == TToken.negArit) {
+									tokensSalida.remove(tokensSalida.size() - 1);
+									tokensSalida.add(new Token(TToken.real, "-"+lex, contPrograma));
+									iniciaScanner();
+									lex = "";
+									break;
+								}
+								else{
+									
+									tokensSalida.add(new Token(TToken.real, "" + realAux + "", contPrograma));
+									iniciaScanner();
+									break;
+									
+								}
 							}
 							else
 								error("Número demasiado grande.");
