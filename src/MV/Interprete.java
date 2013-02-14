@@ -143,7 +143,9 @@ public String imprimirMemoria()
 		i=i+1;
 	}
 	int len=datosParaInterprete.size()/5;
-	String res="";
+	String res="*Detalle de la tabla de memoria Final";
+	res=res+"\n";
+	res=res+"\n";
 	for(int j=0;j<len;j++)
 	{
 		res=res+"Nombre variable: "+datosParaInterprete.elementAt(j*5)+"|";//id
