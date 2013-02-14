@@ -538,7 +538,7 @@ public class AnalizadorSintactico {
 				
 				Vector<Token> expParaConTextual=new Vector<Token>();
 				//aux=Contiene la expresiÃ³n en sÃ­ mediante el metodo procesaExpParaContextuales
-				expParaConTextual=procesaExpParaContextuales(v,i);
+				int iaux=i;
 				i = procesaExpresion(v, i);
 
 				if (i != -1) {// ////Procesa Exp.///////
@@ -546,6 +546,7 @@ public class AnalizadorSintactico {
 					arbol.posorden(arbol.raiz, byteOut);
 					arbol.preorden(arbol.raiz, byteOutConTextual);
 					if (!errorCompilacion){
+					expParaConTextual=procesaExpParaContextuales(v,iaux);
 					procesaRestriccionesContextuales(TS.get(identificador).getTipo(),v.get(i).getLinea(),expParaConTextual,byteOutConTextual,arbol);
 						}
 					byteOut.add(new ByteCode(tByteCode.desapila_dir, aux2));
@@ -2164,7 +2165,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 	}
 
 	public void printTablaMemoria() {
-		salida +="*Detalle de la tabla de memoria\n";
+		salida +="*Detalle de la tabla de memoria inicial\n";
 		salida +="-------------------------------\n";
 		salida += "\n";
 
