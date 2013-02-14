@@ -6,11 +6,12 @@ program: ejemplo{
 		var float centimos;
 		var float pesetas;
 		var boolean correcto;
+		var character car1;
 		const character car := 'a';
 		const float razon := 166.386;
 }
 	instructions{
-		in(correcto);
+		in(car1);
 		cantidad = 10 + 10;
 		centimos = 10+11.1;
 		out(cantidad);
@@ -21,6 +22,7 @@ program: ejemplo{
 		out (pesetas);
 		correcto = false or true;
 		correcto = true > false;
+		euros= 1 << 3;
 		pesetas = 1000 % 50;
 	}
 }
