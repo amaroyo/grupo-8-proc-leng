@@ -442,7 +442,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 				if (convertirBinToDec(instr.elementAt(i+1))==0)//Si es natural o entero
 				{
 					System.out.println(convertirBinToDec(instr.elementAt(i+2)));
-					mw.apila(convertirBinToDec(instr.elementAt(i+2)));
+					mw.apila((int)convertirBinToDec(instr.elementAt(i+2)));
 				}
 				else
 					if (convertirBinToDec(instr.elementAt(i+1))==1)//Si es punto flotante simple
@@ -455,7 +455,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 						if (convertirBinToDec(instr.elementAt(i+1))==2)//Si es punto flotante doble
 						{
 							System.out.println(byteArrayToDoubleBE(instr.elementAt(i+2)));//Si es punto flotante doble
-							mw.apila(byteArrayToDoubleBE(instr.elementAt(i+2)));
+							mw.apila((double)byteArrayToDoubleBE(instr.elementAt(i+2)));
 						}
 						else
 							if (convertirBinToDec(instr.elementAt(i+1))==3)//Si es boolean
