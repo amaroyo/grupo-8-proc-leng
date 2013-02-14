@@ -27,8 +27,8 @@ public class Main extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextArea textArea;
-	private JTextField textField_1;
-	private JLabel lblIntroduzcaLaRuta_1;
+//	private JTextField textField_1;
+//	private JLabel lblIntroduzcaLaRuta_1;
 	
 	private AnalizadorSintactico analizadorSintactico;
 	private Interprete interprete;
@@ -61,7 +61,7 @@ public class Main extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JButton btnAnalizador = new JButton("Analizar");
+		JButton btnAnalizador = new JButton("Ejecutar");
 		btnAnalizador.setBounds(375, 46, 175, 43);
 		btnAnalizador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -71,9 +71,9 @@ public class Main extends JFrame {
 					analizadorSintactico.compilar();
 					generadorFichero=new GeneradorFichero(); 
 					
-					generadorFichero.generaFichero(textField_1.getText(), analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto
+					generadorFichero.generaFichero("binario.txt", analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto
 					Interprete inter= new Interprete();
-					inter.generar(textField_1.getText(), 0, analizadorSintactico.datosParaInterprete());
+					inter.generar("binario.txt", 0, analizadorSintactico.datosParaInterprete());
 					analizadorSintactico.printParser();
 					textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria());
 					
@@ -87,7 +87,7 @@ public class Main extends JFrame {
 		contentPane.setLayout(null);
 		contentPane.add(btnAnalizador);
 		
-		JButton btnEjecutar = new JButton("Ejecutar");//No se puede ejecutar solo con el binario porque los datos de la memoria no estan ahi, por lo que hay que analizar y ejutar al mismo tiempo. Este boton no creo que sirva
+/*		JButton btnEjecutar = new JButton("Ejecutar");//No se puede ejecutar solo con el binario porque los datos de la memoria no estan ahi, por lo que hay que analizar y ejutar al mismo tiempo. Este boton no creo que sirva
 		btnEjecutar.setBounds(375, 109, 175, 43);
 		btnEjecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -97,25 +97,25 @@ public class Main extends JFrame {
 				textArea.append(interprete.muestraPila());
 			}
 		});
-		contentPane.add(btnEjecutar);
+		contentPane.add(btnEjecutar);*/
 		
 		textField = new JTextField();
 		textField.setBounds(21, 52, 317, 28);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblIntroduzcaLaRuta = new JLabel("Ruta del archivo del programa a leer:");
+		JLabel lblIntroduzcaLaRuta = new JLabel("Ruta del archivo del programa:");
 		lblIntroduzcaLaRuta.setBounds(21, 24, 246, 16);
 		contentPane.add(lblIntroduzcaLaRuta);
 		
-		textField_1 = new JTextField();
+/*		textField_1 = new JTextField();
 		textField_1.setBounds(21, 127, 317, 28);
 		textField_1.setColumns(10);
-		contentPane.add(textField_1);
+		contentPane.add(textField_1);*/
 		
-		lblIntroduzcaLaRuta_1 = new JLabel("Ruta del archivo del c\u00F3digo compilado:");
+/*		lblIntroduzcaLaRuta_1 = new JLabel("Ruta del archivo del c\u00F3digo compilado:");
 		lblIntroduzcaLaRuta_1.setBounds(21, 99, 281, 16);
-		contentPane.add(lblIntroduzcaLaRuta_1);
+		contentPane.add(lblIntroduzcaLaRuta_1);*/
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(21, 185, 529, 304);
