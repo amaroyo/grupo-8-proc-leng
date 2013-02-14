@@ -79,7 +79,7 @@ public class Main extends JFrame {
 
 						    // prompt the user to enter their name
 						    JOptionPane.showMessageDialog(frame, "Error en compilación");
-						    analizadorSintactico.printParser();
+						    //analizadorSintactico.printParser();
 						    textArea.setText(analizadorSintactico.getSalida());
 						
 						} catch (Exception e2) {

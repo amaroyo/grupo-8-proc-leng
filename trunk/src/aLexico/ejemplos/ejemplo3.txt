@@ -12,7 +12,7 @@ program: ejemplo{
 	instructions{
 		in(correcto);
 		cantidad = 10 + 10;
-		centimos = euros - cantidad;
+		centimos = 10+11.1;
 		out(cantidad);
 		out ('.');
 		out (centimos);
@@ -20,7 +20,7 @@ program: ejemplo{
 		pesetas = euros / razon;
 		out (pesetas);
 		correcto = false or true;
-		correcto = not false;
-		pesetas =(float) 1000 % 50;
+		correcto = true > false;
+		pesetas = 1000 % 50;
 	}
 }
