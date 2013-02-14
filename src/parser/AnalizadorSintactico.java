@@ -2340,12 +2340,6 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 		String nombreFichero = "src/aLexico/ejemplos/ejemplo.txt";
 		AnalizadorSintactico sintetiza = new AnalizadorSintactico(nombreFichero);
 		sintetiza.compilar();
-		GeneradorFichero gen=new GeneradorFichero();
-		gen.generaFichero("binario10.txt", sintetiza.getByteOut());
-		Interprete inter= new Interprete();
-		inter.generar("binario10.txt", 0, sintetiza.datosParaInterprete());
-		System.out.println(inter.imprimirMemoria());
-		
 		sintetiza.printParser();
 		System.out.println(salida);
 

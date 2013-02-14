@@ -70,25 +70,29 @@ public class Main extends JFrame {
 				if (!(analizadorSintactico.getSalida().equals("El fichero no existe"))){
 					analizadorSintactico.compilar();
 					generadorFichero=new GeneradorFichero(); 
-					generadorFichero.generaFichero(textField_1.getText(), analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto 
+					
+					generadorFichero.generaFichero(textField_1.getText(), analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto
+					Interprete inter= new Interprete();
+					inter.generar(textField_1.getText(), 0, analizadorSintactico.datosParaInterprete());
 					analizadorSintactico.printParser();
-					textArea.setText(analizadorSintactico.getSalida());
+					textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria());
+					
 				}
 				else{
 					textArea.setText(analizadorSintactico.getSalida());
 				}
-				textArea.setText(analizadorSintactico.getSalida());
+				//textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria());
 			}
 		});
 		contentPane.setLayout(null);
 		contentPane.add(btnAnalizador);
 		
-		JButton btnEjecutar = new JButton("Ejecutar");
+		JButton btnEjecutar = new JButton("Ejecutar");//No se puede ejecutar solo con el binario porque los datos de la memoria no estan ahi, por lo que hay que analizar y ejutar al mismo tiempo. Este boton no creo que sirva
 		btnEjecutar.setBounds(375, 109, 175, 43);
 		btnEjecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				interprete = new Interprete();
-				interprete.generar(textField_1.getText(), 0);
+				interprete.generar(textField_1.getText(), 0,analizadorSintactico.datosParaInterprete());//no funciona porque analizadorSintactico es null y es necesario tener datos de la memoria
 				textArea.append(interprete.muestraMemoria());
 				textArea.append(interprete.muestraPila());
 			}
