@@ -43,9 +43,12 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 		if (valor!=null)
 		{
 			String[] arrayS=valor.split(":");
-			if (arrayS[0].equals("int")||arrayS[0].equals("nat"))
+			if (arrayS[0].equals("nat"))
 				memoria.addElement(new Integer(Integer.parseInt(arrayS[1])));
 			else
+				if (arrayS[0].equals("int"))
+					memoria.addElement(new Long(Integer.parseInt(arrayS[1])));
+				else
 				if (arrayS[0].equals("real"))
 					memoria.addElement(new Double(Double.parseDouble(arrayS[1])));
 				else
@@ -89,7 +92,7 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 					try {
 						fich.write(bytesToString(new byte[]{Operaciones.APILA}));//instruccion
 						fich.write(" ");
-						if ((byteOut.elementAt(i)).getTipoVar().equals("nat")||(byteOut.elementAt(i)).getTipoVar().equals("int"))
+						if ((byteOut.elementAt(i)).getTipoVar().equals("nat"))
 						{
 							fich.write(bytesToString(new byte[]{0x00}));//tipo nat o entero
 							fich.write(" ");
@@ -97,6 +100,14 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 							fich.write("\n");//salto linea
 						}
 						else
+							if ((byteOut.elementAt(i)).getTipoVar().equals("int"))
+							{
+								fich.write(bytesToString(new byte[]{0x01}));//tipo nat o entero
+								fich.write(" ");
+								fich.write(bytesToString(intToBytes(Integer.parseInt((byteOut.elementAt(i)).getDireccion()))));//valor nat o entero
+								fich.write("\n");//salto linea
+							}
+							else
 							if ((byteOut.elementAt(i)).getTipoVar().equals("real"))
 							{
 								fich.write(bytesToString(new byte[]{0x02}));// tipo double

@@ -392,6 +392,13 @@ public class InstruccionMW {
 		PC = PC + 1;
 	}
 	
+	public void apila(long n) {
+		if (traza)
+			System.out.println("apila");
+		ST = ST + 1;
+		pila.push(new Long(n));
+		PC = PC + 1;
+	}
 	public void apila(String n) {
 		if (traza)
 			System.out.println("apila");
@@ -451,26 +458,49 @@ public class InstruccionMW {
 						else
 							Mem.set(d, cima);
 					else
-						if (o instanceof String)
+						if ( o instanceof Long)//entero
 						{
-							if (cima.toString().length() > 1)
-							{
-								JFrame frame = new JFrame("Error de longitud caracter");
+							
+							if ( cima instanceof Long)
+								Mem.set(d, cima);
+							else
+								if ( cima instanceof Integer)
+									Mem.set(d, new Long (((Integer)cima).intValue()));
+								else
+								{
+									JFrame frame = new JFrame("Error de tipos");
 
-							    // prompt the user to enter their name
-							    JOptionPane.showMessageDialog(frame, "Caracter de mas de 1 longitud");
-								throw new Exception("Error de longitud caracter");
+								    // prompt the user to enter their name
+								    JOptionPane.showMessageDialog(frame, "No se puede asignar a una variable entera ese valor");
+									throw new Exception("Error de tipos");
+								}
+						}
+						else
+						if ( o instanceof Integer)//nat
+						{
+							
+							if( ( cima instanceof Integer) )
+							{
+								if ((((Integer)cima).intValue()) >-1)
+								{
+									JFrame frame = new JFrame("Error de Tipos");
+
+								    // prompt the user to enter their name
+								    JOptionPane.showMessageDialog(frame, "Valor Negativo no puede ser natural");
+									throw new Exception("Tipo de datos incompatibles");
+								}
+								else
+									Mem.set(d, cima);
 							}
 							else
 							{
-								Mem.set(d, cima.toString());
+								JFrame frame = new JFrame("Error de tipos");
+
+							    // prompt the user to enter their name
+							    JOptionPane.showMessageDialog(frame, "No se puede asignar a una variable natural ese valor");
+								throw new Exception("Error de tipos");
 							}
-						}
-						else if ( o instanceof Integer)
-						{
-							
-							if ( cima instanceof Integer)
-								Mem.set(d, cima);
+								
 						}
 						else
 							if (( o instanceof Double))
@@ -507,26 +537,49 @@ public class InstruccionMW {
 						}
 						else
 							Mem.set(d, cima);
-					else if (o instanceof String)
+					else
+						if ( o instanceof Long)//entero
 						{
-							if (cima.toString().length() > 1)
-							{
-								JFrame frame = new JFrame("Error de longitud caracter");
+							
+							if ( cima instanceof Long)
+								Mem.set(d, cima);
+							else
+								if ( cima instanceof Integer)
+									Mem.set(d, new Long (((Integer)cima).intValue()));
+								else
+								{
+									JFrame frame = new JFrame("Error de tipos");
 
-							    // prompt the user to enter their name
-							    JOptionPane.showMessageDialog(frame, "Caracter de mas de 1 longitud");
-								throw new Exception("Error de longitud caracter");
+								    // prompt the user to enter their name
+								    JOptionPane.showMessageDialog(frame, "No se puede asignar a un variable entera ese valor");
+									throw new Exception("Error de tipos");
+								}
+						}
+						else
+						if (( o instanceof Integer))
+						{
+							
+							if( ( cima instanceof Integer) ){
+								if (!((((Integer)cima).intValue()) >-1))
+								{
+									JFrame frame = new JFrame("Error de Tipos");
+
+								    // prompt the user to enter their name
+								    JOptionPane.showMessageDialog(frame, "Valor Negativo no puede ser natural");
+									throw new Exception("Tipo de datos incompatibles");
+								}
+								else
+								Mem.set(d, cima);
 							}
 							else
 							{
-								Mem.set(d, cima.toString());
+								JFrame frame = new JFrame("Error de tipos");
+
+							    // prompt the user to enter their name
+							    JOptionPane.showMessageDialog(frame, "No se puede asignar a un variable natural ese valor");
+								throw new Exception("Error de tipos");
 							}
-						}
-					else if (( o instanceof Integer))
-						{
-							
-							if ( cima instanceof Integer)
-								Mem.set(d, cima);
+								
 						}
 						else
 							if (( o instanceof Double))
