@@ -9,11 +9,10 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 
 public class InstruccionMW {
 
-	private JTextArea textArea;
+	
 	private Stack<Object> pila = new Stack<Object>();
 	private int PC = 0;
 	private int H = 0;
@@ -28,10 +27,9 @@ public class InstruccionMW {
 	private boolean haciendoMultInvertido = false;
 
 	
-	public InstruccionMW (Vector<Object> mem, JTextArea textArea) 
+	public InstruccionMW (Vector<Object> mem) 
 	{
 		Mem = mem;
-		this.textArea = textArea;
 	}
 
 	/**
@@ -682,6 +680,23 @@ public class InstruccionMW {
 			}
 		}
 		else{
+			if ((ob instanceof Boolean)&&(ob2 instanceof Boolean))  
+			{
+				boolean c1=((Boolean)ob).booleanValue();
+				boolean c2=((Boolean)ob2).booleanValue();
+				if (c1)
+				{ 
+					if (c2)
+						pila.push(new Boolean(false));
+					else
+						pila.push(new Boolean(true));
+				}
+				else
+						pila.push(new Boolean(false));
+					
+			}
+			else
+			{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 < c1) {
@@ -690,6 +705,7 @@ public class InstruccionMW {
 			} else {
 				pila.push(new Boolean(false));
 				//pila.push(new Integer(0));
+			}
 			}
 		}
 		ST = ST - 1;
@@ -730,6 +746,22 @@ public class InstruccionMW {
 			}
 		}
 		else{
+			if ((ob instanceof Boolean)&&(ob2 instanceof Boolean))  
+			{
+				boolean c1=((Boolean)ob).booleanValue();
+				boolean c2=((Boolean)ob2).booleanValue();
+				if (c1)
+				{ 
+						pila.push(new Boolean(true));
+				}
+				else
+					if (c2)
+						pila.push(new Boolean(false));
+					else
+						pila.push(new Boolean(true));
+			}
+			else
+			{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 <= c1) {
@@ -738,6 +770,7 @@ public class InstruccionMW {
 			} else {
 				pila.push(new Boolean(false));
 				//pila.push(new Integer(0));
+			}
 			}
 		}
 		ST = ST - 1;
@@ -845,6 +878,24 @@ public class InstruccionMW {
 			}
 		}
 		else{
+			
+			if ((ob instanceof Boolean)&&(ob2 instanceof Boolean))  
+			{
+				boolean c1=((Boolean)ob).booleanValue();
+				boolean c2=((Boolean)ob2).booleanValue();
+				if (c1)
+				{ 
+					if (c2)
+						pila.push(new Boolean(true));
+					else
+						pila.push(new Boolean(false));
+				}
+				else
+						pila.push(new Boolean(true));
+				
+			}
+			else
+			{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 >= c1) {
@@ -853,6 +904,7 @@ public class InstruccionMW {
 			} else {
 				pila.push(new Boolean(false));
 				//pila.push(new Integer(0));
+			}
 			}
 		}
 		ST = ST - 1;
@@ -893,6 +945,20 @@ public class InstruccionMW {
 			}
 		}
 		else{
+			
+			if ((ob instanceof Boolean)&&(ob2 instanceof Boolean))  
+			{
+				boolean c1=((Boolean)ob).booleanValue();
+				boolean c2=((Boolean)ob2).booleanValue();
+				if (c1==c2)
+				{ 
+						pila.push(new Boolean(true));
+				}
+				else
+						pila.push(new Boolean(false));
+			}
+			else
+			{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 == c1) {
@@ -901,6 +967,7 @@ public class InstruccionMW {
 			} else {
 				pila.push(new Boolean(false));
 				//pila.push(new Integer(0));
+			}
 			}
 		}
 		ST = ST - 1;
@@ -941,6 +1008,21 @@ public class InstruccionMW {
 			}
 		}
 		else{
+			
+			if ((ob instanceof Boolean)&&(ob2 instanceof Boolean))  
+			{
+				boolean c1=((Boolean)ob).booleanValue();
+				boolean c2=((Boolean)ob2).booleanValue();
+				if (c1==c2)
+				{ 
+						pila.push(new Boolean(false));
+				}
+				else
+						pila.push(new Boolean(true));
+					
+			}
+			else
+			{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 != c1) {
@@ -949,6 +1031,7 @@ public class InstruccionMW {
 			} else {
 				pila.push(new Boolean(false));
 				//pila.push(new Integer(0));
+			}
 			}
 		}
 		ST = ST - 1;
@@ -1034,8 +1117,7 @@ public class InstruccionMW {
 		Object ob = pila.pop();
 		System.out.println(ob.toString());
 		
-		textArea.setText(textArea.getText() + "\n" + "SALIDA DEL PROGRAMA :" + ob.toString() + "\n");
-		/*JDialog jd = new JDialog();
+		JDialog jd = new JDialog();
 		jd.setBounds(200, 400, 100, 80);
 		jd.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		jd.setTitle("OUT");
@@ -1045,7 +1127,7 @@ public class InstruccionMW {
 		lblOut.setBounds(10, 5, 30, 20);
 		jd.add(lblOut);
 		
-		jd.setVisible(true);*/
+		jd.setVisible(true);
 		
 		ST--;
 		PC++;
@@ -1224,11 +1306,6 @@ public class InstruccionMW {
 		// System.out.println("muestraPila");
 		Stack<Object> aux = new Stack<Object>();
 		String pilas = "El contenido de la pila es: \n";
-		if (pila.isEmpty())
-		{
-			pilas = pilas.concat("Vac’a \n");
-		}
-		
 		while (!pila.isEmpty()) {
 			Object n = pila.pop();
 			pilas = pilas.concat(n.toString());
@@ -1239,9 +1316,6 @@ public class InstruccionMW {
 			Object n = aux.pop();
 			pila.push(n);
 		}
-		
-		pilas = pilas.concat("\n");
-		
 		return pilas;
 	}
 }
