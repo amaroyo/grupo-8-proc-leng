@@ -1,9 +1,12 @@
 @ Programa de ejemplo;
 program: ejemplo{
 	vars-consts{
-		var float pesetas;
+		var natural pesetas;
+		var boolean gas;
+		var character dime;
 	}
 	instructions{
-		pesetas=((3<5)>(7*2));
+		pesetas= (3+5)*(7.44);
+	
 }
 }

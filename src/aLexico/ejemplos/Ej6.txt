@@ -1,0 +1,23 @@
+@ Programa de ejemplo
+program: ejemplo{
+@parte de declaraciones
+      vars-consts{
+var integer cantidad;
+var float euros;
+var float centimos;
+var float pesetas;
+const float razon := 166.386;
+}@parte de instrucciones
+instructions{
+in(euros);
+cantidad = (int)euros;
+centimos = euros*cantidad;
+out(cantidad);
+out ('.');
+out (centimos);
+swap2();
+pesetas = euros / razon;
+out (pesetas);
+}
+}
+

@@ -8,7 +8,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -27,7 +29,7 @@ public class Main extends JFrame {
 	
 	private static final long serialVersionUID = 1;
 	private JPanel contentPane;
-	private JTextField textField;
+//	private JTextField textField;
 	private JTextArea textArea;
 //	private JTextField textField_1;
 //	private JLabel lblIntroduzcaLaRuta_1;
@@ -35,6 +37,11 @@ public class Main extends JFrame {
 	private AnalizadorSintactico analizadorSintactico;
 	private Interprete interprete;
 	private GeneradorFichero generadorFichero;
+	private File archivo;
+	private JLabel lblIntroduzcaLaRuta;
+	private JButton btnAnalizador;
+	private JButton btnTraza;
+
 
 
 	/**
@@ -63,22 +70,50 @@ public class Main extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JButton btnAnalizador = new JButton("Ejecutar");
-		btnAnalizador.setBounds(375, 46, 175, 43);
+		JButton btnCargar = new JButton("Cargar archivo");
+		btnCargar.setBounds(375, 46, 175, 43);
+		btnCargar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//String rutaArchivo = textField.getText();
+				JFileChooser chooser = new JFileChooser();
+				chooser.setApproveButtonText("Abrir TxT");
+				chooser.addChoosableFileFilter(new TxTFilter());
+				if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					archivo=chooser.getSelectedFile();
+					contentPane.validate();
+					if (archivo!=null){
+						lblIntroduzcaLaRuta.setText("Archivo cargado");
+						contentPane.add(btnAnalizador);
+						contentPane.add(btnTraza);
+						//btnAnalizador.setVisible(true);
+						contentPane.validate();
+						contentPane.updateUI();
+
+					}
+					
+					}
+				
+			}
+		});
+		contentPane.setLayout(null);
+		contentPane.add(btnCargar);
+		
+		btnAnalizador = new JButton("Analizar");
+		btnAnalizador.setBounds(375, 90, 175, 43);
 		btnAnalizador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String rutaArchivo = textField.getText();
-				analizadorSintactico = new AnalizadorSintactico(rutaArchivo);
+				contentPane.validate();
+				analizadorSintactico = new AnalizadorSintactico(archivo);
 				if (!(analizadorSintactico.getSalida().equals("El fichero no existe"))){
 					
 					if (analizadorSintactico.compilar())
 					{
 						try {
 						    // a jframe here isn't strictly necessary, but it makes the example a little more real
-						    JFrame frame = new JFrame("Error de Compilación");
+						    JFrame frame = new JFrame("Error de Compilaciï¿½n");
 
 						    // prompt the user to enter their name
-						    JOptionPane.showMessageDialog(frame, "Error en compilación");
+						    JOptionPane.showMessageDialog(frame, "Error en compilaciï¿½n");
 						    //analizadorSintactico.printParser();
 						    textArea.setText(analizadorSintactico.getSalida());
 						
@@ -122,7 +157,17 @@ public class Main extends JFrame {
 			}
 		});
 		contentPane.setLayout(null);
-		contentPane.add(btnAnalizador);
+		
+		btnTraza = new JButton("Paso a paso");
+		btnTraza.setBounds(375, 135, 175, 43);
+		btnTraza.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					//AquÃ­ lo que haga el boton traza
+				}
+		});
+		contentPane.setLayout(null);
+		
+		//contentPane.add(btnAnalizador);
 		
 /*		JButton btnEjecutar = new JButton("Ejecutar");//No se puede ejecutar solo con el binario porque los datos de la memoria no estan ahi, por lo que hay que analizar y ejutar al mismo tiempo. Este boton no creo que sirva
 		btnEjecutar.setBounds(375, 109, 175, 43);
@@ -136,12 +181,12 @@ public class Main extends JFrame {
 		});
 		contentPane.add(btnEjecutar);*/
 		
-		textField = new JTextField();
+/*		textField = new JTextField();
 		textField.setBounds(21, 52, 317, 28);
 		contentPane.add(textField);
-		textField.setColumns(10);
+		textField.setColumns(10);*/
 		
-		JLabel lblIntroduzcaLaRuta = new JLabel("Ruta del archivo del programa:");
+		lblIntroduzcaLaRuta = new JLabel("Carga un programa:");
 		lblIntroduzcaLaRuta.setBounds(21, 24, 246, 16);
 		contentPane.add(lblIntroduzcaLaRuta);
 		

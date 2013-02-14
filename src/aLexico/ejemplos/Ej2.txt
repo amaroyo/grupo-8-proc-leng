@@ -1,0 +1,13 @@
+@ Programa de ejemplo
+program: ejemplo    {
+var-consts{
+var integer cantidad;
+var float euros;
+var float centimos;
+}
+instructions{
+in(euros);
+cantidad = (int)euros;
+centimos = euros*cantidad;
+}
+}

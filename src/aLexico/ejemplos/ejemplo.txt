@@ -1,26 +1,22 @@
 @ Programa de ejemplo;
 program: ejemplo{
 	vars-consts{
-		var integer cantidad;
+		var float cantidad;
 		var float euros;
-		var float centimos;
-		var float pesetas;
+		var character centimos;
+		var natural pesetas;
 		var boolean correcto;
 		const character car := 'a';
 		const float razon := 166.386;
 }
 	instructions{
-		in(euros);
-		cantidad = (int)euros;
-		centimos = euros - cantidad;
-		out(cantidad);
-		out ('.');
-		out (centimos);
-		swap2();
-		pesetas = euros / razon;
-		out (pesetas);
-		correcto = false or true;
-		correcto = not false;
-		pesetas = 1000 % 50;
+		@pesetas=183;
+		@in(centimos);
+		@cantidad = (int)euros;
+		@correcto = not false;
+		euros=1<<1;
+		@correcto=true<true;
+		@out (pesetas);
+		@out (correcto);
 	}
 }
