@@ -480,7 +480,16 @@ public class InstruccionMW {
 					Object o=Mem.elementAt(d);
 					Object cima=pila.pop();
 					if (( cima instanceof String)&&( o instanceof String))
-						Mem.set(d, cima);
+						if (((String)cima).length()>1)
+						{
+							JFrame frame = new JFrame("Error de longitud caracter");
+
+						    // prompt the user to enter their name
+						    JOptionPane.showMessageDialog(frame, "Caracter de mas de 1 longitud");
+							throw new Exception("Error de longitud caracter");
+						}
+						else
+							Mem.set(d, cima);
 					else
 						if (( o instanceof Integer))
 						{
@@ -972,16 +981,15 @@ public class InstruccionMW {
 			catch (Exception exDouble)
 			{
 				//es un boolean
-				try{
+				
 					if (line.toLowerCase().equals("true"))
 						pila.push (new Boolean(true));
-					if (line.toLowerCase().equals("false"))
-						pila.push (new Boolean(false));
-				}
-				catch (Exception exBoolean){
-					//es un string
-					pila.push (line);	
-				}
+					else
+						if (line.toLowerCase().equals("false"))
+							pila.push (new Boolean(false));
+						else
+							pila.push (line);
+				
 				
 			}
 		}
