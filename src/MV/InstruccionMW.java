@@ -625,27 +625,33 @@ public class InstruccionMW {
 			String c1 = (String) ob;
 			String c2 = (String) ob2;
 			if (c2.compareTo(c1) < 0) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else if (esReal(ob.toString()) || esReal(ob2.toString())){
 			double c1 = (new Double(ob.toString())).doubleValue();
 			double c2 = (new Double(ob2.toString())).doubleValue();
 			if (c2 < c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 < c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		ST = ST - 1;
@@ -667,27 +673,33 @@ public class InstruccionMW {
 			String c1 = (String) ob;
 			String c2 = (String) ob2;
 			if (c2.compareTo(c1) <= 0) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else if (esReal(ob.toString()) || esReal(ob2.toString())){
 			double c1 = (new Double(ob.toString())).doubleValue();
 			double c2 = (new Double(ob2.toString())).doubleValue();
 			if (c2 <= c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 <= c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		ST = ST - 1;
@@ -709,27 +721,33 @@ public class InstruccionMW {
 			String c1 = (String) ob;
 			String c2 = (String) ob2;
 			if (c2.compareTo(c1) > 0) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else if (esReal(ob.toString()) || esReal(ob2.toString())){
 			double c1 = (new Double(ob.toString())).doubleValue();
 			double c2 = (new Double(ob2.toString())).doubleValue();
 			if (c2 > c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 > c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		ST = ST - 1;
@@ -751,27 +769,33 @@ public class InstruccionMW {
 			String c1 = (String) ob;
 			String c2 = (String) ob2;
 			if (c2.compareTo(c1) >= 0) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else if (esReal(ob.toString()) || esReal(ob2.toString())){
 			double c1 = (new Double(ob.toString())).doubleValue();
 			double c2 = (new Double(ob2.toString())).doubleValue();
 			if (c2 >= c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 >= c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		ST = ST - 1;
@@ -793,27 +817,33 @@ public class InstruccionMW {
 			String c1 = (String) ob;
 			String c2 = (String) ob2;
 			if (c2.compareTo(c1) == 0) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else if (esReal(ob.toString()) || esReal(ob2.toString())){
 			double c1 = (new Double(ob.toString())).doubleValue();
 			double c2 = (new Double(ob2.toString())).doubleValue();
 			if (c2 == c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 == c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		ST = ST - 1;
@@ -835,27 +865,33 @@ public class InstruccionMW {
 			String c1 = (String) ob;
 			String c2 = (String) ob2;
 			if (c2.compareTo(c1) != 0) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else if (esReal(ob.toString()) || esReal(ob2.toString())){
 			double c1 = (new Double(ob.toString())).doubleValue();
 			double c2 = (new Double(ob2.toString())).doubleValue();
 			if (c2 != c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		else{
 			int c1 = ((Integer) ob).intValue();
 			int c2 = ((Integer) ob2).intValue();
 			if (c2 != c1) {
-				pila.push(new Integer(1));
+				pila.push(new Boolean(true));
+				//pila.push(new Integer(1));
 			} else {
-				pila.push(new Integer(0));
+				pila.push(new Boolean(false));
+				//pila.push(new Integer(0));
 			}
 		}
 		ST = ST - 1;
