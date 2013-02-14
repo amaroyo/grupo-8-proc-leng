@@ -2152,7 +2152,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 	}
 
 	public void printTablaMemoria() {
-		salida +="*Detalle de la tabla de memoria\n";
+/*		salida +="*Detalle de la tabla de memoria\n";
 		salida +="-------------------------------\n";
 		salida += "\n";
 
@@ -2162,7 +2162,7 @@ private String procesaRestriccionesContxRecursiva(Nodo nodo, int linea) {
 			salida +="Posicion " + e.getKey() + " : " + e.getValue()+"\n";
 		}
 
-		salida += "\n";
+		salida += "\n";*/
 	}
 
 	public boolean procesaTipoVariable(Vector<Token> v, int i) {
