@@ -438,13 +438,31 @@ public class InstruccionMW {
 					Object o=Mem.elementAt(d);
 					Object cima=pila.pop();
 					if (( cima instanceof String)&&( o instanceof String))
-						Mem.set(d, cima);
-					else
-						if (( cima instanceof Integer)&&( o instanceof Integer))
-							Mem.set(d, cima);
+						if (((String)cima).length()>1)
+						{
+							JFrame frame = new JFrame("Error de longitud caracter");
+
+						    // prompt the user to enter their name
+						    JOptionPane.showMessageDialog(frame, "Caracter de mas de 1 longitud");
+							throw new Exception("Error de longitud caracter");
+						}
 						else
-							if (( cima instanceof Double)&&( o instanceof Double))
+							Mem.set(d, cima);
+					else
+						if ( o instanceof Integer)
+						{
+							
+							if ( cima instanceof Integer)
 								Mem.set(d, cima);
+						}
+						else
+							if (( o instanceof Double))
+							{
+								if ( cima instanceof Integer)
+									Mem.set(d,new Double(((Integer) cima).intValue()));
+								if ( cima instanceof Double)
+									Mem.set(d, cima);
+							}
 							else
 								if (( cima instanceof Boolean)&&( o instanceof Boolean))
 									Mem.set(d, cima);
@@ -464,11 +482,20 @@ public class InstruccionMW {
 					if (( cima instanceof String)&&( o instanceof String))
 						Mem.set(d, cima);
 					else
-						if (( cima instanceof Integer)&&( o instanceof Integer))
-							Mem.set(d, cima);
-						else
-							if (( cima instanceof Double)&&( o instanceof Double))
+						if (( o instanceof Integer))
+						{
+							
+							if ( cima instanceof Integer)
 								Mem.set(d, cima);
+						}
+						else
+							if (( o instanceof Double))
+							{
+								if ( cima instanceof Integer)
+									Mem.set(d,new Double(((Integer) cima).intValue()));
+								if ( cima instanceof Double)
+									Mem.set(d, cima);
+							}
 							else
 								if (( cima instanceof Boolean)&&( o instanceof Boolean))
 									Mem.set(d, cima);
@@ -739,15 +766,34 @@ public class InstruccionMW {
 				//pila.push(new Integer(0));
 			}
 		}
-		else{
-			int c1 = ((Integer) ob).intValue();
-			int c2 = ((Integer) ob2).intValue();
-			if (c2 > c1) {
-				pila.push(new Boolean(true));
-				//pila.push(new Integer(1));
-			} else {
-				pila.push(new Boolean(false));
-				//pila.push(new Integer(0));
+		else
+		{
+
+			if ((ob instanceof Boolean)&&(ob2 instanceof Boolean))  
+			{
+				boolean c1=((Boolean)ob).booleanValue();
+				boolean c2=((Boolean)ob2).booleanValue();
+				if (c1)
+				{ 
+						pila.push(new Boolean(false));
+				}
+				else
+					if (c2)
+						pila.push(new Boolean(true));
+					else
+						pila.push(new Boolean(false));
+			}
+			else
+			{
+				int c1 = ((Integer) ob).intValue();
+				int c2 = ((Integer) ob2).intValue();
+				if (c2 > c1) {
+					pila.push(new Boolean(true));
+					//pila.push(new Integer(1));
+				} else {
+					pila.push(new Boolean(false));
+					//pila.push(new Integer(0));
+				}
 			}
 		}
 		ST = ST - 1;
