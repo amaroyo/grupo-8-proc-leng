@@ -1691,7 +1691,7 @@ public class AnalizadorSintactico {
 		procesaRestriccionesContextualesExpresion(a,byteOutConTextual2,linea);
 		if(tipo.equals("tipoVarNatural")){
 			while(i<v.size()){
-				if(procesaOperacionCero(v.get(i).getTipoToken())){
+				if(procesaOperacionCero(v.get(i).getTipoToken())||(v.get(i).getTipoToken()==TToken.oLogica)||(v.get(i).getTipoToken()==TToken.yLogica)||(v.get(i).getTipoToken()==TToken.negLogica)){
 					descripErrorContextual.add("Error en la linea "+linea+" Operador de tipo0 Asignado a natural");
 					i++;
 				}
@@ -1708,7 +1708,7 @@ public class AnalizadorSintactico {
 		}
 		else if(tipo.equals("tipoVarReal")){
 			while(i<v.size()){
-				if(procesaOperacionCero(v.get(i).getTipoToken())){
+				if(procesaOperacionCero(v.get(i).getTipoToken())||(v.get(i).getTipoToken()==TToken.oLogica)||(v.get(i).getTipoToken()==TToken.yLogica)||(v.get(i).getTipoToken()==TToken.negLogica)){
 					descripErrorContextual.add("Error en la linea "+linea+" Operador de tipo0 Asignado a real");
 					i++;
 					}
@@ -1725,7 +1725,7 @@ public class AnalizadorSintactico {
 			}
 		else if(tipo.equals("tipoVarEntero")){
 			while(i<v.size()){
-				if(procesaOperacionCero(v.get(i).getTipoToken())){
+				if(procesaOperacionCero(v.get(i).getTipoToken())||(v.get(i).getTipoToken()==TToken.oLogica)||(v.get(i).getTipoToken()==TToken.yLogica)||(v.get(i).getTipoToken()==TToken.negLogica)){
 					descripErrorContextual.add("Error en la linea "+linea+" Operador de tipo0 Asignado a entero");
 					i++;
 					}
