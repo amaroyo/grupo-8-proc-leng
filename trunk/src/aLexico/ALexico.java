@@ -298,9 +298,18 @@ public class ALexico {
 						else {
 							realAux = Double.valueOf(lex).doubleValue();
 							if (realAux <= Integer.MAX_VALUE) {
-								tokensSalida.add(new Token(TToken.natural, "" + (int)realAux + "", contPrograma));
-								iniciaScanner();
-								break;
+								if (tokensSalida.lastElement().getTipoToken() == TToken.negArit) {
+									tokensSalida.remove(tokensSalida.size() - 1);
+									tokensSalida.add(new Token(TToken.entero, "-"+lex, contPrograma));
+									cambiaEstado(est.e0);
+									lex = "";
+									break;
+								}
+								else{
+									tokensSalida.add(new Token(TToken.natural, "" + (int)realAux + "", contPrograma));
+									iniciaScanner();
+									break;
+								}
 							}
 							if (realAux <= Double.MAX_VALUE) {
 								tokensSalida.add(new Token(TToken.real, "" + realAux + "", contPrograma));
