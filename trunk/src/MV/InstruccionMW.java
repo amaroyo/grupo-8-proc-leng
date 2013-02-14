@@ -906,6 +906,32 @@ public class InstruccionMW {
 		BufferedReader in = new BufferedReader(converter);
 		String line = in.readLine();*/
 		
+		//
+		try
+		{
+			//es un int
+			int valor = (new Integer(line)).intValue();
+			pila.push(new Integer(valor));
+			
+		}
+		catch (Exception exInt )
+		{
+			try
+			{
+				//
+				//es un double
+				double valor = (new Double(line)).doubleValue();
+				pila.push(new Double(valor));	
+			}
+			catch (Exception exDouble)
+			{
+				//es un string
+				pila.push (line);
+			}
+		}
+		//
+		
+		/*
 		try
 		{
 			//es un double
@@ -926,6 +952,7 @@ public class InstruccionMW {
 				pila.push (line);
 			}
 		}
+		*/
 		
 		ST++;
 		PC++;
