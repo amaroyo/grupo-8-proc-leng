@@ -46,6 +46,7 @@ public class Main extends JFrame {
 
 	public void accionEjecutarEnModoTraza(int modoTraza)
 	{
+		textArea.setText("");
 		//Si modoTraza = 1, se ejecutar‡ el modoTraza
 		contentPane.validate();
 		analizadorSintactico = new AnalizadorSintactico(archivo);
