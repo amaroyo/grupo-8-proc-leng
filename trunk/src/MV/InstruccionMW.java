@@ -451,7 +451,22 @@ public class InstruccionMW {
 						else
 							Mem.set(d, cima);
 					else
-						if ( o instanceof Integer)
+						if (o instanceof String)
+						{
+							if (cima.toString().length() > 1)
+							{
+								JFrame frame = new JFrame("Error de longitud caracter");
+
+							    // prompt the user to enter their name
+							    JOptionPane.showMessageDialog(frame, "Caracter de mas de 1 longitud");
+								throw new Exception("Error de longitud caracter");
+							}
+							else
+							{
+								Mem.set(d, cima.toString());
+							}
+						}
+						else if ( o instanceof Integer)
 						{
 							
 							if ( cima instanceof Integer)
@@ -492,8 +507,22 @@ public class InstruccionMW {
 						}
 						else
 							Mem.set(d, cima);
-					else
-						if (( o instanceof Integer))
+					else if (o instanceof String)
+						{
+							if (cima.toString().length() > 1)
+							{
+								JFrame frame = new JFrame("Error de longitud caracter");
+
+							    // prompt the user to enter their name
+							    JOptionPane.showMessageDialog(frame, "Caracter de mas de 1 longitud");
+								throw new Exception("Error de longitud caracter");
+							}
+							else
+							{
+								Mem.set(d, cima.toString());
+							}
+						}
+					else if (( o instanceof Integer))
 						{
 							
 							if ( cima instanceof Integer)
