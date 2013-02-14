@@ -80,9 +80,12 @@ public class AnalizadorSintactico {
 			if (valor!=null && (!valor.equals("null")))
 			{
 				//String[] arrayS=valor.split(":");
-				if (tipo.equals("tipoVarEntero")||tipo.equals("tipoVarNatural"))
+				if (tipo.equals("tipoVarNatural"))
 					valor=new Integer(Integer.parseInt((String) valor));
 				else
+					if (tipo.equals("tipoVarEntero"))
+						valor=new Long(Integer.parseInt((String) valor));
+					else
 					if (tipo.equals("tipoVarReal"))
 						valor=new Double(Double.parseDouble((String) valor));
 					else
@@ -96,9 +99,12 @@ public class AnalizadorSintactico {
 			}
 			else
 			{
-				if (tipo.equals("tipoVarEntero")||tipo.equals("tipoVarNatural"))
+				if (tipo.equals("tipoVarNatural"))
 					valor=new Integer(0);
 				else
+					if (tipo.equals("tipoVarEntero"))
+						valor=new Long(0);
+					else
 					if (tipo.equals("tipoVarReal"))
 						valor=new Double(0.0);
 					else
