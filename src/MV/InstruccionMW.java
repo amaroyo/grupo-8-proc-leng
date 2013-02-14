@@ -9,10 +9,11 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 public class InstruccionMW {
 
-	
+	private JTextArea textArea;
 	private Stack<Object> pila = new Stack<Object>();
 	private int PC = 0;
 	private int H = 0;
@@ -27,9 +28,10 @@ public class InstruccionMW {
 	private boolean haciendoMultInvertido = false;
 
 	
-	public InstruccionMW (Vector<Object> mem) 
+	public InstruccionMW (Vector<Object> mem, JTextArea textArea) 
 	{
 		Mem = mem;
+		this.textArea = textArea;
 	}
 
 	/**
@@ -1032,7 +1034,8 @@ public class InstruccionMW {
 		Object ob = pila.pop();
 		System.out.println(ob.toString());
 		
-		JDialog jd = new JDialog();
+		textArea.setText(textArea.getText() + "\n" + "SALIDA DEL PROGRAMA :" + ob.toString() + "\n");
+		/*JDialog jd = new JDialog();
 		jd.setBounds(200, 400, 100, 80);
 		jd.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		jd.setTitle("OUT");
@@ -1042,7 +1045,7 @@ public class InstruccionMW {
 		lblOut.setBounds(10, 5, 30, 20);
 		jd.add(lblOut);
 		
-		jd.setVisible(true);
+		jd.setVisible(true);*/
 		
 		ST--;
 		PC++;
@@ -1221,6 +1224,11 @@ public class InstruccionMW {
 		// System.out.println("muestraPila");
 		Stack<Object> aux = new Stack<Object>();
 		String pilas = "El contenido de la pila es: \n";
+		if (pila.isEmpty())
+		{
+			pilas = pilas.concat("Vac’a \n");
+		}
+		
 		while (!pila.isEmpty()) {
 			Object n = pila.pop();
 			pilas = pilas.concat(n.toString());
@@ -1231,6 +1239,9 @@ public class InstruccionMW {
 			Object n = aux.pop();
 			pila.push(n);
 		}
+		
+		pilas = pilas.concat("\n");
+		
 		return pilas;
 	}
 }

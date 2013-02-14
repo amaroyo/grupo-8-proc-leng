@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import parser.ByteCode;
 import parser.tByteCode;
@@ -30,12 +31,16 @@ public Interprete()
 
 
 private Vector <Object> datosParaInterprete;
-public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1) throws Exception 
+private JTextArea textArea;
+
+public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1, JTextArea textArea) throws Exception 
 {
 	boolean error=false;
 	instr=new Vector<byte[]>();
 	
 	datosParaInterprete=datosParaInterprete1;
+	this.textArea = textArea;
+	
 	/** Para probar la memoria(nos lo tiene que pasar)**/
 	/*
 	GeneradorFichero it=new GeneradorFichero();
@@ -66,7 +71,7 @@ public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1) t
 	
 	
 	/**fin prueba*/
-	mw=new InstruccionMW(memoria);
+	mw=new InstruccionMW(memoria, textArea);
 	File archivo = null;
 	FileReader fr= null;
 	BufferedReader br = null;
@@ -99,7 +104,7 @@ public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1) t
 		//System.out.println("Numero :"+convertirBinToDec(new byte[]{(byte) 0x8A,(byte) 0x6C}));
 		//System.out.println("Numero float:"+byteArrayToFloatBE(new byte[]{(byte) 0xC2,(byte) 0xED,0x40,0x00}));
 		//System.out.println("Numero double:"+byteArrayToDoubleBE(new byte[]{(byte) 0x7f,(byte) 0xef,(byte)0xFF,(byte)0x00,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF}));
-		imprimirInstr(instr,datosParaInterprete);
+		imprimirInstr(instr,datosParaInterprete,modo);
 		
 		
 
@@ -161,15 +166,25 @@ public String imprimirMemoria()
 	
 }
 
-private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exception 
+private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem, int modoTraza) throws Exception 
 {
 	int i=0;
 	while (i<v.size())
 	{
+		if (modoTraza == 1)
+		{
+		   JFrame frame = new JFrame("Paso a paso");
+		   JOptionPane.showMessageDialog(frame, "Pulse para seguir");
+		   
+		   textArea.append("*************PASO A PASO************* \n");
+		}
+		
+		
 		byte [] array=(byte[])(v.elementAt(i));
 		switch (array[0]) {
 			case Operaciones.MENOR:
 			{
+				if (modoTraza == 1) textArea.append("MENOR \n");
 				System.out.println("MENOR");
 				try {
 					mw.menor();
@@ -182,6 +197,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.MAYOR:
 			{
+				if (modoTraza == 1) textArea.append("MAYOR \n");
 				System.out.println("MAYOR");
 				try {
 					mw.mayor();
@@ -194,6 +210,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.MENOR_IGUAL:
 			{
+				if (modoTraza == 1) textArea.append("MENOR_IGUAL \n");
 				System.out.println("MENOR_IGUAL");
 				try {
 					mw.menorIgual();
@@ -206,6 +223,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.MAYOR_IGUAL:
 			{
+				if (modoTraza == 1) textArea.append("MAYOR_IGUAL \n");
 				System.out.println("MAYOR_IGUAL");
 				try {
 					mw.mayorIgual();
@@ -218,6 +236,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.DISTINTO:
 			{
+				if (modoTraza == 1) textArea.append("DISTINTO \n");
 				System.out.println("DISTINTO");
 				try {
 					mw.distinto();
@@ -230,6 +249,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.SUMA:
 			{
+				if (modoTraza == 1) textArea.append("SUMA \n");
 				System.out.println("SUMA");
 				try {
 					mw.suma();
@@ -242,6 +262,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.RESTA:
 			{
+				if (modoTraza == 1) textArea.append("RESTA \n");
 				System.out.println("RESTA");
 				try {
 					mw.resta();
@@ -254,6 +275,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.PRODUCTO:
 			{
+				if (modoTraza == 1) textArea.append("PRODUCTO \n");
 				System.out.println("PRODUCTO");
 				try {
 					mw.multiplica();
@@ -266,6 +288,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.DIVISION:
 			{
+				if (modoTraza == 1) textArea.append("DIVISION \n");
 				System.out.println("DIVISION");
 				mw.divide();
 				i++;
@@ -273,6 +296,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.MODULO:
 			{
+				if (modoTraza == 1) textArea.append("MODULO \n");
 				System.out.println("MODULO");
 				try {
 					mw.modulo();
@@ -285,6 +309,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.AND:
 			{
+				if (modoTraza == 1) textArea.append("AND \n");
 				System.out.println("AND");
 				try {
 					mw.and();
@@ -297,6 +322,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.OR:
 			{
+				if (modoTraza == 1) textArea.append("OR \n");
 				System.out.println("OR");
 				try {
 					mw.or();
@@ -309,6 +335,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.NOT:
 			{
+				if (modoTraza == 1) textArea.append("NOT \n");
 				System.out.println("NOT");
 				try {
 					mw.not();
@@ -321,6 +348,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.NEG:
 			{
+				if (modoTraza == 1) textArea.append("NEG \n");
 				System.out.println("NEG");
 				try {
 					mw.menos();
@@ -333,6 +361,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.DESPLAZAMIENTO_IZQUIERDA:
 			{
+				if (modoTraza == 1) textArea.append("DESPLAZAMIENTO_IZQUIERDA \n");
 				System.out.println("DESPLAZAMIENTO_IZQUIERDA");
 				try {
 					mw.despIzq();
@@ -345,6 +374,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.DESPLAZAMIENTO_DERECHA:
 			{
+				if (modoTraza == 1) textArea.append("DESPLAZAMIENTO_DERECHA \n");
 				System.out.println("DESPLAZAMIENTO_DERECHA");
 				try {
 					mw.despDer();
@@ -357,6 +387,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.CONVERSION_NAT:
 			{
+				if (modoTraza == 1) textArea.append("CONVERSION_NAT \n");
 				System.out.println("CONVERSION_NAT");
 				try {
 					mw.convertToNat();
@@ -369,6 +400,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.CONVERSION_INT:
 			{
+				if (modoTraza == 1) textArea.append("CONVERSION_INT \n");
 				System.out.println("CONVERSION_INT");
 				try {
 					mw.convertoToInt();
@@ -381,6 +413,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.CONVERSION_CHAR:
 			{
+				if (modoTraza == 1) textArea.append("CONVERSION_CHAR \n");
 				System.out.println("CONVERSION_CHAR");
 				try {
 					mw.convertToString();
@@ -393,6 +426,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.CONVERSION_FLOAT:
 			{
+				if (modoTraza == 1) textArea.append("CONVERSION_FLOAT \n");
 				System.out.println("CONVERSION_FLOAT");
 				try {
 					mw.convertToReal();
@@ -405,12 +439,14 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.VALOR_ABSOLUTO:
 			{
+				if (modoTraza == 1) textArea.append("VALOR_ABSOLUTO \n");
 				System.out.println("VALOR_ABSOLUTO");
 				i++;
 				break;
 			}
 			case Operaciones.LEER:
 			{
+				if (modoTraza == 1) textArea.append("LEER \n");
 				System.out.println("LEER");
 		
 				    // a jframe here isn't strictly necessary, but it makes the example a little more real
@@ -426,6 +462,7 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.ESCRIBIR:
 			{
+				if (modoTraza == 1) textArea.append("ESCRIBIR \n");
 				System.out.println("ESCRIBIR");
 				try {
 					mw.write();
@@ -438,6 +475,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.APILA:
 			{
+				if (modoTraza == 1) textArea.append("APILA \n");
+
 				System.out.print("APILA ");
 				if (convertirBinToDec(instr.elementAt(i+1))==0)//Si es natural o entero
 				{
@@ -488,6 +527,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.APILA_DIR:
 			{
+				if (modoTraza == 1) textArea.append("APILA_DIR \n");
+
 				System.out.print("APILA_DIR ");
 				System.out.println(convertirBinToDec(instr.elementAt(i+1)));
 				try {
@@ -501,6 +542,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.DESAPILA:
 			{
+				if (modoTraza == 1) textArea.append("DESAPILA \n");
+
 				System.out.print("DESAPILA ");
 				System.out.println(convertirBinToDec(instr.elementAt(i+1)));
 				//try {
@@ -512,6 +555,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.DESAPILA_DIR_BOOLEAN:
 			{
+				if (modoTraza == 1) textArea.append("DESAPILA_DIR_BOOLEAN \n");
+
 				System.out.println("DESAPILA_DIR_BOOLEAN");
 				try {
 					mw.desapila_dir((int)convertirBinToDec(instr.elementAt(i+1)));
@@ -524,6 +569,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.DESAPILA_DIR_INTEGER:
 			{
+				if (modoTraza == 1) textArea.append("DESAPILA_DIR_INTEGER \n");
+
 				System.out.print("DESAPILA_DIR_INTEGER ");
 				System.out.println(convertirBinToDec(instr.elementAt(i+1)));
 				try {
@@ -537,6 +584,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.DESAPILA_DIR_NATURAL:
 			{
+				if (modoTraza == 1) textArea.append("DESAPILA_DIR_NATURAL \n");
+
 				System.out.print("DESAPILA_DIR_NATURAL ");
 				System.out.println(convertirBinToDec(instr.elementAt(i+1)));
 				try {
@@ -550,6 +599,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.DESAPILA_DIR_FLOAT:
 			{
+				if (modoTraza == 1) textArea.append("DESAPILA_DIR_FLOAT \n");
+
 				System.out.print("DESAPILA_DIR_FLOAT ");
 				System.out.println(convertirBinToDec(instr.elementAt(i+1)));//La dir siempre es un entero positivo
 				try {
@@ -563,6 +614,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.DESAPILA_DIR_CHAR:
 			{
+				if (modoTraza == 1) textArea.append("DESAPILA_DIR_CHAR \n");
+
 				System.out.println("DESAPILA_DIR_CHAR");
 				try {
 					mw.desapila_dir((int)convertirBinToDec(instr.elementAt(i+1)));
@@ -575,6 +628,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.STOP:
 			{
+				if (modoTraza == 1) textArea.append("STOP \n");
+
 				System.out.println("STOP");
 				System.out.print("Resultado memoria: "+mw.resultadoMem());
 			
@@ -584,6 +639,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.SWAP1:
 			{
+				if (modoTraza == 1) textArea.append("SWAP1 \n");
+
 				System.out.println("SWAP1");
 				mw.swap1();
 				i++;
@@ -591,6 +648,8 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 			}
 			case Operaciones.SWAP2:
 			{
+				if (modoTraza == 1) textArea.append("SWAP2 \n");
+				
 				System.out.println("SWAP2");
 				mw.swap2();
 				i++;
@@ -599,12 +658,21 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem) throws Exc
 	
 			default:
 			{
+				if (modoTraza == 1) textArea.append("UNKNOWN \n");
+				
 				System.out.println("UNKNOWN");
 				i++;
 				break;
 			}
 		} 
 		
+		if (modoTraza == 1)
+		{
+			textArea.append(mw.resultadoMem() + "\n");
+			textArea.append(mw.muestraPila());
+
+		}
+				
 	}
 }
 	

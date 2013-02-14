@@ -44,6 +44,63 @@ public class Main extends JFrame {
 
 
 
+	public void accionEjecutarEnModoTraza(int modoTraza)
+	{
+		//Si modoTraza = 1, se ejecutar‡ el modoTraza
+		contentPane.validate();
+		analizadorSintactico = new AnalizadorSintactico(archivo);
+		if (!(analizadorSintactico.getSalida().equals("El fichero no existe"))){
+			
+			if (analizadorSintactico.compilar())
+			{
+				try {
+				    // a jframe here isn't strictly necessary, but it makes the example a little more real
+				    JFrame frame = new JFrame("Error de Compilaciï¿½n");
+
+				    // prompt the user to enter their name
+				    JOptionPane.showMessageDialog(frame, "Error en compilaciï¿½n");
+				    analizadorSintactico.printParser();
+				    textArea.setText(analizadorSintactico.getSalida());
+				
+				} catch (Exception e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+			else
+			{
+				generadorFichero=new GeneradorFichero(); 
+				
+				generadorFichero.generaFichero("binario.txt", analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto
+				Interprete inter= new Interprete();
+				try {
+					inter.generar("binario.txt", modoTraza, analizadorSintactico.datosParaInterprete(), textArea);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					//e1.printStackTrace();
+					try {
+					    // a jframe here isn't strictly necessary, but it makes the example a little more real
+					    JFrame frame = new JFrame("Error de ejecucion");
+
+					    // prompt the user to enter their name
+					    JOptionPane.showMessageDialog(frame, "Error en tiempo de ejecucion");
+					    textArea.append("\n" + inter.imprimirMemoria());
+					
+					} catch (Exception e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+				}
+				analizadorSintactico.printParser();
+				textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria() + textArea.getText());
+			}
+		}
+		else{
+			textArea.setText(analizadorSintactico.getSalida());
+		}
+		//textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria());
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -102,58 +159,7 @@ public class Main extends JFrame {
 		btnAnalizador.setBounds(375, 90, 175, 43);
 		btnAnalizador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				contentPane.validate();
-				analizadorSintactico = new AnalizadorSintactico(archivo);
-				if (!(analizadorSintactico.getSalida().equals("El fichero no existe"))){
-					
-					if (analizadorSintactico.compilar())
-					{
-						try {
-						    // a jframe here isn't strictly necessary, but it makes the example a little more real
-						    JFrame frame = new JFrame("Error de Compilaciï¿½n");
-
-						    // prompt the user to enter their name
-						    JOptionPane.showMessageDialog(frame, "Error en compilaciï¿½n");
-						    analizadorSintactico.printParser();
-						    textArea.setText(analizadorSintactico.getSalida());
-						
-						} catch (Exception e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
-						}
-					}
-					else
-					{
-						generadorFichero=new GeneradorFichero(); 
-						
-						generadorFichero.generaFichero("binario.txt", analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto
-						Interprete inter= new Interprete();
-						try {
-							inter.generar("binario.txt", 0, analizadorSintactico.datosParaInterprete());
-						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							//e1.printStackTrace();
-							try {
-							    // a jframe here isn't strictly necessary, but it makes the example a little more real
-							    JFrame frame = new JFrame("Error de ejecucion");
-	
-							    // prompt the user to enter their name
-							    JOptionPane.showMessageDialog(frame, "Error en tiempo de ejecucion");
-							    textArea.setText(inter.imprimirMemoria());
-							
-							} catch (Exception e2) {
-								// TODO Auto-generated catch block
-								e2.printStackTrace();
-							}
-						}
-						analizadorSintactico.printParser();
-						textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria());
-					}
-				}
-				else{
-					textArea.setText(analizadorSintactico.getSalida());
-				}
-				//textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria());
+				accionEjecutarEnModoTraza(0);
 			}
 		});
 		contentPane.setLayout(null);
@@ -163,6 +169,7 @@ public class Main extends JFrame {
 		btnTraza.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					//AquÃ­ lo que haga el boton traza
+				accionEjecutarEnModoTraza(1);
 				}
 		});
 		contentPane.setLayout(null);
@@ -207,4 +214,5 @@ public class Main extends JFrame {
 		scrollPane.setViewportView(textArea);
 		textArea.setEditable(false);
 	}
+	
 }
