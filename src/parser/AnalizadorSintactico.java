@@ -115,7 +115,7 @@ public class AnalizadorSintactico {
 		return infoTotal;
 	}
 	
-	public void compilar() {
+	public boolean compilar() {
 
 		int i = 0;
 		int linea = 0;
@@ -130,6 +130,7 @@ public class AnalizadorSintactico {
 			}
 		} else
 			salida+="Â¡No hay nada que compilar!\n";
+		return errorCompilacion;
 
 	}
 

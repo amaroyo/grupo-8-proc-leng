@@ -925,8 +925,18 @@ public class InstruccionMW {
 			}
 			catch (Exception exDouble)
 			{
-				//es un string
-				pila.push (line);
+				//es un boolean
+				try{
+					if (line.toLowerCase().equals("true"))
+						pila.push (new Boolean(true));
+					if (line.toLowerCase().equals("false"))
+						pila.push (new Boolean(false));
+				}
+				catch (Exception exBoolean){
+					//es un string
+					pila.push (line);	
+				}
+				
 			}
 		}
 		//

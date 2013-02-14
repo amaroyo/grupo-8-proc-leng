@@ -70,32 +70,50 @@ public class Main extends JFrame {
 				String rutaArchivo = textField.getText();
 				analizadorSintactico = new AnalizadorSintactico(rutaArchivo);
 				if (!(analizadorSintactico.getSalida().equals("El fichero no existe"))){
-					analizadorSintactico.compilar();
-					generadorFichero=new GeneradorFichero(); 
 					
-					generadorFichero.generaFichero("binario.txt", analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto
-					Interprete inter= new Interprete();
-					try {
-						inter.generar("binario.txt", 0, analizadorSintactico.datosParaInterprete());
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						//e1.printStackTrace();
+					if (analizadorSintactico.compilar())
+					{
 						try {
 						    // a jframe here isn't strictly necessary, but it makes the example a little more real
-						    JFrame frame = new JFrame("Error de ejecucion");
+						    JFrame frame = new JFrame("Error de Compilación");
 
 						    // prompt the user to enter their name
-						    JOptionPane.showMessageDialog(frame, "Error en tiempo de ejecucion");
-						    textArea.setText(inter.imprimirMemoria());
+						    JOptionPane.showMessageDialog(frame, "Error en compilación");
+						    analizadorSintactico.printParser();
+						    textArea.setText(analizadorSintactico.getSalida());
 						
 						} catch (Exception e2) {
 							// TODO Auto-generated catch block
 							e2.printStackTrace();
 						}
 					}
-					analizadorSintactico.printParser();
-					textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria());
-					
+					else
+					{
+						generadorFichero=new GeneradorFichero(); 
+						
+						generadorFichero.generaFichero("binario.txt", analizadorSintactico.getByteOut());//te lo crea en el directorio del proyecto
+						Interprete inter= new Interprete();
+						try {
+							inter.generar("binario.txt", 0, analizadorSintactico.datosParaInterprete());
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							//e1.printStackTrace();
+							try {
+							    // a jframe here isn't strictly necessary, but it makes the example a little more real
+							    JFrame frame = new JFrame("Error de ejecucion");
+	
+							    // prompt the user to enter their name
+							    JOptionPane.showMessageDialog(frame, "Error en tiempo de ejecucion");
+							    textArea.setText(inter.imprimirMemoria());
+							
+							} catch (Exception e2) {
+								// TODO Auto-generated catch block
+								e2.printStackTrace();
+							}
+						}
+						analizadorSintactico.printParser();
+						textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria());
+					}
 				}
 				else{
 					textArea.setText(analizadorSintactico.getSalida());
