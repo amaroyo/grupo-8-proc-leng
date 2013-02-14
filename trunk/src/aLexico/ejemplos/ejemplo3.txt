@@ -10,7 +10,7 @@ program: ejemplo{
 		const float razon := 166.386;
 }
 	instructions{
-		in(euros);
+		in(correcto);
 		cantidad = 10 + 10;
 		centimos = euros - cantidad;
 		out(cantidad);
