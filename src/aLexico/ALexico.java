@@ -152,7 +152,7 @@ public class ALexico {
 									}
 									else{
 										if (lex.equals("float"))
-											error("Operador de 'cast float' mal formado o variable de tipo var o declaración incorrecta de tipo 'float'.");
+											error("Operador de 'cast float' mal formado o variable de tipo var.");
 										else
 											error("Operador de 'cast " + lex + "' mal formado.");
 										tokensSalida.add(new Token());
