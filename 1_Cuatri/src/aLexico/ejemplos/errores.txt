@@ -1,0 +1,5 @@
+program: errores{
+	vars-consts{
+		const character car := 'a;
+	}
+}

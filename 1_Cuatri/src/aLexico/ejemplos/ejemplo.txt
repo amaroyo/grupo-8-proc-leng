@@ -1,0 +1,9 @@
+@ Programa de ejemplo;
+program: ejemplo{
+	vars-consts{
+		var float cantidad;
+}
+	instructions{
+		cantidad = -3+5;
+	}
+}

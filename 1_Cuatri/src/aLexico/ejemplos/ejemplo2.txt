@@ -1,0 +1,12 @@
+@ Programa de ejemplo;
+program: ejemplo{
+	vars-consts{
+		var natural pesetas;
+		var boolean gas;
+		var character dime;
+	}
+	instructions{
+		pesetas= (3+5)*(7.44);
+	
+}
+}
