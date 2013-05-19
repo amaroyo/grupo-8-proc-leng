@@ -19,5 +19,7 @@ public enum tByteCode {
 	negacionlogica, restaunitaria,
 	
 	cchar, cnat, cfloat, cint
+	
+	,ir_a,ir_v,ir_f
 
 }
