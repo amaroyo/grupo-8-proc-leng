@@ -1411,4 +1411,58 @@ public class InstruccionMW {
 		
 		return pilas;
 	}
+	
+	public void ir_v(int pos) throws Exception
+    {
+        if (traza)
+            System.out.println("ir_v");
+        if (ST < 0)
+        {
+            throw new Exception(
+                    "ERROR: ir_v. La pila no contiene los datos necesarios.");
+        }
+        
+        Object cima=pila.pop();
+        if (cima instanceof Boolean)
+        {
+            boolean value = ((Boolean) pila.pop()).booleanValue();
+            if (value == true)
+            {
+                this.setPC(pos);
+            }
+            else
+            {
+                PC = PC + 1;
+            }
+        }
+        
+        ST = ST - 1;
+    }
+    
+    public void ir_f(int pos) throws Exception
+    {
+        if (traza)
+            System.out.println("ir_f");
+        if (ST < 0)
+        {
+            throw new Exception(
+                    "ERROR: ir_f. La pila no contiene los datos necesarios.");
+        }
+        
+        Object cima=pila.pop();
+        if (cima instanceof Boolean)
+        {
+            boolean value = ((Boolean) pila.pop()).booleanValue();
+            if (value == false)
+            {
+                this.setPC(pos);
+            }
+            else
+            {
+                PC = PC + 1;
+            }
+        }
+        
+        ST = ST - 1;
+    }
 }

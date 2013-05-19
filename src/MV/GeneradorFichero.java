@@ -70,7 +70,8 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 }
 
 	
-	// 
+	// path: donde se genera el fichero binario de salida.
+    // byteOut: 
 	public boolean generaFichero(String path,Vector<ByteCode> byteOut)
 	{
 		boolean res=true;
@@ -94,7 +95,7 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 						fich.write(" ");
 						if ((byteOut.elementAt(i)).getTipoVar().equals("nat"))
 						{
-							fich.write(bytesToString(new byte[]{0x00}));//tipo nat o entero
+							fich.write(bytesToString(new byte[]{0x00}));//tipo nat
 							fich.write(" ");
 							fich.write(bytesToString(intToBytes(Integer.parseInt((byteOut.elementAt(i)).getDireccion()))));//valor nat o entero
 							fich.write("\n");//salto linea
@@ -102,7 +103,7 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 						else
 							if ((byteOut.elementAt(i)).getTipoVar().equals("int"))
 							{
-								fich.write(bytesToString(new byte[]{0x01}));//tipo nat o entero
+								fich.write(bytesToString(new byte[]{0x01}));//tipo entero
 								fich.write(" ");
 								fich.write(bytesToString(intToBytes(Integer.parseInt((byteOut.elementAt(i)).getDireccion()))));//valor nat o entero
 								fich.write("\n");//salto linea
@@ -519,6 +520,55 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 					break;
 					
 				}
+				case ir_f:
+				{
+					try 
+					{
+						fich.write(bytesToString(new byte[]{Operaciones.IR_F}));
+						fich.write("\n");//salto linea
+						fich.write(bytesToString(intToBytes(Integer.parseInt((byteOut.elementAt(i)).getDireccion()))));//valor nat o entero
+						fich.write("\n");//salto linea
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						res=false;
+					}//instruccion				
+					break;
+					
+				}
+				case ir_v:
+				{
+					try 
+					{
+						fich.write(bytesToString(new byte[]{Operaciones.IR_V}));
+						fich.write("\n");//salto linea
+						fich.write(bytesToString(intToBytes(Integer.parseInt((byteOut.elementAt(i)).getDireccion()))));//valor nat o entero
+						fich.write("\n");//salto linea
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						res=false;
+					}//instruccion				
+					break;
+					
+				}
+				case ir_a:
+				{
+					try 
+					{
+						fich.write(bytesToString(new byte[]{Operaciones.IR_A}));
+						fich.write("\n");//salto linea
+						fich.write(bytesToString(intToBytes(Integer.parseInt((byteOut.elementAt(i)).getDireccion()))));//valor nat o entero
+						fich.write("\n");//salto linea
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						res=false;
+					}//instruccion				
+					break;
+					
+				}
+				//Falta parchea
 			default:
 				break;
 			}
