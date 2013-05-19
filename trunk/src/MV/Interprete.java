@@ -657,6 +657,42 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem, int modoTr
 				i++;
 				break;
 			}
+			
+			case Operaciones.IR_F:
+			{
+				if (modoTraza == 1) textArea.append("IR_F \n");
+				
+				System.out.println("IR_F ");
+				System.out.println(convertirBinToDec(instr.elementAt(i+1)));
+				mw.ir_f((int)convertirBinToDec(instr.elementAt(i+1)));
+				i++;
+				break;
+			}
+			
+			case Operaciones.IR_V:
+			{
+				if (modoTraza == 1) textArea.append("IR_V \n");
+				
+				System.out.println("IR_V ");
+				System.out.println(convertirBinToDec(instr.elementAt(i+1)));
+				mw.ir_v((int)convertirBinToDec(instr.elementAt(i+1)));
+				i++;
+				break;
+			}
+			case Operaciones.IR_A:
+			{
+				if (modoTraza == 1) textArea.append("IR_A \n");
+				System.out.print("IR_A ");
+				System.out.println(convertirBinToDec(instr.elementAt(i+1)));
+				try {
+					mw.setPC((int)convertirBinToDec(instr.elementAt(i+1)));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				i=i+2;
+				break;
+			}
 	
 			default:
 			{
