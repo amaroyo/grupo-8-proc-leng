@@ -531,7 +531,7 @@ public class EAtribucion extends Atribucion {
     
     
     //========================================================================
-    
+    /////////////////EJERCICIO CUP DE EJEMPLO!
     
     
     public TAtributos sR1(TAtributos i){
