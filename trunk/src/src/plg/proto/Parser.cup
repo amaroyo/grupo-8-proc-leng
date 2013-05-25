@@ -1,0 +1,275 @@
+package src.plg.proto;
+
+import java_cup.runtime.*;
+import src.es.ucm.fdi.plg.evlib.TAtributos;
+
+// Se crea el objeto que contiene las funciones de atribuciÃ³n
+action code {:
+   private EAtribucion atrb = new EAtribucion();
+:}
+
+// DefiniciÃ³n de los terminales del lenguaje 
+terminal            String STRING;
+terminal            program, ident, instructions,consts, tipos, vars, tipo, var, boolean, integer, natural, float, caracter;
+terminal  			if, then, else, endif, WRITE, AND, OR, TRUE, FALSE, PAP, PCIERRE;
+
+// DefiniciÃ³n de los no terminales del lenguaje -se dan como ejemplo: habrÃ¡ que cambiarlos
+non terminal TAtributos S, i, e, t, f;
+non terminal TAtributos Programa, Consts, Tipos, Vars, Decs, ¿Dec?, DecsSubs, ¿DecSub?,  Subprogramas, Insts, IF;
+// Se definen las reglas sintÃ¡cticas -se dan dos como ejemplo: habra que cambiarlas, ya que 
+// no se corresponden con el lenguaje
+
+//===================PROGRAMA==============================
+//Programa → program: ident { Consts Tipos Vars Subprogramas instructions { Insts }}
+Programa ::= program: ident { Consts:consts Tipos:tipos Vars:vars Subprogramas:subprogramas instructions { Insts:insts } } 
+{: RESULT= atrb.ProgramaR1(consts,tipos,vars,subprogramas,insts):};
+
+//===================CONSTS==============================
+//Consts → consts { Decs }; Consts → λ
+Consts ::= consts { Decs:decs } {: RESULT= atrb.ConstsR1(decs):};
+Consts ::= λ {: RESULT= atrb.ConstsR2():}; //VACIO
+
+//===================TIPOS==============================
+//Tipos → tipos { Decs }; Tipos → λ
+Tipos ::= tipos { Decs:decs }  {: RESULT= atrb.TiposR1(decs):};
+Tipos ::= λ {: RESULT= atrb.TiposR2():}; //VACIO
+
+//===================VARS==============================
+//Vars → vars { Decs }; Vars → λ
+Vars ::= vars { Decs:decs }  {: RESULT= atrb.VarsR1(decs):};
+Vars ::= λ {: RESULT= atrb.VarsR2():};  //VACIO 
+
+//===================DECS==============================
+//Decs → Decs ; Dec; Decs → Dec
+Decs ::= Decs:decs ; Dec:dec {: RESULT= atrb.DecsR1(decs,dec):}; 
+Decs ::= Dec:dec {: RESULT= atrb.DecsR2(dec):};
+
+//===================DEC==============================
+//Dec → const Tipo ident = Valores; Dec → tipo Tipo ident; Dec → var Tipo designador
+Dec ::= const Tipo:tipo ident = Valores:Valores {: RESULT= atrb.DecR1(tipo,Valores+) :};
+Dec ::= tipo Tipo:tipo ident {: RESULT= atrb.DecR2(tipo):};
+Dec ::= var Tipo:tipo designador:desig {: RESULT= atrb.DecR3(tipo,desig):};
+
+//===================DECSSUBS==============================
+//DecsSubs→ DecsSubs; DecSub; DecsSubs→ DecSub; DecsSubs→ λ;
+DecsSubs ::= DecsSubs:decssubs; DecSub:decsub {: RESULT= atrb.DecsSubsR1(decssubs,decsub):};
+DecsSubs ::= DecSub:decsub {: RESULT= atrb.DecsSubsR2(decsub):};
+DecsSubs ::= λ {: RESULT= atrb.DecsSubsR1():};
+
+//===================DECSUB==============================
+//DecSub → var Tipo designador
+DecSub ::= var Tipo:tipo designador:desig {: RESULT= atrb.DecSubR1(tipo,desig):}
+
+
+//===================DESIGNADOR==============================
+//designador → ident; designador → designador[Exp]; designador → designador_numero
+designador ::= ident {: RESULT= atrb.designadorR1():};
+designador ::= designador[Exp:exp] {: RESULT= atrb.designadorR2(exp):};
+designador ::= designador_numero {: RESULT= atrb.designadorR3():};
+
+//===================SUBPROGRAMAS==============================
+//Subprogramas → Subprogramas Subprograma; Subprogramas → Subprograma; Subprogramas → λ
+Subprogramas ::= Subprogramas:subprogramas Subprograma:subprograma {: RESULT= atrb.SubprogramasR1(subprogramas,subprograma):};
+Subprogramas ::= Subprograma:subprograma {: RESULT= atrb.SubprogramasR2(subprograma):};
+Subprogramas ::= λ {: RESULT= atrb.SubprogramasR2(subprograma):};
+//===================SUBPROGRAMA==============================
+//Subprograma → subprogram: ident (PFs ) {CS }
+Subprograma ::= subprogram: ident (PFs:pfs ) {CS:cs } {: RESULT= atrb.SubprogramaR1(pfs,cs):}
+
+//===================PFS==============================
+//PFs → PFs, PF | PF
+PFs ::= PFs:pfs, PF:pf {: RESULT= atrb.PFsR1(pfs,pf):};
+PFs ::= PF:pf {: RESULT= atrb.PFsR2(pf):};
+
+//===================PF==============================
+//PF → Tipo ident | Tipo * designador 
+PF ::= Tipo:tipo ident {: RESULT= atrb.PFR1(tipo):};
+PF ::= Tipo:tipo * designador:desig {: RESULT= atrb.PFR2(tipo,desig):};
+
+//===================CS==============================
+//CS  → vars { DecsSubs } instructions { Insts }
+CS  ::= vars { Decs:decs } instructions { Insts:insts } {: RESULT= atrb.CSR1(decs,insts) :};
+
+//===================TIPO==============================
+//Tipo → TipoBasico; Tipo → ident; Tipo → Tipo dimensiones; Tipo → (Tipos)
+Tipo ::= TipoBasico:tipobasico {: RESULT= atrb.TipoR1(tipobasico) :};
+Tipo ::= ident {: RESULT= atrb.TipoR2() :};
+Tipo ::= Tipo:tipo dimensiones:dim {: RESULT= atrb.TipoR3(tipo,dim) :};
+Tipo ::= (Tipos:tipos) {: RESULT= atrb.TipoR4(tipos) :};
+
+//===================DIMENSIONES==============================
+//dimensiones → dimensiones[componente] | [componente]
+dimensiones ::= dimensiones:dim [componente:comp] {: RESULT= atrb.dimensionesR1(dim,comp) :};
+dimensiones ::= [componente:comp] {: RESULT= atrb.dimensionesR2(comp) :};
+
+//===================COMPONENTE==============================
+//componente → numero | ident;
+componente ::= numero {: RESULT= atrb.componenteR1() :};
+componente ::= ident {: RESULT= atrb.componenteR2() :};
+
+
+//===================TIPOS==============================
+//Tipos → Tipos , Tipo; Tipos → Tipo
+Tipos ::= Tipos:tipos , Tipo:tipo {: RESULT= atrb.TiposR2(tipos,tipo):};
+Tipos ::= Tipo:tipo {: RESULT= atrb.TiposR3(tipo):};
+
+//===================TIPOBASICO==============================
+//TipoBasico → boolean | integer | natural | float | caracter
+TipoBasico ::= boolean {: RESULT= atrb.TipoBasicoR1():};
+TipoBasico ::= integer {: RESULT= atrb.TipoBasicoR2():};
+TipoBasico ::= natural {: RESULT= atrb.TipoBasicoR3():};
+TipoBasico ::= float {: RESULT= atrb.TipoBasicoR4():};
+TipoBasico ::= caracter {: RESULT= atrb.TipoBasicoR5():};
+
+//===================VALORES==============================
+//Valores → numeroReal; Valores → numeroEnt; Valores → ’(letra)’; Valores  → ’(digito)’; Valores → true; Valores → false
+Valores  ::= numeroReal {: RESULT= atrb.ValoresR1():};
+Valores  ::= numeroEnt  {: RESULT= atrb.ValoresR2():};
+Valores  ::= '(letra)'  {: RESULT= atrb.ValoresR3():};
+Valores  ::= '(digito)'  {: RESULT= atrb.ValoresR4():};
+Valores  ::= true  {: RESULT= atrb.ValoresR5():};
+Valores  ::= false  {: RESULT= atrb.ValoresR6():};
+
+//===================INSTS==============================
+//Insts → Insts ; Inst; Insts → Inst
+Insts ::= Insts:insts ; Inst:inst {: RESULT= atrb.InstsR1(insts,inst):};
+Insts ::= Inst:inst {: RESULT= atrb.InstsR2(inst):};
+
+//===================INST==============================
+//Inst → InsAsig; Inst → InsR; Inst → InsW; Inst → SWAP1(); Inst → SWAP2(); Inst → IF; Inst → WHILE; Inst → LLAMADA
+Inst ::= InsAsig:insasig {: RESULT= atrb.InstR1(insasig):};
+Inst ::= InsR:insr {: RESULT= atrb.InstR2(insr):};
+Inst ::= InsW:insw {: RESULT= atrb.InstR3(insw):};
+Inst ::= SWAP1() {: RESULT= atrb.InstR4():};
+Inst ::= SWAP2() {: RESULT= atrb.InstR5():};
+Inst ::= IF:if {: RESULT= atrb.InstR6(if):};
+Inst ::= WHILE:while {: RESULT= atrb.InstR7(while):};
+Inst ::= LLAMADA:llamada {: RESULT= atrb.InstR8(llamada):};
+
+//===================INSASIG==============================
+//InsAsig → designador = Exp
+InsAsig ::= designador = Exp:exp {: RESULT= atrb.InsAsigR1(exp):};
+
+//===================INSR==============================
+//InsR → in (designador)
+InsR ::= in (designador) {: RESULT= atrb.InsRR1():};
+
+//===================INSW==============================
+//InsW → out (Exp)
+InsW ::= out (Exp:exp) {: RESULT= atrb.InsWR1():};
+
+//===================WHILE==============================
+//IF → if ExpBool then Insts endif; IF → if  ExpBool then Insts else Insts endif 
+IF ::= if ExpBool:expbool then Insts:insts endif {: RESULT= atrb.IFR1(expbool,insts):};
+IF ::= if ExpBool:expbool then Insts:insts else Insts:insts endif {: RESULT= atrb.IFR2(expbool,insts,insts):};
+
+//===================WHILE==============================
+//WHILE → while ExpBool do Insts endwhile; 
+WHILE ::= while ExpBool:expbool do Insts:insts endwhile {: RESULT= atrb.WHILER1(expbool,insts):};
+
+//===================LLAMADA==============================
+//LLAMADA → Call ident (Parametros)
+LLAMADA ::= Call ident (Parametros:parametros) {: RESULT= atrb.LLAMADAR1(parametros):};
+
+//===================PARAMETROS==============================
+//Parametros → Parametros, Parametro | Parametro
+Parametros ::= Parametros:parametros, Parametro:parametro {: RESULT= atrb.ParametrosR1(parametros,parametro):};
+Parametros ::= Parametro:parametro {: RESULT= atrb.ParametrosR2(parametro):};
+
+//===================PARAMETRO==============================
+//Parametro → ident = Exp | designador = Exp
+Parametro ::= ident = Exp:exp {: RESULT= atrb.ParametroR1(exp):};
+Parametro ::= designador = Exp:exp {: RESULT= atrb.ParametroR2(exp):};
+
+//===================EXPBOOL==============================
+//ExpBool → Exp Op0 Exp 
+ExpBool ::= Exp:exp Op0:op0 Exp:exp {: RESULT= atrb.ExpBoolR1(exp,op0,exp):};
+
+//===================EXP==============================
+//Exp → Exp0 Op0 Exp0; Exp → Exp0
+Exp ::= Exp0:exp0 Op0:op0 Exp0:exp0 {: RESULT= atrb.ExpR1(exp0,op0,exp0):};
+Exp ::= Exp0:exp0 {: RESULT= atrb.ExpR2(exp0):};
+
+//===================EXP0==============================
+//Exp0 → Exp0 Op1 Exp1; Exp0 → Exp0 OR Exp1; Exp0 → Exp1
+Exp0 ::= Exp0:exp0 Op1:op1 Exp1:exp1 {: RESULT= atrb.Exp0R1(exp0,op1,exp1):};
+Exp0 ::= Exp0:exp0 OR Exp1:exp1 {: RESULT= atrb.Exp0R2(exp0,exp1):};
+Exp0 ::= Exp1:exp1 {: RESULT= atrb.Exp0R3(exp1):};
+
+//===================EXP1==============================
+//Exp1 → Exp1 Op2 Exp2; Exp1 → Exp1 AND Exp2; Exp1 → Exp2
+Exp1 ::= Exp1:exp1 Op2:op2 Exp2:exp2 {: RESULT= atrb.Exp1R1(exp1,op2,exp2):};
+Exp1 ::= Exp1:exp1 AND Exp2:exp2 {: RESULT= atrb.Exp1R1(exp1,exp2):};
+Exp1 ::= Exp2:exp2 {: RESULT= atrb.Exp1R2(exp2):};
+
+//===================EXP2==============================
+//Exp2 → Exp3 Op3 Exp2; Exp2 → Exp3
+Exp2 ::= Exp3:exp3 Op3:op3 Exp2:exp2 {: RESULT= atrb.Exp2R1(exp3,op3,exp2):}; 
+Exp2 ::= Exp3:exp3 {: RESULT= atrb.Exp2R2(exp3):};
+
+//===================EXP3==============================
+//Exp3 → Op41 designador; Exp3 → Op42 Exp3; Exp3 → - (Exp3);Exp3 → designador | Valores; Exp3 → (Exp)
+Exp3 ::= Op41:op41 designador {: RESULT= atrb.Exp3R1(op41):};
+Exp3 ::= Op42:op42 Exp3:exp3 {: RESULT= atrb.Exp3R2(op42,exp3):};
+Exp3 ::= - (Exp3:exp3) {: RESULT= atrb.Exp3R3(exp3):};
+Exp3 ::= designador:desig {: RESULT= atrb.Exp3R4(desig):};
+Exp3 ::= Valores:valores {: RESULT= atrb.Exp3R4(valores):};
+Exp3 ::= (Exp:exp) {: RESULT= atrb.Exp3R5(exp):};
+
+ //Op0
+ Op0 ::= < {: RESULT= atrb.Op0R1():};
+ Op0 ::= > {: RESULT= atrb.Op0R2():};
+ Op0 ::= <= {: RESULT= atrb.Op0R3():};
+ Op0 ::= >= {: RESULT= atrb.Op0R4():};
+ Op0 ::= == {: RESULT= atrb.Op0R5():};
+ Op0 ::= != {: RESULT= atrb.Op0R6():};
+ //Op1
+ Op1 ::= + {: RESULT= atrb.Op1R1():};
+ Op1 ::= - {: RESULT= atrb.Op1R2():};
+ //Op2
+ Op2 ::= * {: RESULT= atrb.Op2R1():}; 
+ Op2 ::= / {: RESULT= atrb.Op2R2():};
+ Op2 ::= % {: RESULT= atrb.Op2R3():};
+//Op3
+Op3 ::= << {: RESULT= atrb.Op3R1():};
+Op3 ::= >> {: RESULT= atrb.Op3R2():};
+//Op41
+Op41 ::= (char) {: RESULT= atrb.Op41R1():};| (int) | (nat) | (float)
+Op41 ::= (int) {: RESULT= atrb.Op41R2():};
+Op41 ::= (nat) {: RESULT= atrb.Op41R3():};
+Op41 ::= (float) {: RESULT= atrb.Op41R4():};
+//Op42
+Op42 ::= not {: RESULT= atrb.Op42R1():};
+
+
+
+
+S ::= i:I {: RESULT= atrb.SR1(I) :};
+
+i ::= IF e:E THEN i:I ELSE i:I FI {: RESULT= atrb.IR1(E,I) :};
+
+i ::= WRITE STRING:String {: RESULT= atrb.IR2(String) :};
+
+e ::= e:E OR t:T {: RESULT=  atrb.ER1(E,T):};
+
+e ::= t:T {: RESULT= atrb.ER2(T) :};
+
+t ::= t:T AND f:F {: RESULT= atrb.TR1(T,F) :};
+
+t ::= f:F {: RESULT= atrb.TR2(F) :};
+
+f ::= TRUE {: RESULT=  atrb.FR1():};
+
+f ::= FALSE {: RESULT= atrb.FR2() :};
+
+f ::= PAP e:E PCIERRE {: RESULT= atrb.FR3(E) :};
+
+
+
+
+
+
+
+
+
+

@@ -4,7 +4,7 @@ program: ejemplo{
 var integer cantidad;
 var float euros;
 var float centimos;
-var pesetas float ;
+var float pesetas ;
 const float razon := 166.386;
 }
 instructions{

@@ -136,7 +136,7 @@ public class AnalizadorSintactico {
 				}
 			}
 		} else
-			salida+="Â¡No hay nada que compilar!\n";
+			salida+="¡No hay nada que compilar!\n";
 		return errorCompilacion;
 
 	}

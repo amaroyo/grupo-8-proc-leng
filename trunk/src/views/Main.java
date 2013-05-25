@@ -47,7 +47,7 @@ public class Main extends JFrame {
 	public void accionEjecutarEnModoTraza(int modoTraza)
 	{
 		textArea.setText("");
-		//Si modoTraza = 1, se ejecutar� el modoTraza
+		//Si modoTraza = 1, se ejecutar� el modoTraza
 		contentPane.validate();
 		analizadorSintactico = new AnalizadorSintactico(archivo);
 		if (!(analizadorSintactico.getSalida().equals("El fichero no existe"))){
@@ -56,10 +56,10 @@ public class Main extends JFrame {
 			{
 				try {
 				    // a jframe here isn't strictly necessary, but it makes the example a little more real
-				    JFrame frame = new JFrame("Error de Compilaci�n");
+				    JFrame frame = new JFrame("Error de Compilación");
 
 				    // prompt the user to enter their name
-				    JOptionPane.showMessageDialog(frame, "Error en compilaci�n");
+				    JOptionPane.showMessageDialog(frame, "Error en compilación");
 				    analizadorSintactico.printParser();
 				    textArea.setText(analizadorSintactico.getSalida());
 				
@@ -81,10 +81,10 @@ public class Main extends JFrame {
 					//e1.printStackTrace();
 					try {
 					    // a jframe here isn't strictly necessary, but it makes the example a little more real
-					    JFrame frame = new JFrame("Error de ejecucion");
+					    JFrame frame = new JFrame("Error de ejecución");
 
 					    // prompt the user to enter their name
-					    JOptionPane.showMessageDialog(frame, "Error en tiempo de ejecucion");
+					    JOptionPane.showMessageDialog(frame, "Error en tiempo de ejecución");
 					    //textArea.append("\n" + inter.imprimirMemoria());
 					
 					} catch (Exception e2) {
@@ -93,6 +93,7 @@ public class Main extends JFrame {
 					}
 				}
 				analizadorSintactico.printParser();
+				//imprimirMemoria()->Para la vista de la Memoria Final
 				textArea.setText(analizadorSintactico.getSalida()+inter.imprimirMemoria() + textArea.getText());
 			}
 		}

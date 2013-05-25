@@ -4,18 +4,19 @@ vars-consts{
 var integer cantidad;
 var float euros;
 var float centimos;
-var float pesetas;
-const float razon := 166.386;
+var float pesetas :=1;
+cont float razón := 166.386;
 }
 instructions{
 in(euros);
 cantidad = (int)euros;
-centimos = euros*cantidad;
+centimos = euros – cantidad;
 out(cantidad);
 out ('.');
 out (centimos);
 swap2();
-pesetas = euros / razon;
+pesetas = euros / razón;
 out (pesetas);
 }
 }
+

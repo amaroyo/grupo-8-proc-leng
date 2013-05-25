@@ -2,21 +2,8 @@
 program: ejemplo{
 	vars-consts{
 		var float cantidad;
-		var float euros;
-		var character centimos;
-		var natural pesetas;
-		var boolean correcto;
-		const character car := 'a';
-		const float razon := 166.386;
 }
 	instructions{
-		@pesetas=183;
-		@in(centimos);
-		@cantidad = (int)euros;
-		@correcto = not false;
-		euros=1<<1;
-		@correcto=true<true;
-		@out (pesetas);
-		@out (correcto);
+		cantidad = -3+5;
 	}
 }
