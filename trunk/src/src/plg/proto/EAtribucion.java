@@ -48,6 +48,7 @@ class AsignaCero implements SemFun{
         return 0;
     }
 }
+
 class SumaUno implements SemFun{
     	
 
@@ -164,7 +165,7 @@ public class EAtribucion extends Atribucion {
    
     
     //PRACTICA PLG 2º CUATRI!!!!!!
-    public TAtributos ProgramaR1(TAtributos Consts,TAtributos Tipos,TAtributos Vars,TAtributos Subprogramas,TAtributos Insts){
+    public TAtributos Programa(TAtributos Consts,TAtributos Tipos,TAtributos Vars,TAtributos Subprogramas,TAtributos Insts){
         regla("Programa → program: ident { Consts Tipos Vars Subprogramas instructions { Insts }}");
                 
         TAtributos Programa = atributosPara("Programa", "TS","err","cod");//etq,etqh??
@@ -200,6 +201,132 @@ public class EAtribucion extends Atribucion {
         return Programa;
         
     }
+  
+    public TAtributos Consts1(TAtributos Decs){
+        regla("Consts → consts { Decs }");
+                
+        TAtributos Consts1 = atributosPara("Consts", "TS","err");
+        
+        //FALTA  Programa.TS = CreaTS()
+        dependencias(Decs.a("TPRH"),Consts1.a("TPRH"));//Consts.TSH = Programa.TS
+        dependencias(Consts1.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
+        dependencias(Decs.a("TSH"),Consts1.a("TSH"));//Vars.TSH = Tipos.TS
+        dependencias(Consts1.a("err"),Decs.a("err"));//Subprogramas.TSH = Vars.TS
+      
+        calculo(Decs.a("TPRH"),asignacion);
+        calculo(Consts1.a("TS"),asignacion);
+        calculo(Decs.a("TSH"),asignacion);
+        calculo(Consts1.a("err"),asignacion);
+        
+        return Consts1;
+        
+    }
+    
+    public TAtributos Consts2(TAtributos Decs){
+        regla("Consts → λ ");
+                
+        TAtributos Consts2 = atributosPara("Consts", "TS","err");
+        
+        //FALTA  Programa.TS = CreaTS()
+        dependencias(Decs.a("TPRH"),Consts2.a("TPRH"));//Consts.TSH = Programa.TS
+        dependencias(Consts2.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
+        dependencias(Decs.a("TSH"),Consts2.a("TSH"));//Vars.TSH = Tipos.TS
+      
+        calculo(Decs.a("TPRH"),asignacion);
+        calculo(Consts2.a("TS"),asignacion);
+        calculo(Decs.a("TSH"),asignacion);
+        calculo(Consts2.a("err"),asignafalso);
+        
+        return Consts2;
+        
+    }
+    
+    public TAtributos Tipos1(TAtributos Decs){
+        regla("Tipos → tipos { Decs } ");
+                
+        TAtributos Tipos1 = atributosPara("Consts", "TS","err");
+        
+        //FALTA  Programa.TS = CreaTS()
+        dependencias(Decs.a("TPRH"),Tipos1.a("TPRH"));//Consts.TSH = Programa.TS
+        dependencias(Tipos1.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
+        dependencias(Decs.a("TSH"),Tipos1.a("TSH"));//Vars.TSH = Tipos.TS
+        dependencias(Tipos1.a("err"),Decs.a("err"));//Subprogramas.TSH = Vars.TS
+      
+        calculo(Decs.a("TPRH"),asignacion);
+        calculo(Tipos1.a("TS"),asignacion);
+        calculo(Decs.a("TSH"),asignacion);
+        calculo(Tipos1.a("err"),asignacion);
+        
+        return Tipos1;
+        
+    }
+    
+    public TAtributos Tipos2(TAtributos Decs){
+        regla("Tipos → λ ");
+                
+        TAtributos Tipos2 = atributosPara("Consts", "TS","err");
+        
+        //FALTA  Programa.TS = CreaTS()
+        dependencias(Decs.a("TPRH"),Tipos2.a("TPRH"));//Consts.TSH = Programa.TS
+        dependencias(Tipos2.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
+        dependencias(Decs.a("TSH"),Tipos2.a("TSH"));//Vars.TSH = Tipos.TS
+      
+        calculo(Decs.a("TPRH"),asignacion);
+        calculo(Tipos2.a("TS"),asignacion);
+        calculo(Decs.a("TSH"),asignacion);
+        calculo(Tipos2.a("err"),asignafalso);
+        
+        return Tipos2;
+        
+    }
+    
+    
+    public TAtributos Vars1(TAtributos Decs){
+        regla("Vars→  vars { Decs }");
+                
+        TAtributos Vars1 = atributosPara("Consts", "TS","err");
+        
+        //FALTA  Programa.TS = CreaTS()
+        dependencias(Decs.a("TPRH"),Vars1.a("TPRH"));//Consts.TSH = Programa.TS
+        dependencias(Vars1.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
+        dependencias(Decs.a("TSH"),Vars1.a("TSH"));//Vars.TSH = Tipos.TS
+        dependencias(Vars1.a("err"),Decs.a("err"));//Subprogramas.TSH = Vars.TS
+      
+        calculo(Decs.a("TPRH"),asignacion);
+        calculo(Vars1.a("TS"),asignacion);
+        calculo(Decs.a("TSH"),asignacion);
+        calculo(Vars1.a("err"),asignacion);
+        
+        return Vars1;
+        
+    }
+    
+    public TAtributos Vars2(TAtributos Decs){
+        regla("Vars→  λ");
+                
+        TAtributos Vars2 = atributosPara("Consts", "TS","err");
+        
+        //FALTA  Programa.TS = CreaTS()
+        dependencias(Decs.a("TPRH"),Vars2.a("TPRH"));//Consts.TSH = Programa.TS
+        dependencias(Vars2.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
+        dependencias(Decs.a("TSH"),Vars2.a("TSH"));//Vars.TSH = Tipos.TS
+
+        calculo(Decs.a("TPRH"),asignacion);
+        calculo(Vars2.a("TS"),asignacion);
+        calculo(Decs.a("TSH"),asignacion);
+        calculo(Vars2.a("err"),asignafalso);
+        
+        return Vars2;
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     
     //========================================================================
     
