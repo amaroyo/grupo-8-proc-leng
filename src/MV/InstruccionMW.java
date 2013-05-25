@@ -41,7 +41,8 @@ public class InstruccionMW {
 	 * @return Vector donde cada celda es una posicion de Memoria.
 	 */
 	public Vector<Object> getMem() {
-		System.out.println("getMem");
+		
+		//System.out.println("getMem");
 		return Mem;
 	}
 
@@ -127,7 +128,7 @@ public class InstruccionMW {
 	}
 
 	/**
-	 * Aumenta el tamaí±o del vector memoria segun las necesidades del
+	 * Aumenta el tamaï¿½o del vector memoria segun las necesidades del
 	 * programa que va a ejecutar.
 	 * 
 	 * @param tam
@@ -1393,7 +1394,7 @@ public class InstruccionMW {
 		String pilas = "El contenido de la pila es: \n";
 		if (pila.isEmpty())
 		{
-			pilas = pilas.concat("Vac’a \n");
+			pilas = pilas.concat("VacÃ­a \n");
 		}
 		
 		while (!pila.isEmpty()) {
