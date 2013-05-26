@@ -568,7 +568,20 @@ public Vector<Object> generarMemoria(HashMap<Integer, String> dirMemoria )
 					break;
 					
 				}
-				//Falta parchea
+				case copia:
+				{
+					try 
+					{
+						fich.write(bytesToString(new byte[]{Operaciones.COPIA}));
+						fich.write("\n");//salto linea
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						res=false;
+					}//instruccion				
+					break;
+					
+				}
 			default:
 				break;
 			}

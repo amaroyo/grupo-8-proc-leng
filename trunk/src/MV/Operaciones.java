@@ -38,4 +38,5 @@ public class Operaciones {
 	public static final byte IR_F=0x32;
 	public static final byte IR_V=0x33;
 	public static final byte IR_A=0x34;
+	public static final byte COPIA=0x35;
 }
