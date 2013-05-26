@@ -693,6 +693,15 @@ private void imprimirInstr(Vector<byte[]> v,Vector <Object> datosMem, int modoTr
 				i=i+2;
 				break;
 			}
+			case Operaciones.COPIA:
+			{
+				if (modoTraza == 1) textArea.append("COPIA \n");
+
+				System.out.println("COPIA");
+				mw.copia();
+				i++;
+				break;
+			}
 	
 			default:
 			{

@@ -1466,4 +1466,46 @@ public class InstruccionMW {
         
         ST = ST - 1;
     }
+    
+    public void copia() throws Exception
+    {
+        if (traza)
+            System.out.println("copia");
+        if (ST < 0)
+        {
+            throw new Exception(
+                    "ERROR: ir_f. La pila no contiene los datos necesarios.");
+        }
+        
+        Object cima=pila.pop();
+
+        if (cima instanceof String)
+        {
+            pila.push((String)cima);
+            pila.push((String)cima);
+        }
+        else if (cima instanceof Long)
+        {
+            pila.push((Long)cima);
+            pila.push((Long)cima);
+        }
+        else if (cima instanceof Integer)
+        {
+            pila.push((Integer)cima);
+            pila.push((Integer)cima);
+        }
+        if (cima instanceof Double)
+        {
+            pila.push((Double)cima);
+            pila.push((Double)cima);
+        }
+        else if (cima instanceof Boolean)
+        {
+            pila.push((Boolean)cima);
+            pila.push((Boolean)cima);
+        }
+
+        PC = PC + 1;
+        ST = ST + 1;
+    }
 }
