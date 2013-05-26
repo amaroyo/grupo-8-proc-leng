@@ -1220,7 +1220,7 @@ public class EAtribucion extends Atribucion {
    
     public TAtributos Inst7(TAtributos LLAMADA){
     
-    	regla("Inst → InsW ");
+    	regla("Inst → LLAMADA ");
          
          TAtributos Inst7 = atributosPara("Inst", "TSH","etq","err","cod");
          
