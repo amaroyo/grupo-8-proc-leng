@@ -115,6 +115,18 @@ class asignaCierto implements SemFun{
     }
 }
 
+class concatenar2 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="";
+        s= args[0].valor() +""+ args[1].valor();
+        return s;
+    }
+}
+
+
 class concatenarIR1 implements SemFun{
 	
 
@@ -171,6 +183,7 @@ public class EAtribucion extends Atribucion {
     private static SemFun asignacierto = new asignaCierto();
     private static SemFun asignafalso = new asignaFalso();
     
+    private static SemFun concatenar2 = new concatenar2();
     private static SemFun concatenarIR1 = new concatenarIR1();
     private static SemFun concatenarIR2 = new concatenarIR2();
     private static SemFun concatenarER1 = new concatenarER1();
@@ -810,17 +823,16 @@ public class EAtribucion extends Atribucion {
         return Tipo1;
     }
     
-    public TAtributos Tipo2(TAtributos Tipo){
-        regla("Tipo → Tipo dimensiones");
+    public TAtributos Tipo2(TAtributos Tipo,TAtributos Dimensiones){
+        regla("Tipo → Tipo Dimensiones");
                 
         TAtributos Tipo2 = atributosPara("Tipo","tipo","err");
         
       //TIPO ARRAY!!!!dependencias(Tipo2.a("tipo"),TipoBasico.a("tipo"));
-       // FALTA ERR "OR" 
-        dependencias(Tipo2.a("err"),Tipo.a("err"));
+        dependencias(Tipo2.a("err"),Tipo.a("err"),Dimensiones.a("err"));
 
        // calculo(Tipo2.a("tipo"),asignacion);
-        calculo(Tipo2.a("err"),asignacion);
+        calculo(Tipo2.a("err"),asignacionOR2);
         
         return Tipo2;
     }
@@ -1012,11 +1024,235 @@ public class EAtribucion extends Atribucion {
     }
     
     
+    public TAtributos Insts0(TAtributos Insts,TAtributos Inst){
+        regla("Insts → Insts ; Inst ");
+                
+        TAtributos Insts0 = atributosPara("Insts", "TSH","etq","err","cod");
+        
+        dependencias(Insts.a("TSH"),Insts0.a("TSH"));
+        dependencias(Inst.a("TSH"),Insts.a("TSH"));
+        dependencias(Insts.a("etqh"),Insts0.a("etqh"));
+        dependencias(Inst.a("etqh"),Insts.a("etq"));
+        dependencias(Insts0.a("etq"),Inst.a("etq"));
+        dependencias(Insts0.a("err"),Insts.a("err"),Inst.a("err"));
+        dependencias(Insts0.a("cod"),Insts.a("cod"),Inst.a("cod"));
+        
+        
+        calculo(Insts.a("TSH"),asignacion);
+        calculo(Inst.a("TSH"),asignacion);
+        calculo(Insts.a("etqh"),asignacion);
+        calculo(Inst.a("etqh"),asignacion);
+        calculo(Insts0.a("etq"),asignacion);
+        calculo(Insts0.a("err"),asignacionOR2);
+        calculo(Insts0.a("cod"),concatenar2);
+        
+        return Insts0;
+        
+    }
+    
+    public TAtributos Insts1(TAtributos Inst){
+        regla("Insts → Inst ");
+                
+        TAtributos Insts1 = atributosPara("Insts", "TSH","etq","err","cod");
+        
+        dependencias(Inst.a("TSH"),Insts1.a("TSH"));
+        dependencias(Inst.a("etqh"),Insts1.a("etqh"));
+        dependencias(Insts1.a("etq"),Inst.a("etq"));
+        dependencias(Insts1.a("err"),Inst.a("err"));
+        dependencias(Insts1.a("cod"),Inst.a("cod"));
+        
+        
+        calculo(Inst.a("TSH"),asignacion);
+        calculo(Inst.a("etqh"),asignacion);
+        calculo(Insts1.a("etq"),asignacion);
+        calculo(Insts1.a("err"),asignacion);
+        calculo(Insts1.a("cod"),asignacion);
+        
+        return Insts1;
+        
+    }
+    
+    public TAtributos Inst0(TAtributos InsAsig){
+        regla("Inst → InsAsig ");
+                
+        TAtributos Inst2 = atributosPara("Inst", "TSH","etq","err","cod");
+        
+        dependencias(InsAsig.a("TSH"),Inst2.a("TSH"));
+        dependencias(InsAsig.a("etqh"),Inst2.a("etqh"));
+        dependencias(Inst2.a("etq"),InsAsig.a("etq"));
+        dependencias(Inst2.a("err"),InsAsig.a("err"));
+        dependencias(Inst2.a("cod"),InsAsig.a("cod"));
+        
+        
+        calculo(InsAsig.a("TSH"),asignacion);
+        calculo(InsAsig.a("etqh"),asignacion);
+        calculo(Inst2.a("etq"),asignacion);
+        calculo(Inst2.a("err"),asignacion);
+        calculo(Inst2.a("cod"),asignacion);
+        
+        return Inst2;
+        
+    }
+    
+    public TAtributos Inst1(TAtributos InsR){
+        regla("Inst → InsR ");
+                
+        TAtributos Inst1 = atributosPara("Inst", "TSH","etq","err","cod");
+        
+        dependencias(InsR.a("TSH"),Inst1.a("TSH"));
+        dependencias(InsR.a("etqh"),Inst1.a("etqh"));
+        dependencias(Inst1.a("etq"),InsR.a("etq"));
+        dependencias(Inst1.a("err"),InsR.a("err"));
+        dependencias(Inst1.a("cod"),InsR.a("cod"));
+        
+        
+        calculo(InsR.a("TSH"),asignacion);
+        calculo(InsR.a("etqh"),asignacion);
+        calculo(Inst1.a("etq"),asignacion);
+        calculo(Inst1.a("err"),asignacion);
+        calculo(Inst1.a("cod"),asignacion);
+        
+        return Inst1;
+        
+    }
+    
+    
+    public TAtributos Inst2(TAtributos InsW){
+        regla("Inst → InsW ");
+                
+        TAtributos Inst2 = atributosPara("Inst", "TSH","etq","err","cod");
+        
+        dependencias(InsW.a("TSH"),Inst2.a("TSH"));
+        dependencias(InsW.a("etqh"),Inst2.a("etqh"));
+        dependencias(Inst2.a("etq"),InsW.a("etq"));
+        dependencias(Inst2.a("err"),InsW.a("err"));
+        dependencias(Inst2.a("cod"),InsW.a("cod"));
+        
+        
+        calculo(InsW.a("TSH"),asignacion);
+        calculo(InsW.a("etqh"),asignacion);
+        calculo(Inst2.a("etq"),asignacion);
+        calculo(Inst2.a("err"),asignacion);
+        calculo(Inst2.a("cod"),asignacion);
+        
+        return Inst2;
+        
+    }
+    
+    public TAtributos Inst3(TAtributos SWAP1){
+        regla("Inst → SWAP1() ");
+                
+        TAtributos Inst3 = atributosPara("Inst","etq","err","cod");
+        
+        dependencias(Inst3.a("err"),SWAP1.a("err"));
+        dependencias(Inst3.a("cod"),SWAP1.a("cod"));
+        
+
+        calculo(SWAP1.a("etq"),asignacero);
+        calculo(Inst3.a("err"),asignacion);
+        calculo(Inst3.a("cod"),asignacion);
+        
+        return Inst3;
+        
+    }
+    
+    public TAtributos Inst4(TAtributos SWAP2){
+        regla("Inst → SWAP2() ");
+                
+        TAtributos Inst4 = atributosPara("Inst","etq","err","cod");
+        
+        dependencias(Inst4.a("err"),SWAP2.a("err"));
+        dependencias(Inst4.a("cod"),SWAP2.a("cod"));
+        
+
+        calculo(SWAP2.a("etq"),asignacero);
+        calculo(Inst4.a("err"),asignacion);
+        calculo(Inst4.a("cod"),asignacion);
+        
+        return Inst4;
+        
+    }
+    public TAtributos Inst5(TAtributos IF){
+    	
+    	regla("Inst → IF ");
+         
+         TAtributos Inst5 = atributosPara("Inst", "TSH","etq","err","cod");
+         
+         dependencias(IF.a("TSH"),Inst5.a("TSH"));
+         dependencias(IF.a("etqh"),Inst5.a("etqh"));
+         dependencias(Inst5.a("etq"),IF.a("etq"));
+         dependencias(Inst5.a("err"),IF.a("err"));
+         dependencias(Inst5.a("cod"),IF.a("cod"));
+         
+         
+         calculo(IF.a("TSH"),asignacion);
+         calculo(IF.a("etqh"),asignacion);
+         calculo(Inst5.a("etq"),asignacion);
+         calculo(Inst5.a("err"),asignacion);
+         calculo(Inst5.a("cod"),asignacion);
+         
+         return Inst5;
+        
+    }
+
+    public TAtributos Inst6(TAtributos WHILE){
+        	
+        	regla("Inst → IF ");
+             
+             TAtributos Inst6 = atributosPara("Inst", "TSH","etq","err","cod");
+             
+             dependencias(WHILE.a("TSH"),Inst6.a("TSH"));
+             dependencias(WHILE.a("etqh"),Inst6.a("etqh"));
+             dependencias(Inst6.a("etq"),WHILE.a("etq"));
+             dependencias(Inst6.a("err"),WHILE.a("err"));
+             dependencias(Inst6.a("cod"),WHILE.a("cod"));
+             
+             
+             calculo(WHILE.a("TSH"),asignacion);
+             calculo(WHILE.a("etqh"),asignacion);
+             calculo(Inst6.a("etq"),asignacion);
+             calculo(Inst6.a("err"),asignacion);
+             calculo(Inst6.a("cod"),asignacion);
+             
+             return Inst6;
+            
+        }
+   
+    public TAtributos Inst7(TAtributos LLAMADA){
+    
+    	regla("Inst → InsW ");
+         
+         TAtributos Inst7 = atributosPara("Inst", "TSH","etq","err","cod");
+         
+         dependencias(LLAMADA.a("TSH"),Inst7.a("TSH"));
+         dependencias(Inst7.a("err"),LLAMADA.a("err"));
+         dependencias(Inst7.a("cod"),LLAMADA.a("cod"));
+         
+         
+         calculo(LLAMADA.a("TSH"),asignacion);
+         calculo(Inst7.a("err"),asignacion);
+         calculo(Inst7.a("cod"),asignacion);
+         calculo(LLAMADA.a("etq"),asignacero);
+         
+         return Inst7;
+        
+    }
     
     
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
     //========================================================================
     /////////////////EJERCICIO CUP DE EJEMPLO!
     
