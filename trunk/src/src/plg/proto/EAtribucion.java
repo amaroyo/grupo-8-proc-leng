@@ -222,8 +222,28 @@ public class EAtribucion extends Atribucion {
         
     }
   
-    public TAtributos Consts1(TAtributos Decs){
+    public TAtributos Consts0(TAtributos Decs){
         regla("Consts → consts { Decs }");
+                
+        TAtributos Consts0 = atributosPara("Consts", "TS","err");
+        
+        //FALTA  Programa.TS = CreaTS()
+        dependencias(Decs.a("TPRH"),Consts0.a("TPRH"));//Consts.TSH = Programa.TS
+        dependencias(Consts0.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
+        dependencias(Decs.a("TSH"),Consts0.a("TSH"));//Vars.TSH = Tipos.TS
+        dependencias(Consts0.a("err"),Decs.a("err"));//Subprogramas.TSH = Vars.TS
+      
+        calculo(Decs.a("TPRH"),asignacion);
+        calculo(Consts0.a("TS"),asignacion);
+        calculo(Decs.a("TSH"),asignacion);
+        calculo(Consts0.a("err"),asignacion);
+        
+        return Consts0;
+        
+    }
+    
+    public TAtributos Consts1(TAtributos Decs){
+        regla("Consts → Î» ");
                 
         TAtributos Consts1 = atributosPara("Consts", "TS","err");
         
@@ -231,38 +251,38 @@ public class EAtribucion extends Atribucion {
         dependencias(Decs.a("TPRH"),Consts1.a("TPRH"));//Consts.TSH = Programa.TS
         dependencias(Consts1.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
         dependencias(Decs.a("TSH"),Consts1.a("TSH"));//Vars.TSH = Tipos.TS
-        dependencias(Consts1.a("err"),Decs.a("err"));//Subprogramas.TSH = Vars.TS
       
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Consts1.a("TS"),asignacion);
         calculo(Decs.a("TSH"),asignacion);
-        calculo(Consts1.a("err"),asignacion);
+        calculo(Consts1.a("err"),asignafalso);
         
         return Consts1;
         
     }
     
-    public TAtributos Consts2(TAtributos Decs){
-        regla("Consts → Î» ");
+    public TAtributos Tipos0(TAtributos Decs){
+        regla("Tipos → tipos { Decs } ");
                 
-        TAtributos Consts2 = atributosPara("Consts", "TS","err");
+        TAtributos Tipos0 = atributosPara("Consts", "TS","err");
         
         //FALTA  Programa.TS = CreaTS()
-        dependencias(Decs.a("TPRH"),Consts2.a("TPRH"));//Consts.TSH = Programa.TS
-        dependencias(Consts2.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
-        dependencias(Decs.a("TSH"),Consts2.a("TSH"));//Vars.TSH = Tipos.TS
+        dependencias(Decs.a("TPRH"),Tipos0.a("TPRH"));//Consts.TSH = Programa.TS
+        dependencias(Tipos0.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
+        dependencias(Decs.a("TSH"),Tipos0.a("TSH"));//Vars.TSH = Tipos.TS
+        dependencias(Tipos0.a("err"),Decs.a("err"));//Subprogramas.TSH = Vars.TS
       
         calculo(Decs.a("TPRH"),asignacion);
-        calculo(Consts2.a("TS"),asignacion);
+        calculo(Tipos0.a("TS"),asignacion);
         calculo(Decs.a("TSH"),asignacion);
-        calculo(Consts2.a("err"),asignafalso);
+        calculo(Tipos0.a("err"),asignacion);
         
-        return Consts2;
+        return Tipos0;
         
     }
     
     public TAtributos Tipos1(TAtributos Decs){
-        regla("Tipos → tipos { Decs } ");
+        regla("Tipos → Î» ");
                 
         TAtributos Tipos1 = atributosPara("Consts", "TS","err");
         
@@ -270,155 +290,161 @@ public class EAtribucion extends Atribucion {
         dependencias(Decs.a("TPRH"),Tipos1.a("TPRH"));//Consts.TSH = Programa.TS
         dependencias(Tipos1.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
         dependencias(Decs.a("TSH"),Tipos1.a("TSH"));//Vars.TSH = Tipos.TS
-        dependencias(Tipos1.a("err"),Decs.a("err"));//Subprogramas.TSH = Vars.TS
       
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Tipos1.a("TS"),asignacion);
         calculo(Decs.a("TSH"),asignacion);
-        calculo(Tipos1.a("err"),asignacion);
+        calculo(Tipos1.a("err"),asignafalso);
         
         return Tipos1;
         
     }
     
-    public TAtributos Tipos2(TAtributos Decs){
-        regla("Tipos → Î» ");
+    
+    public TAtributos Vars0(TAtributos Decs){
+        regla("Vars →  vars { Decs }");
                 
-        TAtributos Tipos2 = atributosPara("Consts", "TS","err");
+        TAtributos Vars0 = atributosPara("Consts", "TS","err");
         
-        //FALTA  Programa.TS = CreaTS()
-        dependencias(Decs.a("TPRH"),Tipos2.a("TPRH"));//Consts.TSH = Programa.TS
-        dependencias(Tipos2.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
-        dependencias(Decs.a("TSH"),Tipos2.a("TSH"));//Vars.TSH = Tipos.TS
+
+        dependencias(Decs.a("TPRH"),Vars0.a("TPRH"));
+        dependencias(Vars0.a("TS"),Decs.a("TS"));
+        dependencias(Decs.a("TSH"),Vars0.a("TSH"));
+        dependencias(Vars0.a("err"),Decs.a("err"));
       
         calculo(Decs.a("TPRH"),asignacion);
-        calculo(Tipos2.a("TS"),asignacion);
+        calculo(Vars0.a("TS"),asignacion);
         calculo(Decs.a("TSH"),asignacion);
-        calculo(Tipos2.a("err"),asignafalso);
+        calculo(Vars0.a("err"),asignacion);
         
-        return Tipos2;
+        return Vars0;
         
     }
     
-    
     public TAtributos Vars1(TAtributos Decs){
-        regla("Vars →  vars { Decs }");
+        regla("Vars →  Î»");
                 
         TAtributos Vars1 = atributosPara("Consts", "TS","err");
         
-
+        
         dependencias(Decs.a("TPRH"),Vars1.a("TPRH"));
         dependencias(Vars1.a("TS"),Decs.a("TS"));
         dependencias(Decs.a("TSH"),Vars1.a("TSH"));
-        dependencias(Vars1.a("err"),Decs.a("err"));
-      
+
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Vars1.a("TS"),asignacion);
         calculo(Decs.a("TSH"),asignacion);
-        calculo(Vars1.a("err"),asignacion);
+        calculo(Vars1.a("err"),asignafalso);
         
         return Vars1;
         
     }
     
-    public TAtributos Vars2(TAtributos Decs){
-        regla("Vars →  Î»");
-                
-        TAtributos Vars2 = atributosPara("Consts", "TS","err");
-        
-        
-        dependencias(Decs.a("TPRH"),Vars2.a("TPRH"));
-        dependencias(Vars2.a("TS"),Decs.a("TS"));
-        dependencias(Decs.a("TSH"),Vars2.a("TSH"));
-
-        calculo(Decs.a("TPRH"),asignacion);
-        calculo(Vars2.a("TS"),asignacion);
-        calculo(Decs.a("TSH"),asignacion);
-        calculo(Vars2.a("err"),asignafalso);
-        
-        return Vars2;
-        
-    }
-    
-    public TAtributos Decs1(TAtributos Decs,TAtributos Dec){
+    public TAtributos Decs0(TAtributos Decs,TAtributos Dec){
         regla(" Decs → Decs ; Dec ");
                 
-        TAtributos Decs1 = atributosPara("Decs", "TS","err");
+        TAtributos Decs0 = atributosPara("Decs", "TS","err");
         
      
         // FALTA DECS.TS = AÃ‘ADIr....
         // FALTA ERR
-        dependencias(Decs.a("TPRH"),Decs1.a("TPRH"));
+        dependencias(Decs.a("TPRH"),Decs0.a("TPRH"));
         dependencias(Dec.a("TPRH"),Decs.a("TPRH"));
-        dependencias(Decs.a("TSH"),Decs1.a("TSH"));
+        dependencias(Decs.a("TSH"),Decs0.a("TSH"));
         dependencias(Dec.a("TSH"),Decs.a("TSH"));
-        dependencias(Decs1.a("err"),Decs.a("err"));
-        dependencias(Decs1.a("dir"),Decs.a("dir"));
+        dependencias(Decs0.a("err"),Decs.a("err"));
+        dependencias(Decs0.a("dir"),Decs.a("dir"));
         
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Dec.a("TPRH"),asignacion);
         calculo(Decs.a("TSH"),asignacion);
         calculo(Dec.a("TSH"),asignacion);
-        calculo(Decs1.a("dir"),sumauno);
+        calculo(Decs0.a("dir"),sumauno);
+        
+        return Decs0;
+        
+    }
+    
+    public TAtributos Decs1(TAtributos Dec){
+        regla("Decs → Dec");
+                
+        TAtributos Decs1 = atributosPara("Decs", "TS","err");
+        
+        // FALTA DECS.TS = AÃ‘ADIr....
+        // FALTA ERR
+        dependencias(Dec.a("TPRH"),Decs1.a("TPRH"));
+        dependencias(Dec.a("TSH"),Decs1.a("TSH"));
+        dependencias(Decs1.a("err"),Dec.a("err"));
+       
+        calculo(Dec.a("TPRH"),asignacion);
+        calculo(Dec.a("TSH"),asignacion);
+        calculo(Decs1.a("dir"),asignacero);
         
         return Decs1;
         
     }
     
-    public TAtributos Decs2(TAtributos Dec){
-        regla("Decs → Dec");
+    public TAtributos Dec0(TAtributos Tipo,TAtributos ident){
+        regla("Dec → const Tipo ident = Valores");
                 
-        TAtributos Decs2 = atributosPara("Decs", "TS","err");
+        TAtributos Dec0 = atributosPara("Dec", "TS","err");
         
-        // FALTA DECS.TS = AÃ‘ADIr....
-        // FALTA ERR
-        dependencias(Dec.a("TPRH"),Decs2.a("TPRH"));
-        dependencias(Dec.a("TSH"),Decs2.a("TSH"));
-        dependencias(Decs2.a("err"),Dec.a("err"));
-       
-        calculo(Dec.a("TPRH"),asignacion);
-        calculo(Dec.a("TSH"),asignacion);
-        calculo(Decs2.a("dir"),asignacero);
+        //FALTA ERROR
+        dependencias(Dec0.a("id"),ident.a("lex"));
+        dependencias(Dec0.a("tipo"),Tipo.a("tipo"));
+        dependencias(Tipo.a("TSH"),Dec0.a("TSH"));
+        dependencias(Tipo.a("TPRH"),Dec0.a("TPRH"));
+        dependencias(Dec0.a("err"),Tipo.a("err"));
         
-        return Decs2;
+        calculo(Dec0.a("id"),asignacion);
+      //  calculo(Dec0.a("clase"),asignacero);
+        calculo(Dec0.a("nivel"),asignacero);
+        calculo(Dec0.a("tipo"),asignacion);
+        calculo(Tipo.a("TSH"),asignacion);
+        calculo(Tipo.a("TPRH"),asignacion);
+      
+    //  calculo(Dec0.a("err"),asignacion....OR...);
+        
+        return Dec0;
         
     }
     
-    public TAtributos Dec1(TAtributos Tipo){
-        regla("Dec → const Tipo ident = Valores");
+    public TAtributos Dec1(TAtributos Tipo,TAtributos ident){
+        regla("Dec → tipo Tipo ident");
                 
         TAtributos Dec1 = atributosPara("Dec", "TS","err");
         
-        //FALTA ERROR
+        dependencias(Dec1.a("id"),ident.a("lex"));
         dependencias(Dec1.a("tipo"),Tipo.a("tipo"));
         dependencias(Tipo.a("TSH"),Dec1.a("TSH"));
         dependencias(Tipo.a("TPRH"),Dec1.a("TPRH"));
         dependencias(Dec1.a("err"),Tipo.a("err"));
         
-      //  calculo(Dec1.a("id"),asignacero);
+        calculo(Dec1.a("id"),asignacion);
       //  calculo(Dec1.a("clase"),asignacero);
         calculo(Dec1.a("nivel"),asignacero);
         calculo(Dec1.a("tipo"),asignacion);
         calculo(Tipo.a("TSH"),asignacion);
         calculo(Tipo.a("TPRH"),asignacion);
-      
-    //  calculo(Dec1.a("err"),asignacion....OR...);
+        calculo(Dec1.a("err"),asignacion);
         
         return Dec1;
         
     }
     
-    public TAtributos Dec2(TAtributos Tipo){
-        regla("Dec → tipo Tipo ident");
+    
+    public TAtributos Dec2(TAtributos Tipo,TAtributos Designador){
+        regla("Dec → var Tipo Designador");
                 
         TAtributos Dec2 = atributosPara("Dec", "TS","err");
         
+        dependencias(Dec2.a("id"),Designador.a("lex"));
         dependencias(Dec2.a("tipo"),Tipo.a("tipo"));
         dependencias(Tipo.a("TSH"),Dec2.a("TSH"));
         dependencias(Tipo.a("TPRH"),Dec2.a("TPRH"));
         dependencias(Dec2.a("err"),Tipo.a("err"));
         
-      //  calculo(Dec2.a("id"),asignacero);
+        calculo(Dec2.a("id"),asignacion);
       //  calculo(Dec2.a("clase"),asignacero);
         calculo(Dec2.a("nivel"),asignacero);
         calculo(Dec2.a("tipo"),asignacion);
@@ -427,97 +453,74 @@ public class EAtribucion extends Atribucion {
         calculo(Dec2.a("err"),asignacion);
         
         return Dec2;
-        
     }
     
     
-    public TAtributos Dec3(TAtributos Tipo){
-        regla("Dec → var Tipo Designador");
-                
-        TAtributos Dec3 = atributosPara("Dec", "TS","err");
-        
-        dependencias(Dec3.a("tipo"),Tipo.a("tipo"));
-        dependencias(Tipo.a("TSH"),Dec3.a("TSH"));
-        dependencias(Tipo.a("TPRH"),Dec3.a("TPRH"));
-        dependencias(Dec3.a("err"),Tipo.a("err"));
-        
-      //  calculo(Dec3.a("id"),asignacero);
-      //  calculo(Dec3.a("clase"),asignacero);
-        calculo(Dec3.a("nivel"),asignacero);
-        calculo(Dec3.a("tipo"),asignacion);
-        calculo(Tipo.a("TSH"),asignacion);
-        calculo(Tipo.a("TPRH"),asignacion);
-        calculo(Dec3.a("err"),asignacion);
-        
-        return Dec3;
-    }
-    
-    
-    public TAtributos DecsSubs1(TAtributos DecsSubs,TAtributos DecSub){
+    public TAtributos DecsSubs0(TAtributos DecsSubs,TAtributos DecSub){
         regla("DecsSubs → DecsSubs; DecSub");
                 
-        TAtributos DecsSubs1 = atributosPara("DecsSubs", "TSL","err");
+        TAtributos DecsSubs0 = atributosPara("DecsSubs", "TSL","err");
         
      
         // FALTA DecsSubs.TSL = AÃ‘ADIr....
         // FALTA ERR
-        dependencias(DecsSubs.a("TPRH"),DecsSubs1.a("TPRH"));
-        dependencias(DecsSubs.a("TSLH"),DecsSubs1.a("TSLH"));
+        dependencias(DecsSubs.a("TPRH"),DecsSubs0.a("TPRH"));
+        dependencias(DecsSubs.a("TSLH"),DecsSubs0.a("TSLH"));
         dependencias(DecSub.a("TSLH"),DecsSubs.a("TSLH"));
-        dependencias(DecsSubs1.a("err"),DecsSubs.a("err"));
-        dependencias(DecsSubs1.a("dir"),DecsSubs.a("dir"));
+        dependencias(DecsSubs0.a("err"),DecsSubs.a("err"));
+        dependencias(DecsSubs0.a("dir"),DecsSubs.a("dir"));
         
         calculo(DecsSubs.a("TPRH"),asignacion);
         calculo(DecsSubs.a("TSLH"),asignacion);
         calculo(DecSub.a("TSLH"),asignacion);
-        calculo(DecsSubs1.a("dir"),sumauno);
+        calculo(DecsSubs0.a("dir"),sumauno);
+        
+        return DecsSubs0;
+        
+    }
+    
+    public TAtributos DecsSubs1(TAtributos DecSub){
+        regla("DecsSubs → DecSub");
+                
+        TAtributos DecsSubs1 = atributosPara("DecsSubs", "TSL","err");
+        
+        // FALTA DecsSubs.TSL = AÃ‘ADIr....
+        // FALTA ERR
+        dependencias(DecsSubs1.a("err"),DecSub.a("err"));
+
+        calculo(DecsSubs1.a("dir"),asignacero);
         
         return DecsSubs1;
         
     }
     
-    public TAtributos DecsSubs2(TAtributos DecSub){
-        regla("DecsSubs → DecSub");
+    public TAtributos DecsSubs2(){
+        regla("DecsSubs → Î»");
                 
-        TAtributos DecsSubs2 = atributosPara("DecsSubs", "TSL","err");
+        TAtributos DecsSubs2 = atributosPara("DecsSubs","err");
         
-        // FALTA DecsSubs.TSL = AÃ‘ADIr....
-        // FALTA ERR
-        dependencias(DecsSubs2.a("err"),DecSub.a("err"));
-
-        calculo(DecsSubs2.a("dir"),asignacero);
+        calculo(DecsSubs2.a("err"),asignafalso);
         
         return DecsSubs2;
         
     }
     
-    public TAtributos DecsSubs3(){
-        regla("DecsSubs → Î»");
-                
-        TAtributos DecsSubs3 = atributosPara("DecsSubs","err");
-        
-        calculo(DecsSubs3.a("err"),asignafalso);
-        
-        return DecsSubs3;
-        
-    }
     
-    
-    public TAtributos DecSub1(TAtributos Tipo){
+    public TAtributos DecSub0(TAtributos Tipo){
         regla("DecSub → var Tipo Designador");
                 
-        TAtributos DecSub1 = atributosPara("DecSub","err");
+        TAtributos DecSub0 = atributosPara("DecSub","err");
         
-        dependencias(DecSub1.a("tipo"),Tipo.a("tipo"));
-        dependencias(DecSub1.a("err"),Tipo.a("err"));
+        dependencias(DecSub0.a("tipo"),Tipo.a("tipo"));
+        dependencias(DecSub0.a("err"),Tipo.a("err"));
         
-      //  calculo(DecSub1.a("id"),asignacero);
-      //  calculo(DecSub1.a("clase"),asignacero);
-        calculo(DecSub1.a("nivel"),asignauno);
-        calculo(DecSub1.a("tipo"),asignacion);
-        calculo(DecSub1.a("err"),asignacion);
+      //  calculo(DecSub0.a("id"),asignacero);
+      //  calculo(DecSub0.a("clase"),asignacero);
+        calculo(DecSub0.a("nivel"),asignauno);
+        calculo(DecSub0.a("tipo"),asignacion);
+        calculo(DecSub0.a("err"),asignacion);
         
-        return DecSub1;
+        return DecSub0;
     }
 
    
@@ -764,6 +767,29 @@ public class EAtribucion extends Atribucion {
         
         return CS;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     //========================================================================
     /////////////////EJERCICIO CUP DE EJEMPLO!
