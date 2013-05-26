@@ -20,6 +20,6 @@ public enum tByteCode {
 	
 	cchar, cnat, cfloat, cint
 	
-	,ir_a,ir_v,ir_f
+	,ir_a,ir_v,ir_f,copia
 
 }
