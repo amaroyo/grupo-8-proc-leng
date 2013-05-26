@@ -243,7 +243,7 @@ public class EAtribucion extends Atribucion {
     }
     
     public TAtributos Consts1(TAtributos Decs){
-        regla("Consts → Î» ");
+        regla("Consts →  λ ");
                 
         TAtributos Consts1 = atributosPara("Consts", "TS","err");
         
@@ -282,7 +282,7 @@ public class EAtribucion extends Atribucion {
     }
     
     public TAtributos Tipos1(TAtributos Decs){
-        regla("Tipos → Î» ");
+        regla("Tipos →  λ ");
                 
         TAtributos Tipos1 = atributosPara("Consts", "TS","err");
         
@@ -322,7 +322,7 @@ public class EAtribucion extends Atribucion {
     }
     
     public TAtributos Vars1(TAtributos Decs){
-        regla("Vars →  Î»");
+        regla("Vars →   λ");
                 
         TAtributos Vars1 = atributosPara("Consts", "TS","err");
         
