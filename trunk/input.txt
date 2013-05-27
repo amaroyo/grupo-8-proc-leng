@@ -1,0 +1,33 @@
+@ Programa de ejemplo
+program: ejemplo{
+     consts {
+       const natural DIM=10;
+     }          
+     tipos{
+       tipo float[DIM][DIM] tmatriz;
+       tipo (float,float) tresultado;   
+     }     
+     vars{
+       var tmatriz matriz;
+       var tresultado resul;
+     }
+     subprograms {
+  subprogram: calculaTraza(tmatriz matriz, float * traza){
+      vars {
+        var natural i;
+      }  
+      instructions {
+        i=0;
+        traza=0;
+        while i < DIM do
+          traza = traza + matriz[i][i];
+          i = i+1     
+        endwhile  
+      }
+  }                        
+}
+instructions{
+  out(resultado_0);
+  out(resul_1)    
+}
+}
