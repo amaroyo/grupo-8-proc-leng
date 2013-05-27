@@ -1379,7 +1379,7 @@ public class EAtribucion extends Atribucion {
    }
    
    
-   public TAtributos While(TAtributos ExpBool, TAtributos Insts0){
+   public TAtributos While0(TAtributos ExpBool, TAtributos Insts0){
 	   regla("IF → if ExpBool then Insts endif");
        
        TAtributos While0 = atributosPara("While","TSH","err", "cod","etq","etqh","irvh","irfh");
