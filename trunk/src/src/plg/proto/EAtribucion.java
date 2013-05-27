@@ -1479,7 +1479,7 @@ public class EAtribucion extends Atribucion {
    public TAtributos Parametro0(TAtributos Exp){
        regla("Parametro → ident = Exp ");
                
-       TAtributos Parametro0 = atributosPara("Parametros","TSH","err");
+       TAtributos Parametro0 = atributosPara("Parametro","TSH","err");
        
        dependencias(Exp.a("TSH"),Parametro0.a("TSH"));     
        dependencias(Parametro0.a("err"),Exp.a("err"));
@@ -1494,7 +1494,7 @@ public class EAtribucion extends Atribucion {
    public TAtributos Parametro1(TAtributos Exp){
        regla("Parametro →  Designador = Exp");
                
-       TAtributos Parametro1 = atributosPara("Parametros","TSH","err");
+       TAtributos Parametro1 = atributosPara("Parametro","TSH","err");
        
        dependencias(Exp.a("TSH"),Parametro1.a("TSH"));     
        dependencias(Parametro1.a("err"),Exp.a("err"));
