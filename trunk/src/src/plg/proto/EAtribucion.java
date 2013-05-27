@@ -238,7 +238,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Consts0(TAtributos Decs){
         regla("Consts → consts { Decs }");
                 
-        TAtributos Consts0 = atributosPara("Consts", "TS","err");
+        TAtributos Consts0 = atributosPara("Consts", "TS","TSH","TPRH","err");
         
         //FALTA  Programa.TS = CreaTS()
         dependencias(Decs.a("TPRH"),Consts0.a("TPRH"));//Consts.TSH = Programa.TS
@@ -258,7 +258,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Consts1(TAtributos Decs){
         regla("Consts →  λ ");
                 
-        TAtributos Consts1 = atributosPara("Consts", "TS","err");
+        TAtributos Consts1 = atributosPara("Consts", "TS","TSH","TPRH","err");
         
         //FALTA  Programa.TS = CreaTS()
         dependencias(Decs.a("TPRH"),Consts1.a("TPRH"));//Consts.TSH = Programa.TS
@@ -277,7 +277,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Tipos0(TAtributos Decs){
         regla("Tipos → tipos { Decs } ");
                 
-        TAtributos Tipos0 = atributosPara("Consts", "TS","err");
+        TAtributos Tipos0 = atributosPara("Tipos", "TS","TSH","TPRH","err");
         
         //FALTA  Programa.TS = CreaTS()
         dependencias(Decs.a("TPRH"),Tipos0.a("TPRH"));//Consts.TSH = Programa.TS
@@ -297,7 +297,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Tipos1(TAtributos Decs){
         regla("Tipos →  λ ");
                 
-        TAtributos Tipos1 = atributosPara("Consts", "TS","err");
+        TAtributos Tipos1 = atributosPara("Tipos", "TS","TSH","TPRH","err");
         
         //FALTA  Programa.TS = CreaTS()
         dependencias(Decs.a("TPRH"),Tipos1.a("TPRH"));//Consts.TSH = Programa.TS
@@ -317,7 +317,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Vars0(TAtributos Decs){
         regla("Vars →  vars { Decs }");
                 
-        TAtributos Vars0 = atributosPara("Consts", "TS","err");
+        TAtributos Vars0 = atributosPara("Vars", "TS","TSH","TPRH","err");
         
 
         dependencias(Decs.a("TPRH"),Vars0.a("TPRH"));
@@ -337,7 +337,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Vars1(TAtributos Decs){
         regla("Vars →   λ");
                 
-        TAtributos Vars1 = atributosPara("Consts", "TS","err");
+        TAtributos Vars1 = atributosPara("Vars", "TS","TSH","TPRH","err");
         
         
         dependencias(Decs.a("TPRH"),Vars1.a("TPRH"));
@@ -356,7 +356,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Decs0(TAtributos Decs,TAtributos Dec){
         regla(" Decs → Decs ; Dec ");
                 
-        TAtributos Decs0 = atributosPara("Decs", "TS","err");
+        TAtributos Decs0 = atributosPara("Decs","TS","TSH","TPRH","dir","err");
         
      
         // FALTA DECS.TS = AÃ‘ADIr....
@@ -381,7 +381,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Decs1(TAtributos Dec){
         regla("Decs → Dec");
                 
-        TAtributos Decs1 = atributosPara("Decs", "TS","err");
+        TAtributos Decs1 = atributosPara("Decs", "TS","TSH","TPRH","dir","err");
         
         // FALTA DECS.TS = AÃ‘ADIr....
         // FALTA ERR
@@ -400,7 +400,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Dec0(TAtributos Tipo,TAtributos ident){
         regla("Dec → const Tipo ident = Valores");
                 
-        TAtributos Dec0 = atributosPara("Dec", "TS","id","clase","niv","tipo","err");
+        TAtributos Dec0 = atributosPara("Dec", "TSH","TPRH","id","clase","niv","tipo","err");
         
         //FALTA ERROR
         dependencias(Dec0.a("id"),ident.a("lex"));
@@ -425,7 +425,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Dec1(TAtributos Tipo,TAtributos ident){
         regla("Dec → tipo Tipo ident");
                 
-        TAtributos Dec1 = atributosPara("Dec", "TS","id","clase","niv","tipo","err");
+        TAtributos Dec1 = atributosPara("Dec","TSH","TPRH","id","clase","niv","tipo","err");
         
         dependencias(Dec1.a("id"),ident.a("lex"));
         dependencias(Dec1.a("tipo"),Tipo.a("tipo"));
@@ -449,7 +449,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Dec2(TAtributos Tipo,TAtributos Designador){
         regla("Dec → var Tipo Designador");
                 
-        TAtributos Dec2 = atributosPara("Dec", "TS","id","clase","niv","tipo","err");
+        TAtributos Dec2 = atributosPara("Dec", "TSH","TPRH","id","clase","niv","tipo","err");
         
         dependencias(Dec2.a("id"),Designador.a("lex"));
         dependencias(Dec2.a("tipo"),Tipo.a("tipo"));
@@ -472,7 +472,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos DecsSubs0(TAtributos DecsSubs,TAtributos DecSub){
         regla("DecsSubs → DecsSubs; DecSub");
                 
-        TAtributos DecsSubs0 = atributosPara("DecsSubs", "TSL","err");
+        TAtributos DecsSubs0 = atributosPara("DecsSubs", "TSL","TSLH","TPRH","dir","err");
         
      
         // FALTA DecsSubs.TSL = AÃ‘ADIr....
@@ -497,7 +497,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos DecsSubs1(TAtributos DecSub){
         regla("DecsSubs → DecSub");
                 
-        TAtributos DecsSubs1 = atributosPara("DecsSubs", "TSL","err");
+        TAtributos DecsSubs1 = atributosPara("DecsSubs","TSL","TSLH","TPRH","dir","err");
         
         
         dependencias(DecSub.a("TPRH"),DecsSubs1.a("TPRH"));
@@ -531,7 +531,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos DecSub0(TAtributos Tipo,TAtributos Designador){
         regla("DecSub → var Tipo Designador");
                 
-        TAtributos DecSub0 = atributosPara("DecSub","err");
+        TAtributos DecSub0 = atributosPara("DecSub","TSLH","TPRH","id","clase","nivel","tipo","err");
         
         dependencias(DecSub0.a("id"),Designador.a("lex"));
         dependencias(DecSub0.a("tipo"),Tipo.a("tipo"));
@@ -1027,7 +1027,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Insts0(TAtributos Insts,TAtributos Inst){
         regla("Insts → Insts ; Inst ");
                 
-        TAtributos Insts0 = atributosPara("Insts", "TSH","etq","err","cod");
+        TAtributos Insts0 = atributosPara("Insts", "err","cod","TSH","etq","etqh");
         
         dependencias(Insts.a("TSH"),Insts0.a("TSH"));
         dependencias(Inst.a("TSH"),Insts.a("TSH"));
@@ -1053,7 +1053,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Insts1(TAtributos Inst){
         regla("Insts → Inst ");
                 
-        TAtributos Insts1 = atributosPara("Insts", "TSH","etq","err","cod");
+        TAtributos Insts1 = atributosPara("Insts", "err","cod","TSH","etq","etqh");
         
         dependencias(Inst.a("TSH"),Insts1.a("TSH"));
         dependencias(Inst.a("etqh"),Insts1.a("etqh"));
@@ -1075,7 +1075,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Inst0(TAtributos InsAsig){
         regla("Inst → InsAsig ");
                 
-        TAtributos Inst2 = atributosPara("Inst", "TSH","etq","err","cod");
+        TAtributos Inst2 = atributosPara("Inst", "err","cod","TSH","etq","etqh");
         
         dependencias(InsAsig.a("TSH"),Inst2.a("TSH"));
         dependencias(InsAsig.a("etqh"),Inst2.a("etqh"));
@@ -1097,7 +1097,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Inst1(TAtributos InsR){
         regla("Inst → InsR ");
                 
-        TAtributos Inst1 = atributosPara("Inst", "TSH","etq","err","cod");
+        TAtributos Inst1 = atributosPara("Inst","err","cod","TSH","etq","etqh");
         
         dependencias(InsR.a("TSH"),Inst1.a("TSH"));
         dependencias(InsR.a("etqh"),Inst1.a("etqh"));
@@ -1120,7 +1120,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Inst2(TAtributos InsW){
         regla("Inst → InsW ");
                 
-        TAtributos Inst2 = atributosPara("Inst", "TSH","etq","err","cod");
+        TAtributos Inst2 = atributosPara("Inst", "err","cod","TSH","etq","etqh");
         
         dependencias(InsW.a("TSH"),Inst2.a("TSH"));
         dependencias(InsW.a("etqh"),Inst2.a("etqh"));
@@ -1142,7 +1142,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Inst3(TAtributos SWAP1){
         regla("Inst → SWAP1() ");
                 
-        TAtributos Inst3 = atributosPara("Inst","etq","err","cod");
+        TAtributos Inst3 = atributosPara("Inst","etqh","err","cod");
         
         dependencias(Inst3.a("err"),SWAP1.a("err"));
         dependencias(Inst3.a("cod"),SWAP1.a("cod"));
@@ -1159,7 +1159,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Inst4(TAtributos SWAP2){
         regla("Inst → SWAP2() ");
                 
-        TAtributos Inst4 = atributosPara("Inst","etq","err","cod");
+        TAtributos Inst4 = atributosPara("Inst","etqh","err","cod");
         
         dependencias(Inst4.a("err"),SWAP2.a("err"));
         dependencias(Inst4.a("cod"),SWAP2.a("cod"));
@@ -1176,7 +1176,7 @@ public class EAtribucion extends Atribucion {
     	
     	regla("Inst → IF ");
          
-         TAtributos Inst5 = atributosPara("Inst", "TSH","etq","err","cod");
+         TAtributos Inst5 = atributosPara("Inst", "err","cod","TSH","etq","etqh");
          
          dependencias(IF.a("TSH"),Inst5.a("TSH"));
          dependencias(IF.a("etqh"),Inst5.a("etqh"));
@@ -1199,7 +1199,7 @@ public class EAtribucion extends Atribucion {
         	
         	regla("Inst → IF ");
              
-             TAtributos Inst6 = atributosPara("Inst", "TSH","etq","err","cod");
+             TAtributos Inst6 = atributosPara("Inst","err","cod","TSH","etq","etqh");
              
              dependencias(WHILE.a("TSH"),Inst6.a("TSH"));
              dependencias(WHILE.a("etqh"),Inst6.a("etqh"));
@@ -1222,7 +1222,7 @@ public class EAtribucion extends Atribucion {
     
     	regla("Inst → LLAMADA ");
          
-         TAtributos Inst7 = atributosPara("Inst", "TSH","etq","err","cod");
+         TAtributos Inst7 = atributosPara("Inst", "err","cod","TSH","etq","etqh");
          
          dependencias(LLAMADA.a("TSH"),Inst7.a("TSH"));
          dependencias(Inst7.a("err"),LLAMADA.a("err"));
@@ -1238,15 +1238,273 @@ public class EAtribucion extends Atribucion {
         
     }
     
+    public TAtributos InsAsig(TAtributos Designador,TAtributos Exp){
+        regla("InsAsig → Designador = Exp ");
+                
+        TAtributos InsAsig = atributosPara("InsAsig","err","cod","TSH","etq","etqh");
+        
+        dependencias(Exp.a("etqh"),InsAsig.a("etqh"));
+        dependencias(InsAsig.a("err"),InsAsig.a("TSH"),Designador.a("lex"),Designador.a("tipo"),Exp.a("tipo"),Exp.a("err"));
+        dependencias(InsAsig.a("etq"),Exp.a("etq"));
+        dependencias(Exp.a("etqh"),InsAsig.a("etqh"));
+        dependencias(InsAsig.a("cod"),InsAsig.a("TSH"),Designador.a("lex"));
+  
+        /// FALTA EL COD!!!
+        calculo(Exp.a("etqh"),asignacion);
+        //FALTA ERRORR
+        calculo(InsAsig.a("etq"),sumauno);
+        calculo(Exp.a("etqh"),asignacion);
+  
+        
+        
+        return InsAsig;
+        
+    }
     
+    public TAtributos InsR(TAtributos in,TAtributos Designador){
+        regla("InsR → in (Designador) ");
+                
+        TAtributos InsR = atributosPara("InsR","err","cod","TSH","etq","etqh");
+        
+ 
+        dependencias(InsR.a("err"),InsR.a("TSH"),Designador.a("lex"));
+        dependencias(InsR.a("etq"),in.a("etq"));
+        dependencias(in.a("etqh"),InsR.a("etqh"));
+        dependencias(InsR.a("cod"),InsR.a("TSH"),Designador.a("lex"));
+  
+        /// FALTA EL COD!!!
+        //FALTA ERRORR
+        calculo(InsR.a("etq"),sumauno);
+        calculo(in.a("etqh"),asignacion);
+  
+        
+        
+        return InsR;
+        
+    }
     
+   public TAtributos InsW(TAtributos Exp) {
+       
+       regla("InsW → out (Exp)");
+       
+       TAtributos InsW = atributosPara("InsW","TSH","err", "cod", "etq","etqh");
+     
+       /// VALORE????
+       dependencias(InsW.a("cod"), Exp.a("valor"));
+       dependencias(InsW.a("etq"),InsW.a("etqh"));
+       dependencias(Exp.a("TSH"),InsW.a("TSH"));
+       dependencias(InsW.a("err"),Exp.a("err"));
+       
+       calculo(InsW.a("etq"),sumaDos);
+       calculo(InsW.a("cod"),concatenarIR2);
+       calculo(InsW.a("err"),asignacion);
+       calculo(Exp.a("TSH"),asignacion);
+       
+       return InsW;
+   }
     
+
+   public TAtributos If0(TAtributos ExpBool,TAtributos Insts0){
+       regla("IF → if ExpBool then Insts endif");
+               
+       TAtributos If0 = atributosPara("If","TSH","err", "cod","etq","etqh","irvh","irfh");
+       
+       
+       dependencias(ExpBool.a("TSH"),If0.a("TSH"));
+       dependencias(Insts0.a("TSH"),ExpBool.a("TSH"));
+       dependencias(If0.a("err"),Insts0.a("err"));
+       
+       dependencias(If0.a("cod"),ExpBool.a("cod"),Insts0.a("etq"),Insts0.a("cod"));
+       dependencias(ExpBool.a("etqh"),If0.a("etqh"));
+       dependencias(Insts0.a("etqh"),ExpBool.a("etq"));
+
+       dependencias(If0.a("etq"),Insts0.a("etq"));
+       dependencias(ExpBool.a("irvh"),ExpBool.a("etq"));
+       dependencias(ExpBool.a("irfh"),ExpBool.a("etq"));
+       
+       
+       calculo(ExpBool.a("TSH"),asignacion);
+       calculo(Insts0.a("TSH"),asignacion);
+       calculo(If0.a("err"),asignacionOR2);
+
+       calculo(Insts0.a("etqh"),sumauno);
+
+       //CONCATENAR DIFERENTE
+       calculo(If0.a("cod"),concatenarIR1);
+       calculo(If0.a("etq"),asignacion);
+       calculo(ExpBool.a("etqh"),asignacion);
+       calculo(ExpBool.a("irvh"),asignacion);
+       calculo(ExpBool.a("irfh"),asignacion);
+       
+       
+       return If0;
+       
+   }
     
+   public TAtributos If1(TAtributos ExpBool,TAtributos Insts0, TAtributos Insts1){
+       regla("IF → if  ExpBool then Insts else Insts endif ");
+       
+       TAtributos If1 = atributosPara("If","TSH","err", "cod","etq","etqh","irvh","irfh");
+       
+       
+       dependencias(ExpBool.a("TSH"),If1.a("TSH"));
+       dependencias(Insts0.a("TSH"),ExpBool.a("TSH"));
+       dependencias(Insts1.a("TSH"),Insts0.a("TSH"));
+       dependencias(If1.a("err"),Insts0.a("err"),Insts1.a("err"));
+       
+       dependencias(If1.a("cod"),ExpBool.a("cod"),Insts0.a("etq"),Insts0.a("cod"),Insts1.a("etq"),Insts1.a("cod"));
+       dependencias(ExpBool.a("etqh"),If1.a("etqh"));
+       dependencias(Insts0.a("etqh"),ExpBool.a("etq"));
+       dependencias(Insts1.a("etqh"),Insts0.a("etq"));
+       dependencias(If1.a("etq"),Insts1.a("etq"));
+       dependencias(ExpBool.a("irvh"),ExpBool.a("etq"));
+       dependencias(ExpBool.a("irfh"),ExpBool.a("etq"));
+       
+       
+       calculo(ExpBool.a("TSH"),asignacion);
+       calculo(Insts0.a("TSH"),asignacion);
+       calculo(Insts1.a("TSH"),asignacion);
+       //// FALTA ERRRORRR
+       calculo(Insts0.a("etqh"),sumauno);
+       calculo(Insts1.a("etqh"),sumauno);
+       calculo(If1.a("cod"),concatenarIR1);
+       calculo(If1.a("etq"),asignacion);
+       calculo(ExpBool.a("etqh"),asignacion);
+       calculo(ExpBool.a("irvh"),asignacion);
+       calculo(ExpBool.a("irfh"),asignacion);
+       
+       
+       return If1;
+       
+   }
+   
+   
+   public TAtributos While(TAtributos ExpBool, TAtributos Insts0){
+	   regla("IF → if ExpBool then Insts endif");
+       
+       TAtributos While0 = atributosPara("While","TSH","err", "cod","etq","etqh","irvh","irfh");
+       
+       
+       dependencias(ExpBool.a("TSH"),While0.a("TSH"));
+       dependencias(Insts0.a("TSH"),ExpBool.a("TSH"));
+       dependencias(While0.a("err"),Insts0.a("err"));
+       
+       dependencias(While0.a("cod"),ExpBool.a("cod"),Insts0.a("etq"),Insts0.a("cod"),While0.a("etqh"));
+       dependencias(ExpBool.a("etqh"),While0.a("etqh"));
+       dependencias(Insts0.a("etqh"),ExpBool.a("etq"));
+
+       dependencias(While0.a("etq"),Insts0.a("etq"));
+       dependencias(ExpBool.a("irvh"),ExpBool.a("etq"));
+       dependencias(ExpBool.a("irfh"),ExpBool.a("etq"));
+       
+       
+       calculo(ExpBool.a("TSH"),asignacion);
+       calculo(Insts0.a("TSH"),asignacion);
+       calculo(While0.a("err"),asignacionOR2);
+
+       calculo(Insts0.a("etqh"),sumauno);
+
+       //CONCATENAR DIFERENTE
+       calculo(While0.a("cod"),concatenarIR1);
+       calculo(While0.a("etq"),asignacion);
+       calculo(ExpBool.a("etqh"),asignacion);
+       calculo(ExpBool.a("irvh"),asignacion);
+       calculo(ExpBool.a("irfh"),asignacion);
+       
+       
+       return While0;
+       
+   }
     
+   
+   public TAtributos Llamada0(TAtributos ident,TAtributos Parametros){
+       regla("LLAMADA → Call ident (Parametros)");
+               
+       TAtributos Llamada0 = atributosPara("Llamada","TSH","err", "cod","etq","etqh");
+       
+       
+       dependencias(Parametros.a("TSH"),Llamada0.a("TSH"));
+       dependencias(Llamada0.a("err"),Parametros.a("err"));
+       dependencias(Llamada0.a("cod"),ident.a("cod"),Parametros.a("cod"),ident.a("etqh"));
+       dependencias(Llamada0.a("etq"),ident.a("etq"));
+       dependencias(ident.a("etqh"),Llamada0.a("etqh"));
+
+       
+
+       calculo(Parametros.a("TSH"),asignacion);
+       calculo(Llamada0.a("err"),asignacion);
+       //CONCATENAR DIFERENTE
+       calculo(Llamada0.a("etqh"),asignacion);
+       calculo(Llamada0.a("etq"),sumauno);
+
+       
+       
+       return Llamada0;
+       
+   }
+   
+   public TAtributos Parametros0(TAtributos Parametros1,TAtributos Parametro){
+       regla("Parametros → Parametros, Parametro");
+               
+       TAtributos Parametros0 = atributosPara("Parametros","TSH","err");
+       
+       dependencias(Parametros1.a("TSH"),Parametros0.a("TSH"));
+       dependencias(Parametro.a("TSH"),Parametros1.a("TSH"));     
+       dependencias(Parametros0.a("err"),Parametros1.a("err"),Parametro.a("err"));
+
+
+       calculo(Parametros1.a("TSH"),asignacion);
+       calculo(Parametro.a("TSH"),asignacion);
+       calculo(Parametros0.a("err"),asignacionOR2);
+       
+       return Parametros0;
+       
+   }
+   
+   public TAtributos Parametros1(TAtributos Parametro){
+       regla("Parametros → Parametros, Parametro");
+               
+       TAtributos Parametros1 = atributosPara("Parametros","TSH","err");
+       
+       dependencias(Parametro.a("TSH"),Parametros1.a("TSH"));     
+       dependencias(Parametros1.a("err"),Parametro.a("err"));
+
+       calculo(Parametro.a("TSH"),asignacion);
+       calculo(Parametros1.a("err"),asignacion);
+       
+       return Parametros1;
+       
+   }
     
-    
-    
-    
+   public TAtributos Parametro0(TAtributos Exp){
+       regla("Parametro → ident = Exp ");
+               
+       TAtributos Parametro0 = atributosPara("Parametros","TSH","err");
+       
+       dependencias(Exp.a("TSH"),Parametro0.a("TSH"));     
+       dependencias(Parametro0.a("err"),Exp.a("err"));
+
+       calculo(Exp.a("TSH"),asignacion);
+       calculo(Parametro0.a("err"),asignacion);
+       
+       return Parametro0;
+       
+   }
+   
+   public TAtributos Parametro1(TAtributos Exp){
+       regla("Parametro →  Designador = Exp");
+               
+       TAtributos Parametro1 = atributosPara("Parametros","TSH","err");
+       
+       dependencias(Exp.a("TSH"),Parametro1.a("TSH"));     
+       dependencias(Parametro1.a("err"),Exp.a("err"));
+
+       calculo(Exp.a("TSH"),asignacion);
+       calculo(Parametro1.a("err"),asignacion);
+       
+       return Parametro1;
+       
+   }
     
     
     
