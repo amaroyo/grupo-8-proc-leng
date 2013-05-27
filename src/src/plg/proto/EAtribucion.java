@@ -1506,7 +1506,227 @@ public class EAtribucion extends Atribucion {
        
    }
     
-    
+   public TAtributos ExpBool(TAtributos Exp0,TAtributos Op0,TAtributos Exp1){
+	    
+		regla("ExpBool → Exp Op0 Exp ");
+	     
+	     TAtributos ExpBool = atributosPara("ExpBool", "TSH","tipo","err","cod","etq");
+	     
+	     dependencias(Exp0.a("TSH"),ExpBool.a("TSH"));//Exp.TSH = ExpBool.TSH
+	     dependencias(ExpBool.a("err"),Exp0.a("err"),Exp1.a("err"));//ExpBool.err = Exp0.err  OR Exp1.err
+	     dependencias(ExpBool.a("tipo"),Exp0.a("tipo"),Exp1.a("tipo"));//ExpBool.tipo = Exp0.tipo  OR Exp1.tipo 
+	     dependencias(Exp0.a("etqh"),ExpBool.a("etqh"));//Exp0.etqh=ExpBool.etqh
+	     dependencias(Exp1.a("etqh"),Exp0.a("etq"));//Exp1.etqh=Exp0.etq
+	     dependencias(ExpBool.a("etq"),Exp1.a("etq"));//ExpBool.etq=Exp1.etq+1
+	     dependencias(ExpBool.a("cod"),Exp0.a("cod"),Exp1.a("cod"),Op0.a("cod"));//ExpBool.cod= Exp0.cod||Exp1.cod||Op0.cod
+	     
+	     
+	     calculo(Exp0.a("TSH"),asignacion);
+	     calculo(ExpBool.a("err"),asignacionOR2);
+	     calculo(ExpBool.a("tipo"),asignacionOR2);
+	     calculo(Exp0.a("etqh"),asignacion);
+	     calculo(Exp1.a("etqh"),asignacion);
+	     calculo(Exp1.a("etq"),sumauno);
+	     calculo(ExpBool.a("etq"),asignacionOR2);
+	    // calculo(ExpBool.a("cod"),concatenarExpBool);
+	     
+	     return ExpBool;
+	    
+	}
+	public TAtributos Exp0(TAtributos Exp01,TAtributos Op0,TAtributos Exp02){
+	    
+		regla("Exp → Exp0 Op0 Exp0");
+	     
+	     TAtributos Exp0 = atributosPara("Exp0", "TSH","tipo","err","cod","etq");
+	     
+	     dependencias(Exp01.a("TSH"),Exp0.a("TSH"));//Exp0.TSH = Exp.TSH
+	     dependencias(Exp0.a("err"),Exp01.a("err"),Exp02.a("err"));//Exp.err = Exp01.err  OR Exp02.err
+	     dependencias(Exp0.a("tipo"),Exp01.a("tipo"),Exp02.a("tipo"));//Exp.tipo = Exp01.tipo  OR Exp02.tipo 
+	     dependencias(Exp01.a("etqh"),Exp0.a("etqh"));//Exp01.etqh=Exp0.etqh
+	     dependencias(Exp02.a("etqh"),Exp01.a("etq"));//Exp02.etqh=Exp01.etq
+	     dependencias(Exp0.a("etq"),Exp01.a("etq"));//Exp0.etq=Exp01.etq+1
+	     dependencias(Exp0.a("cod"),Exp01.a("cod"),Exp02.a("cod"),Op0.a("cod"));//ExpBool.cod= Exp0.cod||Exp1.cod||Op0.cod
+	     
+	     
+	     calculo(Exp01.a("TSH"),asignacion);
+	     calculo(Exp0.a("err"),asignacionOR2);
+	     calculo(Exp0.a("tipo"),asignacionOR2);
+	     calculo(Exp01.a("etqh"),asignacion);
+	     calculo(Exp02.a("etqh"),asignacion);
+	     calculo(Exp01.a("etq"),sumauno);
+	     calculo(Exp0.a("etq"),asignacion);
+	    // calculo(Exp0.a("cod"),concatenarExp0);
+	     
+	     return Exp0;
+	    
+	}
+
+
+	public TAtributos Exp1(TAtributos Exp0){
+	regla("Exp → Exp0");
+
+	TAtributos Exp1 = atributosPara("Exp1","TSH","tipo","err","cod","etq","etqh");
+
+	dependencias(Exp0.a("TSH"),Exp1.a("TSH"));//Exp0.TSH = Exp.TSH
+	dependencias(Exp1.a("err"),Exp0.a("err"));//Exp.err = Exp0.err
+	dependencias(Exp1.a("tipo"),Exp0.a("tipo"));//Exp.tipo = Exp0.tipo 
+	dependencias(Exp0.a("etqh"),Exp1.a("etqh"));//Exp0.etqh= Exp.etqh
+	dependencias(Exp1.a("etq"),Exp0.a("etq"));//Exp.etq=Exp0.etq
+	dependencias(Exp1.a("cod"),Exp0.a("cod"));//Exp.cod= Exp0.cod
+
+	calculo(Exp0.a("TSH"),asignacion);
+	calculo(Exp1.a("err"),asignacion);
+	calculo(Exp1.a("tipo"),asignacion);
+	calculo(Exp0.a("etqh"),asignacion);
+	calculo(Exp1.a("etq"),asignacion);
+	calculo(Exp1.a("cod"),asignacion);
+
+	return Exp1;
+	}
+
+
+
+	/*Exp00 → Exp01 Op1 Exp1 
+	Exp01.TSH = Exp00.TSH
+	Exp1.TSH = Exp01.TSH
+	Exp00.err = Exp01.err  OR Exp1.err
+	Exp00.tipo = Exp01.tipo OR Exp1.tipo 
+	Exp01.etqh=Exp00.etqh 
+	Exp1.etqh=Exp01.etqh
+	Exp00.etq=Exp1.etq+1
+	Exp00.cod= Exp01.cod||Exp1.cod||Op1.cod 
+	*/ 
+	public TAtributos Exp00(TAtributos Exp01,TAtributos Op1,TAtributos Exp1){
+
+		regla("Exp0 → Exp0 Op1 Exp1");
+	     
+	     TAtributos Exp00 = atributosPara("Exp00", "TSH","tipo","err","cod","etq");
+	     
+	     dependencias(Exp01.a("TSH"),Exp00.a("TSH"));//Exp01.TSH = Exp00.TSH
+	     dependencias(Exp1.a("TSH"),Exp01.a("TSH"));//Exp1.TSH = Exp01.TSH
+	     dependencias(Exp00.a("err"),Exp01.a("err"),Exp1.a("err"));//Exp00.err = Exp01.err  OR Exp1.err
+	     dependencias(Exp00.a("tipo"),Exp01.a("tipo"),Exp1.a("tipo"));//Exp00.tipo = Exp01.tipo OR Exp1.tipo
+	     dependencias(Exp01.a("etqh"),Exp00.a("etqh"));//Exp01.etqh=Exp00.etqh
+	     dependencias(Exp1.a("etqh"),Exp01.a("etqh"));//Exp1.etqh=Exp01.etqh
+	     dependencias(Exp00.a("etq"),Exp1.a("etq"));//Exp00.etq=Exp1.etq+1
+	     dependencias(Exp00.a("cod"),Exp01.a("cod"),Exp1.a("cod"),Op1.a("cod"));//Exp00.cod= Exp01.cod||Exp1.cod||Op1.cod 
+	     
+	     calculo(Exp01.a("TSH"),asignacion);
+	     calculo(Exp1.a("TSH"),asignacion);
+	     calculo(Exp00.a("err"),asignacionOR2);
+	     calculo(Exp00.a("tipo"),asignacionOR2);
+	     calculo(Exp01.a("etqh"),asignacion);
+	     calculo(Exp1.a("etqh"),asignacion);
+	     calculo(Exp1.a("etq"),sumauno);
+	     calculo(Exp00.a("etq"),asignacion);
+	     //calculo(Exp00.a("cod"),concatenarExp00);
+	     
+	     return Exp00;   
+	}
+	/*Exp01 → Exp0 OR Exp1 
+	Exp0.TSH = Exp00.TSH
+	Exp1.TSH = Exp01.TSH
+	Exp01.err = Exp01.err  OR Exp1.err
+	Exp01.tipo = Exp0.tipo OR Exp1.tipo
+	Exp01.cod = Exp0.cod || copia || ir_v(Exp00.irvh) || desapila || Exp1.cod
+	Exp0.etqh = Exp01.etqh
+	Exp1.etqh = Exp01.etq + 3
+	Exp01.etq = Exp1.etq
+	Exp01.irvh = Exp1.etq
+	Exp01.irfh = Exp1.etq
+	Exp0.irvh = Exp01.irvh
+	Exp0.irfh = Exp01.etq + 2
+	Exp1.irvh = Exp01.irvh
+	Exp1.irfh = Exp01.irfh
+	*/
+	public TAtributos Exp01(TAtributos Exp0,TAtributos Exp1){
+	    
+		regla("Exp0 → Exp0 OR Exp1");
+	     
+	     TAtributos Exp01 = atributosPara("Exp01", "TSH","tipo","err","cod","etq","irvh","irfh");
+	     
+	     dependencias(Exp0.a("TSH"),Exp01.a("TSH"));// Exp0.TSH = Exp01.TSH
+	     dependencias(Exp1.a("TSH"),Exp01.a("TSH"));//Exp1.TSH = Exp01.TSH
+	     dependencias(Exp01.a("err"),Exp0.a("err"),Exp1.a("err"));//Exp01.err = Exp0.err  OR Exp1.err
+	     dependencias(Exp01.a("tipo"),Exp0.a("tipo"),Exp1.a("tipo"));//Exp01.tipo = Exp0.tipo OR Exp1.tipo
+	     dependencias(Exp01.a("cod"),Exp0.a("cod"),Exp0.a("irvh"),Exp1.a("cod"));//Exp01.cod = Exp0.cod || copia || ir_v(Exp0.irvh) || desapila || Exp1.cod
+	     dependencias(Exp0.a("etqh"),Exp01.a("etqh"));//Exp0.etqh = Exp01.etqh
+	     dependencias(Exp1.a("etqh"),Exp01.a("etqh"));//Exp1.etqh = Exp01.etq + 3
+	     dependencias(Exp01.a("etq"),Exp1.a("etq"));//Exp01.etq = Exp1.etq 
+	     
+	     dependencias(Exp01.a("irvh"),Exp1.a("etq"));//Exp01.irvh = Exp1.etq
+	     dependencias(Exp01.a("irfh"),Exp1.a("etq"));//Exp01.irfh = Exp1.etq
+	     dependencias(Exp0.a("irvh"),Exp01.a("irvh"));//Exp0.irvh = Exp01.irvh
+	     dependencias(Exp0.a("irfh"),Exp01.a("etq"));//Exp0.irfh = Exp01.etq + 2
+	     dependencias(Exp1.a("irvh"),Exp01.a("irvh"));//Exp1.irvh = Exp01.irvh
+	     dependencias(Exp1.a("irfh"),Exp01.a("irfh"));//Exp1.irfh = Exp01.irfh
+	     
+	     calculo(Exp0.a("TSH"),asignacion);
+	     calculo(Exp1.a("TSH"),asignacion);
+	     calculo(Exp01.a("err"),asignacionOR2);
+	     calculo(Exp01.a("tipo"),asignacionOR2);
+	     //calculo(Exp01.a("cod"),concatenarExp01);
+	     calculo(Exp0.a("etqh"),asignacion);
+	     calculo(Exp01.a("etq"),sumaTres);
+	     calculo(Exp1.a("etqh"),asignacion);
+	     calculo(Exp01.a("etq"),asignacion);
+	     
+	     calculo(Exp01.a("irvh"),asignacion);
+	     calculo(Exp01.a("irfh"),asignacion);
+	     calculo(Exp0.a("irvh"),asignacion);
+	     calculo(Exp01.a("etq"),sumaDos);
+	     calculo(Exp1.a("irvh"),asignacion);
+	     calculo(Exp1.a("irfh"),asignacion);
+	     return Exp01;   
+	}
+
+	/*Exp02 → Exp1
+	       Exp1.TSH = Exp02.TSH
+	       Exp02.err =  Exp1.err
+	       Exp02.tipo =  Exp1.tipo
+	       Exp1.etqh= Exp02.etqh
+	       Exp02.etq= Exp1.etq  
+	       Exp02.cod= Exp1.cod
+	*/
+	    
+	public TAtributos Exp02(TAtributos Exp1){
+	    
+		regla("Exp0 → Exp1");
+	     
+	     TAtributos Exp02 = atributosPara("Exp02","TSH","tipo","err","cod","etq","etqh");
+	     
+	     dependencias(Exp1.a("TSH"),Exp02.a("TSH"));//Exp1.TSH = Exp02.TSH
+	     dependencias(Exp02.a("err"),Exp1.a("err"));//Exp02.err =  Exp1.err
+	     dependencias(Exp02.a("tipo"),Exp1.a("tipo"));//Exp02.tipo =  Exp1.tipo 
+	     dependencias(Exp1.a("etqh"),Exp02.a("etqh"));//Exp1.etqh= Exp02.etqh
+	     dependencias(Exp02.a("etq"),Exp1.a("etq"));//Exp02.etq= Exp1.etq
+	     dependencias(Exp02.a("cod"),Exp1.a("cod"));//Exp02.cod= Exp1.cod
+	     
+	     calculo(Exp1.a("TSH"),asignacion);
+	     calculo(Exp02.a("err"),asignacion);
+	     calculo(Exp02.a("tipo"),asignacion);
+	     calculo(Exp1.a("etqh"),asignacion);
+	     calculo(Exp02.a("etq"),asignacion);
+	     calculo(Exp02.a("cod"),asignacion);
+	     
+	     return Exp1;
+	    
+	}
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
     
     
     
