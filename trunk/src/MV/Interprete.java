@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,8 +16,6 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.*;
 
 import parser.ByteCode;
@@ -75,7 +74,9 @@ public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1, J
 	File archivo = null;
 	FileReader fr= null;
 	BufferedReader br = null;
+	/*
 	archivo = new File (ruta);
+	
 	
 		fr = new FileReader (archivo);	
 		br=new BufferedReader(fr);
@@ -91,7 +92,22 @@ public void generar(String ruta,int modo,Vector <Object> datosParaInterprete1, J
 					error=true;
 				instr.addElement(array);	
 			}
-		} 
+		}
+		*/
+	//----------------------------	
+	ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ruta));
+		  // Se lee el primer objeto
+		  Object aux = ois.readObject();
+	            
+	// Mientras haya objetos
+	while (aux!=null)
+	{
+	    instr.addElement((byte[])aux);
+	    aux =ois.readObject();
+	}
+	ois.close();	
+	//----------------------------	
+		
 		if (error)
 			System.out.println("Hubo errores");
 		else
