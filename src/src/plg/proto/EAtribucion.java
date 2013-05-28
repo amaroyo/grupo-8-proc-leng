@@ -1822,16 +1822,171 @@ public TAtributos Exp11(TAtributos Exp12,TAtributos Exp2){
      return Exp11;   
 } 
    
-   
-   
-   
-   
-   
-   
+ /*Exp1 → Exp2
+       Exp2.TSH = Exp12.TSH
+       Exp12.err =  Exp2.err
+       Exp12.tipo =  Exp2.tipo
+       Exp2.etqh= Exp12.etqh
+       Exp12.etq= Exp2.etq  
+       Exp12.cod= Exp2.cod 
+*/
+
+public TAtributos Exp12(TAtributos Exp2){
     
+	regla("Exp1 → Exp2");
+     
+     TAtributos Exp12 = atributosPara("Exp12","TSH","tipo","err","cod","etq","etqh");
+     
+     dependencias(Exp2.a("TSH"),Exp12.a("TSH"));//Exp2.TSH = Exp12.TSH
+     dependencias(Exp12.a("err"),Exp2.a("err"));//Exp12.err =  Exp2.err
+     dependencias(Exp12.a("tipo"),Exp2.a("tipo"));//Exp12.tipo =  Exp2.tipo 
+     dependencias(Exp2.a("etqh"),Exp12.a("etqh"));//Exp2.etqh= Exp12.etqh
+     dependencias(Exp12.a("etq"),Exp2.a("etq"));//Exp12.etq= Exp2.etq
+     dependencias(Exp12.a("cod"),Exp2.a("cod"));//Exp12.cod= Exp2.cod
+     
+     calculo(Exp2.a("TSH"),asignacion);
+     calculo(Exp12.a("err"),asignacion);
+     calculo(Exp12.a("tipo"),asignacion);
+     calculo(Exp2.a("etqh"),asignacion);
+     calculo(Exp12.a("etq"),asignacion);
+     calculo(Exp12.a("cod"),asignacion);
+     
+     return Exp12;
     
-    
+}
    
+ /*Exp2 → Exp3 Op3 Exp2 
+       Exp3.TSH = Exp20.TSH
+       Exp21.TSH = Exp3.TSH 
+        Exp20.err = Exp3.err OR Exp21.err
+        Exp20.tipo = Exp3.tipo OR Exp21.tipo 
+       Exp3.etqh=Exp20.etqh 
+       Exp21.etqh=Exp3.etq
+       Exp20.etq=Exp21.etq+1
+       Exp20.cod= Exp3.cod||Exp2.cod||Op3.cod 
+*/  
+public TAtributos Exp20(TAtributos Exp3,TAtributos Op3,TAtributos Exp21){
+
+	regla("Exp2 → Exp3 Op3 Exp2");
+ 
+	TAtributos Exp20 = atributosPara("Exp20", "TSH","tipo","err","cod","etq","etqh");
+ 
+	dependencias(Exp3.a("TSH"),Exp20.a("TSH"));//Exp3.TSH = Exp20.TSH
+	dependencias(Exp21.a("TSH"),Exp3.a("TSH"));//Exp21.TSH = Exp3.TSH
+ 	dependencias(Exp20.a("err"),Exp3.a("err"),Exp21.a("err"));//Exp20.err = Exp3.err OR Exp21.err
+ 	dependencias(Exp20.a("tipo"),Exp3.a("tipo"),Exp21.a("tipo"));//Exp20.tipo = Exp3.tipo OR Exp21.tipo
+ 	dependencias(Exp3.a("etqh"),Exp20.a("etqh"));//Exp3.etqh=Exp20.etqh
+ 	dependencias(Exp21.a("etqh"),Exp3.a("etqh"));//Exp21.etqh=Exp3.etq
+ 	dependencias(Exp20.a("etq"),Exp21.a("etq"));//Exp20.etq=Exp21.etq+1  
+ 	dependencias(Exp20.a("cod"),Exp3.a("cod"),Exp21.a("cod"),Op3.a("cod"));//Exp20.cod= Exp3.cod||Exp21.cod||Op3.cod 
+ 
+ 	calculo(Exp3.a("TSH"),asignacion);
+ 	calculo(Exp21.a("TSH"),asignacion);
+ 	calculo(Exp20.a("err"),asignacionOR2);
+ 	calculo(Exp20.a("tipo"),asignacionOR2);
+ 	calculo(Exp3.a("etqh"),asignacion);
+ 	calculo(Exp21.a("etqh"),asignacion);
+ 	calculo(Exp21.a("etq"),sumauno);
+ 	calculo(Exp20.a("etq"),asignacion);
+ 	//calculo(Exp20.a("cod"),concatenarExp20);
+ 
+ return Exp20;   
+}  
+ 
+/*Exp2 → Exp3
+       Exp3.TSH = Exp21.TSH
+       Exp21.err = Exp3.err
+       Exp21.tipo = Exp3.tipo
+       Exp3.etqh= Exp21.etqh
+       Exp21.etq= Exp3.etq  
+       Exp21.cod= Exp3.cod
+*/
+  
+public TAtributos Exp21(TAtributos Exp3){
+    
+	regla("Exp2 → Exp3");
+     
+     TAtributos Exp21 = atributosPara("Exp21","TSH","tipo","err","cod","etq","etqh");
+     
+     dependencias(Exp3.a("TSH"),Exp21.a("TSH"));//Exp3.TSH = Exp21.TSH
+     dependencias(Exp21.a("err"),Exp3.a("err"));//Exp21.err = Exp3.err
+     dependencias(Exp21.a("tipo"),Exp3.a("tipo"));//Exp21.tipo = Exp3.tipo 
+     dependencias(Exp3.a("etqh"),Exp21.a("etqh"));//Exp3.etqh= Exp21.etqh
+     dependencias(Exp21.a("etq"),Exp3.a("etq"));//Exp21.etq= Exp3.etq
+     dependencias(Exp21.a("cod"),Exp3.a("cod"));//Exp21.cod= Exp3.cod
+     
+     calculo(Exp3.a("TSH"),asignacion);
+     calculo(Exp21.a("err"),asignacion);
+     calculo(Exp21.a("tipo"),asignacion);
+     calculo(Exp3.a("etqh"),asignacion);
+     calculo(Exp21.a("etq"),asignacion);
+     calculo(Exp21.a("cod"),asignacion);
+     
+     return Exp21;
+    
+}
+    
+/*Exp3 → Op41 Designador
+Exp30.err = NOT EstaId? (Exp30.TSH, desginador.Lex) 
+        Exp30.tipo = desginador.tipo
+        Exp30.etq= Exp3.etqh + 2
+        Exp30.cod= apila_dir(Exp30.TSH [Designador.lex].dir)||Op41.cod
+*/  
+    
+public TAtributos Exp30(TAtributos Op41,TAtributos Desig){
+    
+	regla("Exp3 → Op41 Designador");
+     
+     TAtributos Exp30 = atributosPara("Exp30","TSH","tipo","err","cod","etq","etqh");
+     
+     dependencias(Exp30.a("err"),Exp30.a("TSH"),Desig.a("lex"));//Exp30.err = NOT EstaId? (Exp30.TSH, desginador.Lex)
+     dependencias(Exp30.a("tipo"),Desig.a("tipo"));//Exp30.tipo = desginador.tipo
+     dependencias(Exp30.a("etq"),Exp30.a("etqh"));//Exp30.etq= Exp3.etqh + 2 
+     dependencias(Exp30.a("cod"),Exp30.a("TSH"),Desig.a("lex"),Op41.a("cod"));//Exp30.cod= apila_dir(Exp30.TSH [Designador.lex].dir)||Op41.cod
+     
+     calculo(Exp30.a("err"),asignacion);
+     calculo(Exp30.a("tipo"),asignacion);
+     calculo(Exp30.a("etqh"),sumaDos);
+     calculo(Exp30.a("etq"),asignacion);
+     //calculo(Exp30.a("cod"),concatenarExp30);
+     
+     return Exp30;
+    
+} 
+
+/*Exp3 → Op42 Exp3 
+        Exp3.TSH = Exp31.TSH
+        Exp31.err = Exp3.err
+        Exp31.tipo = Exp3.tipo
+       Exp3.etqh= Exp31.etqh 
+       Exp31.etq= Exp3.etq + 1
+       Exp31.cod= apila(1)||Exp3.cod || Op42.cod
+*/
+
+public TAtributos Exp31(TAtributos Op42,TAtributos Exp3){
+    
+	regla("Exp3 → Op42 Exp3");
+     
+     TAtributos Exp31 = atributosPara("Exp31","TSH","tipo","err","cod","etq","etqh");
+     
+     dependencias(Exp3.a("TSH"),Exp31.a("TSH"));//Exp3.TSH = Exp31.TSH
+     dependencias(Exp31.a("err"),Exp3.a("err"));//Exp31.err = Exp3.err
+     dependencias(Exp31.a("tipo"),Exp3.a("tipo"));//Exp31.tipo = Exp3.tipo 
+     dependencias(Exp3.a("etqh"),Exp31.a("etqh"));//Exp3.etqh= Exp31.etqh
+     dependencias(Exp31.a("etq"),Exp3.a("etq"));//Exp31.etq= Exp3.etq + 1
+     dependencias(Exp31.a("cod"),Exp3.a("cod"),Op42.a("cod"));//Exp31.cod= apila(1)||Exp3.cod || Op42.cod 
+     
+     calculo(Exp3.a("TSH"),asignacion);
+     calculo(Exp31.a("err"),asignacion);
+     calculo(Exp31.a("tipo"),asignacion);
+     calculo(Exp3.a("etqh"),asignacion);
+     calculo(Exp3.a("etq"),sumauno);
+     calculo(Exp31.a("etq"),asignacion);
+     //calculo(Exp31.a("cod"),concatenarExp31);
+     
+     return Exp31;
+    
+} 
     //========================================================================
     /////////////////EJERCICIO CUP DE EJEMPLO!
     
