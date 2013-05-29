@@ -1987,6 +1987,133 @@ public TAtributos Exp31(TAtributos Op42,TAtributos Exp3){
      return Exp31;
     
 } 
+
+/*Exp3 → - (Exp3) 
+        Exp3.TSH = Exp32.TS
+        Exp32.err = Exp3.err
+        Exp32.tipo = Exp3.tipo
+        Exp32.cod= apila(0)||Exp3.cod||resta
+        Exp32.etq = Exp3.etqh+1;
+*/
+
+public TAtributos Exp32(TAtributos Exp3){
+    
+	regla("Exp3 → - (Exp3)");
+     
+     TAtributos Exp32 = atributosPara("Exp32","TSH","tipo","err","cod","etq","etqh");
+     
+     dependencias(Exp3.a("TSH"),Exp32.a("TS"));//Exp3.TSH = Exp32.TS
+     dependencias(Exp32.a("err"),Exp3.a("err"));//Exp32.err = Exp3.err
+     dependencias(Exp32.a("tipo"),Exp3.a("tipo"));//Exp32.tipo = Exp3.tipo 
+     dependencias(Exp32.a("cod"),Exp3.a("cod"));//Exp32.cod= apila(0)||Exp3.cod||resta
+     dependencias(Exp32.a("etq"),Exp3.a("etq"));//Exp32.etq = Exp3.etqh+1; 
+     
+     calculo(Exp3.a("TSH"),asignacion);
+     calculo(Exp32.a("err"),asignacion);
+     calculo(Exp32.a("tipo"),asignacion);
+     //calculo(Exp2.a("cod"),concatenarExp32);
+     calculo(Exp3.a("etqh"),sumauno);
+     calculo(Exp32.a("etq"),asignacion);
+     
+     return Exp32;
+    
+}
+
+/*Exp3 → Designador
+       Exp33.err = NOT EstaId? (Exp33.TSH, desginador.Lex)
+       Exp33.tipo = Designador.tipo
+       Exp33.cod=apila
+       Exp33.etq = Exp33.etqh+1;
+*/
+
+public TAtributos Exp33(TAtributos Desig){
+    
+	regla("Exp3 → Designador");
+     
+     TAtributos Exp33 = atributosPara("Exp33","TSH","tipo","err","cod","etq","etqh");
+     
+     dependencias(Exp33.a("err"),Exp33.a("TSH"),Desig.a("lex"));//Exp33.err = NOT EstaId? (Exp33.TSH, desginador.Lex)
+     dependencias(Exp33.a("tipo"),Desig.a("tipo"));//Exp33.tipo = Designador.tipo
+    // dependencias(Exp33.a("cod"),Exp3.a("tipo"));//Exp33.cod=apila 
+     dependencias(Exp33.a("etq"),Exp33.a("etqh"));//Exp33.etq = Exp33.etqh+1; 
+     
+     //calculo(Exp3.a("err"),asignacion);¿¿¿¿????
+     calculo(Exp33.a("tipo"),asignacion);
+     calculo(Exp33.a("cod"),asignacion);
+     calculo(Exp33.a("etqh"),sumauno);
+     calculo(Exp33.a("etq"),asignacion);
+     
+     return Exp33;
+    
+}
+
+/*Exp3 → Valores
+        Exp3.tipo = Valores.tipo
+        Exp3.cod=apila
+        Exp3.etq = Exp3.etqh+1;
+*/
+
+public TAtributos Exp34(TAtributos Valores){
+    
+	regla("Exp3 → Valores");
+     
+     TAtributos Exp34 = atributosPara("Exp34","tipo","cod","etq","etqh");
+     
+     dependencias(Exp34.a("tipo"),Valores.a("tipo"));//Exp34.tipo = Valores.tipo
+     //dependencias(Exp34.a("cod"));//Exp34.cod=apila
+     dependencias(Exp34.a("etq"),Exp34.a("etqh"));// Exp34.etq = Exp3.etqh+1; 
+     
+     calculo(Exp34.a("tipo"),asignacion);
+     calculo(Exp34.a("cod"),asignacion);
+     calculo(Exp34.a("etqh"),sumauno);
+     calculo(Exp34.a("etq"),asignacion);
+     
+     return Exp34;
+    
+}
+
+/*Exp3 → (Exp)
+       Exp.TSH= Exp35.TSH
+       Exp35.err = Exp.err
+       Exp35.tipo = Exp.tipo
+       Exp.etqh= Exp35.etqh
+       Exp35.etq= Exp.etq  
+       Exp35.cod=Exp.cod
+       Exp.irvh= Exp35.irvh
+       Exp.irfh= Exp35.irfh
+*/
+
+public TAtributos Exp35(TAtributos Exp){
+    
+	regla("Exp3 → (Exp)");
+     
+     TAtributos Exp35 = atributosPara("Exp35","tipo","cod","etq","etqh","TS","TSH","irvh","irfh");
+     
+     dependencias(Exp.a("TSH"),Exp35.a("TSH"));//Exp.TSH= Exp35.TSH
+     dependencias(Exp35.a("err"),Exp.a("err"));//Exp35.err = Exp.err
+     dependencias(Exp35.a("tipo"),Exp.a("tipo"));//Exp35.tipo = Exp.tipo 
+     dependencias(Exp.a("etqh"),Exp35.a("etqh"));//Exp.etqh= Exp35.etqh
+     dependencias(Exp35.a("etq"),Exp.a("etq"));//Exp35.etq= Exp.etq 
+     dependencias(Exp35.a("cod"),Exp.a("cod"));//Exp35.cod=Exp.cod 
+     dependencias(Exp.a("irvh"),Exp35.a("tipo"));//Exp.irvh= Exp35.irvh
+     dependencias(Exp.a("irfh"),Exp35.a("irfh"));//Exp.irfh= Exp35.irfh
+     
+     calculo(Exp.a("TSH"),asignacion);
+     calculo(Exp35.a("err"),asignacion);
+     calculo(Exp35.a("tipo"),asignacion);
+     calculo(Exp.a("etqh"),asignacion);
+     calculo(Exp35.a("etq"),asignacion);
+     calculo(Exp35.a("cod"),asignacion);
+     calculo(Exp.a("irvh"),asignacion);
+     calculo(Exp.a("irfh"),asignacion);
+     
+     return Exp35;
+    
+}
+
+/*Op0 → >
+      Op0.cod= mayor
+*/
     //========================================================================
     /////////////////EJERCICIO CUP DE EJEMPLO!
     
