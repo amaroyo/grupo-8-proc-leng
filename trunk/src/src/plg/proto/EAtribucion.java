@@ -183,6 +183,211 @@ class concatenarExp10 implements SemFun{
         return s;
     }
 }
+
+//----------OpsFunctions---------------------------
+class asignaOp00 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="mayor";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp01 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="menor";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp02 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="menor igual";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp03 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="mayor igual";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp04 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="igual";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp05 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="distinto";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp10 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="suma";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp11 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="resta";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp20 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="multiplicacion";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+
+class asignaOp21 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="division";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+
+class asignaOp22 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="modulo";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp30 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="desplazamiento izquierda";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp31 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="desplazamiento derecha";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp410 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="conversionChar";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp411 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="conversionInt";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp412 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="conversionNat";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp413 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="conversionFloat";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class asignaOp420 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="negacion logica";
+       // s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+
+
+
 public class EAtribucion extends Atribucion {    
     
     // Se crean los objetos que representan las diferentes funciones semÃ¡nticas
@@ -207,7 +412,31 @@ public class EAtribucion extends Atribucion {
     private static SemFun sumaDos = new SumaDos();
     private static SemFun sumaTres = new SumaTres();
     
-   
+   //funciones Ops
+    private static SemFun asignaOp00 = new asignaOp00();
+    private static SemFun asignaOp01 = new asignaOp01();
+    private static SemFun asignaOp02 = new asignaOp02();
+    private static SemFun asignaOp03 = new asignaOp03();
+    private static SemFun asignaOp04 = new asignaOp04();
+    private static SemFun asignaOp05 = new asignaOp05();
+    //-------------------------------------------------
+    private static SemFun asignaOp10 = new asignaOp10();
+    private static SemFun asignaOp11 = new asignaOp11();
+    //--------------------------------------------------
+    private static SemFun asignaOp20 = new asignaOp20();
+    private static SemFun asignaOp21 = new asignaOp21();
+    private static SemFun asignaOp22 = new asignaOp22();
+    //--------------------------------------------------
+    private static SemFun asignaOp30 = new asignaOp30();
+    private static SemFun asignaOp31 = new asignaOp31();
+    //--------------------------------------------------
+    private static SemFun asignaOp410 = new asignaOp410();
+    private static SemFun asignaOp411 = new asignaOp411();
+    private static SemFun asignaOp412 = new asignaOp412();
+    private static SemFun asignaOp413 = new asignaOp413();
+    //---------------------------------------------------
+    private static SemFun asignaOp420 = new asignaOp420();
+    
     
     //PRACTICA PLG 2Âº CUATRI!!!!!!
     public TAtributos Programa(TAtributos Consts,TAtributos Tipos,TAtributos Vars,TAtributos Subprogramas,TAtributos Insts){
@@ -2114,6 +2343,296 @@ public TAtributos Exp35(TAtributos Exp){
 /*Op0 → >
       Op0.cod= mayor
 */
+
+public TAtributos Op00(){
+    
+	regla("Op0 → >");
+     
+     TAtributos Op00 = atributosPara("Op00","cod");
+     
+     //dependencias(Exp.a("TSH"),Exp35.a("TSH"));//Exp.TSH= Exp35.TSH
+     
+     calculo(Op00.a("cod"),asignaOp00);
+     
+     return Op00;
+     
+ }
+
+/*Op0 → <
+      Op0.cod= menor
+*/
+
+public TAtributos Op01(){
+    
+	regla("Op0 → <");
+     
+     TAtributos Op01 = atributosPara("Op01","cod");
+     
+     //dependencias(Exp.a("TSH"),Exp35.a("TSH"));//Exp.TSH= Exp35.TSH
+     
+     calculo(Op01.a("cod"),asignaOp01);
+     
+     return Op01;
+     
+ }
+
+/*Op0 → <=
+      Op0.cod= menor igual
+*/
+
+public TAtributos Op02(){
+    
+	regla("Op0 → <=");
+     
+     TAtributos Op02 = atributosPara("Op02","cod");
+     
+     calculo(Op02.a("cod"),asignaOp02);
+     
+     return Op02;
+     
+ }
+
+/*Op0 → >=
+      Op0.cod= mayor igual
+*/
+
+public TAtributos Op03(){
+    
+	regla("Op0 → >=");
+     
+     TAtributos Op03 = atributosPara("Op03","cod");
+     
+     calculo(Op03.a("cod"),asignaOp03);
+     
+     return Op03;
+     
+ }
+
+/*Op0 → ==
+      Op0.cod= igual
+*/
+
+public TAtributos Op04(){
+    
+	regla("Op0 → ==");
+     
+     TAtributos Op04 = atributosPara("Op04","cod");
+     
+     calculo(Op04.a("cod"),asignaOp04);
+     
+     return Op04;
+     
+ }
+
+/*Op0 → !=
+      Op0.cod= distinto
+*/
+
+public TAtributos Op05(){
+    
+	regla("Op0 → !=");
+     
+     TAtributos Op05 = atributosPara("Op05","cod");
+     
+     calculo(Op05.a("cod"),asignaOp05);
+     
+     return Op05;
+     
+ }
+
+/*Op1 → +
+      Op1.cod= suma
+*/
+
+public TAtributos Op10(){
+    
+	regla("Op1 → +");
+     
+     TAtributos Op10 = atributosPara("Op10","cod");
+     
+     calculo(Op10.a("cod"),asignaOp10);
+     
+     return Op10;
+     
+ }
+
+/*Op1 → -
+      Op1.cod= resta
+*/
+
+public TAtributos Op11(){
+    
+	regla("Op1 → -");
+     
+     TAtributos Op11 = atributosPara("Op11","cod");
+     
+     calculo(Op11.a("cod"),asignaOp11);
+     
+     return Op11;
+     
+ }
+
+/*Op2 → *
+      Op2.cod= multiplicación
+*/
+
+public TAtributos Op20(){
+    
+	regla("Op2 → *");
+     
+     TAtributos Op20 = atributosPara("Op20","cod");
+     
+     calculo(Op20.a("cod"),asignaOp20);
+     
+     return Op20;
+     
+ }
+
+/*Op2 → /
+      Op2.cod= división
+*/
+
+public TAtributos Op21(){
+    
+	regla("Op2 → /");
+     
+     TAtributos Op21 = atributosPara("Op21","cod");
+     
+     calculo(Op21.a("cod"),asignaOp21);
+     
+     return Op21;
+     
+ }
+
+/*Op2 → %
+      Op2.cod= modulo
+*/
+
+public TAtributos Op22(){
+    
+	regla("Op2 → %");
+     
+     TAtributos Op22 = atributosPara("Op22","cod");
+     
+     calculo(Op22.a("cod"),asignaOp22);
+     
+     return Op22;
+     
+ }
+
+/*Op3 → <<
+      Op3.cod= desplazamiento izquierda
+*/
+
+public TAtributos Op30(){
+    
+	regla("Op3 → <<");
+     
+     TAtributos Op30 = atributosPara("Op30","cod");
+     
+     calculo(Op30.a("cod"),asignaOp30);
+     
+     return Op30;
+     
+ }
+
+/*Op3 → >>
+      Op3.cod= desplazamiento derecha
+*/
+
+public TAtributos Op31(){
+    
+	regla("Op3 → >>");
+     
+     TAtributos Op31 = atributosPara("Op31","cod");
+     
+     calculo(Op31.a("cod"),asignaOp31);
+     
+     return Op31;
+     
+ }
+
+/*Op41 → (char)
+      Op41.cod= conversiónChar
+*/
+
+public TAtributos Op410(){
+    
+	regla("Op41 → (char)");
+     
+     TAtributos Op410 = atributosPara("Op410","cod");
+     
+     calculo(Op410.a("cod"),asignaOp410);
+     
+     return Op410;
+     
+ }
+
+/*Op41 → (int)
+      Op41.cod= conversiónInt
+*/
+
+public TAtributos Op411(){
+    
+	regla("Op41 → (int)");
+     
+     TAtributos Op411 = atributosPara("Op411","cod");
+     
+     calculo(Op411.a("cod"),asignaOp411);
+     
+     return Op411;
+     
+ }
+
+/*Op41→ (nat)
+      Op41.cod= conversiónNat
+*/
+
+public TAtributos Op412(){
+    
+	regla("Op41 → (nat)");
+     
+     TAtributos Op412 = atributosPara("Op412","cod");
+     
+     calculo(Op412.a("cod"),asignaOp412);
+     
+     return Op412;
+     
+ }
+
+/*Op41 → (float)
+      Op41.cod= conversiónFloat
+*/
+
+public TAtributos Op413(){
+    
+	regla("Op41 → (float)");
+     
+     TAtributos Op413 = atributosPara("Op413","cod");
+     
+     calculo(Op413.a("cod"),asignaOp413);
+     
+     return Op413;
+     
+ }
+
+/*Op42 → not
+      Op41.cod= negación logica
+*/
+
+public TAtributos Op420(){
+    
+	regla("Op42 → not");
+     
+     TAtributos Op420 = atributosPara("Op420","cod");
+     
+     calculo(Op420.a("cod"),asignaOp420);
+     
+     return Op420;
+     
+ }
+
+
     //========================================================================
     /////////////////EJERCICIO CUP DE EJEMPLO!
     
