@@ -442,7 +442,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Programa(TAtributos Consts,TAtributos Tipos,TAtributos Vars,TAtributos Subprogramas,TAtributos Insts){
         regla("Programa → program: ident { Consts Tipos Vars Subprogramas instructions { Insts }}");
                 
-        TAtributos Programa = atributosPara("Programa", "TS","err","cod");//etq,etqh??
+        TAtributos Programa = atributosPara("Programa", "TS","err","cod","etq","etqh");
         
         //FALTA  Programa.TS = CreaTS()
         dependencias(Consts.a("TSH"),Programa.a("TS"));//Consts.TSH = Programa.TS
@@ -458,6 +458,12 @@ public class EAtribucion extends Atribucion {
         dependencias(Programa.a("err"),Consts.a("err"),Tipos.a("err"),Vars.a("err"),Subprogramas.a("err"),Insts.a("err"));//Programa.err = Consts.err OR  Tipos.err OR Vars.err OR Subprogramas.err OR Insts.err
         dependencias(Programa.a("cod"),Insts.a("cod"));//Prog.cod=Insts.cod || stop
         
+        dependencias(Subprogramas.a("etqh"),Programa.a("etqh"));
+        dependencias(Insts.a("etqh"),Subprogramas.a("etq"));
+        dependencias(Programa.a("etq"),Insts.a("etq"));
+
+        
+        
         calculo(Programa.a("TS"),creaTS);
         calculo(Programa.a("cod"),concatenarIR1);
         calculo(Consts.a("TSH"),asignacion);
@@ -472,6 +478,13 @@ public class EAtribucion extends Atribucion {
         calculo(Vars.a("TPRH"),asignacion);
         calculo(Subprogramas.a("TPRH"),asignacion);
         calculo(Programa.a("err"),asignacion);
+        
+        calculo(Programa.a("etqh"),asignacero);
+        calculo(Subprogramas.a("etqh"),asignacion);
+        calculo(Insts.a("etqh"),asignacion);
+        calculo(Programa.a("etq"),asignacion);
+
+        
         return Programa;
         
     }
@@ -594,10 +607,57 @@ public class EAtribucion extends Atribucion {
         
     }
     
+    public TAtributos Subprogramas0(TAtributos Decs){
+        regla("Subprogramas →  subprograms { Decs }");
+                
+        TAtributos Subprogramas0 = atributosPara("Subprogramas", "TS","TSH","TPRH","err","etq","etqh");
+        
+
+        dependencias(Decs.a("TPRH"),Subprogramas0.a("TPRH"));
+        dependencias(Subprogramas0.a("TS"),Decs.a("TS"));
+        dependencias(Decs.a("TSH"),Subprogramas0.a("TSH"));
+        dependencias(Subprogramas0.a("err"),Decs.a("err"));
+        
+        dependencias(Decs.a("etqh"),Subprogramas0.a("etq"));
+        dependencias(Subprogramas0.a("etq"),Decs.a("etq"));
+        
+        
+        calculo(Decs.a("TPRH"),asignacion);
+        calculo(Subprogramas0.a("TS"),asignacion);
+        calculo(Decs.a("TSH"),asignacion);
+        calculo(Subprogramas0.a("err"),asignacion);
+        
+        calculo(Decs.a("etqh"),asignacion);
+        calculo(Subprogramas0.a("etq"),asignacion);
+        
+        return Subprogramas0;
+        
+    }
+    
+    public TAtributos Subprogramas1(TAtributos Decs){
+        regla("Subprogramas →   λ");
+                
+        TAtributos Subprogramas1 = atributosPara("Subprogramas", "TS","TSH","TPRH","err");
+        
+        
+        dependencias(Decs.a("TPRH"),Subprogramas1.a("TPRH"));
+        dependencias(Subprogramas1.a("TS"),Decs.a("TS"));
+        dependencias(Decs.a("TSH"),Subprogramas1.a("TSH"));
+
+        calculo(Decs.a("TPRH"),asignacion);
+        calculo(Subprogramas1.a("TS"),asignacion);
+        calculo(Decs.a("TSH"),asignacion);
+        calculo(Subprogramas1.a("err"),asignafalso);
+        
+        return Subprogramas1;
+        
+    }
+    
+    
     public TAtributos Decs0(TAtributos Decs,TAtributos Dec){
         regla(" Decs → Decs ; Dec ");
                 
-        TAtributos Decs0 = atributosPara("Decs","TS","TSH","TPRH","dir","err");
+        TAtributos Decs0 = atributosPara("Decs","TS","TSH","TPRH","dir","err","etq","etqh");
         
      
         // FALTA DECS.TS = AÃ‘ADIr....
@@ -609,11 +669,20 @@ public class EAtribucion extends Atribucion {
         dependencias(Decs0.a("err"),Decs.a("err"));
         dependencias(Decs0.a("dir"),Decs.a("dir"));
         
+        
+        dependencias(Decs.a("etqh"),Decs0.a("etqh"));
+        dependencias(Dec.a("etqh"),Decs.a("etq"));
+        dependencias(Decs0.a("etq"),Dec.a("etq"));
+        
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Dec.a("TPRH"),asignacion);
         calculo(Decs.a("TSH"),asignacion);
         calculo(Dec.a("TSH"),asignacion);
         calculo(Decs0.a("dir"),sumauno);
+        
+        calculo(Decs.a("etqh"),asignacion);
+        calculo(Dec.a("etqh"),asignacion);
+        calculo(Decs0.a("etq"),asignacion);
         
         return Decs0;
         
@@ -622,17 +691,23 @@ public class EAtribucion extends Atribucion {
     public TAtributos Decs1(TAtributos Dec){
         regla("Decs → Dec");
                 
-        TAtributos Decs1 = atributosPara("Decs", "TS","TSH","TPRH","dir","err");
+        TAtributos Decs1 = atributosPara("Decs", "TS","TSH","TPRH","dir","err","etq","etqh");
         
         // FALTA DECS.TS = AÃ‘ADIr....
         // FALTA ERR
         dependencias(Dec.a("TPRH"),Decs1.a("TPRH"));
         dependencias(Dec.a("TSH"),Decs1.a("TSH"));
         dependencias(Decs1.a("err"),Dec.a("err"));
+        dependencias(Dec.a("etqh"),Decs1.a("etqh"));
+        dependencias(Decs1.a("etq"),Dec.a("etq"));
+        
        
         calculo(Dec.a("TPRH"),asignacion);
         calculo(Dec.a("TSH"),asignacion);
         calculo(Decs1.a("dir"),asignacero);
+        
+        calculo(Dec.a("etqh"),asignacion);
+        calculo(Decs1.a("etq"),asignacion);
         
         return Decs1;
         
@@ -708,6 +783,162 @@ public class EAtribucion extends Atribucion {
         
         return Dec2;
     }
+    
+    public TAtributos Dec3(TAtributos ident, TAtributos PFs, TAtributos CS){
+        regla("Dec → subprogram: ident (PFs ) {CS}");
+        
+        TAtributos Dec3 = atributosPara("Dec","TPRH","id","clase","niv","tipo","dir","err","etq","etqh");
+        
+        dependencias(PFs.a("TPRH"),Dec3.a("TPRH"));//PFs.TPRH = Subprograma.TPRH
+        dependencias(CS.a("TPRH"),PFs.a("TPRH"));//CS.TPRH = PFs.TPRH
+        dependencias(PFs.a("TSLH"),Dec3.a("TSL"));//PFs.TSLH = Subprograma.TSL(local)
+        dependencias(CS.a("TSLH"),PFs.a("TSL"));//CS.TSLH = PFs.TSL
+        dependencias(Dec3.a("id"),ident.a("lex"));//Subprograma.id = ident.Lex
+       // dependencias(Dec3.a("clase"),PFs.a("TSL"));//Subprograma.clase = proc
+       // dependencias(Dec3.a("TSLH"),PFs.a("TSL"));//Subprograma.niv = 0
+        dependencias(Dec3.a("tipo"),PFs.a("tipo"));//Subprograma.tipo = PFs.tipo
+       // dependencias(Dec3.a("TSLH"),PFs.a("TSL"));//Subprograma.dir = ¿??????????????????
+        dependencias(Dec3.a("err"),PFs.a("err"),CS.a("err"));//Subprograma.err= PFs.err OR CS.err
+        
+        dependencias(CS.a("etqh"),Dec3.a("etqh"));
+        dependencias(Dec3.a("etq"),CS.a("etq"));
+        
+        calculo(PFs.a("TPRH"),asignacion);
+        calculo(CS.a("TPRH"),asignacion);
+        calculo(PFs.a("TSLH"),asignacion);
+        calculo(CS.a("TSLH"),asignacion);
+        calculo(Dec3.a("id"),asignacion);
+        //calculo(Dec3.a("clase"),asignacionProc);
+        calculo(Dec3.a("niv"),asignacero);
+        calculo(Dec3.a("tipo"),asignacion);
+       // calculo(Dec3.a("dir"),asignacion);
+        calculo(Dec3.a("err"),asignacionOR2);
+        
+        calculo(CS.a("etqh"),asignacion);
+        calculo(Dec3.a("etq"),asignacion);
+        
+        return Dec3;
+    }
+    
+    
+   
+    
+    public TAtributos PFs0(TAtributos PFs1, TAtributos PF){
+        regla("PFs → PFs, PF");
+                
+        TAtributos PFs0 = atributosPara("PFs","tipo","TSLH","TPRH","err");
+        
+        dependencias(PFs0.a("tipo"),PF.a("tipo"));//PFs.tipo= PF.tipo
+        dependencias(PFs1.a("TSLH"),PFs0.a("TSLH"));//PFs1.TSLH= PFs0.TSLH
+        dependencias(PF.a("TSLH"),PFs1.a("TSLH"));//PF.TSLH= PFs1.TSLH
+        dependencias(PFs1.a("TPRH"),PFs0.a("TPRH"));//PFs1.TPRH= PFs0.TPRH
+        dependencias(PF.a("TPRH"),PFs1.a("TPRH"));//PF.TPRH= PFs1.TPRH
+        dependencias(PFs0.a("err"),PFs1.a("err"),PF.a("err"));//PFs0.err= PFs1.err OR PF.err
+        
+        calculo(PFs0.a("tipo"),asignacion);
+        calculo(PFs1.a("TSLH"),asignacion);
+        calculo(PF.a("TSLH"),asignacion);
+        calculo(PFs1.a("TPRH"),asignacion);
+        calculo(PF.a("TPRH"),asignacion);
+        calculo(PFs0.a("err"),asignacionOR2);
+        
+        return PFs0;
+    }
+    
+    public TAtributos PFs1(TAtributos PF){
+        regla("PFs → PFs, PF");
+                
+        TAtributos PFs1 = atributosPara("PFs","tipo","TSLH","TPRH","err","TSH");
+        
+        dependencias(PFs1.a("tipo"),PF.a("tipo"));//PFs.tipo= PF.tipo
+        //PFs.TSL= Añadir (PF.TSLH, PF.id,PF.clase, PF.niv, PF.Dir , PF.tipo)
+        dependencias(PFs1.a("TSL"),PF.a("TSLH"),PF.a("id"),PF.a("clase"),PF.a("niv"),PF.a("dir"),PF.a("tipo"));
+        //PFs.err= EstaId?( PFs.TSH, PF.id) OR EsPalReservada?( PFs.TPRH, PF.id) OR PF.err
+        dependencias(PFs1.a("err"),PFs1.a("TSH"),PF.a("id"),PFs1.a("TPRH"),PF.a("err"));
+        
+        calculo(PFs1.a("tipo"),asignacion);
+        //calculo(PFs1.a("TSL"),añadir);
+        //calculo(PFs.a("err"),estaId?);
+        
+        return PFs1;
+    }
+    
+    public TAtributos PF0(TAtributos Tipo, TAtributos ident){
+        regla("PF → Tipo ident");
+                
+        TAtributos PF0 = atributosPara("PF","id","clase","niv","tipo","dir","err");
+        
+        dependencias(PF0.a("id"),ident.a("lex"));//PF.id = ident.lex
+        //dependencias(PF0.a("clase"),ident.a("lex"));//PF.clase = pf
+        //dependencias(PF0.a("niv"),ident.a("lex"));//PF.niv = 1
+        dependencias(PF0.a("tipo"),Tipo.a("tipo"));//PF.tipo = Tipo.tipo
+        dependencias(PF0.a("dir"),PF0.a("tipo"),PF0.a("clase"));//PF.dir = tamañoDe(PF.tipo , PF.clase)
+        dependencias(PF0.a("err"),Tipo.a("err"));//PF.err= Tipo.err
+        
+        calculo(PF0.a("id"),asignacion);
+        //calculo(PF0.a("clase"),asignacionPF);¿¿¿¿¿¿¿¿¿?????????
+        calculo(PF0.a("niv"),asignauno);
+        calculo(PF0.a("tipo"),asignacion);
+        //calculo(PF0.a("dir"),asignacion);¿¿¿¿¿¿¿¿¿¿¿¿¿?????????
+        calculo(PF0.a("err"),asignacion);
+        
+        return PF0;
+    }
+    
+    
+    public TAtributos PF1(TAtributos Tipo, TAtributos Designador){
+        regla("PF → Tipo * designador");
+                
+        TAtributos PF1 = atributosPara("PF","id","clase","niv","tipo","dir","err");
+        
+        dependencias(PF1.a("id"),Designador.a("lex"));//PF.id = Designador.lex
+        //dependencias(PF0.a("clase"),ident.a("lex"));//PF.clase = pf
+        //dependencias(PF0.a("niv"),ident.a("lex"));//PF.niv = 1
+        dependencias(PF1.a("tipo"),Tipo.a("tipo"));//PF.tipo = Tipo.tipo
+        dependencias(PF1.a("dir"),PF1.a("tipo"),PF1.a("clase"));//PF.dir = tamañoDe(PF.tipo , PF.clase)
+        dependencias(PF1.a("err"),Tipo.a("err"));//PF.err= Tipo.err
+        
+        calculo(PF1.a("id"),asignacion);
+        //calculo(PF1.a("clase"),asignacionPF);¿¿¿¿¿¿¿¿¿?????????
+        calculo(PF1.a("niv"),asignauno);
+        calculo(PF1.a("tipo"),asignacion);
+        //calculo(PF1.a("dir"),asignacion);¿¿¿¿¿¿¿¿¿¿¿¿¿?????????
+        calculo(PF1.a("err"),asignacion);
+        
+        return PF1;
+    }
+    
+    /*CS  → vars { DecsSubs } instructions { Insts }
+        DecsSubs.TPRH = CS.TPRH
+        DecsSubs.TSLH = CS.TSLH
+        Insts.TSH = DecsSubs.TSL 
+        CS.err= DecsSubs.err OR Insts.err
+*/
+    public TAtributos CS(TAtributos DecSubs, TAtributos Insts){
+        regla("CS  → vars { DecsSubs } instructions { Insts }");
+                
+        TAtributos CS = atributosPara("CS","TPRH","TSLH","niv","tipo","dir","err","etq","etqh");
+        
+        dependencias(DecSubs.a("TPRH"),CS.a("TPRH"));//DecsSubs.TPRH = CS.TPRH
+        dependencias(DecSubs.a("TSLH"),CS.a("TSLH"));//DecsSubs.TSLH = CS.TSLH
+        dependencias(Insts.a("TSH"),DecSubs.a("TSL"));//Insts.TSH = DecsSubs.TSL
+        dependencias(CS.a("err"),DecSubs.a("err"),Insts.a("err"));//CS.err= DecsSubs.err OR Insts.err
+        dependencias(Insts.a("etqh"),CS.a("etqh"));
+        dependencias(CS.a("etq"),Insts.a("etq"));
+        
+        calculo(DecSubs.a("TPRH"),asignacion);
+        calculo(DecSubs.a("TSLH"),asignacion);
+        calculo(Insts.a("tipo"),asignacion);
+        calculo(CS.a("err"),asignacionOR2);
+        
+        calculo(Insts.a("etqh"),asignacion);
+        calculo(CS.a("etq"),asignacion);
+        
+        return CS;
+    }
+    
+    
+    
     
     
     public TAtributos DecsSubs0(TAtributos DecsSubs,TAtributos DecSub){
@@ -838,203 +1069,7 @@ public class EAtribucion extends Atribucion {
         return designador3;
     }
     
-    public TAtributos Subprogramas0(TAtributos Subprogramas1,TAtributos Subprograma){
-        regla("Subprogramas → Subprogramas Subprograma");
-                
-        TAtributos Subprogramas0 = atributosPara("Subprogramas","TPRH","TSH","err");
-        
-        dependencias(Subprogramas1.a("TPRH"),Subprogramas0.a("TPRH"));//Subprogramas1.TPRH = Subprogramas0.TPRH
-        dependencias(Subprograma.a("TPRH"),Subprogramas1.a("TPRH"));//Subprograma.TPRH = Subprogramas1.TPRH
-        dependencias(Subprogramas1.a("TSH"),Subprogramas0.a("TSH"));//Subprogramas1.TSH = Subprogramas0.TSH
-        dependencias(Subprograma.a("TSH"),Subprogramas1.a("TSH"));//Subprograma.TSH = Subprogramas1.TSH
-        dependencias(Subprogramas0.a("err"),Subprogramas1.a("err"),Subprograma.a("err"));//Subprogramas0.err= Subprogramas1.err OR Subprograma.err 
-        
-        calculo(Subprogramas1.a("TPRH"),asignacion);
-        calculo(Subprograma.a("TPRH"),asignacero);
-        calculo(Subprogramas1.a("TSH"),asignauno);
-        calculo(Subprograma.a("TSH"),asignacion);
-        calculo(Subprogramas0.a("err"),asignacion);
-        
-        return Subprogramas0;
-    } 
-    
-    
-    public TAtributos Subprogramas1(TAtributos Subprograma){
-        regla("Subprogramas → Subprograma");
-                
-        TAtributos Subprogramas1 = atributosPara("Subprogramas","TPRH","TSH","err");
-        
-        dependencias(Subprograma.a("TPRH"),Subprogramas1.a("TPRH"));//Subprograma.TPRH = Subprogramas.TPRH
-        dependencias(Subprograma.a("TSH"),Subprogramas1.a("TSH"));//Subprograma.TPRH = Subprogramas1.TPRH
-       // dependencias(Subprogramas1.a("TSH"),Subprogramas0.a("TSH"));//Subprograma.TSL(local) = CreaTSL(Subprograma.TSH)
-        //AÑADIRRRRRRdependencias(Subprograma.a("TSH"),Subprogramas1.a("TSH"));//Subprograma.TS= Añadir (Subprograma.TSH, Subprograma.id,
-        //Subprograma.clase, Subprograma.niv ,Subprograma.dir, Subprograma.tipo)
-        dependencias(Subprogramas1.a("err"),Subprogramas1.a("TSH"),Subprograma.a("id"),Subprograma.a("clase"),Subprograma.a("dir"),Subprograma.a("niv"),Subprograma.a("tipo"),Subprogramas1.a("TPRH"),Subprograma.a("err"));//Subprogramas0.err= Subprogramas1.err OR Subprograma.err 
-        
-        calculo(Subprograma.a("TPRH"),asignacion);
-        calculo(Subprograma.a("TSH"),asignacero);
-       // calculo(Subprograma.a("TSL"),creaTSL);
-       // calculo(Subprograma.a("TS"),Añadir);
-        //calculo(Subprogramas1.a("err"),EstaId?);
-        //calculo(Subprogramas1.a("err"),EsPalReservada?);
-        
-        return Subprogramas1;
-    }
 
-    public TAtributos Subprogramas2(){
-        regla("Subprogramas → λ");
-                
-        TAtributos Subprogramas2 = atributosPara("Subprogramas","TS","TSH","err");
-        
-        dependencias(Subprogramas2.a("TS"),Subprogramas2.a("TSH"));//Subprogramas.TS = Subprogramas.TSH
-
-        calculo(Subprogramas2.a("TS"),asignacion);
-        calculo(Subprogramas2.a("err"),asignafalso);
-       // calculo(Subprograma.a("TSL"),creaTSL);
-       // calculo(Subprograma.a("TS"),Añadir);
-        //calculo(Subprogramas1.a("err"),EstaId?);
-        //calculo(Subprogramas1.a("err"),EsPalReservada?);
-        
-        return Subprogramas2;
-    }
-    
-    public TAtributos Subprograma0(TAtributos ident, TAtributos PFs, TAtributos CS){
-        regla("Subprograma → subprogram: ident (PFs ) {CS }");
-                
-        TAtributos Subprograma0 = atributosPara("Subprograma","TPRH","id","clase","niv","tipo","dir","err");
-        
-        dependencias(PFs.a("TPRH"),Subprograma0.a("TPRH"));//PFs.TPRH = Subprograma.TPRH
-        dependencias(CS.a("TPRH"),PFs.a("TPRH"));//CS.TPRH = PFs.TPRH
-        dependencias(PFs.a("TSLH"),Subprograma0.a("TSL"));//PFs.TSLH = Subprograma.TSL(local)
-        dependencias(CS.a("TSLH"),PFs.a("TSL"));//CS.TSLH = PFs.TSL
-        dependencias(Subprograma0.a("id"),ident.a("lex"));//Subprograma.id = ident.Lex
-       // dependencias(Subprograma0.a("clase"),PFs.a("TSL"));//Subprograma.clase = proc
-       // dependencias(Subprograma0.a("TSLH"),PFs.a("TSL"));//Subprograma.niv = 0
-        dependencias(Subprograma0.a("tipo"),PFs.a("tipo"));//Subprograma.tipo = PFs.tipo
-       // dependencias(Subprograma0.a("TSLH"),PFs.a("TSL"));//Subprograma.dir = ¿??????????????????
-        dependencias(Subprograma0.a("err"),PFs.a("err"),CS.a("err"));//Subprograma.err= PFs.err OR CS.err
-        
-        calculo(PFs.a("TPRH"),asignacion);
-        calculo(CS.a("TPRH"),asignacion);
-        calculo(PFs.a("TSLH"),asignacion);
-        calculo(CS.a("TSLH"),asignacion);
-        calculo(Subprograma0.a("id"),asignacion);
-        //calculo(Subprograma0.a("clase"),asignacionProc);
-        calculo(Subprograma0.a("niv"),asignacero);
-        calculo(Subprograma0.a("tipo"),asignacion);
-       // calculo(Subprograma0.a("dir"),asignacion);
-        calculo(Subprograma0.a("err"),asignacionOR2);
-        
-        return Subprograma0;
-    }  
-    
-    public TAtributos PFs0(TAtributos PFs1, TAtributos PF){
-        regla("PFs → PFs, PF");
-                
-        TAtributos PFs0 = atributosPara("PFs","tipo","TSLH","TPRH","err");
-        
-        dependencias(PFs0.a("tipo"),PF.a("tipo"));//PFs.tipo= PF.tipo
-        dependencias(PFs1.a("TSLH"),PFs0.a("TSLH"));//PFs1.TSLH= PFs0.TSLH
-        dependencias(PF.a("TSLH"),PFs1.a("TSLH"));//PF.TSLH= PFs1.TSLH
-        dependencias(PFs1.a("TPRH"),PFs0.a("TPRH"));//PFs1.TPRH= PFs0.TPRH
-        dependencias(PF.a("TPRH"),PFs1.a("TPRH"));//PF.TPRH= PFs1.TPRH
-        dependencias(PFs0.a("err"),PFs1.a("err"),PF.a("err"));//PFs0.err= PFs1.err OR PF.err
-        
-        calculo(PFs0.a("tipo"),asignacion);
-        calculo(PFs1.a("TSLH"),asignacion);
-        calculo(PF.a("TSLH"),asignacion);
-        calculo(PFs1.a("TPRH"),asignacion);
-        calculo(PF.a("TPRH"),asignacion);
-        calculo(PFs0.a("err"),asignacionOR2);
-        
-        return PFs0;
-    }
-    
-    public TAtributos PFs1(TAtributos PF){
-        regla("PFs → PFs, PF");
-                
-        TAtributos PFs1 = atributosPara("PFs","tipo","TSLH","TPRH","err","TSH");
-        
-        dependencias(PFs1.a("tipo"),PF.a("tipo"));//PFs.tipo= PF.tipo
-        //PFs.TSL= Añadir (PF.TSLH, PF.id,PF.clase, PF.niv, PF.Dir , PF.tipo)
-        dependencias(PFs1.a("TSL"),PF.a("TSLH"),PF.a("id"),PF.a("clase"),PF.a("niv"),PF.a("dir"),PF.a("tipo"));
-        //PFs.err= EstaId?( PFs.TSH, PF.id) OR EsPalReservada?( PFs.TPRH, PF.id) OR PF.err
-        dependencias(PFs1.a("err"),PFs1.a("TSH"),PF.a("id"),PFs1.a("TPRH"),PF.a("err"));
-        
-        calculo(PFs1.a("tipo"),asignacion);
-        //calculo(PFs1.a("TSL"),añadir);
-        //calculo(PFs.a("err"),estaId?);
-        
-        return PFs1;
-    }
-    
-    public TAtributos PF0(TAtributos Tipo, TAtributos ident){
-        regla("PF → Tipo ident");
-                
-        TAtributos PF0 = atributosPara("PF","id","clase","niv","tipo","dir","err");
-        
-        dependencias(PF0.a("id"),ident.a("lex"));//PF.id = ident.lex
-        //dependencias(PF0.a("clase"),ident.a("lex"));//PF.clase = pf
-        //dependencias(PF0.a("niv"),ident.a("lex"));//PF.niv = 1
-        dependencias(PF0.a("tipo"),Tipo.a("tipo"));//PF.tipo = Tipo.tipo
-        dependencias(PF0.a("dir"),PF0.a("tipo"),PF0.a("clase"));//PF.dir = tamañoDe(PF.tipo , PF.clase)
-        dependencias(PF0.a("err"),Tipo.a("err"));//PF.err= Tipo.err
-        
-        calculo(PF0.a("id"),asignacion);
-        //calculo(PF0.a("clase"),asignacionPF);¿¿¿¿¿¿¿¿¿?????????
-        calculo(PF0.a("niv"),asignauno);
-        calculo(PF0.a("tipo"),asignacion);
-        //calculo(PF0.a("dir"),asignacion);¿¿¿¿¿¿¿¿¿¿¿¿¿?????????
-        calculo(PF0.a("err"),asignacion);
-        
-        return PF0;
-    }
-    
-    public TAtributos PF1(TAtributos Tipo, TAtributos Designador){
-        regla("PF → Tipo * designador");
-                
-        TAtributos PF1 = atributosPara("PF","id","clase","niv","tipo","dir","err");
-        
-        dependencias(PF1.a("id"),Designador.a("lex"));//PF.id = Designador.lex
-        //dependencias(PF0.a("clase"),ident.a("lex"));//PF.clase = pf
-        //dependencias(PF0.a("niv"),ident.a("lex"));//PF.niv = 1
-        dependencias(PF1.a("tipo"),Tipo.a("tipo"));//PF.tipo = Tipo.tipo
-        dependencias(PF1.a("dir"),PF1.a("tipo"),PF1.a("clase"));//PF.dir = tamañoDe(PF.tipo , PF.clase)
-        dependencias(PF1.a("err"),Tipo.a("err"));//PF.err= Tipo.err
-        
-        calculo(PF1.a("id"),asignacion);
-        //calculo(PF1.a("clase"),asignacionPF);¿¿¿¿¿¿¿¿¿?????????
-        calculo(PF1.a("niv"),asignauno);
-        calculo(PF1.a("tipo"),asignacion);
-        //calculo(PF1.a("dir"),asignacion);¿¿¿¿¿¿¿¿¿¿¿¿¿?????????
-        calculo(PF1.a("err"),asignacion);
-        
-        return PF1;
-    }
-    
-    /*CS  → vars { DecsSubs } instructions { Insts }
-        DecsSubs.TPRH = CS.TPRH
-        DecsSubs.TSLH = CS.TSLH
-        Insts.TSH = DecsSubs.TSL 
-        CS.err= DecsSubs.err OR Insts.err
-*/
-    public TAtributos CS(TAtributos DecSubs, TAtributos Insts){
-        regla("CS  → vars { DecsSubs } instructions { Insts }");
-                
-        TAtributos CS = atributosPara("CS","TPRH","TSLH","niv","tipo","dir","err");
-        
-        dependencias(DecSubs.a("TPRH"),CS.a("TPRH"));//DecsSubs.TPRH = CS.TPRH
-        dependencias(DecSubs.a("TSLH"),CS.a("TSLH"));//DecsSubs.TSLH = CS.TSLH
-        dependencias(Insts.a("TSH"),DecSubs.a("TSL"));//Insts.TSH = DecsSubs.TSL
-        dependencias(CS.a("err"),DecSubs.a("err"),Insts.a("err"));//CS.err= DecsSubs.err OR Insts.err
-        
-        calculo(DecSubs.a("TPRH"),asignacion);
-        calculo(DecSubs.a("TSLH"),asignacion);
-        calculo(Insts.a("tipo"),asignacion);
-        calculo(CS.a("err"),asignacionOR2);
-        
-        return CS;
-    }
     
     public TAtributos Tipo0(TAtributos TipoBasico){
         regla("Tipo → TipoBasico");
