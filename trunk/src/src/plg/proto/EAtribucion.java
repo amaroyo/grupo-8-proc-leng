@@ -7,20 +7,7 @@ import src.es.ucm.fdi.plg.evlib.Atributo;
 import src.es.ucm.fdi.plg.evlib.SemFun;
 import src.es.ucm.fdi.plg.evlib.TAtributos;
 // DefiniciÃ³n de las funciones semÃ¡nticas
-
-class creaTS implements SemFun{
-	
-    @Override
-    public Object eval(Atributo... args) {
-        
-    	
-    	TS TSGlobal=new TS();
-    	
-    		
-    	return args[0].valor();
-    }
-
-}
+import src.plg.proto.TS;
 
 class creaTPR implements SemFun{
 	
@@ -202,6 +189,17 @@ class concatenarExp10 implements SemFun{
     public Object eval(Atributo... args) {
         String s="";
         s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        return s;
+    }
+}
+
+class concatenarPrograma implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="";
+        s=args[0].valor()+" stop ";
         return s;
     }
 }
@@ -411,10 +409,9 @@ public class EAtribucion extends Atribucion {
     
 	
 	
-	public ArrayList<TS> ListasTS=new ArrayList<TS>();
+	public TS tSimbolos;
 	
     // Se crean los objetos que representan las diferentes funciones semÃ¡nticas
-	private static SemFun creaTS = new creaTS();
 	private static SemFun creaTPR = new creaTPR();
     private static SemFun asignacion = new Asignacion();
     private static SemFun asignacionOR2 = new AsignacionOR2();
@@ -428,13 +425,13 @@ public class EAtribucion extends Atribucion {
     private static SemFun concatenarIR1 = new concatenarIR1();
     private static SemFun concatenarIR2 = new concatenarIR2();
     private static SemFun concatenarExp10 = new concatenarExp10();
+    private static SemFun concatenarPrograma = new concatenarPrograma();
   //  private static SemFun addVal = new AddVal();
   //  private static SemFun initT = new InitT();
     
     private static SemFun sumauno = new SumaUno();
     private static SemFun sumaDos = new SumaDos();
     private static SemFun sumaTres = new SumaTres();
-    
    //funciones Ops
     private static SemFun asignaOp00 = new asignaOp00();
     private static SemFun asignaOp01 = new asignaOp01();
@@ -485,9 +482,8 @@ public class EAtribucion extends Atribucion {
         dependencias(Insts.a("etqh"),Subprogramas.a("etq"));
         dependencias(Programa.a("etq"),Insts.a("etq"));
 
-        
+        TS tSimbolos=new TS();
         calculo(Programa.a("TPR"),creaTPR);
-        calculo(Programa.a("TS"),creaTS);
         calculo(Programa.a("cod"),concatenarIR1);
         calculo(Consts.a("TSH"),asignacion);
         calculo(Tipos.a("TSH"),asignacion);
@@ -495,7 +491,7 @@ public class EAtribucion extends Atribucion {
         calculo(Subprogramas.a("TSH"),asignacion);
         calculo(Insts.a("TSH"),asignacion);
         
-        calculo(Programa.a("cod"),concatenarIR1);
+        calculo(Programa.a("cod"),concatenarPrograma);
         calculo(Consts.a("TPRH"),asignacion);
         calculo(Tipos.a("TPRH"),asignacion);
         calculo(Vars.a("TPRH"),asignacion);
@@ -517,34 +513,24 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Consts0 = atributosPara("Consts", "TS","TSH","TPRH","err");
         
-        //FALTA  Programa.TS = CreaTS()
-        dependencias(Decs.a("TPRH"),Consts0.a("TPRH"));//Consts.TSH = Programa.TS
-        dependencias(Consts0.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
-        dependencias(Decs.a("TSH"),Consts0.a("TSH"));//Vars.TSH = Tipos.TS
-        dependencias(Consts0.a("err"),Decs.a("err"));//Subprogramas.TSH = Vars.TS
+        dependencias(Decs.a("TPRH"),Consts0.a("TPRH"));
+        dependencias(Consts0.a("TS"),Decs.a("TS"));
+        dependencias(Decs.a("TSH"),Consts0.a("TSH"));
+        dependencias(Consts0.a("err"),Decs.a("err"));
       
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Consts0.a("TS"),asignacion);
         calculo(Decs.a("TSH"),asignacion);
         calculo(Consts0.a("err"),asignacion);
         
-        return Consts0;
-        
+        return Consts0;     
     }
     
     public TAtributos Consts1(TAtributos Decs){
         regla("Consts →  λ ");
                 
-        TAtributos Consts1 = atributosPara("Consts", "TS","TSH","TPRH","err");
-        
-        //FALTA  Programa.TS = CreaTS()
-        dependencias(Decs.a("TPRH"),Consts1.a("TPRH"));//Consts.TSH = Programa.TS
-        dependencias(Consts1.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
-        dependencias(Decs.a("TSH"),Consts1.a("TSH"));//Vars.TSH = Tipos.TS
-      
-        calculo(Decs.a("TPRH"),asignacion);
-        calculo(Consts1.a("TS"),asignacion);
-        calculo(Decs.a("TSH"),asignacion);
+        TAtributos Consts1 = atributosPara("Consts", "err");
+
         calculo(Consts1.a("err"),asignafalso);
         
         return Consts1;
@@ -556,11 +542,10 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Tipos0 = atributosPara("Tipos", "TS","TSH","TPRH","err");
         
-        //FALTA  Programa.TS = CreaTS()
-        dependencias(Decs.a("TPRH"),Tipos0.a("TPRH"));//Consts.TSH = Programa.TS
-        dependencias(Tipos0.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
-        dependencias(Decs.a("TSH"),Tipos0.a("TSH"));//Vars.TSH = Tipos.TS
-        dependencias(Tipos0.a("err"),Decs.a("err"));//Subprogramas.TSH = Vars.TS
+        dependencias(Decs.a("TPRH"),Tipos0.a("TPRH"));
+        dependencias(Tipos0.a("TS"),Decs.a("TS"));
+        dependencias(Decs.a("TSH"),Tipos0.a("TSH"));
+        dependencias(Tipos0.a("err"),Decs.a("err"));
       
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Tipos0.a("TS"),asignacion);
@@ -574,16 +559,8 @@ public class EAtribucion extends Atribucion {
     public TAtributos Tipos1(TAtributos Decs){
         regla("Tipos →  λ ");
                 
-        TAtributos Tipos1 = atributosPara("Tipos", "TS","TSH","TPRH","err");
+        TAtributos Tipos1 = atributosPara("Tipos","err");
         
-        //FALTA  Programa.TS = CreaTS()
-        dependencias(Decs.a("TPRH"),Tipos1.a("TPRH"));//Consts.TSH = Programa.TS
-        dependencias(Tipos1.a("TS"),Decs.a("TS"));//Tipos.TSH = Consts.TS
-        dependencias(Decs.a("TSH"),Tipos1.a("TSH"));//Vars.TSH = Tipos.TS
-      
-        calculo(Decs.a("TPRH"),asignacion);
-        calculo(Tipos1.a("TS"),asignacion);
-        calculo(Decs.a("TSH"),asignacion);
         calculo(Tipos1.a("err"),asignafalso);
         
         return Tipos1;
@@ -614,16 +591,8 @@ public class EAtribucion extends Atribucion {
     public TAtributos Vars1(TAtributos Decs){
         regla("Vars →   λ");
                 
-        TAtributos Vars1 = atributosPara("Vars", "TS","TSH","TPRH","err");
-        
-        
-        dependencias(Decs.a("TPRH"),Vars1.a("TPRH"));
-        dependencias(Vars1.a("TS"),Decs.a("TS"));
-        dependencias(Decs.a("TSH"),Vars1.a("TSH"));
+        TAtributos Vars1 = atributosPara("Vars","err");
 
-        calculo(Decs.a("TPRH"),asignacion);
-        calculo(Vars1.a("TS"),asignacion);
-        calculo(Decs.a("TSH"),asignacion);
         calculo(Vars1.a("err"),asignafalso);
         
         return Vars1;
@@ -649,7 +618,6 @@ public class EAtribucion extends Atribucion {
         calculo(Subprogramas0.a("TS"),asignacion);
         calculo(Decs.a("TSH"),asignacion);
         calculo(Subprogramas0.a("err"),asignacion);
-        
         calculo(Decs.a("etqh"),asignacion);
         calculo(Subprogramas0.a("etq"),asignacion);
         
@@ -660,16 +628,8 @@ public class EAtribucion extends Atribucion {
     public TAtributos Subprogramas1(TAtributos Decs){
         regla("Subprogramas →   λ");
                 
-        TAtributos Subprogramas1 = atributosPara("Subprogramas", "TS","TSH","TPRH","err");
-        
-        
-        dependencias(Decs.a("TPRH"),Subprogramas1.a("TPRH"));
-        dependencias(Subprogramas1.a("TS"),Decs.a("TS"));
-        dependencias(Decs.a("TSH"),Subprogramas1.a("TSH"));
+        TAtributos Subprogramas1 = atributosPara("Subprogramas","err");
 
-        calculo(Decs.a("TPRH"),asignacion);
-        calculo(Subprogramas1.a("TS"),asignacion);
-        calculo(Decs.a("TSH"),asignacion);
         calculo(Subprogramas1.a("err"),asignafalso);
         
         return Subprogramas1;
@@ -687,22 +647,21 @@ public class EAtribucion extends Atribucion {
         // FALTA ERR
         dependencias(Decs.a("TPRH"),Decs0.a("TPRH"));
         dependencias(Dec.a("TPRH"),Decs.a("TPRH"));
+        dependencias(Decs0.a("TS"),Decs.a("TS"),Dec.a("id"),Dec.a("clase"),Decs.a("nivel"),Decs.a("dir"),Dec.a("tipo"));
         dependencias(Decs.a("TSH"),Decs0.a("TSH"));
         dependencias(Dec.a("TSH"),Decs.a("TSH"));
-        dependencias(Decs0.a("err"),Decs.a("err"));
+        dependencias(Decs0.a("err"),Decs.a("err"),Dec.a("err"),Dec.a("id"),Decs.a("TSH"),Decs.a("TPRH"));
         dependencias(Decs0.a("dir"),Decs.a("dir"));
-        
-        
         dependencias(Decs.a("etqh"),Decs0.a("etqh"));
         dependencias(Dec.a("etqh"),Decs.a("etq"));
         dependencias(Decs0.a("etq"),Dec.a("etq"));
         
+        tSimbolos.añadirTS(Dec.a("id"),tSimbolos.creaParametros(Dec.a("clase"),Decs.a("nivel"),Decs.a("dir"),Dec.a("tipo")));
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Dec.a("TPRH"),asignacion);
         calculo(Decs.a("TSH"),asignacion);
         calculo(Dec.a("TSH"),asignacion);
         calculo(Decs0.a("dir"),sumauno);
-        
         calculo(Decs.a("etqh"),asignacion);
         calculo(Dec.a("etqh"),asignacion);
         calculo(Decs0.a("etq"),asignacion);

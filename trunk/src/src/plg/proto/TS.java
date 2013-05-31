@@ -4,29 +4,31 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import src.es.ucm.fdi.plg.evlib.SAtributo;
+
 public class TS {
 	
 	
-	public HashMap<String, ArrayList<String> > TablaSimbolos;
-	public String Identificador;
-	public ArrayList<String> Parametros;
+	public HashMap<SAtributo, ArrayList<SAtributo> > TablaSimbolos;
+	public SAtributo Identificador;
+	public ArrayList<SAtributo> Parametros;
 	
 	
 	public TS() {
 		super();
-		this.Parametros = new ArrayList<String>();
-		this.TablaSimbolos = new HashMap<String, ArrayList<String>>();	
+		this.Parametros = new ArrayList<SAtributo>();
+		this.TablaSimbolos = new HashMap<SAtributo, ArrayList<SAtributo>>();	
 	}
 	
-	public void añadirTS(HashMap<String, ArrayList<String>> TS,String Identificador,ArrayList<String> Parametros){
+	public void añadirTS(SAtributo Identificador,ArrayList<SAtributo> Parametros){
 		
-		TS.put(Identificador, Parametros);
+		TablaSimbolos.put(Identificador, Parametros);
 		
 	}
 	
-    public ArrayList<String> creaParametros(String Clase,String Nivel,String Dir,String Tipo){
+    public ArrayList<SAtributo> creaParametros(SAtributo Clase,SAtributo Nivel,SAtributo Dir,SAtributo Tipo){
 	
-    	Parametros=new ArrayList<String>();
+    	Parametros=new ArrayList<SAtributo>();
 	
     	Parametros.add(0, Clase);
     	Parametros.add(1, Nivel);
