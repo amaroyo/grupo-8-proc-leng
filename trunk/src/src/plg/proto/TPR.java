@@ -3,38 +3,73 @@ package src.plg.proto;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 public class TPR {
 	
-	
-	public HashMap<String, ArrayList<String> > TablaSimbolos;
-	public String Identificador;
-	public ArrayList<String> Parametros;
-	
+	private Vector<String> TPR;
+
 	
 	public TPR() {
-		super();
-		this.Parametros = new ArrayList<String>();
-		this.TablaSimbolos = new HashMap<String, ArrayList<String>>();	
+		this.TPR = new Vector<String>();
+		iniciaVecPalReservadas();
 	}
-	
-	public void añadirTS(HashMap<String, ArrayList<String>> TS,String Identificador,ArrayList<String> Parametros){
+
+
+    public void iniciaVecPalReservadas() {
+		TPR.clear();
 		
-		TS.put(Identificador, Parametros);
+		TPR.add("var");
+		TPR.add("vars");
+		TPR.add("const");
+		TPR.add("consts");
+		TPR.add("tipos");
+		TPR.add("tipo");
+		TPR.add("subprogram");
+		TPR.add("subprograms");
+		TPR.add("instructions");
+		TPR.add("program");
+		TPR.add("swap1");
+		TPR.add("swap2");
+		TPR.add("e");
+		TPR.add("E");
 		
-	}
-	
-    public ArrayList<String> creaParametros(String Clase,String Nivel,String Dir,String Tipo){
-	
-    	Parametros=new ArrayList<String>();
-	
-    	Parametros.add(0, Clase);
-    	Parametros.add(1, Nivel);
-		Parametros.add(2, Dir);
-		Parametros.add(3, Tipo);
-	
-		return Parametros;
+		//tipos
+		TPR.add("boolean");
+		TPR.add("character");
+		TPR.add("natural");
+		TPR.add("integer");
+		TPR.add("float");
 		
+		//Valores booleanos
+		TPR.add("true");
+		TPR.add("false");
+		
+		//Operadores booleanos
+		TPR.add("or");
+		TPR.add("and");
+		TPR.add("not");
+		
+		//Operadores de entrada / salida
+		TPR.add("in");
+		TPR.add("out");
+		
+		//Operadores de casting
+		TPR.add("char");
+		TPR.add("nat");
+		TPR.add("int");
+		
+		//Instrucciones
+		TPR.add("if");
+		TPR.add("then");
+		TPR.add("else");
+		TPR.add("endif");
+		
+		TPR.add("while");
+		TPR.add("do");
+		TPR.add("endwhile");
+		TPR.add("call");
+
 	}
 	
 }
