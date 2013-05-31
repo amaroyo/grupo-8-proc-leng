@@ -1,29 +1,34 @@
 package src.plg.proto;
 
+import java.util.ArrayList;
+
 import src.es.ucm.fdi.plg.evlib.Atribucion;
 import src.es.ucm.fdi.plg.evlib.Atributo;
-import src.es.ucm.fdi.plg.evlib.LAtributo;
 import src.es.ucm.fdi.plg.evlib.SemFun;
 import src.es.ucm.fdi.plg.evlib.TAtributos;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-
-
-
 // DefiniciÃ³n de las funciones semÃ¡nticas
 
-
-
 class creaTS implements SemFun{
-
+	
     @Override
     public Object eval(Atributo... args) {
         
     	
     	TS TSGlobal=new TS();
+    	
+    		
+    	return args[0].valor();
+    }
+
+}
+
+class creaTPR implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+        
+    	
+    	TPR TPal=new TPR();
     	
     		
     	return args[0].valor();
@@ -44,10 +49,26 @@ class AsignacionOR2 implements SemFun{
 
     @Override
     public Object eval(Atributo... args) {
-        return args[0].valor() ;//|| args[1].valor() ;
+        String s="";
+        //s= args[0].valor()+" ir_f("+n+") "+args[2].valor()+" ir_a("+args[3].valor()+") "+args[4].valor();
+        s = args[0].valor()+""+ args[1].valor() + "or";
+    	return s;
     }
 
 }
+
+class AsignacionOR5 implements SemFun{
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="";
+        //s= args[0].valor()+" ir_f("+n+") "+args[2].valor()+" ir_a("+args[3].valor()+") "+args[4].valor();
+        s = args[0].valor()+""+ args[1].valor() + "or"+ args[2].valor() + "or"+args[3].valor() + "or" + args[4].valor();
+    	return s;
+    }
+
+}
+
 class AsignaCero implements SemFun{
 	
 
@@ -394,8 +415,10 @@ public class EAtribucion extends Atribucion {
 	
     // Se crean los objetos que representan las diferentes funciones semÃ¡nticas
 	private static SemFun creaTS = new creaTS();
+	private static SemFun creaTPR = new creaTPR();
     private static SemFun asignacion = new Asignacion();
     private static SemFun asignacionOR2 = new AsignacionOR2();
+    private static SemFun asignacionOR5 = new AsignacionOR5();
     private static SemFun asignacero = new AsignaCero();
     private static SemFun asignauno = new AsignaUno();
     private static SemFun asignacierto = new asignaCierto();
@@ -442,7 +465,7 @@ public class EAtribucion extends Atribucion {
     public TAtributos Programa(TAtributos Consts,TAtributos Tipos,TAtributos Vars,TAtributos Subprogramas,TAtributos Insts){
         regla("Programa → program: ident { Consts Tipos Vars Subprogramas instructions { Insts }}");
                 
-        TAtributos Programa = atributosPara("Programa", "TS","err","cod","etq","etqh");
+        TAtributos Programa = atributosPara("Programa", "TS","err","cod","etq","etqh","TPR");
         
         //FALTA  Programa.TS = CreaTS()
         dependencias(Consts.a("TSH"),Programa.a("TS"));//Consts.TSH = Programa.TS
@@ -463,7 +486,7 @@ public class EAtribucion extends Atribucion {
         dependencias(Programa.a("etq"),Insts.a("etq"));
 
         
-        
+        calculo(Programa.a("TPR"),creaTPR);
         calculo(Programa.a("TS"),creaTS);
         calculo(Programa.a("cod"),concatenarIR1);
         calculo(Consts.a("TSH"),asignacion);
@@ -477,7 +500,7 @@ public class EAtribucion extends Atribucion {
         calculo(Tipos.a("TPRH"),asignacion);
         calculo(Vars.a("TPRH"),asignacion);
         calculo(Subprogramas.a("TPRH"),asignacion);
-        calculo(Programa.a("err"),asignacion);
+        calculo(Programa.a("err"),asignacionOR5);
         
         calculo(Programa.a("etqh"),asignacero);
         calculo(Subprogramas.a("etqh"),asignacion);
