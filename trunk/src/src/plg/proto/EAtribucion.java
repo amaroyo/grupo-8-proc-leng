@@ -2,6 +2,7 @@ package src.plg.proto;
 
 import java.util.ArrayList;
 
+
 import src.es.ucm.fdi.plg.evlib.Atribucion;
 import src.es.ucm.fdi.plg.evlib.Atributo;
 import src.es.ucm.fdi.plg.evlib.SemFun;
@@ -9,16 +10,41 @@ import src.es.ucm.fdi.plg.evlib.TAtributos;
 // DefiniciÃ³n de las funciones semÃ¡nticas
 import src.plg.proto.TS;
 
+
+class creaTS implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+    	return new TS();
+    }
+
+}
+
+class añadirTS implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+    	
+		TS tablasimbolos 		= (TS)args[0].valor();
+		String id 				= (String)args[1].valor();
+		String clase 			= (String)args[2].valor();
+		String nivel 			= (String)args[3].valor();
+		String dir				= (String)args[4].valor();
+		String tipo 			= (String)args[5].valor();
+    	
+		tablasimbolos.añadir(id, clase, nivel, dir, tipo);
+    	return tablasimbolos;
+    }
+
+}
+
+
+
 class creaTPR implements SemFun{
 	
     @Override
     public Object eval(Atributo... args) {
-        
-    	
-    	TPR TPal=new TPR();
-    	
-    		
-    	return args[0].valor();
+    	return new TPR();
     }
 
 }
@@ -409,9 +435,9 @@ public class EAtribucion extends Atribucion {
     
 	
 	
-	public TS tSimbolos;
-	
     // Se crean los objetos que representan las diferentes funciones semÃ¡nticas
+	private static SemFun creaTS = new creaTS();
+	private static SemFun añadirTS = new añadirTS();
 	private static SemFun creaTPR = new creaTPR();
     private static SemFun asignacion = new Asignacion();
     private static SemFun asignacionOR2 = new AsignacionOR2();
@@ -482,7 +508,7 @@ public class EAtribucion extends Atribucion {
         dependencias(Insts.a("etqh"),Subprogramas.a("etq"));
         dependencias(Programa.a("etq"),Insts.a("etq"));
 
-        TS tSimbolos=new TS();
+        calculo(Programa.a("TPR"),creaTS);
         calculo(Programa.a("TPR"),creaTPR);
         calculo(Programa.a("cod"),concatenarIR1);
         calculo(Consts.a("TSH"),asignacion);
@@ -656,9 +682,10 @@ public class EAtribucion extends Atribucion {
         dependencias(Dec.a("etqh"),Decs.a("etq"));
         dependencias(Decs0.a("etq"),Dec.a("etq"));
         
-        tSimbolos.añadirTS(Dec.a("id"),tSimbolos.creaParametros(Dec.a("clase"),Decs.a("nivel"),Decs.a("dir"),Dec.a("tipo")));
+        
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Dec.a("TPRH"),asignacion);
+        calculo(Decs0.a("TS"),añadirTS);
         calculo(Decs.a("TSH"),asignacion);
         calculo(Dec.a("TSH"),asignacion);
         calculo(Decs0.a("dir"),sumauno);
