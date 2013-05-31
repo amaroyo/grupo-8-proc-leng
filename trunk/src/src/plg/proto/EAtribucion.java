@@ -5,6 +5,8 @@ import src.es.ucm.fdi.plg.evlib.Atributo;
 import src.es.ucm.fdi.plg.evlib.LAtributo;
 import src.es.ucm.fdi.plg.evlib.SemFun;
 import src.es.ucm.fdi.plg.evlib.TAtributos;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +23,9 @@ class creaTS implements SemFun{
     public Object eval(Atributo... args) {
         
     	
+    	TS TSGlobal=new TS();
+    	
+    		
     	return args[0].valor();
     }
 
@@ -383,6 +388,10 @@ class asignaOp420 implements SemFun{
 
 public class EAtribucion extends Atribucion {    
     
+	
+	
+	public ArrayList<TS> ListasTS=new ArrayList<TS>();
+	
     // Se crean los objetos que representan las diferentes funciones semÃ¡nticas
 	private static SemFun creaTS = new creaTS();
     private static SemFun asignacion = new Asignacion();
