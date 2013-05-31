@@ -15,7 +15,7 @@ terminal  			if, then, else, endif, WRITE, AND, OR, TRUE, FALSE, PAP, PCIERRE;
 
 // DefiniciÃ³n de los no terminales del lenguaje -se dan como ejemplo: habrÃ¡ que cambiarlos
 non terminal TAtributos S, i, e, t, f;
-non terminal TAtributos Programa, Consts, Tipos, Vars, Decs, ¿Dec?, DecsSubs, ¿DecSub?,  Subprogramas, Insts, IF;
+non terminal TAtributos Programa, Consts, Tipos, Vars, Decs, Dec, DecsSubs, DecSub,  Subprogramas, Insts, IF;
 // Se definen las reglas sintÃ¡cticas -se dan dos como ejemplo: habra que cambiarlas, ya que 
 // no se corresponden con el lenguaje
 
