@@ -12,7 +12,7 @@ public class TS {
 		this.TablaSimbolos = new ArrayList<Parametros>();	
 	}
 	
-	public void añadir(String id, String clase, String nivel, String dir, String tipo) {
+	public void añadir(String id, String clase, String nivel, String dir, Tipo tipo) {
 		Parametros param = new Parametros(id, clase, nivel, dir, tipo);
 		TablaSimbolos.add(param);
 	}
@@ -24,13 +24,13 @@ public class TS {
 		return ts;
 	}
 	
-	public String dameTipo(String id) {
+	public Tipo dameTipo(String id) {
 		
 		Iterator<Parametros> it = TablaSimbolos.iterator();
 	    while (it.hasNext()) {
 	      Parametros element = it.next();
 	      String ident=element.getId();
-	      String tipo = it.next().getTipo();
+	      Tipo tipo = it.next().getTipo();
 	     if(id.equals(ident)){
 	    	 return tipo;	 
 	     }
