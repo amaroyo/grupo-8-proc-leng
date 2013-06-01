@@ -3,16 +3,16 @@ package src.plg.proto;
 
 public class Tipo {
 	
-	protected String t;
+	protected String tip;
 	protected int tam;
 	
-	public Tipo(String t) {
-		this.t = t;
+	public Tipo(String tipo) {
+		this.tip = tipo;
 		this.tam = 1;
 	}
 	
-	public Tipo(String t, int tam) {
-		this.t = t;
+	public Tipo(String tipo, int tam) {
+		this.tip = tipo;
 		this.tam = tam;
 	}
 	
@@ -21,11 +21,11 @@ public class Tipo {
 	}
 	
 	public String getT() {
-		return this.t;
+		return this.tip;
 	}
 	
 	public String toString() {
-		return "< t : "+ t + " , tam : " + tam + " >";
+		return "< t : "+ tip + " , tam : " + tam + " >";
 	}
 
 }

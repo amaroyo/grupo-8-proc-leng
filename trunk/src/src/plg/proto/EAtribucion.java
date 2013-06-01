@@ -25,12 +25,12 @@ class añadirTS implements SemFun{
     @Override
     public Object eval(Atributo... args) {
     	
-		TS tablasimbolos 		= (TS)args[0].valor();
-		String id 				= (String)args[1].valor();
-		String clase 			= (String)args[2].valor();
-		String nivel 			= (String)args[3].valor();
-		String dir				= (String)args[4].valor();
-		String tipo 			= (String)args[5].valor();
+		TS tablasimbolos = (TS)args[0].valor();
+		String id = (String)args[1].valor();
+		String clase = (String)args[2].valor();
+		String nivel = (String)args[3].valor();
+		String dir = (String)args[4].valor();
+		Tipo tipo = (Tipo)args[5].valor();
     	
 		tablasimbolos.añadir(id, clase, nivel, dir, tipo);
     	return tablasimbolos;
@@ -278,10 +278,10 @@ class tamañoDe implements SemFun{
 	
     @Override
     public Object eval(Atributo... args) {
-		String tipo = (String) args[0].valor();
+		Tipo tipo = (Tipo) args[0].valor();
 		String clase= (String) args[2].valor();
 		
-		Parametros aux=new Parametros(tipo,clase);
+		Parametros aux=new Parametros(clase,tipo);
 		
     	Integer tam = aux.getTam(tipo, clase);	
         return String.valueOf(tam);
@@ -296,7 +296,7 @@ class tipoDe implements SemFun{
 		TS ts = (TS) args[0].valor();
 		String id = (String) args[1].valor();
 		
-		String tipo = ts.dameTipo(id);
+		Tipo tipo = ts.dameTipo(id);
 		return tipo;
     }
 }
@@ -306,10 +306,10 @@ class tipoArray implements SemFun{
 	
     @Override
     public Object eval(Atributo... args) {
-		String tipo = (String) args[0].valor();
+		Tipo tipo = (Tipo) args[0].valor();
 		String clase= (String) args[2].valor();
 		
-		Parametros aux=new Parametros(tipo,clase);
+		Parametros aux=new Parametros(clase,tipo);
 		
     	Integer tam = aux.getTam(tipo, clase);	
         return " PF ";
@@ -321,10 +321,10 @@ class tipoTupla implements SemFun{
 	
     @Override
     public Object eval(Atributo... args) {
-		String tipo = (String) args[0].valor();
+		Tipo tipo = (Tipo) args[0].valor();
 		String clase= (String) args[2].valor();
 		
-		Parametros aux=new Parametros(tipo,clase);
+		Parametros aux=new Parametros(clase,tipo);
 		
     	Integer tam = aux.getTam(tipo, clase);	
         return " PF ";
