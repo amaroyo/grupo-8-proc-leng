@@ -278,8 +278,8 @@ class tamañoDe implements SemFun{
 	
     @Override
     public Object eval(Atributo... args) {
-		String tipo 			= (String) args[0].valor();
-		String clase 		= (String) args[2].valor();
+		String tipo = (String) args[0].valor();
+		String clase= (String) args[2].valor();
 		
 		Parametros aux=new Parametros(tipo,clase);
 		
@@ -293,8 +293,8 @@ class tipoDe implements SemFun{
     @Override
     public Object eval(Atributo... args) {
     	
-		TS ts 	= (TS) args[0].valor();
-		String id 			= (String) args[1].valor();
+		TS ts = (TS) args[0].valor();
+		String id = (String) args[1].valor();
 		
 		String tipo = ts.dameTipo(id);
 		return tipo;
@@ -306,8 +306,8 @@ class tipoArray implements SemFun{
 	
     @Override
     public Object eval(Atributo... args) {
-		String tipo 			= (String) args[0].valor();
-		String clase 		= (String) args[2].valor();
+		String tipo = (String) args[0].valor();
+		String clase= (String) args[2].valor();
 		
 		Parametros aux=new Parametros(tipo,clase);
 		
@@ -321,8 +321,8 @@ class tipoTupla implements SemFun{
 	
     @Override
     public Object eval(Atributo... args) {
-		String tipo 			= (String) args[0].valor();
-		String clase 		= (String) args[2].valor();
+		String tipo = (String) args[0].valor();
+		String clase= (String) args[2].valor();
 		
 		Parametros aux=new Parametros(tipo,clase);
 		
@@ -372,6 +372,8 @@ class estaId_OR_sonCompatibles implements SemFun{
 			i++;
 		}
 
+		
+		
         return error;
     }
 }
@@ -1780,8 +1782,9 @@ public class EAtribucion extends Atribucion {
         dependencias(InsAsig.a("cod"),InsAsig.a("TSH"),Designador.a("lex"));
   
         /// FALTA EL COD!!!
+        
         calculo(Exp.a("etqh"),asignacion);
-        //FALTA ERRORR
+        //dependencias(InsAsig.a("err"),estaId_OR_sonCompatibles);
         calculo(InsAsig.a("etq"),sumauno);
         calculo(Exp.a("etqh"),asignacion);
   
