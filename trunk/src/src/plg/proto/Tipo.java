@@ -4,28 +4,37 @@ package src.plg.proto;
 public class Tipo {
 	
 	protected String tip;
-	protected int tam;
+	protected int tamano;
 	
 	public Tipo(String tipo) {
 		this.tip = tipo;
-		this.tam = 1;
+		this.tamano = 1;
 	}
 	
-	public Tipo(String tipo, int tam) {
+	public Tipo(String tipo, int tamano) {
 		this.tip = tipo;
-		this.tam = tam;
+		this.tamano = tamano;
 	}
 	
-	public int getTam() {
-		return this.tam;
+	public int gettamano() {
+		return tamano;
 	}
 	
-	public String getT() {
-		return this.tip;
-	}
 	
+	public String getTipo() {
+		return tip;
+	}
+
+	public void setTipo(String tip) {
+		this.tip = tip;
+	}
+
+	public void settamano(int tamano) {
+		this.tamano = tamano;
+	}
+
 	public String toString() {
-		return "< t : "+ tip + " , tam : " + tam + " >";
+		return "< t : "+ tip + " , tam : " + tamano + " >";
 	}
 
 }
