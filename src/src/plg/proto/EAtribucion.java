@@ -9,6 +9,8 @@ import src.es.ucm.fdi.plg.evlib.SemFun;
 import src.es.ucm.fdi.plg.evlib.TAtributos;
 // DefiniciÃ³n de las funciones semÃ¡nticas
 import src.plg.proto.TS;
+import src.plg.proto.Tipo;
+
 
 
 class creaTS implements SemFun{
@@ -341,9 +343,9 @@ class estaId_OR_esReserv implements SemFun{
     public Object eval(Atributo... args) {
     	
     	ArrayList<String> errores = new ArrayList<String>();
-    	TS ts 	= (TS) args[0].valor();
-    	TPR tpr 	= (TPR) args[1].valor();
-		String id 		= (String) args[2].valor();
+    	TS ts = (TS) args[0].valor();
+    	TPR tpr = (TPR) args[1].valor();
+		String id = (String) args[2].valor();
 		
 		int i=0;
 		if(TS.buscaId(id)){
@@ -363,8 +365,8 @@ class estaId_OR_sonCompatibles implements SemFun{
     public Object eval(Atributo... args) {
     	
     	ArrayList<String> errores = new ArrayList<String>();
-    	TS ts 	= (TS) args[0].valor();
-		String id 		= (String) args[2].valor();
+    	TS ts = (TS) args[0].valor();
+		String id = (String) args[2].valor();
 		
 		int i=0;
 		if(TS.buscaId(id)){
