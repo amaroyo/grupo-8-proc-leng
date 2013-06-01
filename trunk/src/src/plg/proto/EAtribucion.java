@@ -340,21 +340,41 @@ class estaId_OR_esReserv implements SemFun{
     @Override
     public Object eval(Atributo... args) {
     	
+    	ArrayList<String> error = new ArrayList<String>();
     	TS ts 	= (TS) args[0].valor();
     	TPR tpr 	= (TPR) args[1].valor();
 		String id 		= (String) args[2].valor();
 		
-		String error = null;
+		int i=0;
 		if(TS.buscaId(id)){
-			error= "Identificador Repetido en TS";
+			error.set(i, "Identificador Repetido en TS");
+			i++;
 		}
 		if(TPR.buscaId(id)){
-				error= "Identificador Repetido en TPR";
+			error.set(i, "Identificador Repetido en TPR");
 		}
         return error;
     }
 }
 
+class estaId_OR_sonCompatibles implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+    	
+    	ArrayList<String> error = new ArrayList<String>();
+    	TS ts 	= (TS) args[0].valor();
+		String id 		= (String) args[2].valor();
+		
+		int i=0;
+		if(TS.buscaId(id)){
+			error.set(i, "Identificador Repetido en TS");
+			i++;
+		}
+
+        return error;
+    }
+}
 
 ///////////////////////////////////////////////////
 
@@ -1652,11 +1672,12 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Inst3 = atributosPara("Inst","etqh","err","cod");
         
+        dependencias(SWAP1.a("etq"),Inst3.a("etqh"));
         dependencias(Inst3.a("err"),SWAP1.a("err"));
         dependencias(Inst3.a("cod"),SWAP1.a("cod"));
         
 
-        calculo(SWAP1.a("etq"),asignacero);
+        calculo(SWAP1.a("etq"),sumauno);
         calculo(Inst3.a("err"),asignacion);
         calculo(Inst3.a("cod"),asignacion);
         
@@ -1669,11 +1690,12 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Inst4 = atributosPara("Inst","etqh","err","cod");
         
+        dependencias(SWAP2.a("etq"),Inst4.a("etqh"));
         dependencias(Inst4.a("err"),SWAP2.a("err"));
         dependencias(Inst4.a("cod"),SWAP2.a("cod"));
         
 
-        calculo(SWAP2.a("etq"),asignacero);
+        calculo(SWAP2.a("etq"),sumauno);
         calculo(Inst4.a("err"),asignacion);
         calculo(Inst4.a("cod"),asignacion);
         
