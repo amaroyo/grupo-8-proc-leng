@@ -30,7 +30,7 @@ non terminal TAtributos Programa, Consts, Tipos, Vars,  Subprogramas, Decs, Dec,
 // Se definen las reglas sintácticas
 //===================PROGRAMA==============================
 //Programa → program : ident { Consts Tipos Vars Subprogramas instructions { Insts }}
-Programa ::= program DP ident:id { Consts:consts Tipos:tipos Vars:vars Subprogramas:subprogramas instructions { Insts:insts } } 
+Programa ::= program DP ident:id LLABIERTA Consts:consts Tipos:tipos Vars:vars Subprogramas:subprogramas instrutions LLABIERTA Insts:insts LLCERRADA LLCERRADA 
 {: RESULT= atrb.ProgramaR1( id,consts,tipos,vars,subprogramas,insts ):};
 
 //===================CONSTS==============================
@@ -40,17 +40,17 @@ Consts ::= {: RESULT= atrb.ConstsR2():}; //VACIO
 
 //===================TIPOS==============================
 //Tipos → tipos { Decs }; Tipos → λ
-Tipos ::= tipos LLABIERTA Decs:decs LLCERRADA  {: RESULT= atrb.TiposR1(decs):};
+Tipos ::= tipos LLABIERTA Decs:decs LLCERRADA  PYC {: RESULT= atrb.TiposR1(decs):};
 Tipos ::= {: RESULT= atrb.TiposR2():}; //VACIO
 
 //===================VARS==============================
 //Vars → vars { Decs }; Vars → λ
-Vars ::= vars LLABIERTA Decs:decs LLCERRADA  {: RESULT= atrb.VarsR1(decs):};
+Vars ::= vars LLABIERTA Decs:decs LLCERRADA  PYC {: RESULT= atrb.VarsR1(decs):};
 Vars ::= {: RESULT= atrb.VarsR2():};  //VACIO 
 
 //===================SUBPROGRAMAS==============================
 //Subprogramas →  subprograms { Decs }; Subprogramas → Subprograma; Subprogramas → λ
-Subprogramas ::= subprograms LLABIERTA Decs:decs LLCERRADA  {: RESULT= atrb.SubprogramasR1(decs):};
+Subprogramas ::= subprograms LLABIERTA Decs:decs LLCERRADA PYC {: RESULT= atrb.SubprogramasR1(decs):};
 Subprogramas ::= {: RESULT= atrb.SubprogramasR2(subprograma):};
 
 //===================DECS==============================
@@ -102,7 +102,7 @@ Designador ::= designador_numero {: RESULT= atrb.designadorR3():};
 Tipo ::= TipoBasico:tipobasico PYC {: RESULT= atrb.TipoR1(tipobasico) :};
 Tipo ::= ident:id PYC {: RESULT= atrb.TipoR2(id) :};
 Tipo ::= Tipo:tipo Dimensiones:dim PYC {: RESULT= atrb.TipoR3(tipo,dim) :};
-Tipo ::= (Tipos:tipos) {: RESULT= atrb.TipoR4(tipos) :};
+Tipo ::= PABIERTO TiposTupla:tipos PCERRADO {: RESULT= atrb.TipoR4(tipos) :};
 
 //===================DIMENSIONES==============================
 //dimensiones → dimensiones[componente] | [componente]
@@ -114,7 +114,10 @@ Dimensiones ::= CABIERTO componente:comp CCERRADO {: RESULT= atrb.dimensionesR2(
 Componente ::= numero {: RESULT= atrb.componenteR1() :};
 Componente ::= ident:id {: RESULT= atrb.componenteR2(id) :};
 
-//----FALTA TIPO TUPLA!!!!!!--------------
+//===================TIPOTUPLA==============================
+//TiposTupla → TiposTupla, Tipo; TiposTupla → Tipo
+TiposTupla ::= TiposTupla:tipostupla COMA Tipo:tipo {: RESULT = atrb.tiposTuplaR1(tipostupla,tipo) :};
+TiposTupla ::= Tipo:tipo {: RESULT = atrb.tiposTuplaR2(tipo) :};
 
 //===================TIPOBASICO==============================
 //TipoBasico → boolean | integer | natural | float | caracter
