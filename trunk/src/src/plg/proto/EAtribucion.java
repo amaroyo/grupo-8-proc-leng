@@ -340,20 +340,20 @@ class estaId_OR_esReserv implements SemFun{
     @Override
     public Object eval(Atributo... args) {
     	
-    	ArrayList<String> error = new ArrayList<String>();
+    	ArrayList<String> errores = new ArrayList<String>();
     	TS ts 	= (TS) args[0].valor();
     	TPR tpr 	= (TPR) args[1].valor();
 		String id 		= (String) args[2].valor();
 		
 		int i=0;
 		if(TS.buscaId(id)){
-			error.set(i, "Identificador Repetido en TS");
+			errores.set(i, "Identificador Repetido en TS");
 			i++;
 		}
 		if(TPR.buscaId(id)){
-			error.set(i, "Identificador Repetido en TPR");
+			errores.set(i, "Identificador Repetido en TPR");
 		}
-        return error;
+        return errores;
     }
 }
 
@@ -362,19 +362,19 @@ class estaId_OR_sonCompatibles implements SemFun{
     @Override
     public Object eval(Atributo... args) {
     	
-    	ArrayList<String> error = new ArrayList<String>();
+    	ArrayList<String> errores = new ArrayList<String>();
     	TS ts 	= (TS) args[0].valor();
 		String id 		= (String) args[2].valor();
 		
 		int i=0;
 		if(TS.buscaId(id)){
-			error.set(i, "Identificador Repetido en TS");
+			errores.set(i, "Identificador Repetido en TS");
 			i++;
 		}
 
 		
 		
-        return error;
+        return errores;
     }
 }
 
