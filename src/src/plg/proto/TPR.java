@@ -7,7 +7,7 @@ import java.util.Vector;
 
 public class TPR {
 	
-	private Vector<String> TPR;
+	private static Vector<String> TPR;
 
 	
 	public TPR() {
@@ -15,6 +15,18 @@ public class TPR {
 		iniciaVecPalReservadas();
 	}
 
+	public static boolean buscaId(String id) {
+		int i=0;
+		while(i<TPR.size()){
+			 if(TPR.get(i).equals(id)){
+				 return true;
+			 }
+			i++; 
+		}
+   return false;
+	}
+
+	
 
     public void iniciaVecPalReservadas() {
 		TPR.clear();

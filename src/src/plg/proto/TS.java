@@ -1,11 +1,12 @@
 package src.plg.proto;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class TS {
 		
-	public ArrayList<Parametros> TablaSimbolos;
+	public static ArrayList<Parametros> TablaSimbolos;
 	
 	public TS() {
 		this.TablaSimbolos = new ArrayList<Parametros>();	
@@ -16,4 +17,38 @@ public class TS {
 		TablaSimbolos.add(param);
 	}
 
+	public TS copia() {
+		TS ts = new TS();
+		for (int i = 0; i < TablaSimbolos.size(); i++)
+			ts.TablaSimbolos.add(TablaSimbolos.get(i));
+		return ts;
+	}
+	
+	public String dameTipo(String id) {
+		
+		Iterator<Parametros> it = TablaSimbolos.iterator();
+	    while (it.hasNext()) {
+	      Parametros element = it.next();
+	      String ident=element.getId();
+	      String tipo = it.next().getTipo();
+	     if(id.equals(ident)){
+	    	 return tipo;	 
+	     }
+	    }
+		return null;
+	}
+	
+	public static boolean buscaId(String id) {
+		
+		Iterator<Parametros> it = TablaSimbolos.iterator();
+	    while (it.hasNext()) {
+	      Parametros element = it.next();
+	      String ident=element.getId();
+	      if(id.equals(ident)){
+	    	  return true; 
+	      }
+	    }
+		return false;
+	}
+	
 }
