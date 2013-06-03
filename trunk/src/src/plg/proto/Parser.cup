@@ -12,19 +12,19 @@ action code {:
 terminal            String ident,letra, digito,caracter;
 terminal			float numeroReal;
 terminal            integer numeroEnt;
-terminal            program, instructions,consts, const, tipos, tipo, vars, var, subprograms,subprogram,
-				    then, else, endif, while, do, endwhile, if,
-					boolean, integer, natural, float,
-					numero, true, false, in, out, Call,
+terminal            program, instructions,CONSTS, CONST, tipos, tipo, vars, var, subprograms,subprogram,
+				    THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE, IF,
+					BOOLEAN, INTEGER, NATURAL, FLOAT,
+					numero, TRUE, FALSE, in, out, Call,
 					RESTA,MAYOR,MENOR,MENORIGUAL,MAYORIGUAL,IGUALIGUAL,DISTINTO,SUMA,MULT,DIV,MOD,
-					DESPIZQ,DESPDER,char,int,nat,not,
+					DESPIZQ,DESPDER,CHAR,INT,NAT,not,
 					DP,SWAP1,SWAP2,PABIERTO,PCERRADO,COMILLA,
 					CABIERTO,CCERRADO,LLABIERTA,LLCERRADA,COMA,ARROBA,PYC,IGUAL,GUIONBAJO;
 
 // Definición de los no terminales del lenguaje
 non terminal TAtributos Programa, Consts, Tipos, Vars,  Subprogramas, Decs, Dec,
 			PFs, PF, CS, DecsSubs, DecSub, Designador, Tipo, Dimensiones, Componente,
-			TiposTupla, TipoBasico, Valores, Insts, Inst, InsAsig, InsR, InsW, IF, WHILE, LLAMADA,
+			TiposTupla, TipoBasico, Valores, Insts, Inst, InsAsig, InsR, InsW, ExpIF, ExpWHILE, LLAMADA,
 			Parametros, Parametro, ExpBool, Exp, Exp0, Exp1, Exp2, Exp3, Op0, Op1, OR, Op2, AND1, Op3,
 			Op41, Op42;
 
@@ -36,7 +36,7 @@ Programa ::= program DP ident:id LLABIERTA Consts:consts Tipos:tipos Vars:vars S
 
 //===================CONSTS==============================
 //Consts → consts { Decs }; Consts → λ
-Consts ::= consts LLABIERTA Decs:decs LLCERRADA {: RESULT= atrb.Consts0(decs); :};
+Consts ::= CONSTS LLABIERTA Decs:decs LLCERRADA {: RESULT= atrb.Consts0(decs); :};
 Consts ::= {: RESULT= atrb.Consts1(); :}; //VACIO
 
 //===================TIPOS==============================
@@ -62,7 +62,7 @@ Decs ::= Dec:dec {: RESULT= atrb.Decs1(dec); :};
 //===================DEC==============================
 //Dec → const TipoBasico ident = Valores; Dec → tipo Tipo ident; Dec → var Tipo ident
 //Dec → subprogram: ident (PFs) {CS}
-Dec ::= const TipoBasico:tipobasico ident:id IGUAL Valores:valores {: RESULT= atrb.Dec0(tipobasico,id,Valores); :};
+Dec ::= CONST TipoBasico:tipobasico ident:id IGUAL Valores:valores {: RESULT= atrb.Dec0(tipobasico,id,Valores); :};
 Dec ::= tipo Tipo:tipo ident:id {: RESULT= atrb.Dec1(tipo,id); :};
 Dec ::= var Tipo:tipo ident:id {: RESULT= atrb.Dec2(tipo,id); :};
 Dec ::= subprogram DP ident:id PABIERTO PFs:pfs PCERRADO LLABIERTA CS:cs LLCERRADA {: RESULT = atrb.Dec3(id,pfs,cs); :};
@@ -121,11 +121,11 @@ TiposTupla ::= TiposTupla:tipostupla COMA Tipo:tipo {: RESULT = atrb.TiposTupla0
 TiposTupla ::= Tipo:tipo {: RESULT = atrb.tiposTuplaR2(tipo); :};
 
 //===================TIPOBASICO==============================
-//TipoBasico → boolean | integer | natural | float | caracter
-TipoBasico ::= boolean {: RESULT= atrb.TipoBasico0(); :};
-TipoBasico ::= integer {: RESULT= atrb.TipoBasico1(); :};
-TipoBasico ::= natural {: RESULT= atrb.TipoBasico2(); :};
-TipoBasico ::= float {: RESULT= atrb.TipoBasico3(); :};
+//TipoBasico → boolean | integer | natural | FLOAT | caracter
+TipoBasico ::= BOOLEAN {: RESULT= atrb.TipoBasico0(); :};
+TipoBasico ::= INTEGER {: RESULT= atrb.TipoBasico1(); :};
+TipoBasico ::= NATURAL {: RESULT= atrb.TipoBasico2(); :};
+TipoBasico ::= FLOAT {: RESULT= atrb.TipoBasico3(); :};
 TipoBasico ::= caracter {: RESULT= atrb.TipoBasico4(); :};
 
 //===================VALORES==============================
@@ -134,8 +134,8 @@ Valores  ::= numeroReal {: RESULT= atrb.Valores0(); :};
 Valores  ::= numeroEnt  {: RESULT= atrb.Valores1();:};
 Valores  ::= COMILLA PABIERTO letra PCERRADO COMILLA  {: RESULT= atrb.Valores2(); :};
 Valores  ::= COMILLA PABIERTO digito PCERRADO COMILLA  {: RESULT= atrb.Valores3(); :};
-Valores  ::= true  {: RESULT= atrb.Valores4(); :};
-Valores  ::= false  {: RESULT= atrb.Valores5(); :};
+Valores  ::= TRUE  {: RESULT= atrb.Valores4(); :};
+Valores  ::= FALSE  {: RESULT= atrb.Valores5(); :};
 
 //===================INSTS==============================
 //Insts → Insts ; Inst; Insts → Inst
@@ -149,8 +149,8 @@ Inst ::= InsR:insr  {: RESULT= atrb.Inst1(insr); :};
 Inst ::= InsW:insw {: RESULT= atrb.Inst2(insw); :};
 Inst ::= SWAP1 PABIERTO PCERRADO {: RESULT= atrb.Inst3(); :};
 Inst ::= SWAP2 PABIERTO PCERRADO {: RESULT= atrb.Inst4(); :};
-Inst ::= IF:if {: RESULT= atrb.Inst5(if); :};
-Inst ::= WHILE:while {: RESULT= atrb.Inst6(while); :};
+Inst ::= ExpIF:if {: RESULT= atrb.Inst5(if); :};
+Inst ::= ExpWHILE:while {: RESULT= atrb.Inst6(while); :};
 Inst ::= LLAMADA:llamada {: RESULT= atrb.Inst7(llamada); :};
 
 //===================INSASIG==============================
@@ -166,13 +166,13 @@ InsR ::= in PABIERTO Designador:desig PCERRADO {: RESULT= atrb.InsR(desig); :};
 InsW ::= out PABIERTO Exp:exp PCERRADO {: RESULT= atrb.InsW(exp); :};
 
 //===================IF================================
-//IF → if ExpBool then Insts endif; IF → if  ExpBool then Insts else Insts endif  
-IF ::= if ExpBool:expbool then Insts:insts endif {: RESULT= atrb.IF0(expbool,insts); :};
-IF ::= if ExpBool:expbool then Insts:insts1 else Insts:insts2 endif {: RESULT= atrb.IF1(expbool,insts1,insts2); :};
+//IF → if ExpBool then Insts endif; IF → if  ExpBool then Insts ELSE Insts endif  
+ExpIF ::= IF ExpBool:expbool THEN Insts:insts ENDIF {: RESULT= atrb.IF0(expbool,insts); :};
+ExpIF ::= IF ExpBool:expbool THEN Insts:insts1 ELSE Insts:insts2 ENDIF {: RESULT= atrb.IF1(expbool,insts1,insts2); :};
 
 //===================WHILE==============================
-//WHILE → while ExpBool do Insts endwhile
-WHILE ::= while ExpBool:expbool do Insts:insts endwhile {: RESULT= atrb.WHILE0(expbool,insts); :};
+//WHILE → while ExpBool DO Insts endwhile
+ExpWHILE ::= WHILE Exp:exp DO Insts:insts ENDWHILE {: RESULT= atrb.WHILE0(exp,insts); :};
 
 //===================LLAMADA==============================
 //LLAMADA → Call ident (Parametros)
@@ -236,9 +236,9 @@ Exp3 ::= PABIERTO Exp:exp PCERRADO {: RESULT= atrb.Exp35(exp); :};
 Op3 ::= DESPIZQ {: RESULT= atrb.Op30(); :};
 Op3 ::= DESPDER {: RESULT= atrb.Op31(); :};
 //Op41
-Op41 ::= PABIERTO char PCERRADO {: RESULT= atrb.Op410(); :}; 
-Op41 ::= PABIERTO int PCERRADO {: RESULT= atrb.Op411(); :};
-Op41 ::= PABIERTO nat PCERRADO {: RESULT= atrb.Op412(); :};
-Op41 ::= PABIERTO float PCERRADO {: RESULT= atrb.Op413(); :};
+Op41 ::= PABIERTO CHAR PCERRADO {: RESULT= atrb.Op410(); :}; 
+Op41 ::= PABIERTO INT PCERRADO {: RESULT= atrb.Op411(); :};
+Op41 ::= PABIERTO NAT PCERRADO {: RESULT= atrb.Op412(); :};
+Op41 ::= PABIERTO FLOAT PCERRADO {: RESULT= atrb.Op413(); :};
 //Op42
 Op42 ::= not {: RESULT= atrb.Op420(); :};
