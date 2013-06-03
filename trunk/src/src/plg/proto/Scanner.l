@@ -20,10 +20,10 @@ multiplicacion	=	"*"
 modulo			=	"%"
 mayor			=	">"
 menor			=	"<"
-mayor-igual		=	">="
-menor-igual		=	"<="
+mayorigual		=	">="
+menorigual		=	"<="
 igualigual		=	"=="
-distinct		=	"!="
+distinto		=	"!="
 
 or      		= 	"or"
 and     		= 	"and"
@@ -46,7 +46,7 @@ arroba			=	"@"
 cabierto		=	"["
 ccerrado		=	"]"
 coma			= 	","
-barrabaja		=	"_"
+guionbajo		=	"_"
 
 
 //palabras reservadas
@@ -96,11 +96,11 @@ digito			=	[0-9]
 parteDecimal 	= 	"." ("0" | {digito}* {digitoPos})
 
 caracter 		= 	\' [^\'] \'
-cNatural		=	{cero} | {digitoPos}{digito}*
-exponencial 	= 	("e" | "E" ) ("-")? ({cNatural})
-real 			= 	{cNatural} ( {parteDecimal} | {exponencial} | {parteDecimal} {exponencial} )
+numeroEnt		=	{cero} | {digitoPos}{digito}*
+exponencial 	= 	("e" | "E" ) ("-")? ({numeroEnt})
+numeroReal 			= 	{numeroEnt} ( {parteDecimal} | {exponencial} | {parteDecimal} {exponencial} )
 //real 			= 	{natural} ( {parteDecimal} )+
-identificador	=	{letraMin} ( {letra} | {digito} )*
+identificador	=	{letraMinus} ( {letra} | {digito} )*
 
 String  = \"[^\"]*\"
 
@@ -124,9 +124,9 @@ String  = \"[^\"]*\"
 {modulo}		{return new Symbol(sym.MOD, yyline, yycolumn);}
 {mayor}			{return new Symbol(sym.MAYOR, yyline, yycolumn);}
 {menor}			{return new Symbol(sym.MENOR, yyline, yycolumn);}
-{mayorIgual}	{return new Symbol(sym.MAYORIGUAL, yyline, yycolumn);}
-{menorIgual}	{return new Symbol(sym.MENORIGUAL, yyline, yycolumn);}
-{igualIgual}	{return new Symbol(sym.IGUALIGUAL, yyline, yycolumn);}
+{mayorigual}	{return new Symbol(sym.MAYORIGUAL, yyline, yycolumn);}
+{menorigual}	{return new Symbol(sym.MENORIGUAL, yyline, yycolumn);}
+{igualigual}	{return new Symbol(sym.IGUALIGUAL, yyline, yycolumn);}
 {distinto}		{return new Symbol(sym.DISTINTO, yyline, yycolumn);}
 {not}			{return new Symbol(sym.NOT, yyline, yycolumn);}
 {and}     		{return new Symbol(sym.and, yyline, yycolumn);}
@@ -143,20 +143,14 @@ String  = \"[^\"]*\"
 {llcerrada}	{return new Symbol(sym.LLCERRADA, yyline, yycolumn);}
 {cabierto}	{return new Symbol(sym.CABIERTO, yyline, yycolumn);}
 {ccerrado} {return new Symbol(sym.CCERRADO, yyline, yycolumn);}
-{dosPuntos}		{return new Symbol(sym.DP, yyline, yycolumn);}
-{puntoComa}		{return new Symbol(sym.PYC, yyline, yycolumn);}
+{dospuntos}		{return new Symbol(sym.DP, yyline, yycolumn);}
+{puntoycoma}		{return new Symbol(sym.PYC, yyline, yycolumn);}
 {igual}			{return new Symbol(sym.IGUAL, yyline, yycolumn);}
 //{dosPuntosIgual} {return new Symbol(sym.DPIGUAL, yyline, yycolumn);}
 {coma}			{return new Symbol(sym.COMA, yyline, yycolumn);}
 {arroba}		{return new Symbol(sym.ARROBA, yyline, yycolumn);}
 {guionbajo}		{return new Symbol(sym.GUIONBAJO, yyline, yycolumn);}
 
-
-program, instructions,consts, const, tipos, tipo, vars, var, subprograms,subprogram,
-					if, then, else, endif, while, do, endwhile, if, then
-					boolean, integer, natural, float, caracter,
-					numero, true, false, in, out, while, do, endwhile, Call,
-					,DESPIZQ,DESPDER,char,int,nat,float,NOT,
 //palabras reservadas
 {program}		{return new Symbol(sym.program, yyline, yycolumn);}
 {consts}		{return new Symbol(sym.consts, yyline, yycolumn);}
@@ -200,10 +194,10 @@ program, instructions,consts, const, tipos, tipo, vars, var, subprograms,subprog
 {numeroEnt}  	{return new Symbol(sym.CARACTER, yyline, yycolumn, yytext());}
 //{cNatural}  	{return new Symbol(sym.CNATURAL, yyline, yycolumn, new Integer(yytext()));}
 {numeroReal}  	{return new Symbol(sym.REAL, yyline, yycolumn, new Float(yytext()));}
-{ident}         {return new Symbol(sym.IDENT, yyline, yycolumn, yytext());}
+{identificador}         {return new Symbol(sym.IDENT, yyline, yycolumn, yytext());}
 
 
 
 //errores
 [^]   	    	{throw new Error("Caracter no reconocido: " + yytext() + " linea: " + yyline
-
+								+ " columna: " + yycolumn);}
