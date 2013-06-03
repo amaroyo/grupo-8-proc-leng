@@ -3,15 +3,20 @@ package src.plg.proto;
 import java.util.ArrayList;
 
 
+
 import src.es.ucm.fdi.plg.evlib.Atribucion;
 import src.es.ucm.fdi.plg.evlib.Atributo;
+import src.es.ucm.fdi.plg.evlib.LAtributo;
 import src.es.ucm.fdi.plg.evlib.SemFun;
 import src.es.ucm.fdi.plg.evlib.TAtributos;
 // DefiniciÃ³n de las funciones semÃ¡nticas
 import src.plg.proto.TS;
 import src.plg.proto.Tipo;
+import tiposNuevos.TiposArray;
 
 
+
+/////////////////////////  TS
 
 class creaTS implements SemFun{
 	
@@ -33,8 +38,9 @@ class añadirTS implements SemFun{
 		String nivel = (String)args[3].valor();
 		String dir = (String)args[4].valor();
 		Tipo tipo = (Tipo)args[5].valor();
-    	
-		tablasimbolos.añadir(id, clase, nivel, dir, tipo);
+		int valor = (Integer)args[6].valor();
+		
+		tablasimbolos.añadir(id, clase, nivel, dir, tipo,valor);
     	return tablasimbolos;
     }
 
@@ -61,6 +67,37 @@ class creaTSL implements SemFun{
 
 }
 
+
+class dirMasTamaño implements SemFun{
+	
+	
+	// dependencias(Decs0.a("dir"),Decs.a("TSH"),Decs.a("dir"),Dec.a("id"),Dec.a("clase"));
+    @Override
+    public Object eval(Atributo... args) {
+    	
+    	TS ts = (TS)args[0].valor();
+    	String dirDecs1 = (String)args[1].valor();
+		String id = (String)args[2].valor();
+		String clase = (String)args[3].valor();
+
+	    int dirDecsUno=Integer.parseInt(dirDecs1);
+		int tamano=ts.tamanoDe(id,clase);
+		
+	    return String.valueOf(dirDecsUno+tamano);
+		
+    }
+
+}
+
+
+
+
+
+
+
+
+
+///////////////////////// Asignaciones  
 
 class Asignacion implements SemFun{
 
@@ -152,6 +189,17 @@ class asignaFalso implements SemFun{
     }
 }
 
+class asignaVacio implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        	
+        return " ";
+    }
+}
+
+
 class asignaCierto implements SemFun{
 	
 
@@ -169,7 +217,7 @@ class asignaCLaseConst implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " const ";
+        return "Const";
     }
 }
 
@@ -179,7 +227,7 @@ class asignaCLaseTipo implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " tipo ";
+        return "Tipo";
     }
 }
 
@@ -189,7 +237,7 @@ class asignaCLaseVars implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " vars ";
+        return "Var";
     }
 }
 
@@ -199,7 +247,7 @@ class asignaCLaseSubVars implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " pvars ";
+        return "Var";
     }
 }
 
@@ -209,7 +257,7 @@ class asignaCLaseSubPro implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " subPro ";
+        return "Proc";
     }
 }
 
@@ -220,7 +268,7 @@ class asignaCLasePF implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " PF ";
+        return "PVar";
     }
 }
 
@@ -230,7 +278,7 @@ class asignaTipoNat implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " Natural ";
+        return "<t:Nat , tam:1>";
     }
 }
 
@@ -240,7 +288,7 @@ class asignaTipoInt implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " Integer ";
+        return "<t:Int , tam:1>";
     }
 }
 
@@ -250,7 +298,7 @@ class asignaTipoFloat implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " Float ";
+        return "<Float , tam:1>";
     }
 }
 
@@ -260,7 +308,7 @@ class asignaTipoBool implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " Boolean ";
+        return "<t:Bool , tam:1>";
     }
 }
 
@@ -271,27 +319,33 @@ class asignaTipoChar implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return " Character ";
+        return "<t:Char , tam:1>";
     }
 }
 
+
+
+
+///////////////////////// TIPOS
 
 class tamañoDe implements SemFun{
 	
     @Override
     public Object eval(Atributo... args) {
-		Tipo tipo = (Tipo) args[0].valor();
-		String clase= (String) args[2].valor();
+       	
+    	TS ts = (TS)args[0].valor();
+		String id = (String)args[1].valor();
+		String clase = (String)args[2].valor();
 		
-		Parametros aux=new Parametros(clase,tipo);
+		int tamano=ts.tamanoDe(id,clase);
 		
-    	Integer tam = aux.getTam(tipo, clase);	
-        return String.valueOf(tam);
+	    return String.valueOf(tamano);
     }
 }
 
 class tipoDe implements SemFun{
 	
+	//dependencias(Tipo1.a("tipo"),Tipo1.a("TSH"),ident.a("lex"));
     @Override
     public Object eval(Atributo... args) {
     	
@@ -309,12 +363,12 @@ class tipoArray implements SemFun{
     @Override
     public Object eval(Atributo... args) {
 		Tipo tipo = (Tipo) args[0].valor();
-		String clase= (String) args[2].valor();
+		int nelems = (Integer) args[1].valor();
 		
-		Parametros aux=new Parametros(clase,tipo);
+		TiposArray aux=new TiposArray("",nelems,nelems, tipo);
 		
-    	Integer tam = aux.getTam(tipo, clase);	
-        return " PF ";
+    	
+        return aux;
     }
 }
 
@@ -337,6 +391,141 @@ class tipoTupla implements SemFun{
 
 ///////////////////////////// ERRORESSSSSSSSSSSS
 
+
+class erroresDecs implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+    	
+    	    	
+    	ArrayList<String> errores = new ArrayList<String>();
+    	
+    	ArrayList<String> erroresdeDecs=(ArrayList<String>)args[0].valor();
+    	ArrayList<String> erroresdeDec=(ArrayList<String>)args[1].valor();
+    	TS ts = (TS) args[3].valor();
+    	TPR tpr = (TPR) args[4].valor();
+		String id = (String) args[2].valor();
+		
+		int i=0;
+		if(ts.buscaId(id)){
+			errores.set(i, "Identificador Repetido en TS");
+			i++;
+		}
+		if(tpr.buscaId(id)){
+			errores.set(i, "Identificador Repetido en TPR");
+			i++;
+		}
+		if(!erroresdeDecs.isEmpty()){
+			errores.set(i,erroresdeDecs.toString());
+			i++;
+		}
+		if(!erroresdeDec.isEmpty()){
+			errores.set(i,erroresdeDec.toString());
+			i++;
+		}
+		
+        return errores;
+    }
+}
+
+class erroresDec implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+    	
+    	
+       //dependencias(Decs1.a("err"),Dec.a("err"),Dec.a("id"),Decs1.a("TSH"),Decs1.a("TPRH"));
+    	
+    	ArrayList<String> errores = new ArrayList<String>();
+    	
+    	ArrayList<String> erroresdeDec=(ArrayList<String>)args[0].valor();
+    	TS ts = (TS) args[2].valor();
+    	TPR tpr = (TPR) args[3].valor();
+		String id = (String) args[1].valor();
+		
+		int i=0;
+		if(ts.buscaId(id)){
+			errores.set(i, "Identificador Repetido en TS");
+			i++;
+		}
+		if(tpr.buscaId(id)){
+			errores.set(i, "Identificador Repetido en TPR");
+			i++;
+		}
+		if(!erroresdeDec.isEmpty()){
+			errores.set(i,erroresdeDec.toString());
+			i++;
+		}
+		
+        return errores;
+    }
+}
+
+class errorDec implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+    	
+    	
+       //dependencias(Dec0.a("err"),TipoBasico.a("err"),Dec0.a("tipo"),Valores.a("tipo"));
+    	
+    	ArrayList<String> errores = new ArrayList<String>();
+    	
+    	ArrayList<String> erroresdeTipoBasico=(ArrayList<String>)args[0].valor();
+    	Tipo tipo = (Tipo) args[1].valor();
+    	Tipo tipo2 = (Tipo) args[2].valor();
+		
+		int i=0;
+		if(tipo.equals(tipo2)){
+			errores.set(i, "No es mismo tipo el asignado a Const");
+			i++;
+		}
+		if(!erroresdeTipoBasico.isEmpty()){
+			errores.set(i,erroresdeTipoBasico.toString());
+			i++;
+		}
+		
+        return errores;
+    }
+}
+
+
+class errorFalso implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+
+    return "";
+    }
+}
+
+class errorInsW implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+
+    	 // dependencias(InsW.a("err"),Exp.a("err"),Exp.a("tipo"));
+        ArrayList<String> errores = new ArrayList<String>();
+    	
+    	ArrayList<String> erroresdeTipoBasico=(ArrayList<String>)args[0].valor();
+    	Tipo tipo = (Tipo) args[1].valor();
+		
+		int i=0;
+		if(!tipo.equals("<t:Bool , tam:1>") || !tipo.equals("<t:Char , tam:1>") || !tipo.equals("<t:Int , tam:1>")
+				|| !tipo.equals("<t:Float , tam:1>") || !tipo.equals("<t:Nat , tam:1>")){
+			errores.set(i, "No es tipo BASICO");
+			i++;
+		}
+		if(!erroresdeTipoBasico.isEmpty()){
+			errores.set(i,erroresdeTipoBasico.toString());
+			i++;
+		}
+		
+        return errores;
+    
+    }
+}
+
 class estaId_OR_esReserv implements SemFun{
 	
     @Override
@@ -348,12 +537,30 @@ class estaId_OR_esReserv implements SemFun{
 		String id = (String) args[2].valor();
 		
 		int i=0;
-		if(TS.buscaId(id)){
+		if(ts.buscaId(id)){
 			errores.set(i, "Identificador Repetido en TS");
 			i++;
 		}
-		if(TPR.buscaId(id)){
-			errores.set(i, "Identificador Repetido en TPR");
+		if(tpr.buscaId(id)){
+			errores.set(i, "Identificador está en TPR");
+		}
+        return errores;
+    }
+}
+
+class estaId implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+    	
+    	ArrayList<String> errores = new ArrayList<String>();
+    	TS ts = (TS) args[0].valor();
+		String id = (String) args[1].valor();
+
+		int i=0;
+		if(!ts.buscaId(id)){
+			errores.set(i, "Identificador no está en TS");
+			i++;
 		}
         return errores;
     }
@@ -369,7 +576,7 @@ class estaId_OR_sonCompatibles implements SemFun{
 		String id = (String) args[2].valor();
 		
 		int i=0;
-		if(TS.buscaId(id)){
+		if(ts.buscaId(id)){
 			errores.set(i, "Identificador Repetido en TS");
 			i++;
 		}
@@ -380,7 +587,15 @@ class estaId_OR_sonCompatibles implements SemFun{
     }
 }
 
-///////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+///////////////////////////CONCATENAR
 
 
 
@@ -690,6 +905,7 @@ public class EAtribucion extends Atribucion {
     private static SemFun asignacionOR5 = new AsignacionOR5();
     private static SemFun asignacero = new AsignaCero();
     private static SemFun asignauno = new AsignaUno();
+    private static SemFun asignavacio = new asignaVacio();
     private static SemFun asignacierto = new asignaCierto();
     private static SemFun asignafalso = new asignaFalso();
     private static SemFun asignaClaseConst =new asignaCLaseConst();
@@ -698,12 +914,15 @@ public class EAtribucion extends Atribucion {
     private static SemFun asignaClaseSubVars =new asignaCLaseSubVars();
     private static SemFun asignaClaseSubPro =new asignaCLaseSubPro();
     private static SemFun asignaClasePF =new asignaCLasePF();
-    private static SemFun asignaTipoInt =new asignaTipoNat();
+    
+    
+    private static SemFun asignaTipoInt =new asignaTipoInt();
     private static SemFun asignaTipoNat =new asignaTipoNat();
     private static SemFun asignaTipoFloat =new asignaTipoFloat();
     private static SemFun asignaTipoBool =new asignaTipoBool();
     private static SemFun asignaTipoChar =new asignaTipoChar();
     
+    private static SemFun  dirMasTamaño =new  dirMasTamaño();
     private static SemFun tamañoDe =new tamañoDe();
     
     /////////////////Funciones de Tipos(Ident, array, tupla) y Errores
@@ -711,9 +930,16 @@ public class EAtribucion extends Atribucion {
     private static SemFun tipoArray = new tipoArray();
     private static SemFun tipoTupla = new tipoTupla();
     private static SemFun estaId_OR_esReserv = new estaId_OR_esReserv();
-  
+    private static SemFun estaId = new estaId();
+    private static SemFun erroresDecs = new erroresDecs();
+    private static SemFun erroresDec = new erroresDec();
+    private static SemFun errorDec = new errorDec();
+    private static SemFun errorFalso = new errorFalso();
+    private static SemFun errorInsw = new errorInsW();
     
+
     
+ 
     private static SemFun concatenar2 = new concatenar2();
     private static SemFun concatenarIR1 = new concatenarIR1();
     private static SemFun concatenarIR2 = new concatenarIR2();
@@ -758,13 +984,13 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Programa = atributosPara("Programa", "TS","err","cod","etq","etqh","TPR");
         
-        //FALTA  Programa.TS = CreaTS()
+
         dependencias(Consts.a("TSH"),Programa.a("TS"));//Consts.TSH = Programa.TS
         dependencias(Tipos.a("TSH"),Consts.a("TS"));//Tipos.TSH = Consts.TS
         dependencias(Vars.a("TSH"),Tipos.a("TS"));//Vars.TSH = Tipos.TS
         dependencias(Subprogramas.a("TSH"),Vars.a("TS"));//Subprogramas.TSH = Vars.TS
         dependencias(Insts.a("TSH"),Subprogramas.a("TS"));//Insts.TSH = Subprogramas.TS         
-       // dependencias(e.a("irfh"),e.a("etq"));//Programa.TPR= CreaTPR()
+
         dependencias(Consts.a("TPRH"),Programa.a("TPR"));//Consts.TPRH = Programa.TPR
         dependencias(Tipos.a("TPRH"),Consts.a("TPRH"));//Tipos.TPRH = Consts.TPRH
         dependencias(Vars.a("TPRH"),Tipos.a("TPRH"));//Vars.TPRH = Tipos.TPRH
@@ -825,7 +1051,7 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Consts1 = atributosPara("Consts", "err");
 
-        calculo(Consts1.a("err"),asignafalso);
+        calculo(Consts1.a("err"),errorFalso);
         
         return Consts1;
         
@@ -855,7 +1081,7 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Tipos1 = atributosPara("Tipos","err");
         
-        calculo(Tipos1.a("err"),asignafalso);
+        calculo(Tipos1.a("err"),errorFalso);
         
         return Tipos1;
         
@@ -887,7 +1113,7 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Vars1 = atributosPara("Vars","err");
 
-        calculo(Vars1.a("err"),asignafalso);
+        calculo(Vars1.a("err"),errorFalso);
         
         return Vars1;
         
@@ -924,7 +1150,7 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Subprogramas1 = atributosPara("Subprogramas","err");
 
-        calculo(Subprogramas1.a("err"),asignafalso);
+        calculo(Subprogramas1.a("err"),errorFalso);
         
         return Subprogramas1;
         
@@ -938,23 +1164,22 @@ public class EAtribucion extends Atribucion {
         
         dependencias(Decs.a("TPRH"),Decs0.a("TPRH"));
         dependencias(Dec.a("TPRH"),Decs.a("TPRH"));
-        dependencias(Decs0.a("TS"),Decs.a("TSH"),Dec.a("id"),Dec.a("clase"),Dec.a("nivel"),Dec.a("dir"),Dec.a("tipo"));
+        dependencias(Decs0.a("TS"),Decs.a("TSH"),Dec.a("id"),Dec.a("clase"),Dec.a("nivel"),Dec.a("dir"),Dec.a("tipo"),Dec.a("valor"));
         dependencias(Decs.a("TSH"),Decs0.a("TSH"));
         dependencias(Dec.a("TSH"),Decs.a("TSH"));
         dependencias(Decs0.a("err"),Decs.a("err"),Dec.a("err"),Dec.a("id"),Decs.a("TSH"),Decs.a("TPRH"));
-        dependencias(Decs0.a("dir"),Decs.a("dir"));
+        dependencias(Decs0.a("dir"),Decs.a("TSH"),Decs.a("dir"),Dec.a("id"),Dec.a("clase"));
         dependencias(Decs.a("etqh"),Decs0.a("etqh"));
         dependencias(Dec.a("etqh"),Decs.a("etq"));
         dependencias(Decs0.a("etq"),Dec.a("etq"));
         
-        
-        ////////////FALTA ERRORRR
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Dec.a("TPRH"),asignacion);
         calculo(Decs0.a("TS"),añadirTS);
         calculo(Decs.a("TSH"),asignacion);
+        calculo(Decs0.a("err"),erroresDecs);
         calculo(Dec.a("TSH"),asignacion);
-        calculo(Decs0.a("dir"),sumauno);
+        calculo(Decs0.a("dir"),dirMasTamaño);
         calculo(Decs.a("etqh"),asignacion);
         calculo(Dec.a("etqh"),asignacion);
         calculo(Decs0.a("etq"),asignacion);
@@ -967,19 +1192,20 @@ public class EAtribucion extends Atribucion {
         regla("Decs → Dec");
                 
         TAtributos Decs1 = atributosPara("Decs", "TS","TSH","TPRH","dir","err","etq","etqh");
-
+        LAtributo Zero = new LAtributo("cero", 0);
       
         dependencias(Dec.a("TPRH"),Decs1.a("TPRH"));
         dependencias(Dec.a("TSH"),Decs1.a("TSH"));
-        dependencias(Decs1.a("TS"),Dec.a("TSH"),Dec.a("id"),Dec.a("clase"),Dec.a("nivel"),Dec.a("dir"),Dec.a("tipo"));
-        dependencias(Decs1.a("err"),Dec.a("err"));
+        dependencias(Decs1.a("TS"),Dec.a("TSH"),Dec.a("id"),Dec.a("clase"),Dec.a("nivel"),Zero,Dec.a("tipo"),Dec.a("valor"));
+        dependencias(Decs1.a("err"),Dec.a("err"),Dec.a("id"),Decs1.a("TSH"),Decs1.a("TPRH"));
+        dependencias(Decs1.a("dir"),Dec.a("TSH"),Dec.a("id"),Dec.a("clase"));
         dependencias(Dec.a("etqh"),Decs1.a("etqh"));
         dependencias(Decs1.a("etq"),Dec.a("etq"));
         
-        // FALTA ERRORRRRRRRRRRRR
+        calculo(Decs1.a("err"),erroresDec);
         calculo(Dec.a("TPRH"),asignacion);
         calculo(Dec.a("TSH"),asignacion);
-        calculo(Decs1.a("dir"),asignacero);
+        calculo(Decs1.a("dir"),tamañoDe);
         calculo(Decs1.a("TS"),añadirTS);
         calculo(Dec.a("etqh"),asignacion);
         calculo(Decs1.a("etq"),asignacion);
@@ -988,32 +1214,37 @@ public class EAtribucion extends Atribucion {
         
     }
     
-    public TAtributos Dec0(TAtributos TipoBasico,TAtributos ident){
+    public TAtributos Dec0(TAtributos TipoBasico,String ident,TAtributos Valores){
         regla("Dec → const TipoBasico ident = Valores");
                 
-        TAtributos Dec0 = atributosPara("Dec", "TSH","TPRH","id","clase","niv","tipo","err");
+        TAtributos Dec0 = atributosPara("Dec", "TSH","TPRH","id","clase","niv","tipo","err","valor");
         
-       
-        dependencias(Dec0.a("id"),ident.a("lex"));
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident);
+        
+        dependencias(Dec0.a("id"),identif);
         dependencias(Dec0.a("tipo"),TipoBasico.a("tipo"));
-        dependencias(Dec0.a("err"),TipoBasico.a("err"),Dec0.a("tipo"));
+        dependencias(Dec0.a("valor"),Valores.a("valor"));
+        dependencias(Dec0.a("err"),TipoBasico.a("err"),Dec0.a("tipo"),Valores.a("tipo"));
         
-        //FALTA ERRORRRRRR
+        
+        calculo(Dec0.a("err"),errorDec);
         calculo(Dec0.a("id"),asignacion);
         calculo(Dec0.a("clase"),asignaClaseConst);
         calculo(Dec0.a("nivel"),asignacero);
         calculo(Dec0.a("tipo"),asignacion);
+        calculo(Dec0.a("valor"),asignacion);
         
         return Dec0;
         
     }
     
-    public TAtributos Dec1(TAtributos Tipo,TAtributos ident){
-        regla("Dec → tipo Tipo ident");
+    public TAtributos Dec1(TAtributos Tipo,String ident){
+        regla("Dec → tipo TipoBasico ident");
                 
-        TAtributos Dec1 = atributosPara("Dec","TSH","TPRH","id","clase","niv","tipo","err");
+        TAtributos Dec1 = atributosPara("Dec","TSH","TPRH","id","clase","niv","tipo","err","valor");
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident);
         
-        dependencias(Dec1.a("id"),ident.a("lex"));
+        dependencias(Dec1.a("id"),identif);
         dependencias(Dec1.a("tipo"),Tipo.a("tipo"));
         dependencias(Tipo.a("TSH"),Dec1.a("TSH"));
         dependencias(Tipo.a("TPRH"),Dec1.a("TPRH"));
@@ -1026,18 +1257,20 @@ public class EAtribucion extends Atribucion {
         calculo(Tipo.a("TSH"),asignacion);
         calculo(Tipo.a("TPRH"),asignacion);
         calculo(Dec1.a("err"),asignacion);
+        calculo(Dec1.a("valor"),asignavacio);
         
         return Dec1;
         
     }
     
     
-    public TAtributos Dec2(TAtributos Tipo,TAtributos Designador){
-        regla("Dec → var Tipo Designador");
+    public TAtributos Dec2(TAtributos Tipo,String ident){
+        regla("Dec → var Tipo ident");
                 
-        TAtributos Dec2 = atributosPara("Dec", "TSH","TPRH","id","clase","niv","tipo","err");
+        TAtributos Dec2 = atributosPara("Dec", "TSH","TPRH","id","clase","niv","tipo","err","valor");
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident);
         
-        dependencias(Dec2.a("id"),Designador.a("lex"));
+        dependencias(Dec2.a("id"),identif);
         dependencias(Dec2.a("tipo"),Tipo.a("tipo"));
         dependencias(Tipo.a("TSH"),Dec2.a("TSH"));
         dependencias(Tipo.a("TPRH"),Dec2.a("TPRH"));
@@ -1047,23 +1280,25 @@ public class EAtribucion extends Atribucion {
         calculo(Dec2.a("clase"),asignaClaseVars);
         calculo(Dec2.a("nivel"),asignacero);
         calculo(Dec2.a("tipo"),asignacion);
+        calculo(Dec2.a("valor"),asignavacio);
         calculo(Tipo.a("TSH"),asignacion);
         calculo(Tipo.a("TPRH"),asignacion);
-        calculo(Dec2.a("err"),asignacion);
+        calculo(Dec2.a("err"),asignavacio);
         
         return Dec2;
     }
     
-    public TAtributos Dec3(TAtributos ident, TAtributos PFs, TAtributos CS){
+    public TAtributos Dec3(String ident, TAtributos PFs, TAtributos CS){
         regla("Dec → subprogram: ident (PFs ) {CS}");
         
         TAtributos Dec3 = atributosPara("Dec","TPRH","id","clase","niv","tipo","dir","err","etq","etqh");
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident);
         
         dependencias(PFs.a("TPRH"),Dec3.a("TPRH"));
         dependencias(CS.a("TPRH"),PFs.a("TPRH"));
         dependencias(PFs.a("TSLH"),Dec3.a("TSH"));
         dependencias(CS.a("TSLH"),PFs.a("TSL"));
-        dependencias(Dec3.a("id"),ident.a("lex"));
+        dependencias(Dec3.a("id"),identif);
         dependencias(Dec3.a("tipo"),PFs.a("tipo"));
         dependencias(Dec3.a("err"),PFs.a("err"),CS.a("err"));
         dependencias(CS.a("etqh"),Dec3.a("etqh"));
@@ -1077,6 +1312,7 @@ public class EAtribucion extends Atribucion {
         calculo(Dec3.a("clase"),asignaClaseSubPro);
         calculo(Dec3.a("niv"),asignacero);
         calculo(Dec3.a("tipo"),asignacion);
+        calculo(Dec3.a("valor"),asignavacio);
         calculo(Dec3.a("dir"),asignacero);
         calculo(Dec3.a("err"),asignacionOR2);
         
@@ -1117,24 +1353,25 @@ public class EAtribucion extends Atribucion {
         TAtributos PFs1 = atributosPara("PFs","tipo","TSLH","TPRH","err","TSH");
         
         dependencias(PFs1.a("tipo"),PF.a("tipo"));//PFs.tipo= PF.tipo
-        dependencias(PFs1.a("TSL"),PF.a("TSLH"),PF.a("id"),PF.a("clase"),PF.a("niv"),PF.a("dir"),PF.a("tipo"));
+        dependencias(PFs1.a("TSL"),PF.a("TSLH"),PF.a("id"),PF.a("clase"),PF.a("niv"),PF.a("dir"),PF.a("tipo"),PF.a("valor"));
         dependencias(PFs1.a("err"),PFs1.a("TSH"),PF.a("id"),PFs1.a("TPRH"),PF.a("err"));
         
-        ///////////  FALTA ERROR
+        calculo(PFs1.a("err"),estaId_OR_esReserv);
         calculo(PFs1.a("tipo"),asignacion);
         calculo(PFs1.a("TSL"),añadirTS);
         
         return PFs1;
     }
     
-    public TAtributos PF0(TAtributos Tipo, TAtributos ident){
+    public TAtributos PF0(TAtributos Tipo, String ident){
         regla("PF → Tipo ident");
                 
         TAtributos PF0 = atributosPara("PF","id","clase","niv","tipo","dir","err");
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident);
         
-        dependencias(PF0.a("id"),ident.a("lex"));//PF.id = ident.lex
+        dependencias(PF0.a("id"),identif);//PF.id = ident.lex
         dependencias(PF0.a("tipo"),Tipo.a("tipo"));//PF.tipo = Tipo.tipo
-        dependencias(PF0.a("dir"),PF0.a("tipo"),PF0.a("clase"));//PF.dir = tamañoDe(PF.tipo , PF.clase)
+        dependencias(PF0.a("dir"),PF0.a("id"),PF0.a("clase"));//PF.dir = tamañoDe(PF.id , PF.clase)
         dependencias(PF0.a("err"),Tipo.a("err"));//PF.err= Tipo.err
         
         calculo(PF0.a("id"),asignacion);
@@ -1143,19 +1380,21 @@ public class EAtribucion extends Atribucion {
         calculo(PF0.a("tipo"),asignacion);
         calculo(PF0.a("dir"),tamañoDe);
         calculo(PF0.a("err"),asignacion);
+        calculo(PF0.a("valor"),asignavacio);
         
         return PF0;
     }
     
     
-    public TAtributos PF1(TAtributos Tipo, TAtributos Designador){
-        regla("PF → Tipo * designador");
+    public TAtributos PF1(TAtributos Tipo, String ident){
+        regla("PF → Tipo * ident");
                 
         TAtributos PF1 = atributosPara("PF","id","clase","niv","tipo","dir","err");
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident);
         
-        dependencias(PF1.a("id"),Designador.a("lex"));//PF.id = Designador.lex
+        dependencias(PF1.a("id"),identif);//PF.id = Designador.lex
         dependencias(PF1.a("tipo"),Tipo.a("tipo"));//PF.tipo = Tipo.tipo
-        dependencias(PF1.a("dir"),PF1.a("tipo"),PF1.a("clase"));//PF.dir = tamañoDe(PF.tipo , PF.clase)
+        dependencias(PF1.a("dir"),PF1.a("id"),PF1.a("clase"));//PF.dir = tamañoDe(PF.id , PF.clase)
         dependencias(PF1.a("err"),Tipo.a("err"));//PF.err= Tipo.err
         
         calculo(PF1.a("id"),asignacion);
@@ -1164,7 +1403,7 @@ public class EAtribucion extends Atribucion {
         calculo(PF1.a("tipo"),asignacion);
         calculo(PF1.a("dir"),tamañoDe);
         calculo(PF1.a("err"),asignacion);
-        
+        calculo(PF1.a("valor"),asignavacio);
         
         return PF1;
     }
@@ -1208,19 +1447,19 @@ public class EAtribucion extends Atribucion {
         dependencias(DecSub.a("TPRH"),DecsSubs.a("TPRH"));
         dependencias(DecsSubs.a("TSLH"),DecsSubs0.a("TSLH"));
         dependencias(DecSub.a("TSLH"),DecsSubs.a("TSLH"));
-        dependencias(DecsSubs0.a("TS"),DecSub.a("TSH"),DecSub.a("id"),DecSub.a("clase"),DecSub.a("nivel"),DecSub.a("dir"),DecSub.a("tipo"));
+        dependencias(DecsSubs0.a("TSL"),DecSub.a("TSLH"),DecSub.a("id"),DecSub.a("clase"),DecSub.a("nivel"),DecSub.a("dir"),DecSub.a("tipo"),DecSub.a("valor"));
         
-        dependencias(DecsSubs0.a("err"),DecsSubs.a("err"));
-        dependencias(DecsSubs0.a("err"),DecsSubs.a("err"));
-        dependencias(DecsSubs0.a("dir"),DecsSubs.a("dir"));
+        dependencias(DecsSubs0.a("err"),DecsSubs.a("err"),DecSub.a("err"),DecSub.a("id"),DecsSubs.a("TSLH"),DecsSubs.a("TPRH"));
+        dependencias(DecsSubs0.a("dir"),DecsSubs.a("dir"),DecSub.a("id"),DecSub.a("clase"));
+
         
-        /// FALTA ERRRORRRRRRR
         calculo(DecsSubs.a("TPRH"),asignacion);
         calculo(DecSub.a("TPRH"),asignacion);
         calculo(DecsSubs.a("TSLH"),asignacion);
         calculo(DecSub.a("TSLH"),asignacion);
         calculo(DecsSubs0.a("TS"),añadirTS);
-        calculo(DecsSubs0.a("dir"),sumauno);
+        calculo(DecsSubs0.a("dir"),dirMasTamaño);
+        calculo(DecsSubs0.a("err"),erroresDecs);
         
         return DecsSubs0;
         
@@ -1231,18 +1470,19 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos DecsSubs1 = atributosPara("DecsSubs","TSL","TSLH","TPRH","dir","err");
         
+        LAtributo Zero = new LAtributo("cero", 0);
         
         dependencias(DecSub.a("TPRH"),DecsSubs1.a("TPRH"));
         dependencias(DecSub.a("TSLH"),DecsSubs1.a("TSLH"));
-        dependencias(DecsSubs1.a("err"),DecSub.a("err"));
-        dependencias(DecsSubs1.a("TS"),DecSub.a("TSH"),DecSub.a("id"),DecSub.a("clase"),DecSub.a("nivel"),DecSub.a("dir"),DecSub.a("tipo"));
-        
-        
-     // FALTA ERRORRRRRRRRRRRR
+        dependencias(DecsSubs1.a("err"),DecSub.a("err"),DecSub.a("id"),DecsSubs1.a("TSLH"),DecsSubs1.a("TPRH"));
+        dependencias(DecsSubs1.a("TSL"),DecSub.a("TSLH"),DecSub.a("id"),DecSub.a("clase"),DecSub.a("nivel"),Zero,DecSub.a("tipo"));
+        dependencias(DecsSubs1.a("dir"),DecsSubs1.a("TSLH"),DecSub.a("id"),DecSub.a("clase"));
+
         calculo(DecSub.a("TPRH"),asignacion);
         calculo(DecSub.a("TSLH"),asignacion);
+        calculo(DecsSubs1.a("err"),erroresDec);
         calculo(DecsSubs1.a("TS"),añadirTS);
-        calculo(DecsSubs1.a("dir"),asignacero);
+        calculo(DecsSubs1.a("dir"),tamañoDe);
         
         return DecsSubs1;
         
@@ -1253,19 +1493,21 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos DecsSubs2 = atributosPara("DecsSubs","err");
         
-        calculo(DecsSubs2.a("err"),asignafalso);
+        calculo(DecsSubs2.a("err"),errorFalso);
         
         return DecsSubs2;
         
     }
     
     
-    public TAtributos DecSub0(TAtributos Tipo,TAtributos Designador){
-        regla("DecSub → var Tipo Designador");
+    public TAtributos DecSub0(TAtributos Tipo,String ident){
+        regla("DecSub → var Tipo ident");
                 
         TAtributos DecSub0 = atributosPara("DecSub","TSLH","TPRH","id","clase","nivel","tipo","err");
         
-        dependencias(DecSub0.a("id"),Designador.a("lex"));
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident);
+        
+        dependencias(DecSub0.a("id"),identif);
         dependencias(DecSub0.a("tipo"),Tipo.a("tipo"));
         dependencias(Tipo.a("TSH"),DecSub0.a("TSH"));
         dependencias(Tipo.a("TPRH"),DecSub0.a("TPRH"));
@@ -1276,6 +1518,7 @@ public class EAtribucion extends Atribucion {
         calculo(DecSub0.a("clase"),asignaClaseSubVars);
         calculo(DecSub0.a("nivel"),asignauno);
         calculo(DecSub0.a("tipo"),asignacion);
+        calculo(DecSub0.a("valor"),asignavacio);
         calculo(Tipo.a("TSH"),asignacion);
         calculo(Tipo.a("TPRH"),asignacion);
         calculo(DecSub0.a("err"),asignacion);
@@ -1285,12 +1528,13 @@ public class EAtribucion extends Atribucion {
 
    
 
-    public TAtributos designador1(TAtributos ident){
+    public TAtributos designador1(String ident){
         regla("designador → ident");
                 
         TAtributos designador1 = atributosPara("designador","lex");
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident);
         
-        dependencias(designador1.a("lex"),ident.a("lex"));//designador.lex=ident.lex
+        dependencias(designador1.a("lex"),identif);//designador.lex=ident.lex
         
         calculo(designador1.a("lex"),asignacion);
         
@@ -1298,21 +1542,25 @@ public class EAtribucion extends Atribucion {
     }
     
     
-    public TAtributos designador2(TAtributos designador,TAtributos Exp){
-        regla("designador → designador[Exp]");
+    public TAtributos designador2(String ident,TAtributos Exp){
+        regla("designador → ident[Exp]");
                 
         TAtributos designador2 = atributosPara("designador");
-        dependencias(designador2.a("lex"),designador.a("lex"));//designador.lex=ident.lex
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident);
+        
+        dependencias(designador2.a("lex"),identif);//designador.lex=ident.lex
         
         calculo(designador2.a("lex"),asignacion);
         return designador2;
     }
     
-    public TAtributos designador3(TAtributos designador_numero){
-        regla("designador → designador_numero");
+    public TAtributos designador3(String ident_numero){
+        regla("designador → ident_numero");
                 
         TAtributos designador3 = atributosPara("designador");
-        dependencias(designador3.a("lex"),designador_numero.a("lex"));//designador.lex=ident.lex
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident_numero);
+        
+        dependencias(designador3.a("lex"),identif);//designador.lex=ident.lex
         
         calculo(designador3.a("lex"),asignacion);
         
@@ -1335,14 +1583,14 @@ public class EAtribucion extends Atribucion {
         return Tipo0;
     }
     
-    public TAtributos Tipo1(TAtributos ident){
+    public TAtributos Tipo1(String ident){
         regla("Tipo → ident");
                 
         TAtributos Tipo1 = atributosPara("Tipo","tipo","err");
+        Atributo identif = atributoLexicoPara("Identificador", "lex", ident);
         
-
-        dependencias(Tipo1.a("tipo"),Tipo1.a("TSH"),ident.a("lex"));
-        dependencias(Tipo1.a("err"),Tipo1.a("TSH"),Tipo1.a("TPRH"),ident.a("lex"));
+        dependencias(Tipo1.a("tipo"),Tipo1.a("TSH"),identif);
+        dependencias(Tipo1.a("err"),Tipo1.a("TSH"),Tipo1.a("TPRH"),identif);
 
         calculo(Tipo1.a("tipo"),tipoDe);
         calculo(Tipo1.a("err"),estaId_OR_esReserv);
@@ -1378,23 +1626,25 @@ public class EAtribucion extends Atribucion {
     }
     
     
-    public TAtributos Componente0(TAtributos numero){
+    public TAtributos Componente0(String numero){
         regla("Componente → numero ");
                 
         TAtributos Componente0 = atributosPara("Componente","lex");
-
-        dependencias(Componente0.a("lex"),numero.a("lex"));
+        Atributo identComp0 = atributoLexicoPara("Identificador", "lex", numero);
+        
+        dependencias(Componente0.a("lex"),identComp0);
         calculo(Componente0.a("lex"),asignacion);
         
         return Componente0;
     }
     
-    public TAtributos Componente1(TAtributos ident){
+    public TAtributos Componente1(String ident){
         regla("Componente → numero ");
                 
         TAtributos Componente1 = atributosPara("Componente","lex");
-
-        dependencias(Componente1.a("lex"),ident.a("lex"));
+        Atributo identComp1 = atributoLexicoPara("Identificador", "lex", ident);
+        
+        dependencias(Componente1.a("lex"),identComp1);
         calculo(Componente1.a("lex"),asignacion);
 
         
@@ -1440,7 +1690,7 @@ public class EAtribucion extends Atribucion {
         TAtributos TiposBasico0 = atributosPara("TipoBasico","tipo","err");
          
         calculo(TiposBasico0.a("tipo"),asignaTipoBool);
-        calculo(TiposBasico0.a("err"),asignafalso);
+        calculo(TiposBasico0.a("err"),errorFalso);
         return TiposBasico0;
     }
     
@@ -1451,7 +1701,7 @@ public class EAtribucion extends Atribucion {
         TAtributos TiposBasico1 = atributosPara("TipoBasico","tipo","err");
          
         calculo(TiposBasico1.a("tipo"),asignaTipoInt);
-        calculo(TiposBasico1.a("err"),asignafalso);
+        calculo(TiposBasico1.a("err"),errorFalso);
         return TiposBasico1;
     }
     
@@ -1461,7 +1711,7 @@ public class EAtribucion extends Atribucion {
         TAtributos TiposBasico2 = atributosPara("TipoBasico","tipo","err");
          
         calculo(TiposBasico2.a("tipo"),asignaTipoNat);
-        calculo(TiposBasico2.a("err"),asignafalso);
+        calculo(TiposBasico2.a("err"),errorFalso);
 
         return TiposBasico2;
     }
@@ -1472,7 +1722,7 @@ public class EAtribucion extends Atribucion {
         TAtributos TiposBasico3 = atributosPara("TipoBasico","tipo","err");
          
         calculo(TiposBasico3.a("tipo"),asignaTipoFloat);
-        calculo(TiposBasico3.a("err"),asignafalso);
+        calculo(TiposBasico3.a("err"),errorFalso);
         return TiposBasico3;
     }
     
@@ -1482,71 +1732,81 @@ public class EAtribucion extends Atribucion {
         TAtributos TiposBasico4 = atributosPara("TipoBasico","tipo","err");
          
         calculo(TiposBasico4.a("tipo"),asignaTipoChar);
-        calculo(TiposBasico4.a("err"),asignafalso);
+        calculo(TiposBasico4.a("err"),errorFalso);
         return TiposBasico4;
     }
     
     
-    public TAtributos Valores0(TAtributos numeroReal){
+    public TAtributos Valores0(Float numeroReal){
         regla("Valores → numeroReal ");
                 
-        TAtributos Valores0 = atributosPara("Valores","valor");
-   
-        dependencias(Valores0.a("valor"),numeroReal.a("lex"));
+        TAtributos Valores0 = atributosPara("Valores","valor","tipo");
+        Atributo numRe = atributoLexicoPara("Identificador", "lex", numeroReal);
+        
+        dependencias(Valores0.a("valor"),numRe);
         calculo(Valores0.a("valor"),asignacion);
-   
+        calculo(Valores0.a("tipo"),asignaTipoFloat);
+        
         return Valores0;
     }
     
-    public TAtributos Valores1(TAtributos numeroEnt){
+    public TAtributos Valores1(Integer numeroEnt){
         regla("Valores → numeroEnt");
                 
-        TAtributos Valores1 = atributosPara("Valores","valor");
+        TAtributos Valores1 = atributosPara("Valores","valor","tipo");
+        Atributo numEnt = atributoLexicoPara("Identificador", "lex", numeroEnt);
    
-        dependencias(Valores1.a("valor"),numeroEnt.a("lex"));
+        dependencias(Valores1.a("valor"),numEnt);
         calculo(Valores1.a("valor"),asignacion);
+        calculo(Valores1.a("tipo"),asignaTipoInt);
    
         return Valores1;
     }
     
-    public TAtributos Valores2(TAtributos numeroEnt){
+    public TAtributos Valores2(){
         regla("Valores → false ");
                 
         TAtributos Valores2 = atributosPara("Valores","valor");
    
         calculo(Valores2.a("valor"),asignafalso);
+        calculo(Valores2.a("tipo"),asignaTipoBool);
    
         return Valores2;
     }
     
-    public TAtributos Valores3(TAtributos numeroEnt){
+    public TAtributos Valores3(){
         regla("Valores → true ");
                 
         TAtributos Valores3 = atributosPara("Valores","valor");
 
         calculo(Valores3.a("valor"),asignacierto);
+        calculo(Valores3.a("tipo"),asignaTipoBool);
    
         return Valores3;
     }
         
-    public TAtributos Valores4(TAtributos letra){
+    public TAtributos Valores4(String letra){
         regla("Valores → ’(letra)’ ");
         
         TAtributos Valores4 = atributosPara("Valores","valor");
-   
-        dependencias(Valores4.a("valor"),letra.a("lex"));
+        Atributo letras = atributoLexicoPara("Identificador", "lex", letra);
+        
+        dependencias(Valores4.a("valor"),letras);
         calculo(Valores4.a("valor"),asignacion);
+        calculo(Valores4.a("tipo"),asignaTipoChar);
    
         return Valores4;
     }
     
-    public TAtributos Valores5(TAtributos digito){
+    public TAtributos Valores5(String digito){
         regla("Valores → ’(digito)’ ");
         
         TAtributos Valores5 = atributosPara("Valores","valor");
-   
-        dependencias(Valores5.a("valor"),digito.a("lex"));
+        Atributo digitos = atributoLexicoPara("Identificador", "lex", digito);
+        
+        dependencias(Valores5.a("valor"),digitos);
         calculo(Valores5.a("valor"),asignacion);
+        calculo(Valores5.a("tipo"),asignaTipoChar);
    
         return Valores5;
     }
@@ -1761,12 +2021,15 @@ public class EAtribucion extends Atribucion {
          dependencias(LLAMADA.a("TSH"),Inst7.a("TSH"));
          dependencias(Inst7.a("err"),LLAMADA.a("err"));
          dependencias(Inst7.a("cod"),LLAMADA.a("cod"));
-         
-         
+         dependencias(LLAMADA.a("etqh"),Inst7.a("etqh"));
+         dependencias(Inst7.a("etq"),LLAMADA.a("etq"));
+        
+
          calculo(LLAMADA.a("TSH"),asignacion);
          calculo(Inst7.a("err"),asignacion);
          calculo(Inst7.a("cod"),asignacion);
-         calculo(LLAMADA.a("etq"),asignacero);
+         calculo(LLAMADA.a("etqh"),asignacion);
+         calculo(Inst7.a("etq"),asignacion);
          
          return Inst7;
         
@@ -1796,23 +2059,22 @@ public class EAtribucion extends Atribucion {
         
     }
     
-    public TAtributos InsR(TAtributos in,TAtributos Designador){
+    public TAtributos InsR(TAtributos Designador){
         regla("InsR → in (Designador) ");
                 
         TAtributos InsR = atributosPara("InsR","err","cod","TSH","etq","etqh");
         
  
         dependencias(InsR.a("err"),InsR.a("TSH"),Designador.a("lex"));
-        dependencias(InsR.a("etq"),in.a("etq"));
-        dependencias(in.a("etqh"),InsR.a("etqh"));
+        dependencias(InsR.a("etq"),Designador.a("etq"));
+        dependencias(Designador.a("etqh"),InsR.a("etqh"));
         dependencias(InsR.a("cod"),InsR.a("TSH"),Designador.a("lex"));
   
-        /// FALTA EL COD!!!
-        //FALTA ERRORR
+    
         calculo(InsR.a("etq"),sumauno);
-        calculo(in.a("etqh"),asignacion);
-  
-        
+        calculo(Designador.a("etqh"),asignacion);
+        calculo(InsR.a("cod"),concatenar2);
+        calculo(InsR.a("err"),estaId);
         
         return InsR;
         
@@ -1824,41 +2086,40 @@ public class EAtribucion extends Atribucion {
        
        TAtributos InsW = atributosPara("InsW","TSH","err", "cod", "etq","etqh");
      
-       /// VALORE????
        dependencias(InsW.a("cod"), Exp.a("valor"));
        dependencias(InsW.a("etq"),InsW.a("etqh"));
        dependencias(Exp.a("TSH"),InsW.a("TSH"));
-       dependencias(InsW.a("err"),Exp.a("err"));
+       dependencias(InsW.a("err"),Exp.a("err"),Exp.a("tipo"));
        
        calculo(InsW.a("etq"),sumaDos);
        calculo(InsW.a("cod"),concatenarIR2);
-       calculo(InsW.a("err"),asignacion);
+       calculo(InsW.a("err"),errorInsw);
        calculo(Exp.a("TSH"),asignacion);
        
        return InsW;
    }
     
 
-   public TAtributos If0(TAtributos ExpBool,TAtributos Insts0){
-       regla("IF → if ExpBool then Insts endif");
+   public TAtributos If0(TAtributos Exp,TAtributos Insts0){
+       regla("IF → if Exp then Insts endif");
                
        TAtributos If0 = atributosPara("If","TSH","err", "cod","etq","etqh","irvh","irfh");
        
        
-       dependencias(ExpBool.a("TSH"),If0.a("TSH"));
-       dependencias(Insts0.a("TSH"),ExpBool.a("TSH"));
+       dependencias(Exp.a("TSH"),If0.a("TSH"));
+       dependencias(Insts0.a("TSH"),Exp.a("TSH"));
        dependencias(If0.a("err"),Insts0.a("err"));
        
-       dependencias(If0.a("cod"),ExpBool.a("cod"),Insts0.a("etq"),Insts0.a("cod"));
-       dependencias(ExpBool.a("etqh"),If0.a("etqh"));
-       dependencias(Insts0.a("etqh"),ExpBool.a("etq"));
+       dependencias(If0.a("cod"),Exp.a("cod"),Insts0.a("etq"),Insts0.a("cod"));
+       dependencias(Exp.a("etqh"),If0.a("etqh"));
+       dependencias(Insts0.a("etqh"),Exp.a("etq"));
 
        dependencias(If0.a("etq"),Insts0.a("etq"));
-       dependencias(ExpBool.a("irvh"),ExpBool.a("etq"));
-       dependencias(ExpBool.a("irfh"),ExpBool.a("etq"));
+       dependencias(Exp.a("irvh"),Exp.a("etq"));
+       dependencias(Exp.a("irfh"),Exp.a("etq"));
        
        
-       calculo(ExpBool.a("TSH"),asignacion);
+       calculo(Exp.a("TSH"),asignacion);
        calculo(Insts0.a("TSH"),asignacion);
        calculo(If0.a("err"),asignacionOR2);
 
@@ -1867,36 +2128,36 @@ public class EAtribucion extends Atribucion {
        //CONCATENAR DIFERENTE
        calculo(If0.a("cod"),concatenarIR1);
        calculo(If0.a("etq"),asignacion);
-       calculo(ExpBool.a("etqh"),asignacion);
-       calculo(ExpBool.a("irvh"),asignacion);
-       calculo(ExpBool.a("irfh"),asignacion);
+       calculo(Exp.a("etqh"),asignacion);
+       calculo(Exp.a("irvh"),asignacion);
+       calculo(Exp.a("irfh"),asignacion);
        
        
        return If0;
        
    }
     
-   public TAtributos If1(TAtributos ExpBool,TAtributos Insts0, TAtributos Insts1){
-       regla("IF → if  ExpBool then Insts else Insts endif ");
+   public TAtributos If1(TAtributos Exp,TAtributos Insts0, TAtributos Insts1){
+       regla("IF → if  Exp then Insts else Insts endif ");
        
        TAtributos If1 = atributosPara("If","TSH","err", "cod","etq","etqh","irvh","irfh");
        
        
-       dependencias(ExpBool.a("TSH"),If1.a("TSH"));
-       dependencias(Insts0.a("TSH"),ExpBool.a("TSH"));
+       dependencias(Exp.a("TSH"),If1.a("TSH"));
+       dependencias(Insts0.a("TSH"),Exp.a("TSH"));
        dependencias(Insts1.a("TSH"),Insts0.a("TSH"));
        dependencias(If1.a("err"),Insts0.a("err"),Insts1.a("err"));
        
-       dependencias(If1.a("cod"),ExpBool.a("cod"),Insts0.a("etq"),Insts0.a("cod"),Insts1.a("etq"),Insts1.a("cod"));
-       dependencias(ExpBool.a("etqh"),If1.a("etqh"));
-       dependencias(Insts0.a("etqh"),ExpBool.a("etq"));
+       dependencias(If1.a("cod"),Exp.a("cod"),Insts0.a("etq"),Insts0.a("cod"),Insts1.a("etq"),Insts1.a("cod"));
+       dependencias(Exp.a("etqh"),If1.a("etqh"));
+       dependencias(Insts0.a("etqh"),Exp.a("etq"));
        dependencias(Insts1.a("etqh"),Insts0.a("etq"));
        dependencias(If1.a("etq"),Insts1.a("etq"));
-       dependencias(ExpBool.a("irvh"),ExpBool.a("etq"));
-       dependencias(ExpBool.a("irfh"),ExpBool.a("etq"));
+       dependencias(Exp.a("irvh"),Exp.a("etq"));
+       dependencias(Exp.a("irfh"),Exp.a("etq"));
        
        
-       calculo(ExpBool.a("TSH"),asignacion);
+       calculo(Exp.a("TSH"),asignacion);
        calculo(Insts0.a("TSH"),asignacion);
        calculo(Insts1.a("TSH"),asignacion);
        //// FALTA ERRRORRR
@@ -1904,9 +2165,9 @@ public class EAtribucion extends Atribucion {
        calculo(Insts1.a("etqh"),sumauno);
        calculo(If1.a("cod"),concatenarIR1);
        calculo(If1.a("etq"),asignacion);
-       calculo(ExpBool.a("etqh"),asignacion);
-       calculo(ExpBool.a("irvh"),asignacion);
-       calculo(ExpBool.a("irfh"),asignacion);
+       calculo(Exp.a("etqh"),asignacion);
+       calculo(Exp.a("irvh"),asignacion);
+       calculo(Exp.a("irfh"),asignacion);
        
        
        return If1;
@@ -1914,26 +2175,26 @@ public class EAtribucion extends Atribucion {
    }
    
    
-   public TAtributos While0(TAtributos ExpBool, TAtributos Insts0){
-	   regla("IF → if ExpBool then Insts endif");
+   public TAtributos While0(TAtributos Exp, TAtributos Insts0){
+	   regla("IF → if Exp then Insts endif");
        
        TAtributos While0 = atributosPara("While","TSH","err", "cod","etq","etqh","irvh","irfh");
        
        
-       dependencias(ExpBool.a("TSH"),While0.a("TSH"));
-       dependencias(Insts0.a("TSH"),ExpBool.a("TSH"));
+       dependencias(Exp.a("TSH"),While0.a("TSH"));
+       dependencias(Insts0.a("TSH"),Exp.a("TSH"));
        dependencias(While0.a("err"),Insts0.a("err"));
        
-       dependencias(While0.a("cod"),ExpBool.a("cod"),Insts0.a("etq"),Insts0.a("cod"),While0.a("etqh"));
-       dependencias(ExpBool.a("etqh"),While0.a("etqh"));
-       dependencias(Insts0.a("etqh"),ExpBool.a("etq"));
+       dependencias(While0.a("cod"),Exp.a("cod"),Insts0.a("etq"),Insts0.a("cod"),While0.a("etqh"));
+       dependencias(Exp.a("etqh"),While0.a("etqh"));
+       dependencias(Insts0.a("etqh"),Exp.a("etq"));
 
        dependencias(While0.a("etq"),Insts0.a("etq"));
-       dependencias(ExpBool.a("irvh"),ExpBool.a("etq"));
-       dependencias(ExpBool.a("irfh"),ExpBool.a("etq"));
+       dependencias(Exp.a("irvh"),Exp.a("etq"));
+       dependencias(Exp.a("irfh"),Exp.a("etq"));
        
        
-       calculo(ExpBool.a("TSH"),asignacion);
+       calculo(Exp.a("TSH"),asignacion);
        calculo(Insts0.a("TSH"),asignacion);
        calculo(While0.a("err"),asignacionOR2);
 
@@ -1942,9 +2203,9 @@ public class EAtribucion extends Atribucion {
        //CONCATENAR DIFERENTE
        calculo(While0.a("cod"),concatenarIR1);
        calculo(While0.a("etq"),asignacion);
-       calculo(ExpBool.a("etqh"),asignacion);
-       calculo(ExpBool.a("irvh"),asignacion);
-       calculo(ExpBool.a("irfh"),asignacion);
+       calculo(Exp.a("etqh"),asignacion);
+       calculo(Exp.a("irvh"),asignacion);
+       calculo(Exp.a("irfh"),asignacion);
        
        
        return While0;
@@ -1952,17 +2213,20 @@ public class EAtribucion extends Atribucion {
    }
     
    
-   public TAtributos Llamada0(TAtributos ident,TAtributos Parametros){
+   public TAtributos Llamada0(String ident,TAtributos Parametros){
        regla("LLAMADA → Call ident (Parametros)");
                
        TAtributos Llamada0 = atributosPara("Llamada","TSH","err", "cod","etq","etqh");
-       
+       Atributo identLlamada0 = atributoLexicoPara("Identificador", "lex", ident);
+       Atributo identLlamada1 = atributoLexicoPara("Identificador", "cod", ident);
+       Atributo identLlamada2 = atributoLexicoPara("Identificador", "etq", ident);
+       Atributo identLlamada3 = atributoLexicoPara("Identificador", "etqh", ident);
        
        dependencias(Parametros.a("TSH"),Llamada0.a("TSH"));
        dependencias(Llamada0.a("err"),Parametros.a("err"));
-       dependencias(Llamada0.a("cod"),ident.a("cod"),Parametros.a("cod"),ident.a("etqh"));
-       dependencias(Llamada0.a("etq"),ident.a("etq"));
-       dependencias(ident.a("etqh"),Llamada0.a("etqh"));
+       dependencias(Llamada0.a("cod"),identLlamada1,Parametros.a("cod"),identLlamada3);
+       dependencias(Llamada0.a("etq"),identLlamada2);
+       dependencias(identLlamada3,Llamada0.a("etqh"));
 
        
 
@@ -2011,7 +2275,7 @@ public class EAtribucion extends Atribucion {
        
    }
     
-   public TAtributos Parametro0(TAtributos Exp){
+   public TAtributos Parametro0(String ident,TAtributos Exp){
        regla("Parametro → ident = Exp ");
                
        TAtributos Parametro0 = atributosPara("Parametro","TSH","err");
@@ -2026,48 +2290,7 @@ public class EAtribucion extends Atribucion {
        
    }
    
-   public TAtributos Parametro1(TAtributos Exp){
-       regla("Parametro →  Designador = Exp");
-               
-       TAtributos Parametro1 = atributosPara("Parametro","TSH","err");
-       
-       dependencias(Exp.a("TSH"),Parametro1.a("TSH"));     
-       dependencias(Parametro1.a("err"),Exp.a("err"));
 
-       calculo(Exp.a("TSH"),asignacion);
-       calculo(Parametro1.a("err"),asignacion);
-       
-       return Parametro1;
-       
-   }
-    
-   public TAtributos ExpBool(TAtributos Exp0,TAtributos Op0,TAtributos Exp1){
-	    
-		regla("ExpBool → Exp Op0 Exp ");
-	     
-	     TAtributos ExpBool = atributosPara("ExpBool", "TSH","tipo","err","cod","etq");
-	     
-	     dependencias(Exp0.a("TSH"),ExpBool.a("TSH"));//Exp.TSH = ExpBool.TSH
-	     dependencias(ExpBool.a("err"),Exp0.a("err"),Exp1.a("err"));//ExpBool.err = Exp0.err  OR Exp1.err
-	     dependencias(ExpBool.a("tipo"),Exp0.a("tipo"),Exp1.a("tipo"));//ExpBool.tipo = Exp0.tipo  OR Exp1.tipo 
-	     dependencias(Exp0.a("etqh"),ExpBool.a("etqh"));//Exp0.etqh=ExpBool.etqh
-	     dependencias(Exp1.a("etqh"),Exp0.a("etq"));//Exp1.etqh=Exp0.etq
-	     dependencias(ExpBool.a("etq"),Exp1.a("etq"));//ExpBool.etq=Exp1.etq+1
-	     dependencias(ExpBool.a("cod"),Exp0.a("cod"),Exp1.a("cod"),Op0.a("cod"));//ExpBool.cod= Exp0.cod||Exp1.cod||Op0.cod
-	     
-	     
-	     calculo(Exp0.a("TSH"),asignacion);
-	     calculo(ExpBool.a("err"),asignacionOR2);
-	     calculo(ExpBool.a("tipo"),asignacionOR2);
-	     calculo(Exp0.a("etqh"),asignacion);
-	     calculo(Exp1.a("etqh"),asignacion);
-	     calculo(Exp1.a("etq"),sumauno);
-	     calculo(ExpBool.a("etq"),asignacionOR2);
-	    // calculo(ExpBool.a("cod"),concatenarExpBool);
-	     
-	     return ExpBool;
-	    
-	}
 	public TAtributos Exp0(TAtributos Exp01,TAtributos Op0,TAtributos Exp02){
 	    
 		regla("Exp → Exp0 Op0 Exp0");
