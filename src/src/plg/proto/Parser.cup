@@ -13,26 +13,25 @@ terminal            String ident,letra, digito,caracter;
 terminal			float numeroReal;
 terminal            integer numeroEnt;
 terminal            program, instructions,consts, const, tipos, tipo, vars, var, subprograms,subprogram,
-					if, then, else, endif, while, do, endwhile, if, then
+				    then, else, endif, while, do, endwhile, if,
 					boolean, integer, natural, float,
-					numero, true, false, in, out, while, do, endwhile, Call,
-					RESTA,MAYOR,MENOR,MENORIGUAL,MAYORIGUAL,IGUALIGUAL,DISTINTO,SUMA,or,MULT,DIV,MOD
-					,and,DESPIZQ,DESPDER,char,int,nat,float,not,
-					DP,SWAP1,SWAP2,Call,in,out,PABIERTO,PCERRADO,
-					CABIERTO,CCERRADO,LLABIERTA,LLCERRADA,COMA,ARROBA,PYC,IGUAL,GUIONBAJO
-					designador_numero;
+					numero, true, false, in, out, Call,
+					RESTA,MAYOR,MENOR,MENORIGUAL,MAYORIGUAL,IGUALIGUAL,DISTINTO,SUMA,MULT,DIV,MOD,
+					DESPIZQ,DESPDER,char,int,nat,not,
+					DP,SWAP1,SWAP2,PABIERTO,PCERRADO,COMILLA,
+					CABIERTO,CCERRADO,LLABIERTA,LLCERRADA,COMA,ARROBA,PYC,IGUAL,GUIONBAJO;
 
 // Definición de los no terminales del lenguaje
 non terminal TAtributos Programa, Consts, Tipos, Vars,  Subprogramas, Decs, Dec,
 			PFs, PF, CS, DecsSubs, DecSub, Designador, Tipo, Dimensiones, Componente,
 			TiposTupla, TipoBasico, Valores, Insts, Inst, InsAsig, InsR, InsW, IF, WHILE, LLAMADA,
-			Parametros, Parametro, ExpBool, Exp, Exp0, Exp1, Exp2, Exp3, Op0, Op1, OR, Op2, AND, OR, Op3
+			Parametros, Parametro, ExpBool, Exp, Exp0, Exp1, Exp2, Exp3, Op0, Op1, OR, Op2, AND1, Op3,
 			Op41, Op42;
 
 // Se definen las reglas sintácticas
 //===================PROGRAMA==============================
 //Programa → program : ident { Consts Tipos Vars Subprogramas instructions { Insts }}
-Programa ::= program DP ident:id LLABIERTA Consts:consts Tipos:tipos Vars:vars Subprogramas:subprogramas instrutions LLABIERTA Insts:insts LLCERRADA LLCERRADA 
+Programa ::= program DP ident:id LLABIERTA Consts:consts Tipos:tipos Vars:vars Subprogramas:subprogramas instructions LLABIERTA Insts:insts LLCERRADA LLCERRADA 
 {: RESULT= atrb.ProgramaR1( id,consts,tipos,vars,subprogramas,insts ):};
 
 //===================CONSTS==============================
@@ -61,22 +60,22 @@ Decs ::= Decs:decs PYC Dec:dec {: RESULT= atrb.DecsR1(decs,dec):};
 Decs ::= Dec:dec {: RESULT= atrb.DecsR2(dec):};
 
 //===================DEC==============================
-//Dec → const TipoBasico ident = Valores; Dec → tipo Tipo ident; Dec → var Tipo designador
+//Dec → const TipoBasico ident = Valores; Dec → tipo Tipo ident; Dec → var Tipo Designador
 //Dec → subprogram: ident (PFs) {CS}
 Dec ::= const TipoBasico:tipobasico ident:id IGUAL Valores:valores {: RESULT= atrb.DecR1(tipobasico,id,Valores) :};
 Dec ::= tipo Tipo:tipo ident:id {: RESULT= atrb.DecR2(tipo,id):};
-Dec ::= var Tipo:tipo designador:desig {: RESULT= atrb.DecR3(tipo,desig):};
-Dec ::= subprogram DP ident:id PABIERTO PFs:pfs PCERRADO LLABIERTA CS:cs LLCERRADA {: RESULT = atrb.DecR4(id,pfs,cs) :}
+Dec ::= var Tipo:tipo Designador:desig {: RESULT= atrb.DecR3(tipo,desig):};
+Dec ::= subprogram DP ident:id PABIERTO PFs:pfs PCERRADO LLABIERTA CS:cs LLCERRADA {: RESULT = atrb.DecR4(id,pfs,cs) :};
 
 //===================PFS==============================
-//PFs → PFs, PF | PF
+//PFs → PFs, PF | PF;
 PFs ::= PFs:pfs COMA PF:pf {: RESULT= atrb.PFsR1(pfs,pf):};
 PFs ::= PF:pf {: RESULT= atrb.PFsR2(pf):};
 
 //===================PF==============================
-//PF → Tipo ident | Tipo * designador 
+//PF → Tipo ident | Tipo * Designador 
 PF ::= Tipo:tipo ident:id {: RESULT= atrb.PFR1(tipo,id):};
-PF ::= Tipo:tipo MULT designador:desig {: RESULT= atrb.PFR2(tipo,desig):};
+PF ::= Tipo:tipo MULT Designador:desig {: RESULT= atrb.PFR2(tipo,desig):};
 
 //===================CS==============================
 //CS  → vars { DecsSubs } instructions { Insts }
@@ -90,14 +89,14 @@ DecsSubs ::=  {: RESULT= atrb.DecsSubsR1():};
 
 //===================DECSUB==============================
 //DecSub → var Tipo designador
-DecSub ::= var Tipo:tipo Designador:desig {: RESULT= atrb.DecSubR1(tipo,desig):}
+DecSub ::= var Tipo:tipo Designador:desig {: RESULT= atrb.DecSubR1(tipo,desig):};
 
 
 //===================DESIGNADOR==============================
 //designador → ident; designador → designador[Exp]; designador → designador_numero
-Designador ::= ident:id {: RESULT= atrb.designadorR1(id):};
-Designador ::= designador CABIERTO Exp:exp CCERRADO {: RESULT= atrb.designadorR2(exp):};
-Designador ::= designador GUIONBAJO numero {: RESULT= atrb.designadorR3():};
+//Designador ::= ident:id {: RESULT= atrb.designadorR1(id):};
+Designador ::= Designador CABIERTO Exp:exp CCERRADO {: RESULT= atrb.designadorR2(exp):};
+Designador ::= Designador GUIONBAJO numero {: RESULT= atrb.designadorR3():};
 
 //===================TIPO==============================
 //Tipo → TipoBasico; Tipo → ident; Tipo → Tipo Dimensiones;
@@ -107,9 +106,9 @@ Tipo ::= Tipo:tipo Dimensiones:dim PYC {: RESULT= atrb.TipoR3(tipo,dim) :};
 Tipo ::= PABIERTO TiposTupla:tipos PCERRADO {: RESULT= atrb.TipoR4(tipos) :};
 
 //===================DIMENSIONES==============================
-//dimensiones → dimensiones[componente] | [componente]
+//dimensiones → Dimensiones[Componente] | [Componente]
 Dimensiones ::= Dimensiones:dim CABIERTO Componente:comp CCERRADO {: RESULT= atrb.dimensionesR1(dim,comp) :};
-Dimensiones ::= CABIERTO componente:comp CCERRADO {: RESULT= atrb.dimensionesR2(comp) :};
+Dimensiones ::= CABIERTO Componente:comp CCERRADO {: RESULT= atrb.dimensionesR2(comp) :};
 
 //===================COMPONENTE==============================
 //componente → numero | ident;
@@ -168,8 +167,8 @@ InsW ::= out PABIERTO Exp:exp PCERRADO {: RESULT= atrb.InsWR1(exp):};
 
 //===================IF================================
 //IF → if ExpBool then Insts endif; IF → if  ExpBool then Insts else Insts endif  
-IF ::= if ExpBool:expbool then Insts:insts endif {: RESULT= atrb.IFR1(expbool,insts) :}
-IF ::= if ExpBool:expbool then Insts:insts1 else Insts:insts2 endif {: RESULT= atrb.IFR1(expbool,insts1,insts2) :}
+IF ::= if ExpBool:expbool then Insts:insts endif {: RESULT= atrb.IFR1(expbool,insts) :};
+IF ::= if ExpBool:expbool then Insts:insts1 else Insts:insts2 endif {: RESULT= atrb.IFR1(expbool,insts1,insts2) :};
 
 //===================WHILE==============================
 //WHILE → while ExpBool do Insts endwhile
@@ -191,12 +190,12 @@ Parametro ::= Designador:desig IGUAL Exp:exp {: RESULT= atrb.ParametroR2(desig,e
 
 //===================EXPBOOL==============================
 //ExpBool → Exp Op0 Exp 
-ExpBool ::= Exp:exp1 Op0:op0 Exp:exp2 {: RESULT= atrb.ExpBoolR1(exp1,op0,exp2):};
+//ExpBool ::= Exp:exp1 Op0:op0 Exp:exp2 {: RESULT= atrb.ExpBoolR1(exp1,op0,exp2):};
 
 //===================EXP==============================
 //Exp → Exp0 Op0 Exp0; Exp → Exp0
 Exp ::= Exp0:exp01 Op0:op0 Exp0:exp02 {: RESULT= atrb.ExpR1(exp01,op0,exp02):};
-Exp ::= Exp0:exp0 {: RESULT= atrb.ExpR2(exp0):};
+Exp ::= Exp0:exp01 {: RESULT= atrb.ExpR2(exp01):};
 
 //===================EXP0==============================
 //Exp0 → Exp0 Op1 Exp1; Exp0 → Exp0 OR Exp1; Exp0 → Exp1
@@ -207,7 +206,7 @@ Exp0 ::= Exp1:exp1 {: RESULT= atrb.Exp0R3(exp1):};
 //===================EXP1==============================
 //Exp1 → Exp1 Op2 Exp2; Exp1 → Exp1 AND Exp2; Exp1 → Exp2
 Exp1 ::= Exp1:exp1 Op2:op2 Exp2:exp2 {: RESULT= atrb.Exp1R1(exp1,op2,exp2):};
-Exp1 ::= Exp1:exp1 AND Exp2:exp2 {: RESULT= atrb.Exp1R1(exp1,exp2):};
+Exp1 ::= Exp1:exp1 AND1 Exp2:exp2 {: RESULT= atrb.Exp1R1(exp1,exp2):};
 Exp1 ::= Exp2:exp2 {: RESULT= atrb.Exp1R2(exp2):};
 
 //===================EXP2==============================
@@ -242,7 +241,7 @@ Exp3 ::= PABIERTO Exp:exp PCERRADO {: RESULT= atrb.Exp3R5(exp):};
 Op3 ::= DESPIZQ {: RESULT= atrb.Op3R1():};
 Op3 ::= DESPDER {: RESULT= atrb.Op3R2():};
 //Op41
-Op41 ::= PABIERTO char PCERRADO {: RESULT= atrb.Op41R1():};| (int) | (nat) | (float)
+Op41 ::= PABIERTO char PCERRADO {: RESULT= atrb.Op41R1():}; //| (int) | (nat) | (float)
 Op41 ::= PABIERTO int PCERRADO {: RESULT= atrb.Op41R2():};
 Op41 ::= PABIERTO nat PCERRADO {: RESULT= atrb.Op41R3():};
 Op41 ::= PABIERTO float PCERRADO {: RESULT= atrb.Op41R4():};
