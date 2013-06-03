@@ -9,15 +9,17 @@ action code {:
 :}
 
 // DefiniciÃ³n de los terminales del lenguaje 
-terminal            String ident,numeroReal,numeroEnt, letra, digito,Designador_numero;
+terminal            String ident,letra, digito,caracter;
+terminal			float numeroReal;
+terminal            integer numeroEnt;
 terminal            program, instructions,consts, const, tipos, tipo, vars, var, subprograms,subprogram,
 					if, then, else, endif, while, do, endwhile, if, then
-					boolean, integer, natural, float, caracter,
+					boolean, integer, natural, float,
 					numero, true, false, in, out, while, do, endwhile, Call,
 					RESTA,MAYOR,MENOR,MENORIGUAL,MAYORIGUAL,IGUALIGUAL,DISTINTO,SUMA,or,MULT,DIV,MOD
 					,and,DESPIZQ,DESPDER,char,int,nat,float,not,
 					DP,SWAP1,SWAP2,Call,in,out,PABIERTO,PCERRADO,
-					CABIERTO,CCERRADO,LLABIERTA,LLCERRADA,COMA,ARROBA,PYC,DPIGUAL,IGUAL,
+					CABIERTO,CCERRADO,LLABIERTA,LLCERRADA,COMA,ARROBA,PYC,IGUAL,GUIONBAJO
 					designador_numero;
 
 // Definición de los no terminales del lenguaje
@@ -95,7 +97,7 @@ DecSub ::= var Tipo:tipo Designador:desig {: RESULT= atrb.DecSubR1(tipo,desig):}
 //designador → ident; designador → designador[Exp]; designador → designador_numero
 Designador ::= ident:id {: RESULT= atrb.designadorR1(id):};
 Designador ::= designador CABIERTO Exp:exp CCERRADO {: RESULT= atrb.designadorR2(exp):};
-Designador ::= designador_numero {: RESULT= atrb.designadorR3():};
+Designador ::= designador GUIONBAJO numero {: RESULT= atrb.designadorR3():};
 
 //===================TIPO==============================
 //Tipo → TipoBasico; Tipo → ident; Tipo → Tipo Dimensiones;
