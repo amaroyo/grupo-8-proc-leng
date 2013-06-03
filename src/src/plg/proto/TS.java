@@ -12,8 +12,8 @@ public class TS {
 		this.TablaSimbolos = new ArrayList<Parametros>();	
 	}
 	
-	public void añadir(String id, String clase, String nivel, String dir, Tipo tipo) {
-		Parametros param = new Parametros(id, clase, nivel, dir, tipo);
+	public void añadir(String id, String clase, String nivel, String dir, Tipo tipo,int valor) {
+		Parametros param = new Parametros(id, clase, nivel, dir, tipo, valor);
 		TablaSimbolos.add(param);
 	}
 
@@ -49,6 +49,20 @@ public class TS {
 	      }
 	    }
 		return false;
+	}
+
+	public int tamanoDe(String id, String clase) {
+		
+		Iterator<Parametros> it = TablaSimbolos.iterator();
+	    while (it.hasNext()) {
+	      Parametros element = it.next();
+	      String ident=element.getId();
+	      String clase2=element.getClase();
+	      if(id.equals(ident)&&clase2.equals(clase)){
+	    	  return element.getTipo().gettamano(); 
+	      }
+	    }
+		return -1;
 	}
 	
 }

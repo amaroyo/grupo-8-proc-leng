@@ -8,16 +8,26 @@ public class Parametros {
 	private String nivel;
 	private String dir;
 	private Tipo tipo;
-
-	public Parametros(String id, String clase, String nivel, String dir, Tipo tipo2) {
+	private int valor;
+	
+	public Parametros(String id, String clase, String nivel, String dir, Tipo tipo2,int valor) {
 
 		this.id = id;
 		this.clase = clase;
 		this.nivel = nivel;
 		this.dir = dir;
 		this.tipo = tipo2;
+		this.valor = valor;
 	}
 	
+	public int getValor() {
+		return valor;
+	}
+
+	public void setValor(int valor) {
+		this.valor = valor;
+	}
+
 	public Parametros(String clase, Tipo tipo) {
 		this.clase = clase;
 		this.tipo = tipo;
