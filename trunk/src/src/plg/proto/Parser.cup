@@ -10,7 +10,7 @@ action code {:
 
 // DefiniciÃ³n de los terminales del lenguaje 
 terminal            String ident,letra, digito,caracter;
-terminal			float numeroReal;
+terminal			float numReal;
 terminal            integer numeroEnt;
 terminal            program, instructions,CONSTS, CONST, tipos, tipo, vars, var, subprograms,subprogram,
 				    THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE, IF,
@@ -130,7 +130,7 @@ TipoBasico ::= caracter {: RESULT= atrb.TipoBasico4(); :};
 
 //===================VALORES==============================
 //Valores → numeroReal; Valores → numeroEnt; Valores → ’(letra)’; Valores  → ’(digito)’; Valores → true; Valores → false
-Valores  ::= numeroReal {: RESULT= atrb.Valores0(); :};
+Valores  ::= numeroReal:numreal {: RESULT= atrb.Valores0(numreal); :};
 Valores  ::= numeroEnt  {: RESULT= atrb.Valores1();:};
 Valores  ::= COMILLA PABIERTO letra PCERRADO COMILLA  {: RESULT= atrb.Valores2(); :};
 Valores  ::= COMILLA PABIERTO digito PCERRADO COMILLA  {: RESULT= atrb.Valores3(); :};
