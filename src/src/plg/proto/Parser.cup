@@ -112,13 +112,13 @@ Dimensiones ::= CABIERTO Componente:comp CCERRADO {: RESULT= atrb.Dimensiones1(c
 
 //===================COMPONENTE==============================
 //componente → numero | ident;
-Componente ::= numero {: RESULT= atrb.Componente0(); :};
+Componente ::= numero:id {: RESULT= atrb.Componente0(id); :};
 Componente ::= ident:id {: RESULT= atrb.Componente1(id); :};
 
 //===================TIPOTUPLA==============================
 //TiposTupla → TiposTupla, Tipo; TiposTupla → Tipo
 TiposTupla ::= TiposTupla:tipostupla COMA Tipo:tipo {: RESULT = atrb.TiposTupla0(tipostupla,tipo); :};
-TiposTupla ::= Tipo:tipo {: RESULT = atrb.tiposTuplaR2(tipo); :};
+TiposTupla ::= Tipo:tipo {: RESULT = atrb.tiposTupla1(tipo); :};
 
 //===================TIPOBASICO==============================
 //TipoBasico → boolean | integer | natural | FLOAT | caracter
@@ -131,9 +131,9 @@ TipoBasico ::= caracter {: RESULT= atrb.TipoBasico4(); :};
 //===================VALORES==============================
 //Valores → numeroReal; Valores → numeroEnt; Valores → ’(letra)’; Valores  → ’(digito)’; Valores → true; Valores → false
 Valores  ::= numeroReal:numreal {: RESULT= atrb.Valores0(numreal); :};
-Valores  ::= numeroEnt  {: RESULT= atrb.Valores1();:};
-Valores  ::= COMILLA PABIERTO letra PCERRADO COMILLA  {: RESULT= atrb.Valores2(); :};
-Valores  ::= COMILLA PABIERTO digito PCERRADO COMILLA  {: RESULT= atrb.Valores3(); :};
+Valores  ::= numeroEnt:numEnt  {: RESULT= atrb.Valores1(numEnt); :};
+Valores  ::= COMILLA PABIERTO letra:id PCERRADO COMILLA {: RESULT= atrb.Valores2(id); :};
+Valores  ::= COMILLA PABIERTO digito:id PCERRADO COMILLA {: RESULT= atrb.Valores3(id); :};
 Valores  ::= TRUE  {: RESULT= atrb.Valores4(); :};
 Valores  ::= FALSE  {: RESULT= atrb.Valores5(); :};
 
@@ -147,10 +147,10 @@ Insts ::= Inst:inst PYC {: RESULT= atrb.Insts1(inst); :};
 Inst ::= InsAsig:insasig  {: RESULT= atrb.Inst0(insasig); :};
 Inst ::= InsR:insr  {: RESULT= atrb.Inst1(insr); :};
 Inst ::= InsW:insw {: RESULT= atrb.Inst2(insw); :};
-Inst ::= SWAP1 PABIERTO PCERRADO {: RESULT= atrb.Inst3(); :};
-Inst ::= SWAP2 PABIERTO PCERRADO {: RESULT= atrb.Inst4(); :};
-Inst ::= ExpIF:if {: RESULT= atrb.Inst5(if); :};
-Inst ::= ExpWHILE:while {: RESULT= atrb.Inst6(while); :};
+Inst ::= SWAP1:swap1 PABIERTO PCERRADO {: RESULT= atrb.Inst3(swap1); :};
+Inst ::= SWAP2:swap2 PABIERTO PCERRADO {: RESULT= atrb.Inst4(swap2); :};
+Inst ::= ExpIF:ExpIf {: RESULT= atrb.Inst5(ExpIf); :};
+Inst ::= ExpWHILE:ExpWhile {: RESULT= atrb.Inst6(ExpWhile); :};
 Inst ::= LLAMADA:llamada {: RESULT= atrb.Inst7(llamada); :};
 
 //===================INSASIG==============================
@@ -158,8 +158,8 @@ Inst ::= LLAMADA:llamada {: RESULT= atrb.Inst7(llamada); :};
 InsAsig ::= Designador:desig IGUAL Exp:exp {: RESULT= atrb.InsAsig(desig,exp); :};
 
 //===================INSR==============================
-//InsR → in (Designador)
-InsR ::= in PABIERTO Designador:desig PCERRADO {: RESULT= atrb.InsR(desig); :};
+//InsR → in (Exp)
+InsR ::= in PABIERTO Exp:exp PCERRADO {: RESULT= atrb.InsR(exp); :};
 
 //===================INSW==============================
 //InsW → out (Exp)
@@ -167,12 +167,12 @@ InsW ::= out PABIERTO Exp:exp PCERRADO {: RESULT= atrb.InsW(exp); :};
 
 //===================IF================================
 //IF → if ExpBool then Insts endif; IF → if  ExpBool then Insts ELSE Insts endif  
-ExpIF ::= IF ExpBool:expbool THEN Insts:insts ENDIF {: RESULT= atrb.IF0(expbool,insts); :};
-ExpIF ::= IF ExpBool:expbool THEN Insts:insts1 ELSE Insts:insts2 ENDIF {: RESULT= atrb.IF1(expbool,insts1,insts2); :};
+ExpIF ::= IF ExpBool:expbool THEN Insts:insts ENDIF {: RESULT= atrb.If0(expbool,insts); :};
+ExpIF ::= IF ExpBool:expbool THEN Insts:insts1 ELSE Insts:insts2 ENDIF {: RESULT= atrb.If1(expbool,insts1,insts2); :};
 
 //===================WHILE==============================
 //WHILE → while ExpBool DO Insts endwhile
-ExpWHILE ::= WHILE Exp:exp DO Insts:insts ENDWHILE {: RESULT= atrb.WHILE0(exp,insts); :};
+ExpWHILE ::= WHILE Exp:exp DO Insts:insts ENDWHILE {: RESULT= atrb.While0(exp,insts); :};
 
 //===================LLAMADA==============================
 //LLAMADA → Call ident (Parametros)

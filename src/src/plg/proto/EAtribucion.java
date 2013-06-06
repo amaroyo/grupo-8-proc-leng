@@ -1612,75 +1612,135 @@ public class EAtribucion extends Atribucion {
         return Tipo2;
     }
     
-    
-    public TAtributos Dimensiones0(TAtributos Componente){
-        regla("Dimensiones → Dimensiones[Componente] | [Componente]");
+    /*Dimensiones → Dimensiones[Componente] | [Componente]
+       Dimensiones0.lex= Componente.lex
+       Dimensiones0.err=Dimensiones1.err OR Componente.err
+*/
+    public TAtributos Dimensiones0(TAtributos Dimensiones1, TAtributos Componente){
+        regla("Dimensiones → Dimensiones[Componente]");
                 
-        TAtributos Dimensiones0 = atributosPara("Dimensiones","lex");
+        TAtributos Dimensiones0 = atributosPara("Dimensiones","lex","err");
         
-        dependencias(Dimensiones0.a("lex"),Componente.a("lex"));
-
+        dependencias(Dimensiones0.a("lex"),Componente.a("lex"));//Dimensiones0.lex= Componente.lex
+        dependencias(Dimensiones0.a("err"),Dimensiones1.a("err"),Componente.a("err"));//Dimensiones0.err=Dimensiones1.err OR Componente.err
+        
         calculo(Dimensiones0.a("lex"),asignacion);
+        calculo(Dimensiones0.a("err"),asignacionOR2);
         
         return Dimensiones0;
     }
     
+    /*Dimensiones → [Componente]
+       Dimensiones.lex= Componente.lex
+       Dimensiones0.err=Componente.err
+     */
     
-    public TAtributos Componente0(String numero){
+    public TAtributos Dimensiones1(TAtributos Componente){
+        regla("Dimensiones → [Componente]");
+                
+        TAtributos Dimensiones1 = atributosPara("Dimensiones","lex","err");
+        
+        dependencias(Dimensiones1.a("lex"),Componente.a("lex"));//Dimensiones.lex= Componente.lex
+        dependencias(Dimensiones1.a("err"),Componente.a("err"));//Dimensiones0.err=Componente.err
+        
+        calculo(Dimensiones1.a("lex"),asignacion);
+        calculo(Dimensiones1.a("err"),asignacion);
+        
+        return Dimensiones1;
+    }
+    
+    /*Componente → numero 
+       Componente0.lex = numero.lex
+        Componente0.err=false
+     */
+    
+    public TAtributos Componente0(String numero){//¿?¿?HAY Q PASARLE STRING NUMERO¿?¿? LA RESPUESTA ES YEAH!!
         regla("Componente → numero ");
                 
-        TAtributos Componente0 = atributosPara("Componente","lex");
-        Atributo identComp0 = atributoLexicoPara("Identificador", "lex", numero);
+        TAtributos Componente0 = atributosPara("Componente","lex","err");//Componente.lex = numero.lex
+        Atributo identComp0 = atributoLexicoPara("Identificador", "lex", numero);//Componente.err=false
         
         dependencias(Componente0.a("lex"),identComp0);
         calculo(Componente0.a("lex"),asignacion);
+        calculo(Componente0.a("err"),asignafalso);
         
         return Componente0;
     }
     
+    /*Componente → ident
+       Componente1.lex = ident.lex
+       Componente1.err = esComponente(ident.lex)
+*/
     public TAtributos Componente1(String ident){
-        regla("Componente → numero ");
+        regla("Componente → ident ");
                 
         TAtributos Componente1 = atributosPara("Componente","lex");
         Atributo identComp1 = atributoLexicoPara("Identificador", "lex", ident);
+        Atributo identComp2 = atributoLexicoPara("Identificador", "err", ident);
         
         dependencias(Componente1.a("lex"),identComp1);
+        dependencias(Componente1.a("err"),identComp2);
+        
         calculo(Componente1.a("lex"),asignacion);
-
+        //calculo(Componente1.a("lex"),esComponente);//HAY QUE HACER esComponente!!!!
+        calculo(Componente1.a("err"),asignacion);
         
         return Componente1;
     }
     
+    /*Tipo3 → (TiposTupla) 
+        Tipo3.tipo = TiposTupla.tipo
+        Tipos3.err = TiposTupla.err
+     */
     public TAtributos Tipo3(TAtributos TiposTupla){
         regla("Tipo → (TiposTupla) ");
                 
-        TAtributos Tipo3 = atributosPara("Tipo","tipo");
+        TAtributos Tipo3 = atributosPara("Tipo","tipo","err");
         
-      //TIPO TUPLA!!!!dependencias(Tipo2.a("tipo"),TipoBasico.a("tipo"));
-       // FALTA ERR "OR" 
+        dependencias(Tipo3.a("tipo"),TiposTupla.a("tipo"));//Tipo3.tipo = TiposTupla.tipo
+        dependencias(Tipo3.a("err"),TiposTupla.a("err"));//Tipos3.err = TiposTupla.err
+        
+        calculo(Tipo3.a("tipo"),asignacion);
+        calculo(Tipo3.a("err"),asignacion); 
         
         return Tipo3;
     }
     
-    public TAtributos TiposTupla0(TAtributos Tipos){
+    /*TiposTupla0 → TiposTupla1, Tipo
+        TiposTupla 0.tipo = TiposTupla1.Tipo || tipoTupla(Tipo.tipo)
+        TiposTupla 0.err = TiposTupla1.err OR Tipo.err
+    */
+    public TAtributos TiposTupla0(TAtributos TiposTupla1, TAtributos Tipo){
         regla("TiposTupla → TiposTupla , Tipo ");
                 
-        TAtributos TiposTupla0 = atributosPara("Tipos","tipo");
+        TAtributos TiposTupla0 = atributosPara("Tipos","tipo","err");
         
-      //TIPO TUPLA!!!!dependencias(Tipo2.a("tipo"),TipoBasico.a("tipo"));
-       // FALTA ERR "OR" 
-        
+        dependencias(TiposTupla0.a("tipo"),TiposTupla1.a("tipo"),Tipo.a("tipo"));//TiposTupla 0.tipo = TiposTupla1.Tipo || tipoTupla(Tipo.tipo)
+        dependencias(TiposTupla0.a("err"),TiposTupla1.a("err"),Tipo.a("err"));//TiposTupla 0.err = TiposTupla1.err OR Tipo.err
+     
+        calculo(Tipo.a("tipo"),tipoTupla);
+        //calculo(TiposTupla0.a("tipo"),concatenaTipoTupla);// HAY Q HACER concatenaTipoTupla
+        calculo(TiposTupla0.a("err"),asignacionOR2); 
         return TiposTupla0;
     }
     
-    public TAtributos TiposTupla1(TAtributos Tipos){
+    /*TiposTupla → Tipo
+        TiposTupla1.tipo = tipoTupla(Tipo.tipo)
+        TiposTupla1.err = Tipo.err
+     */
+    
+    public TAtributos TiposTupla1(TAtributos Tipo){
         regla("TiposTupla → Tipo ");
                 
-        TAtributos TiposTupla1 = atributosPara("Tipo","tipo");
+        TAtributos TiposTupla1 = atributosPara("Tipo","tipo","err");
         
-      //TIPO TUPLA!!!!dependencias(Tipo2.a("tipo"),TipoBasico.a("tipo"));
-       // FALTA ERR "OR" 
+        dependencias(TiposTupla1.a("tipo"),Tipo.a("tipo"));//TiposTupla1.tipo = tipoTupla(Tipo.tipo)
+        dependencias(TiposTupla1.a("err"),Tipo.a("err"));//TiposTupla1.err = Tipo.err
 
+        calculo(Tipo.a("tipo"),tipoTupla);
+        calculo(TiposTupla1.a("tipo"),asignacion);
+        calculo(TiposTupla1.a("err"),asignacion);
+        
         return TiposTupla1;
     }
     
