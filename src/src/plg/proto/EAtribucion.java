@@ -13,6 +13,7 @@ import src.es.ucm.fdi.plg.evlib.TAtributos;
 import src.plg.proto.TS;
 import src.plg.proto.Tipo;
 import tiposNuevos.TiposArray;
+import tiposNuevos.TiposTupla;
 
 
 
@@ -380,13 +381,11 @@ class tipoTupla implements SemFun{
 		Tipo tipo = (Tipo) args[0].valor();
 		String clase= (String) args[2].valor();
 		
-		Parametros aux=new Parametros(clase,tipo);
-		
-    	Integer tam = aux.getTam(tipo, clase);	
-        return " PF ";
+        TiposTupla aux=new TiposTupla(clase,0,null);
+    	
+        return aux;
     }
 }
-
 
 
 ///////////////////////////// ERRORESSSSSSSSSSSS
@@ -526,6 +525,9 @@ class errorInsW implements SemFun{
     }
 }
 
+
+
+
 class estaId_OR_esReserv implements SemFun{
 	
     @Override
@@ -587,7 +589,20 @@ class estaId_OR_sonCompatibles implements SemFun{
     }
 }
 
-
+class esComponente implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+    	ArrayList<String> errores = new ArrayList<String>();
+		String id = (String) args[0].valor();
+		int aux=Integer.parseInt(id);
+		
+	    if(aux>=0){return "";}
+	    else{return errores.set(0, "Componente Inválida");}
+	    
+	    
+    }
+}
 
 
 
@@ -597,7 +612,16 @@ class estaId_OR_sonCompatibles implements SemFun{
 
 ///////////////////////////CONCATENAR
 
+class concatenarPrograma implements SemFun{
+	
 
+    @Override
+    public Object eval(Atributo... args) {
+        String s="";
+        s=args[0].valor()+" stop ";
+        return s;
+    }
+}
 
 
 class concatenar2 implements SemFun{
@@ -612,7 +636,19 @@ class concatenar2 implements SemFun{
 }
 
 
-class concatenarIR1 implements SemFun{
+class concatenarIf1 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="";
+        int n=(Integer) args[1].valor()+1;
+        s= args[0].valor()+" ir_f("+n+") "+args[2].valor();
+        return s;
+    }
+}
+
+class concatenarIf2 implements SemFun{
 	
 
     @Override
@@ -624,7 +660,20 @@ class concatenarIR1 implements SemFun{
     }
 }
 
-class concatenarIR2 implements SemFun{
+class concatenarWhile1 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="";
+        int n=(Integer) args[1].valor()+1;
+        s= args[0].valor()+" ir_f("+n+") "+args[2].valor()+" ir_a("+args[3].valor()+") ";
+        return s;
+    }
+}
+
+
+class concatenarOut implements SemFun{
 	
 
     @Override
@@ -635,7 +684,20 @@ class concatenarIR2 implements SemFun{
     }
 }
 
-class concatenarER1 implements SemFun{
+class concatenarExp implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="";
+        s= args[0].valor() +""+ args[1].valor()+""+ args[2].valor();
+        return s;
+    }
+}
+
+
+
+class concatenarOr implements SemFun{
 	
 
     @Override
@@ -647,7 +709,7 @@ class concatenarER1 implements SemFun{
 }
 
 
-class concatenarTR1 implements SemFun{
+class concatenarAnd implements SemFun{
 	
 
     @Override
@@ -658,32 +720,63 @@ class concatenarTR1 implements SemFun{
     }
 }
 
-class concatenarExp10 implements SemFun{
+// dependencias(Exp30.a("cod"),Exp30.a("TSH"),Desig.a("lex"),Op41.a("cod"))
+
+
+class concatenarExp30 implements SemFun{
 	
 
     @Override
     public Object eval(Atributo... args) {
         String s="";
-        s=args[0].valor()+" copia "+" ir_f("+args[1].valor()+") "+" desapila "+args[2].valor();
+        s="apila_dir("+args[0].valor()+") "+args[1].valor();
         return s;
     }
 }
 
-class concatenarPrograma implements SemFun{
+class concatenarExp31 implements SemFun{
 	
 
     @Override
     public Object eval(Atributo... args) {
         String s="";
-        s=args[0].valor()+" stop ";
+        s=" apila(1) "+args[1].valor()+args[2].valor();
         return s;
     }
 }
 
+class concatenarExp32 implements SemFun{
+	
 
+    @Override
+    public Object eval(Atributo... args) {
+        String s="";
+        s=" apila(0) "+args[1].valor()+"resta";
+        return s;
+    }
+}
 
+class concatenarExp33 implements SemFun{
+	
 
+    @Override
+    public Object eval(Atributo... args) {
+        String s="";
+        s="apila_dir("+args[0].valor()+") ";
+        return s;
+    }
+}
 
+class concatenarExp34 implements SemFun{
+	
+
+    @Override
+    public Object eval(Atributo... args) {
+        String s="";
+        s="apila("+args[0].valor()+") ";
+        return s;
+    }
+}
 
 
 
@@ -935,16 +1028,31 @@ public class EAtribucion extends Atribucion {
     private static SemFun erroresDec = new erroresDec();
     private static SemFun errorDec = new errorDec();
     private static SemFun errorFalso = new errorFalso();
+    private static SemFun esComponente = new esComponente();
     private static SemFun errorInsw = new errorInsW();
+
     
 
     
- 
+  /////////////////Funciones de Concatenación
+    private static SemFun concatenarExp = new concatenarExp();
     private static SemFun concatenar2 = new concatenar2();
-    private static SemFun concatenarIR1 = new concatenarIR1();
-    private static SemFun concatenarIR2 = new concatenarIR2();
-    private static SemFun concatenarExp10 = new concatenarExp10();
+    private static SemFun concatenarIf1 = new concatenarIf1();
+    private static SemFun concatenarIf2 = new concatenarIf2();
+    private static SemFun concatenarWhile1 = new concatenarWhile1();
+    private static SemFun concatenarOut = new concatenarOut();
+  
     private static SemFun concatenarPrograma = new concatenarPrograma();
+    private static SemFun concatenarOr = new concatenarOr();
+    private static SemFun concatenarAnd = new concatenarAnd();
+    
+    private static SemFun concatenarExp30 = new concatenarExp30();
+    private static SemFun concatenarExp31 = new concatenarExp31();
+    private static SemFun concatenarExp32 = new concatenarExp32();
+    private static SemFun concatenarExp33 = new concatenarExp33();
+    private static SemFun concatenarExp34 = new concatenarExp34();
+    
+    
   //  private static SemFun addVal = new AddVal();
   //  private static SemFun initT = new InitT();
     
@@ -1003,15 +1111,15 @@ public class EAtribucion extends Atribucion {
         dependencias(Programa.a("etq"),Insts.a("etq"));
 
         calculo(Programa.a("TPR"),creaTS);
+        calculo(Programa.a("cod"),concatenarPrograma);
         calculo(Programa.a("TPR"),creaTPR);
-        calculo(Programa.a("cod"),concatenarIR1);
         calculo(Consts.a("TSH"),asignacion);
         calculo(Tipos.a("TSH"),asignacion);
         calculo(Vars.a("TSH"),asignacion);
         calculo(Subprogramas.a("TSH"),asignacion);
         calculo(Insts.a("TSH"),asignacion);
         
-        calculo(Programa.a("cod"),concatenarPrograma);
+       
         calculo(Consts.a("TPRH"),asignacion);
         calculo(Tipos.a("TPRH"),asignacion);
         calculo(Vars.a("TPRH"),asignacion);
@@ -1662,7 +1770,7 @@ public class EAtribucion extends Atribucion {
         
         dependencias(Componente0.a("lex"),identComp0);
         calculo(Componente0.a("lex"),asignacion);
-        calculo(Componente0.a("err"),asignafalso);
+        calculo(Componente0.a("err"),errorFalso);
         
         return Componente0;
     }
@@ -1676,14 +1784,12 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Componente1 = atributosPara("Componente","lex");
         Atributo identComp1 = atributoLexicoPara("Identificador", "lex", ident);
-        Atributo identComp2 = atributoLexicoPara("Identificador", "err", ident);
         
         dependencias(Componente1.a("lex"),identComp1);
-        dependencias(Componente1.a("err"),identComp2);
+        dependencias(Componente1.a("err"),identComp1);
         
         calculo(Componente1.a("lex"),asignacion);
-        //calculo(Componente1.a("lex"),esComponente);//HAY QUE HACER esComponente!!!!
-        calculo(Componente1.a("err"),asignacion);
+        calculo(Componente1.a("err"),esComponente);
         
         return Componente1;
     }
@@ -2152,7 +2258,7 @@ public class EAtribucion extends Atribucion {
        dependencias(InsW.a("err"),Exp.a("err"),Exp.a("tipo"));
        
        calculo(InsW.a("etq"),sumaDos);
-       calculo(InsW.a("cod"),concatenarIR2);
+      calculo(InsW.a("cod"),concatenarOut);
        calculo(InsW.a("err"),errorInsw);
        calculo(Exp.a("TSH"),asignacion);
        
@@ -2186,7 +2292,7 @@ public class EAtribucion extends Atribucion {
        calculo(Insts0.a("etqh"),sumauno);
 
        //CONCATENAR DIFERENTE
-       calculo(If0.a("cod"),concatenarIR1);
+       calculo(If0.a("cod"),concatenarIf1);
        calculo(If0.a("etq"),asignacion);
        calculo(Exp.a("etqh"),asignacion);
        calculo(Exp.a("irvh"),asignacion);
@@ -2223,7 +2329,7 @@ public class EAtribucion extends Atribucion {
        //// FALTA ERRRORRR
        calculo(Insts0.a("etqh"),sumauno);
        calculo(Insts1.a("etqh"),sumauno);
-       calculo(If1.a("cod"),concatenarIR1);
+       calculo(If1.a("cod"),concatenarIf2);
        calculo(If1.a("etq"),asignacion);
        calculo(Exp.a("etqh"),asignacion);
        calculo(Exp.a("irvh"),asignacion);
@@ -2261,7 +2367,7 @@ public class EAtribucion extends Atribucion {
        calculo(Insts0.a("etqh"),sumauno);
 
        //CONCATENAR DIFERENTE
-       calculo(While0.a("cod"),concatenarIR1);
+       calculo(While0.a("cod"),concatenarWhile1);
        calculo(While0.a("etq"),asignacion);
        calculo(Exp.a("etqh"),asignacion);
        calculo(Exp.a("irvh"),asignacion);
@@ -2371,9 +2477,8 @@ public class EAtribucion extends Atribucion {
 	     calculo(Exp0.a("tipo"),asignacionOR2);
 	     calculo(Exp01.a("etqh"),asignacion);
 	     calculo(Exp02.a("etqh"),asignacion);
-	     calculo(Exp01.a("etq"),sumauno);
-	     calculo(Exp0.a("etq"),asignacion);
-	    // calculo(Exp0.a("cod"),concatenarExp0);
+	     calculo(Exp0.a("etq"),sumauno);
+	     calculo(Exp0.a("cod"),concatenarExp);
 	     
 	     return Exp0;
 	    
@@ -2435,9 +2540,8 @@ public class EAtribucion extends Atribucion {
 	     calculo(Exp00.a("tipo"),asignacionOR2);
 	     calculo(Exp01.a("etqh"),asignacion);
 	     calculo(Exp1.a("etqh"),asignacion);
-	     calculo(Exp1.a("etq"),sumauno);
-	     calculo(Exp00.a("etq"),asignacion);
-	     //calculo(Exp00.a("cod"),concatenarExp00);
+	     calculo(Exp00.a("etq"),sumauno);
+	     calculo(Exp00.a("cod"),concatenarExp);
 	     
 	     return Exp00;   
 	}
@@ -2483,7 +2587,7 @@ public class EAtribucion extends Atribucion {
 	     calculo(Exp1.a("TSH"),asignacion);
 	     calculo(Exp01.a("err"),asignacionOR2);
 	     calculo(Exp01.a("tipo"),asignacionOR2);
-	     //calculo(Exp01.a("cod"),concatenarExp01);
+	     calculo(Exp01.a("cod"),concatenarOr);
 	     calculo(Exp0.a("etqh"),asignacion);
 	     calculo(Exp01.a("etq"),sumaTres);
 	     calculo(Exp1.a("etqh"),asignacion);
@@ -2492,7 +2596,7 @@ public class EAtribucion extends Atribucion {
 	     calculo(Exp01.a("irvh"),asignacion);
 	     calculo(Exp01.a("irfh"),asignacion);
 	     calculo(Exp0.a("irvh"),asignacion);
-	     calculo(Exp01.a("etq"),sumaDos);
+	     calculo(Exp0.a("irfh"),sumaDos);
 	     calculo(Exp1.a("irvh"),asignacion);
 	     calculo(Exp1.a("irfh"),asignacion);
 	     return Exp01;   
@@ -2562,9 +2666,8 @@ regla("Exp1 → Exp1 Op2 Exp2");
  calculo(Exp10.a("tipo"),asignacionOR2);
  calculo(Exp11.a("etqh"),asignacion);
  calculo(Exp2.a("etqh"),asignacion);
- calculo(Exp2.a("etq"),sumauno);
- calculo(Exp10.a("etq"),asignacion);
- calculo(Exp10.a("cod"),concatenarExp10);
+ calculo(Exp10.a("etq"),sumauno);
+ calculo(Exp10.a("cod"),concatenarExp);
  
  return Exp10;   
 }
@@ -2612,16 +2715,16 @@ public TAtributos Exp11(TAtributos Exp12,TAtributos Exp2){
      calculo(Exp2.a("TSH"),asignacion);
      calculo(Exp11.a("err"),asignacionOR2);
      calculo(Exp11.a("tipo"),asignacionOR2);
-     //calculo(Exp11.a("cod"),concatenarExp11);
+     calculo(Exp11.a("cod"),concatenarAnd);
      calculo(Exp12.a("etqh"),asignacion);
-     calculo(Exp12.a("etq"),sumaTres);
-     calculo(Exp2.a("etqh"),asignacion);
+
+     calculo(Exp2.a("etqh"),sumaTres);
      calculo(Exp11.a("etq"),asignacion);
      
      calculo(Exp11.a("irvh"),asignacion);
      calculo(Exp11.a("irfh"),asignacion);
-     calculo(Exp12.a("etq"),sumaDos);
-     calculo(Exp12.a("irvh"),asignacion);
+
+     calculo(Exp12.a("irvh"),sumaDos);
      calculo(Exp12.a("irfh"),asignacion);
      calculo(Exp2.a("irvh"),asignacion);
      calculo(Exp2.a("irfh"),asignacion);
@@ -2692,9 +2795,8 @@ public TAtributos Exp20(TAtributos Exp3,TAtributos Op3,TAtributos Exp21){
  	calculo(Exp20.a("tipo"),asignacionOR2);
  	calculo(Exp3.a("etqh"),asignacion);
  	calculo(Exp21.a("etqh"),asignacion);
- 	calculo(Exp21.a("etq"),sumauno);
- 	calculo(Exp20.a("etq"),asignacion);
- 	//calculo(Exp20.a("cod"),concatenarExp20);
+ 	calculo(Exp20.a("etq"),sumauno);
+ 	calculo(Exp20.a("cod"),concatenarExp);
  
  return Exp20;   
 }  
@@ -2746,15 +2848,14 @@ public TAtributos Exp30(TAtributos Op41,TAtributos Desig){
      TAtributos Exp30 = atributosPara("Exp30","TSH","tipo","err","cod","etq","etqh");
      
      dependencias(Exp30.a("err"),Exp30.a("TSH"),Desig.a("lex"));//Exp30.err = NOT EstaId? (Exp30.TSH, desginador.Lex)
-     dependencias(Exp30.a("tipo"),Desig.a("tipo"));//Exp30.tipo = desginador.tipo
+     dependencias(Exp30.a("tipo"),Exp30.a("TSH"),Desig.a("lex"));//Exp30.tipo = desginador.tipo
      dependencias(Exp30.a("etq"),Exp30.a("etqh"));//Exp30.etq= Exp3.etqh + 2 
      dependencias(Exp30.a("cod"),Exp30.a("TSH"),Desig.a("lex"),Op41.a("cod"));//Exp30.cod= apila_dir(Exp30.TSH [Designador.lex].dir)||Op41.cod
      
-     calculo(Exp30.a("err"),asignacion);
-     calculo(Exp30.a("tipo"),asignacion);
-     calculo(Exp30.a("etqh"),sumaDos);
-     calculo(Exp30.a("etq"),asignacion);
-     //calculo(Exp30.a("cod"),concatenarExp30);
+     calculo(Exp30.a("err"),estaId);
+     calculo(Exp30.a("tipo"),tipoDe);
+     calculo(Exp30.a("etq"),sumaDos);
+     calculo(Exp30.a("cod"),concatenarExp30);
      
      return Exp30;
     
@@ -2786,9 +2887,8 @@ public TAtributos Exp31(TAtributos Op42,TAtributos Exp3){
      calculo(Exp31.a("err"),asignacion);
      calculo(Exp31.a("tipo"),asignacion);
      calculo(Exp3.a("etqh"),asignacion);
-     calculo(Exp3.a("etq"),sumauno);
-     calculo(Exp31.a("etq"),asignacion);
-     //calculo(Exp31.a("cod"),concatenarExp31);
+     calculo(Exp31.a("etq"),sumauno);
+     calculo(Exp31.a("cod"),concatenarExp31);
      
      return Exp31;
     
@@ -2817,9 +2917,8 @@ public TAtributos Exp32(TAtributos Exp3){
      calculo(Exp3.a("TSH"),asignacion);
      calculo(Exp32.a("err"),asignacion);
      calculo(Exp32.a("tipo"),asignacion);
-     //calculo(Exp2.a("cod"),concatenarExp32);
-     calculo(Exp3.a("etqh"),sumauno);
-     calculo(Exp32.a("etq"),asignacion);
+     calculo(Exp3.a("cod"),concatenarExp32);
+     calculo(Exp32.a("etq"),sumauno);
      
      return Exp32;
     
@@ -2839,15 +2938,15 @@ public TAtributos Exp33(TAtributos Desig){
      TAtributos Exp33 = atributosPara("Exp33","TSH","tipo","err","cod","etq","etqh");
      
      dependencias(Exp33.a("err"),Exp33.a("TSH"),Desig.a("lex"));//Exp33.err = NOT EstaId? (Exp33.TSH, desginador.Lex)
-     dependencias(Exp33.a("tipo"),Desig.a("tipo"));//Exp33.tipo = Designador.tipo
-    // dependencias(Exp33.a("cod"),Exp3.a("tipo"));//Exp33.cod=apila 
+     dependencias(Exp33.a("tipo"),Exp33.a("TSH"),Desig.a("lex"));//Exp33.tipo = Designador.tipo
+     dependencias(Exp33.a("cod"),Exp33.a("TSH"),Desig.a("lex"));//Exp30.cod= apila_dir(Exp30.TSH [Designador.lex].dir)||Op41.cod
      dependencias(Exp33.a("etq"),Exp33.a("etqh"));//Exp33.etq = Exp33.etqh+1; 
      
-     //calculo(Exp3.a("err"),asignacion);¿¿¿¿????
-     calculo(Exp33.a("tipo"),asignacion);
-     calculo(Exp33.a("cod"),asignacion);
-     calculo(Exp33.a("etqh"),sumauno);
-     calculo(Exp33.a("etq"),asignacion);
+     calculo(Exp33.a("err"),estaId);
+     calculo(Exp33.a("tipo"),tipoDe);
+     calculo(Exp33.a("cod"),concatenarExp33);
+     calculo(Exp33.a("etq"),sumauno);
+
      
      return Exp33;
     
@@ -2863,16 +2962,16 @@ public TAtributos Exp34(TAtributos Valores){
     
 	regla("Exp3 → Valores");
      
-     TAtributos Exp34 = atributosPara("Exp34","tipo","cod","etq","etqh");
+     TAtributos Exp34 = atributosPara("Exp34","tipo","err","cod","etq","etqh");
      
      dependencias(Exp34.a("tipo"),Valores.a("tipo"));//Exp34.tipo = Valores.tipo
-     //dependencias(Exp34.a("cod"));//Exp34.cod=apila
+     dependencias(Exp34.a("cod"),Valores.a("valor"));//Exp34.cod=apila
      dependencias(Exp34.a("etq"),Exp34.a("etqh"));// Exp34.etq = Exp3.etqh+1; 
      
      calculo(Exp34.a("tipo"),asignacion);
-     calculo(Exp34.a("cod"),asignacion);
-     calculo(Exp34.a("etqh"),sumauno);
-     calculo(Exp34.a("etq"),asignacion);
+     calculo(Exp34.a("cod"),concatenarExp34);
+     calculo(Exp34.a("err"),errorFalso);
+     calculo(Exp34.a("etq"),sumauno);
      
      return Exp34;
     
