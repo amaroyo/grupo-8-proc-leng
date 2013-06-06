@@ -2157,7 +2157,7 @@ public class EAtribucion extends Atribucion {
 
     public TAtributos Inst6(TAtributos WHILE){
         	
-        	regla("Inst → IF ");
+        	regla("Inst → WHILE ");
              
              TAtributos Inst6 = atributosPara("Inst","err","cod","TSH","etq","etqh");
              
