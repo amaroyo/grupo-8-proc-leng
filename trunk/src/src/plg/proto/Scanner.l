@@ -85,7 +85,7 @@ false 			= 	"false"
 int 			= 	"int"
 nat 			= 	"nat"
 char			= 	"char"
-
+real			= 	"real"
 
 //conjuntos
 letraMinus 		=	[a-z]
@@ -99,7 +99,7 @@ caracter 		= 	\' [^\'] \'
 numeroEnt		=	{cero} | {digitoPos}{digito}*
 exponencial 	= 	("e" | "E" ) ("-")? ({numeroEnt})
 numeroReal 			= 	{numeroEnt} ( {parteDecimal} | {exponencial} | {parteDecimal} {exponencial} )
-//real 			= 	{natural} ( {parteDecimal} )+
+real 			= 	{natural} ( {parteDecimal} )+
 identificador	=	{letraMinus} ( {letra} | {digito} )*
 
 String  = \"[^\"]*\"
@@ -128,9 +128,9 @@ String  = \"[^\"]*\"
 {menorigual}	{return new Symbol(sym.MENORIGUAL, yyline, yycolumn);}
 {igualigual}	{return new Symbol(sym.IGUALIGUAL, yyline, yycolumn);}
 {distinto}		{return new Symbol(sym.DISTINTO, yyline, yycolumn);}
-{not}			{return new Symbol(sym.NOT, yyline, yycolumn);}
-{and}     		{return new Symbol(sym.and, yyline, yycolumn);}
-{or}      		{return new Symbol(sym.or, yyline, yycolumn);}
+{not}			{return new Symbol(sym.not, yyline, yycolumn);}
+{and}     		{return new Symbol(sym.AND, yyline, yycolumn);}
+{or}      		{return new Symbol(sym.OR, yyline, yycolumn);}
 {despIzq}		{return new Symbol(sym.DESPIZQ, yyline, yycolumn);}
 {despDer}		{return new Symbol(sym.DESPDER, yyline, yycolumn);}
 
@@ -152,49 +152,49 @@ String  = \"[^\"]*\"
 {guionbajo}		{return new Symbol(sym.GUIONBAJO, yyline, yycolumn);}
 
 //palabras reservadas
-{program}		{return new Symbol(sym.program, yyline, yycolumn);}
-{consts}		{return new Symbol(sym.consts, yyline, yycolumn);}
-{const}			{return new Symbol(sym.const, yyline, yycolumn);}
-{tipos}			{return new Symbol(sym.tipos, yyline, yycolumn);}
-{tipo}			{return new Symbol(sym.tipo, yyline, yycolumn);}
-{vars}			{return new Symbol(sym.vars, yyline, yycolumn);}
-{var}			{return new Symbol(sym.var, yyline, yycolumn);}
-{subprograms}	{return new Symbol(sym.subprograms, yyline, yycolumn);}
-{subprogram}	{return new Symbol(sym.subprogram, yyline, yycolumn);}
-{instructions}	{return new Symbol(sym.instructions, yyline, yycolumn);}
+{program}		{return new Symbol(sym.PROGRAM, yyline, yycolumn);}
+{consts}		{return new Symbol(sym.CONSTS, yyline, yycolumn);}
+{const}			{return new Symbol(sym.CONST, yyline, yycolumn);}
+{tipos}			{return new Symbol(sym.TIPOS, yyline, yycolumn);}
+{tipo}			{return new Symbol(sym.TIPO, yyline, yycolumn);}
+{vars}			{return new Symbol(sym.VARS, yyline, yycolumn);}
+{var}			{return new Symbol(sym.VAR, yyline, yycolumn);}
+{subprograms}	{return new Symbol(sym.SUBPROGRAMS, yyline, yycolumn);}
+{subprogram}	{return new Symbol(sym.SUBPROGRAM, yyline, yycolumn);}
+{instructions}	{return new Symbol(sym.INSTRUCTIONS, yyline, yycolumn);}
 
 {in}			{return new Symbol(sym.in, yyline, yycolumn);}
 {out}			{return new Symbol(sym.out, yyline, yycolumn);}
 {swap1}			{return new Symbol(sym.SWAP1, yyline, yycolumn);}
 {swap2}			{return new Symbol(sym.SWAP2, yyline, yycolumn);}
 {call}			{return new Symbol(sym.Call, yyline, yycolumn);}
-{if}      		{return new Symbol(sym.if, yyline, yycolumn);}
-{then}    		{return new Symbol(sym.then, yyline, yycolumn);}
-{else}    		{return new Symbol(sym.else, yyline, yycolumn);}
-{endif}    		{return new Symbol(sym.endif, yyline, yycolumn);}
-{while}			{return new Symbol(sym.while, yyline, yycolumn);}
-{do}			{return new Symbol(sym.do, yyline, yycolumn);}
-{endwhile}		{return new Symbol(sym.endwhile, yyline, yycolumn);}
+{if}      		{return new Symbol(sym.IF, yyline, yycolumn);}
+{then}    		{return new Symbol(sym.THEN, yyline, yycolumn);}
+{else}    		{return new Symbol(sym.ELSE, yyline, yycolumn);}
+{endif}    		{return new Symbol(sym.ENDIF, yyline, yycolumn);}
+{while}			{return new Symbol(sym.WHILE, yyline, yycolumn);}
+{do}			{return new Symbol(sym.DO, yyline, yycolumn);}
+{endwhile}		{return new Symbol(sym.ENDWHILE, yyline, yycolumn);}
 
-{float}			{return new Symbol(sym.float, yyline, yycolumn);}
-{integer}		{return new Symbol(sym.integer, yyline, yycolumn);}
-{natural}		{return new Symbol(sym.natural, yyline, yycolumn);}
-{caracter}		{return new Symbol(sym.caracter, yyline, yycolumn);}
-{boolean}		{return new Symbol(sym.boolean, yyline, yycolumn);}
+{float}			{return new Symbol(sym.FLOAT, yyline, yycolumn);}
+{integer}		{return new Symbol(sym.INTEGER, yyline, yycolumn);}
+{natural}		{return new Symbol(sym.NATURAL, yyline, yycolumn);}
+{caracter}		{return new Symbol(sym.CARACTER, yyline, yycolumn);}
+{boolean}		{return new Symbol(sym.BOOLEAN, yyline, yycolumn);}
 {true}			{return new Symbol(sym.TRUE, yyline, yycolumn);}
 {false}			{return new Symbol(sym.FALSE, yyline, yycolumn);}
 
 {int}			{return new Symbol(sym.INT, yyline, yycolumn);}
 {nat}			{return new Symbol(sym.NAT, yyline, yycolumn);}
 {char}			{return new Symbol(sym.CHAR, yyline, yycolumn);}
-
+//{real}			{return new Symbol(sym.REAL, yyline, yycolumn);}
 
 
 //conjuntos
-{numeroEnt}  	{return new Symbol(sym.CARACTER, yyline, yycolumn, yytext());}
+{numeroEnt}  	{return new Symbol(sym.numeroEnt, yyline, yycolumn, yytext());}
 //{cNatural}  	{return new Symbol(sym.CNATURAL, yyline, yycolumn, new Integer(yytext()));}
-{numeroReal}  	{return new Symbol(sym.REAL, yyline, yycolumn, new Float(yytext()));}
-{identificador}         {return new Symbol(sym.IDENT, yyline, yycolumn, yytext());}
+{numeroReal}  	{return new Symbol(sym.numeroReal, yyline, yycolumn, new Float(yytext()));}
+{identificador}         {return new Symbol(sym.ident, yyline, yycolumn, yytext());}
 
 
 
