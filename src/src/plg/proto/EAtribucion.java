@@ -70,7 +70,7 @@ class creaTSL implements SemFun{
 }
 
 
-class dirMasTamaño implements SemFun{
+class dirMasTamano implements SemFun{
 	
 	
 	// dependencias(Decs0.a("dir"),Decs.a("TSH"),Decs.a("dir"),Dec.a("id"),Dec.a("clase"));
@@ -330,7 +330,7 @@ class asignaTipoChar implements SemFun{
 
 ///////////////////////// TIPOS
 
-class tamañoDe implements SemFun{
+class tamanoDe implements SemFun{
 	
     @Override
     public Object eval(Atributo... args) {
@@ -1248,8 +1248,8 @@ public class EAtribucion extends Atribucion {
     private static SemFun asignaTipoBool =new asignaTipoBool();
     private static SemFun asignaTipoChar =new asignaTipoChar();
     
-    private static SemFun  dirMasTamaño =new  dirMasTamaño();
-    private static SemFun tamañoDe =new tamañoDe();
+    private static SemFun  dirMasTamano =new  dirMasTamano();
+    private static SemFun tamanoDe =new tamanoDe();
     
     /////////////////Funciones de Tipos(Ident, array, tupla) y Errores
     private static SemFun tipoDe = new tipoDe();
@@ -1530,7 +1530,7 @@ public class EAtribucion extends Atribucion {
         calculo(Decs.a("TSH"),asignacion);
         calculo(Decs0.a("err"),erroresDecs);
         calculo(Dec.a("TSH"),asignacion);
-        calculo(Decs0.a("dir"),dirMasTamaño);
+        calculo(Decs0.a("dir"),dirMasTamano);
         calculo(Decs.a("etqh"),asignacion);
         calculo(Dec.a("etqh"),asignacion);
         calculo(Decs0.a("etq"),asignacion);
@@ -1556,7 +1556,7 @@ public class EAtribucion extends Atribucion {
         calculo(Decs1.a("err"),erroresDec);
         calculo(Dec.a("TPRH"),asignacion);
         calculo(Dec.a("TSH"),asignacion);
-        calculo(Decs1.a("dir"),tamañoDe);
+        calculo(Decs1.a("dir"),tamanoDe);
         calculo(Decs1.a("TS"),anadirTS);
         calculo(Dec.a("etqh"),asignacion);
         calculo(Decs1.a("etq"),asignacion);
@@ -1729,7 +1729,7 @@ public class EAtribucion extends Atribucion {
         calculo(PF0.a("clase"),asignaClasePF);
         calculo(PF0.a("niv"),asignauno);
         calculo(PF0.a("tipo"),asignacion);
-        calculo(PF0.a("dir"),tamañoDe);
+        calculo(PF0.a("dir"),tamanoDe);
         calculo(PF0.a("err"),asignacion);
         calculo(PF0.a("valor"),asignavacio);
         
@@ -1752,7 +1752,7 @@ public class EAtribucion extends Atribucion {
         calculo(PF1.a("clase"),asignaClasePF);
         calculo(PF1.a("niv"),asignauno);
         calculo(PF1.a("tipo"),asignacion);
-        calculo(PF1.a("dir"),tamañoDe);
+        calculo(PF1.a("dir"),tamanoDe);
         calculo(PF1.a("err"),asignacion);
         calculo(PF1.a("valor"),asignavacio);
         
@@ -1809,7 +1809,7 @@ public class EAtribucion extends Atribucion {
         calculo(DecsSubs.a("TSLH"),asignacion);
         calculo(DecSub.a("TSLH"),asignacion);
         calculo(DecsSubs0.a("TS"),anadirTS);
-        calculo(DecsSubs0.a("dir"),dirMasTamaño);
+        calculo(DecsSubs0.a("dir"),dirMasTamano);
         calculo(DecsSubs0.a("err"),erroresDecs);
         
         return DecsSubs0;
@@ -1833,7 +1833,7 @@ public class EAtribucion extends Atribucion {
         calculo(DecSub.a("TSLH"),asignacion);
         calculo(DecsSubs1.a("err"),erroresDec);
         calculo(DecsSubs1.a("TS"),anadirTS);
-        calculo(DecsSubs1.a("dir"),tamañoDe);
+        calculo(DecsSubs1.a("dir"),tamanoDe);
         
         return DecsSubs1;
         
