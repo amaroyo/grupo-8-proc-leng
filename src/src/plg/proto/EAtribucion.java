@@ -300,7 +300,7 @@ class asignaTipoFloat implements SemFun{
     @Override
     public Object eval(Atributo... args) {
         	
-        return "<Float , tam:1>";
+        return "<t:Float , tam:1>";
     }
 }
 
@@ -524,6 +524,73 @@ class errorFalso implements SemFun{
     }
 }
 
+class errorInsAsig implements SemFun{
+	
+    @Override
+    public Object eval(Atributo... args) {
+
+    	//dependencias(InsAsig.a("err"),InsAsig.a("TSH"),Designador.a("lex"),Exp.a("tipo"),Exp.a("err"));//
+        
+    	
+    	ArrayList<String> errores = new ArrayList<String>();
+    	TS ts = (TS) args[0].valor();
+		String id = (String) args[1].valor();
+		ArrayList<String> errorExp=(ArrayList<String>)args[3].valor();
+		
+		Tipo tipoDesig=ts.dameTipo(id);
+		Tipo tipoExp=(Tipo) args[2].valor();
+		int i=0;
+		
+		if(ts.buscaId(id)){
+			errores.set(i, "Identificador no está en la TS");
+			i++;
+		}
+		
+		if(!tipoDesig.compatibles(tipoExp)){
+			errores.set(i,"Tipos no compatibles!!");
+			i++;
+		}
+		
+		if(!errorExp.isEmpty()){
+			errores.set(i,errorExp.toString());
+			i++;
+		}
+		
+        return errores;
+ 
+    
+    }
+}
+
+
+
+class errorInsR implements SemFun{
+	
+	//dependencias(InsR.a("err"),InsR.a("TSH"),Designador.a("lex"));
+	
+    @Override
+    public Object eval(Atributo... args) {
+
+    	 // dependencias(InsW.a("err"),Exp.a("err"),Exp.a("tipo"));
+        ArrayList<String> errores = new ArrayList<String>();
+        TS ts = (TS) args[0].valor();
+        String id = (String) args[1].valor();
+        Tipo tipo=ts.dameTipo(id);
+		
+		int i=0;
+		if(!tipo.equals("<t:Bool , tam:1>") || !tipo.equals("<t:Char , tam:1>") || !tipo.equals("<t:Int , tam:1>")
+				|| !tipo.equals("<t:Float , tam:1>") || !tipo.equals("<t:Nat , tam:1>")){
+			errores.set(i, "No es tipo BASICO");
+			i++;
+		}		
+        return errores;
+    
+    }
+}
+
+
+
+
 class errorInsW implements SemFun{
 	
     @Override
@@ -552,6 +619,43 @@ class errorInsW implements SemFun{
 }
 
 
+
+
+class errorParam implements SemFun{
+
+	// dependencias(Parametro0.a("err"),Exp.a("err"),Parametro0.a("TSH"),identComp1,Exp.a("tipo"));
+	
+    @Override
+    public Object eval(Atributo... args) {
+
+    	ArrayList<String> errores = new ArrayList<String>();
+    	TS ts = (TS) args[1].valor();
+		String id = (String) args[2].valor();
+		ArrayList<String> errorExp=(ArrayList<String>)args[0].valor();
+		
+		Tipo tipoDesig=ts.dameTipo(id);
+		Tipo tipoExp=(Tipo) args[3].valor();
+		int i=0;
+		
+		if(ts.buscaId(id)){
+			errores.set(i, "Identificador no está en la TS");
+			i++;
+		}
+		
+		if(!tipoDesig.compatibles(tipoExp)){
+			errores.set(i,"Tipos no compatibles!!");
+			i++;
+		}
+		
+		if(!errorExp.isEmpty()){
+			errores.set(i,errorExp.toString());
+			i++;
+		}
+		
+        return errores;
+    
+    }
+}
 
 
 class estaId_OR_esReserv implements SemFun{
@@ -594,26 +698,7 @@ class estaId implements SemFun{
     }
 }
 
-class estaId_OR_sonCompatibles implements SemFun{
-	
-    @Override
-    public Object eval(Atributo... args) {
-    	
-    	ArrayList<String> errores = new ArrayList<String>();
-    	TS ts = (TS) args[0].valor();
-		String id = (String) args[2].valor();
-		
-		int i=0;
-		if(ts.buscaId(id)){
-			errores.set(i, "Identificador Repetido en TS");
-			i++;
-		}
 
-		
-		
-        return errores;
-    }
-}
 
 class esComponente implements SemFun{
 	
@@ -712,7 +797,32 @@ class concatenarWhile1 implements SemFun{
         return s;
     }
 }
+class concatenarAsig implements SemFun{
+	
+//dependencias(InsAsig.a("cod"),Exp.a("cod"),InsAsig.a("TSH"),Designador.a("lex"));
+    @Override
+    public Object eval(Atributo... args) {
+    	
+    	TS ts = (TS) args[1].valor();
+		String id = (String) args[2].valor();
+	    String s;    
+        s=args[1].valor()+"desapila_dir("+ts.dameDir(id)+") ";
+        return s;
+    }
+}
+class concatenarIn implements SemFun{
+	
 
+    @Override
+    public Object eval(Atributo... args) {
+        
+    	TS ts = (TS) args[1].valor();
+		String id = (String) args[2].valor();
+	    String s;    
+        s= "lee" +"desapila_dir("+ts.dameDir(id)+") ";
+        return s;
+    }
+}
 
 class concatenarOut implements SemFun{
 	
@@ -803,11 +913,13 @@ class concatenarExp32 implements SemFun{
 
 class concatenarExp33 implements SemFun{
 	
-
+// dependencias(Exp33.a("cod"),Exp33.a("TSH"),Desig.a("lex"));//Exp30.cod= apila_dir(Exp30.TSH [Designador.lex].dir)||Op41.cod
     @Override
     public Object eval(Atributo... args) {
-        String s="";
-        s="apila_dir("+args[0].valor()+") ";
+    	TS ts = (TS) args[0].valor();
+		String id = (String) args[1].valor();
+	    String s;    
+        s="apila_dir("+ts.dameDir(id)+") ";
         return s;
     }
 }
@@ -1036,8 +1148,9 @@ public class EAtribucion extends Atribucion {
 	private static SemFun creaTS = new creaTS();
 	private static SemFun añadirTS = new añadirTS();
 	private static SemFun creaTPR = new creaTPR();
-	private static SemFun creaTSL = new creaTSL()
-	;
+	private static SemFun creaTSL = new creaTSL();
+	
+	
     private static SemFun asignacion = new Asignacion();
     private static SemFun asignacionOR2 = new AsignacionOR2();
     private static SemFun asignacionOR5 = new AsignacionOR5();
@@ -1075,8 +1188,11 @@ public class EAtribucion extends Atribucion {
     private static SemFun errorDec = new errorDec();
     private static SemFun errorFalso = new errorFalso();
     private static SemFun esComponente = new esComponente();
-    private static SemFun errorInsw = new errorInsW();
-
+    
+    private static SemFun errorInsAsig = new errorInsAsig();
+    private static SemFun errorInsR = new errorInsR();
+    private static SemFun errorInsW = new errorInsW();
+    private static SemFun errorParam = new errorParam();
     
 
     
@@ -1086,6 +1202,8 @@ public class EAtribucion extends Atribucion {
     private static SemFun concatenarIf1 = new concatenarIf1();
     private static SemFun concatenarIf2 = new concatenarIf2();
     private static SemFun concatenarWhile1 = new concatenarWhile1();
+    private static SemFun concatenarAsig = new concatenarAsig();
+    private static SemFun concatenarIn = new concatenarIn();
     private static SemFun concatenarOut = new concatenarOut();
     private static SemFun concatenaTipoTupla = new concatenaTipoTupla();
     
@@ -2234,18 +2352,15 @@ public class EAtribucion extends Atribucion {
         TAtributos InsAsig = atributosPara("InsAsig","err","cod","TSH","etq","etqh");
         
         dependencias(Exp.a("TSH"),InsAsig.a("TSH"));//Exp.TSH = InsAsig.TSH
-        dependencias(InsAsig.a("err"),InsAsig.a("TSH"),Designador.a("lex"),
-        		Designador.a("tipo"),Exp.a("tipo"),Exp.a("err"));//
+        dependencias(InsAsig.a("err"),InsAsig.a("TSH"),Designador.a("lex"),Exp.a("tipo"),Exp.a("err"));//
         dependencias(InsAsig.a("etq"),Exp.a("etq"));//Exp.etqh=InsAsig.etqh
         dependencias(Exp.a("etqh"),InsAsig.a("etqh"));//Exp.etqh=InsAsig.etqh
-        dependencias(InsAsig.a("cod"),InsAsig.a("TSH"),Designador.a("lex"));// InsAsig.etq= Exp.etq + 1
-        																	//El +1 es por el desapila
-																			//SUMA UUNO O DOS????
+        dependencias(InsAsig.a("cod"),Exp.a("cod"),InsAsig.a("TSH"),Designador.a("lex"));
   
-        /// FALTA EL COD!!!
-        
+  
+        calculo(InsAsig.a("cod"),concatenarAsig);
         calculo(Exp.a("TSH"),asignacion);
-        //dependencias(InsAsig.a("err"),estaId_OR_sonCompatibles);
+        calculo(InsAsig.a("err"),errorInsAsig);
         calculo(InsAsig.a("etq"),sumauno);
         calculo(Exp.a("etqh"),asignacion);
   
@@ -2262,15 +2377,12 @@ public class EAtribucion extends Atribucion {
         
  
         dependencias(InsR.a("err"),InsR.a("TSH"),Designador.a("lex"));
-        dependencias(InsR.a("etq"),Designador.a("etq"));
-        dependencias(Designador.a("etqh"),InsR.a("etqh"));
         dependencias(InsR.a("cod"),InsR.a("TSH"),Designador.a("lex"));
-  
+        dependencias(InsR.a("etq"),Designador.a("etq"));
     
-        calculo(InsR.a("etq"),sumauno);
-        calculo(Designador.a("etqh"),asignacion);
-        calculo(InsR.a("cod"),concatenar2);
-        calculo(InsR.a("err"),estaId);
+        calculo(InsR.a("etq"),sumaDos);
+        calculo(InsR.a("cod"),concatenarIn);
+        calculo(InsR.a("err"),errorInsR);
         
         return InsR;
         
@@ -2288,8 +2400,8 @@ public class EAtribucion extends Atribucion {
        dependencias(InsW.a("err"),Exp.a("err"),Exp.a("tipo"));
        
        calculo(InsW.a("etq"),sumaDos);
-      calculo(InsW.a("cod"),concatenarOut);
-       calculo(InsW.a("err"),errorInsw);
+       calculo(InsW.a("cod"),concatenarOut);
+       calculo(InsW.a("err"),errorInsW);
        calculo(Exp.a("TSH"),asignacion);
        
        return InsW;
@@ -2321,7 +2433,6 @@ public class EAtribucion extends Atribucion {
 
        calculo(Insts0.a("etqh"),sumauno);
 
-       //CONCATENAR DIFERENTE
        calculo(If0.a("cod"),concatenarIf1);
        calculo(If0.a("etq"),asignacion);
        calculo(Exp.a("etqh"),asignacion);
@@ -2475,12 +2586,14 @@ public class EAtribucion extends Atribucion {
        regla("Parametro → ident = Exp ");
                
        TAtributos Parametro0 = atributosPara("Parametro","TSH","err");
+       Atributo identComp1 = atributoLexicoPara("Identificador", "lex", ident);
+       
        
        dependencias(Exp.a("TSH"),Parametro0.a("TSH"));     
-       dependencias(Parametro0.a("err"),Exp.a("err"));
+       dependencias(Parametro0.a("err"),Exp.a("err"),Parametro0.a("TSH"),identComp1,Exp.a("tipo"));
 
        calculo(Exp.a("TSH"),asignacion);
-       calculo(Parametro0.a("err"),asignacion);
+       calculo(Parametro0.a("err"),errorParam);
        
        return Parametro0;
        
