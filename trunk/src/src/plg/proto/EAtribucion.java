@@ -1550,16 +1550,16 @@ public class EAtribucion extends Atribucion {
         dependencias(Decs1.a("TS"),dec.a("TSH"),dec.a("id"),dec.a("clase"),dec.a("nivel"),Zero,dec.a("tipo"),dec.a("valor"));
         dependencias(Decs1.a("err"),dec.a("err"),dec.a("id"),Decs1.a("TSH"),Decs1.a("TPRH"));
         dependencias(Decs1.a("dir"),dec.a("TSH"),dec.a("id"),dec.a("clase"));
-        dependencias(dec.a("etqh"),Decs1.a("etqh"));
-        dependencias(Decs1.a("etq"),dec.a("etq"));
+       // dependencias(dec.a("etqh"),Decs1.a("etqh"));
+       // dependencias(Decs1.a("etq"),dec.a("etq"));
         
         calculo(Decs1.a("err"),erroresDec);
         calculo(dec.a("TPRH"),asignacion);
         calculo(dec.a("TSH"),asignacion);
         calculo(Decs1.a("dir"),tamanoDe);
         calculo(Decs1.a("TS"),anadirTS);
-        calculo(dec.a("etqh"),asignacion);
-        calculo(Decs1.a("etq"),asignacion);
+      //  calculo(dec.a("etqh"),asignacion);
+       // calculo(Decs1.a("etq"),asignacion);
         
         return Decs1;
         
@@ -1623,17 +1623,17 @@ public class EAtribucion extends Atribucion {
         
         dependencias(Dec2.a("id"),identif);
         dependencias(Dec2.a("tipo"),tipo.a("tipo"));
-        dependencias(tipo.a("TSH"),Dec2.a("TSH"));
-        dependencias(tipo.a("TPRH"),Dec2.a("TPRH"));
+       // dependencias(tipo.a("TSH"),Dec2.a("TSH"));
+        //dependencias(tipo.a("TPRH"),Dec2.a("TPRH"));
         dependencias(Dec2.a("err"),tipo.a("err"));
         
         calculo(Dec2.a("id"),asignacion);
         calculo(Dec2.a("clase"),asignaClaseVars);
-        calculo(Dec2.a("nivel"),asignacero);
+      //  calculo(Dec2.a("nivel"),asignacero);
         calculo(Dec2.a("tipo"),asignacion);
         calculo(Dec2.a("valor"),asignavacio);
-        calculo(tipo.a("TSH"),asignacion);
-        calculo(tipo.a("TPRH"),asignacion);
+        //calculo(tipo.a("TSH"),asignacion);
+        //calculo(tipo.a("TPRH"),asignacion);
         calculo(Dec2.a("err"),asignavacio);
         
         return Dec2;
