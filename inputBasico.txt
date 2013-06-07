@@ -2,7 +2,7 @@
 program: ejemplo{
 
      consts {
-       const natural dIM=10;
+     
      }          
      
 instructions{
