@@ -1,5 +1,7 @@
 program : pruebaCodigo {
-
+vars {
+		var integer x ;
+	}
 instructions {
 swap1();
 swap2();

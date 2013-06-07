@@ -190,9 +190,9 @@ Designador ::= ident:id GUIONBAJO numero {: RESULT= atrb.designador3(id); :};
 
 //===================TIPO==============================
 //Tipo → TipoBasico; Tipo → ident; Tipo → Tipo Dimensiones;
-Tipo ::= TipoBasico:tipobasico PYC {: RESULT= atrb.Tipo0(tipobasico); :};
-Tipo ::= ident:id PYC {: RESULT= atrb.Tipo1(id); :};
-Tipo ::= Tipo:tipo CABIERTO Componente:comp CCERRADO PYC {: RESULT= atrb.Tipo2(tipo,comp); :};
+Tipo ::= TipoBasico:tipobasico {: RESULT= atrb.Tipo0(tipobasico); :};
+Tipo ::= ident:id {: RESULT= atrb.Tipo1(id); :};
+Tipo ::= Tipo:tipo CABIERTO Componente:comp CCERRADO {: RESULT= atrb.Tipo2(tipo,comp); :};
 Tipo ::= PABIERTO TiposTupla:tipos PCERRADO {: RESULT= atrb.Tipo3(tipos); :};
 
 //===================COMPONENTE==============================
