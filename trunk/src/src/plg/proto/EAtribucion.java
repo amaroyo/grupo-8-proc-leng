@@ -766,11 +766,15 @@ class concatenarAnd implements SemFun{
 
 class concatenarExp30 implements SemFun{
 	
-
+//dependencias(Exp30.a("cod"),Exp30.a("TSH"),Desig.a("lex"),Op41.a("cod"));//Exp30.cod= apila_dir(Exp30.TSH [Designador.lex].dir)||Op41.cod
     @Override
     public Object eval(Atributo... args) {
-        String s="";
-        s="apila_dir("+args[0].valor()+") "+args[1].valor();
+        
+    	
+    	TS ts = (TS) args[0].valor();
+		String id = (String) args[1].valor();
+	    String s;    
+        s="apila_dir("+ts.dameDir(id)+") "+args[2].valor();
         return s;
     }
 }
@@ -1769,7 +1773,7 @@ public class EAtribucion extends Atribucion {
         Componente0.err=false
      */
     
-    public TAtributos Componente0(String numero){//¿?¿?HAY Q PASARLE STRING NUMERO¿?¿? LA RESPUESTA ES YEAH!!
+    public TAtributos Componente0(Integer numero){
         regla("Componente → numero ");
                 
         TAtributos Componente0 = atributosPara("Componente","lex","err");//Componente.lex = numero.lex
@@ -1856,7 +1860,7 @@ public class EAtribucion extends Atribucion {
         return TiposTupla1;
     }
     
-    public TAtributos TiposBasico0(){
+    public TAtributos TipoBasico0(){
         regla("TiposBasico → boolean ");
                 
         TAtributos TiposBasico0 = atributosPara("TipoBasico","tipo","err");
@@ -1867,7 +1871,7 @@ public class EAtribucion extends Atribucion {
     }
     
     
-    public TAtributos TiposBasico1(){
+    public TAtributos TipoBasico1(){
         regla("TiposBasico → integer ");
                 
         TAtributos TiposBasico1 = atributosPara("TipoBasico","tipo","err");
@@ -1877,7 +1881,7 @@ public class EAtribucion extends Atribucion {
         return TiposBasico1;
     }
     
-    public TAtributos TiposBasico2(){
+    public TAtributos TipoBasico2(){
         regla("TiposBasico → natural ");
                 
         TAtributos TiposBasico2 = atributosPara("TipoBasico","tipo","err");
@@ -1888,7 +1892,7 @@ public class EAtribucion extends Atribucion {
         return TiposBasico2;
     }
     
-    public TAtributos TiposBasico3(){
+    public TAtributos TipoBasico3(){
         regla("TiposBasico → float ");
                 
         TAtributos TiposBasico3 = atributosPara("TipoBasico","tipo","err");
@@ -1898,7 +1902,7 @@ public class EAtribucion extends Atribucion {
         return TiposBasico3;
     }
     
-    public TAtributos TiposBasico4(){
+    public TAtributos TipoBasico4(){
         regla("TiposBasico → carácter ");
                 
         TAtributos TiposBasico4 = atributosPara("TipoBasico","tipo","err");
