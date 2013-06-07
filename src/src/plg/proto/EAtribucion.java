@@ -29,7 +29,7 @@ class creaTS implements SemFun{
 
 }
 
-class añadirTS implements SemFun{
+class anadirTS implements SemFun{
 	
     @Override
     public Object eval(Atributo... args) {
@@ -1221,7 +1221,7 @@ public class EAtribucion extends Atribucion {
 	
     // Se crean los objetos que representan las diferentes funciones semÃ¡nticas
 	private static SemFun creaTS = new creaTS();
-	private static SemFun añadirTS = new añadirTS();
+	private static SemFun anadirTS = new anadirTS();
 	private static SemFun creaTPR = new creaTPR();
 	private static SemFun creaTSL = new creaTSL();
 	
@@ -1526,7 +1526,7 @@ public class EAtribucion extends Atribucion {
         
         calculo(Decs.a("TPRH"),asignacion);
         calculo(Dec.a("TPRH"),asignacion);
-        calculo(Decs0.a("TS"),añadirTS);
+        calculo(Decs0.a("TS"),anadirTS);
         calculo(Decs.a("TSH"),asignacion);
         calculo(Decs0.a("err"),erroresDecs);
         calculo(Dec.a("TSH"),asignacion);
@@ -1557,7 +1557,7 @@ public class EAtribucion extends Atribucion {
         calculo(Dec.a("TPRH"),asignacion);
         calculo(Dec.a("TSH"),asignacion);
         calculo(Decs1.a("dir"),tamañoDe);
-        calculo(Decs1.a("TS"),añadirTS);
+        calculo(Decs1.a("TS"),anadirTS);
         calculo(Dec.a("etqh"),asignacion);
         calculo(Decs1.a("etq"),asignacion);
         
@@ -1709,7 +1709,7 @@ public class EAtribucion extends Atribucion {
         
         calculo(PFs1.a("err"),estaId_OR_esReserv);
         calculo(PFs1.a("tipo"),asignacion);
-        calculo(PFs1.a("TSL"),añadirTS);
+        calculo(PFs1.a("TSL"),anadirTS);
         
         return PFs1;
     }
@@ -1808,7 +1808,7 @@ public class EAtribucion extends Atribucion {
         calculo(DecSub.a("TPRH"),asignacion);
         calculo(DecsSubs.a("TSLH"),asignacion);
         calculo(DecSub.a("TSLH"),asignacion);
-        calculo(DecsSubs0.a("TS"),añadirTS);
+        calculo(DecsSubs0.a("TS"),anadirTS);
         calculo(DecsSubs0.a("dir"),dirMasTamaño);
         calculo(DecsSubs0.a("err"),erroresDecs);
         
@@ -1832,7 +1832,7 @@ public class EAtribucion extends Atribucion {
         calculo(DecSub.a("TPRH"),asignacion);
         calculo(DecSub.a("TSLH"),asignacion);
         calculo(DecsSubs1.a("err"),erroresDec);
-        calculo(DecsSubs1.a("TS"),añadirTS);
+        calculo(DecsSubs1.a("TS"),anadirTS);
         calculo(DecsSubs1.a("dir"),tamañoDe);
         
         return DecsSubs1;
