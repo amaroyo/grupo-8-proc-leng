@@ -10,12 +10,12 @@ action code {:
 
 // DefiniciÃ³n de los terminales del lenguaje 
 terminal            String ident,letra, digito,caracter;
-terminal			float numReal;
-terminal            integer numeroEnt;
+terminal			Float numeroReal;
+terminal            Integer numeroEnt,numeroNat,numero;
 terminal            program, instructions,CONSTS, CONST, tipos, tipo, vars, var, subprograms,subprogram,
 				    THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE, IF,
 					BOOLEAN, INTEGER, NATURAL, FLOAT,
-					numero, TRUE, FALSE, in, out, Call,
+					 TRUE, FALSE, in, out, Call,
 					RESTA,MAYOR,MENOR,MENORIGUAL,MAYORIGUAL,IGUALIGUAL,DISTINTO,SUMA,MULT,DIV,MOD,
 					DESPIZQ,DESPDER,CHAR,INT,NAT,not,
 					DP,SWAP1,SWAP2,PABIERTO,PCERRADO,COMILLA,
@@ -23,7 +23,7 @@ terminal            program, instructions,CONSTS, CONST, tipos, tipo, vars, var,
 
 // Definición de los no terminales del lenguaje
 non terminal TAtributos Programa, Consts, Tipos, Vars,  Subprogramas, Decs, Dec,
-			PFs, PF, CS, DecsSubs, DecSub, Designador, Tipo, Dimensiones, Componente,
+			PFs, PF, CS, DecsSubs, DecSub, Designador, Tipo, Componente,
 			TiposTupla, TipoBasico, Valores, Insts, Inst, InsAsig, InsR, InsW, ExpIF, ExpWHILE, LLAMADA,
 			Parametros, Parametro, ExpBool, Exp, Exp0, Exp1, Exp2, Exp3, Op0, Op1, OR, Op2, AND1, Op3,
 			Op41, Op42;
@@ -32,7 +32,7 @@ non terminal TAtributos Programa, Consts, Tipos, Vars,  Subprogramas, Decs, Dec,
 //===================PROGRAMA==============================
 //Programa → program : ident { Consts Tipos Vars Subprogramas instructions { Insts }}
 Programa ::= program DP ident:id LLABIERTA Consts:consts Tipos:tipos Vars:vars Subprogramas:subprogramas instructions LLABIERTA Insts:insts LLCERRADA LLCERRADA 
-{: RESULT= atrb.Programa( id,consts,tipos,vars,subprogramas,insts); :};
+{: RESULT= atrb.Programa( consts,tipos,vars,subprogramas,insts); :};
 
 //===================CONSTS==============================
 //Consts → consts { Decs }; Consts → λ
@@ -52,7 +52,7 @@ Vars ::= {: RESULT= atrb.Vars1(); :};  //VACIO
 //===================SUBPROGRAMAS==============================
 //Subprogramas →  subprograms { Decs }; Subprogramas → Subprograma; Subprogramas → λ
 Subprogramas ::= subprograms LLABIERTA Decs:decs LLCERRADA PYC {: RESULT= atrb.Subprogramas0(decs); :};
-Subprogramas ::= {: RESULT= atrb.Subprogramas1(subprograma); :};
+Subprogramas ::= {: RESULT= atrb.Subprogramas1(); :};
 
 //===================DECS==============================
 //Decs → Decs ; Dec; Decs → Dec
@@ -62,7 +62,7 @@ Decs ::= Dec:dec {: RESULT= atrb.Decs1(dec); :};
 //===================DEC==============================
 //Dec → const TipoBasico ident = Valores; Dec → tipo Tipo ident; Dec → var Tipo ident
 //Dec → subprogram: ident (PFs) {CS}
-Dec ::= CONST TipoBasico:tipobasico ident:id IGUAL Valores:valores {: RESULT= atrb.Dec0(tipobasico,id,Valores); :};
+Dec ::= CONST TipoBasico:tipobasico ident:id IGUAL Valores:valores {: RESULT= atrb.Dec0(tipobasico,id,valores); :};
 Dec ::= tipo Tipo:tipo ident:id {: RESULT= atrb.Dec1(tipo,id); :};
 Dec ::= var Tipo:tipo ident:id {: RESULT= atrb.Dec2(tipo,id); :};
 Dec ::= subprogram DP ident:id PABIERTO PFs:pfs PCERRADO LLABIERTA CS:cs LLCERRADA {: RESULT = atrb.Dec3(id,pfs,cs); :};
@@ -75,7 +75,7 @@ PFs ::= PF:pf {: RESULT= atrb.PFs1(pf);:};
 //===================PF==============================
 //PF → Tipo ident | Tipo * Designador 
 PF ::= Tipo:tipo ident:id {: RESULT= atrb.PF0(tipo,id); :};
-PF ::= Tipo:tipo MULT Designador:desig {: RESULT= atrb.PF1(tipo,desig); :};
+PF ::= Tipo:tipo MULT ident:id {: RESULT= atrb.PF1(tipo,id); :};
 
 //===================CS==============================
 //CS  → vars { DecsSubs } instructions { Insts }
@@ -95,30 +95,25 @@ DecSub ::= var Tipo:tipo ident:id {: RESULT= atrb.DecSub0(tipo,id); :};
 //===================DESIGNADOR==============================
 //designador → ident; designador → designador[Exp]; designador → designador_numero
 Designador ::= ident:id {: RESULT= atrb.designador1(id); :};
-Designador ::= ident:id CABIERTO Exp:exp CCERRADO {: RESULT= atrb.designador2(desig,exp); :};
-Designador ::= ident:id GUIONBAJO numero {: RESULT= atrb.designador3(desig); :};
+Designador ::= ident:id CABIERTO Exp:exp CCERRADO {: RESULT= atrb.designador2(id,exp); :};
+Designador ::= ident:id GUIONBAJO numero {: RESULT= atrb.designador3(id); :};
 
 //===================TIPO==============================
 //Tipo → TipoBasico; Tipo → ident; Tipo → Tipo Dimensiones;
 Tipo ::= TipoBasico:tipobasico PYC {: RESULT= atrb.Tipo0(tipobasico); :};
 Tipo ::= ident:id PYC {: RESULT= atrb.Tipo1(id); :};
-Tipo ::= Tipo:tipo Dimensiones:dim PYC {: RESULT= atrb.Tipo2(tipo,dim); :};
+Tipo ::= Tipo:tipo CABIERTO Componente:comp CCERRADO PYC {: RESULT= atrb.Tipo2(tipo,comp); :};
 Tipo ::= PABIERTO TiposTupla:tipos PCERRADO {: RESULT= atrb.Tipo3(tipos); :};
-
-//===================DIMENSIONES==============================
-//dimensiones → Dimensiones[Componente] | [Componente]
-Dimensiones ::= Dimensiones:dim CABIERTO Componente:comp CCERRADO {: RESULT= atrb.Dimensiones0(dim,comp); :};
-Dimensiones ::= CABIERTO Componente:comp CCERRADO {: RESULT= atrb.Dimensiones1(comp); :};
 
 //===================COMPONENTE==============================
 //componente → numero | ident;
-Componente ::= numero:id {: RESULT= atrb.Componente0(id); :};
+Componente ::= numero:numEnt {: RESULT= atrb.Componente0(numEnt); :};
 Componente ::= ident:id {: RESULT= atrb.Componente1(id); :};
 
 //===================TIPOTUPLA==============================
 //TiposTupla → TiposTupla, Tipo; TiposTupla → Tipo
 TiposTupla ::= TiposTupla:tipostupla COMA Tipo:tipo {: RESULT = atrb.TiposTupla0(tipostupla,tipo); :};
-TiposTupla ::= Tipo:tipo {: RESULT = atrb.tiposTupla1(tipo); :};
+TiposTupla ::= Tipo:tipo {: RESULT = atrb.TiposTupla1(tipo); :};
 
 //===================TIPOBASICO==============================
 //TipoBasico → boolean | integer | natural | FLOAT | caracter
@@ -130,12 +125,13 @@ TipoBasico ::= caracter {: RESULT= atrb.TipoBasico4(); :};
 
 //===================VALORES==============================
 //Valores → numeroReal; Valores → numeroEnt; Valores → ’(letra)’; Valores  → ’(digito)’; Valores → true; Valores → false
+Valores  ::= numeroNat:numnat {: RESULT= atrb.Valores(numnat); :};
 Valores  ::= numeroReal:numreal {: RESULT= atrb.Valores0(numreal); :};
 Valores  ::= numeroEnt:numEnt  {: RESULT= atrb.Valores1(numEnt); :};
-Valores  ::= COMILLA PABIERTO letra:id PCERRADO COMILLA {: RESULT= atrb.Valores2(id); :};
-Valores  ::= COMILLA PABIERTO digito:id PCERRADO COMILLA {: RESULT= atrb.Valores3(id); :};
-Valores  ::= TRUE  {: RESULT= atrb.Valores4(); :};
-Valores  ::= FALSE  {: RESULT= atrb.Valores5(); :};
+Valores  ::= COMILLA PABIERTO letra:id PCERRADO COMILLA {: RESULT= atrb.Valores4(id); :};
+Valores  ::= COMILLA PABIERTO digito:id PCERRADO COMILLA {: RESULT= atrb.Valores5(id); :};
+Valores  ::= TRUE  {: RESULT= atrb.Valores3(); :};
+Valores  ::= FALSE  {: RESULT= atrb.Valores2(); :};
 
 //===================INSTS==============================
 //Insts → Insts ; Inst; Insts → Inst
@@ -147,8 +143,8 @@ Insts ::= Inst:inst PYC {: RESULT= atrb.Insts1(inst); :};
 Inst ::= InsAsig:insasig  {: RESULT= atrb.Inst0(insasig); :};
 Inst ::= InsR:insr  {: RESULT= atrb.Inst1(insr); :};
 Inst ::= InsW:insw {: RESULT= atrb.Inst2(insw); :};
-Inst ::= SWAP1:swap1 PABIERTO PCERRADO {: RESULT= atrb.Inst3(swap1); :};
-Inst ::= SWAP2:swap2 PABIERTO PCERRADO {: RESULT= atrb.Inst4(swap2); :};
+Inst ::= SWAP1 PABIERTO PCERRADO {: RESULT= atrb.Inst3(); :};
+Inst ::= SWAP2 PABIERTO PCERRADO {: RESULT= atrb.Inst4(); :};
 Inst ::= ExpIF:ExpIf {: RESULT= atrb.Inst5(ExpIf); :};
 Inst ::= ExpWHILE:ExpWhile {: RESULT= atrb.Inst6(ExpWhile); :};
 Inst ::= LLAMADA:llamada {: RESULT= atrb.Inst7(llamada); :};
@@ -176,7 +172,7 @@ ExpWHILE ::= WHILE Exp:exp DO Insts:insts ENDWHILE {: RESULT= atrb.While0(exp,in
 
 //===================LLAMADA==============================
 //LLAMADA → Call ident (Parametros)
-LLAMADA ::= Call ident:id PABIERTO Parametros:parametros PCERRADO {: RESULT= atrb.LLAMADA0(id,parametros); :};
+LLAMADA ::= Call ident:id PABIERTO Parametros:parametros PCERRADO {: RESULT= atrb.Llamada0(id,parametros); :};
 
 //===================PARAMETROS==============================
 //Parametros → Parametros, Parametro | Parametro
