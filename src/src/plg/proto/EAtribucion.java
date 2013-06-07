@@ -1520,8 +1520,8 @@ public class EAtribucion extends Atribucion {
         dependencias(dec.a("TSH"),decs.a("TSH"));
         dependencias(Decs0.a("err"),decs.a("err"),dec.a("err"),dec.a("id"),decs.a("TSH"),decs.a("TPRH"));
         dependencias(Decs0.a("dir"),decs.a("TSH"),decs.a("dir"),dec.a("id"),dec.a("clase"));
-        dependencias(decs.a("etqh"),Decs0.a("etqh"));
-        dependencias(dec.a("etqh"),decs.a("etq"));
+      //  dependencias(decs.a("etqh"),Decs0.a("etqh"));
+      //  dependencias(dec.a("etqh"),decs.a("etq"));
         dependencias(Decs0.a("etq"),dec.a("etq"));
         
         calculo(decs.a("TPRH"),asignacion);
@@ -1531,8 +1531,8 @@ public class EAtribucion extends Atribucion {
         calculo(Decs0.a("err"),erroresDecs);
         calculo(dec.a("TSH"),asignacion);
         calculo(Decs0.a("dir"),dirMasTamano);
-        calculo(decs.a("etqh"),asignacion);
-        calculo(dec.a("etqh"),asignacion);
+      //  calculo(decs.a("etqh"),asignacion);
+      //  calculo(dec.a("etqh"),asignacion);
         calculo(Decs0.a("etq"),asignacion);
         
         return Decs0;
@@ -1597,16 +1597,16 @@ public class EAtribucion extends Atribucion {
         
         dependencias(Dec1.a("id"),identif);
         dependencias(Dec1.a("tipo"),tipo.a("tipo"));
-        dependencias(tipo.a("TSH"),Dec1.a("TSH"));
-        dependencias(tipo.a("TPRH"),Dec1.a("TPRH"));
+       // dependencias(tipo.a("TSH"),Dec1.a("TSH"));
+       // dependencias(tipo.a("TPRH"),Dec1.a("TPRH"));
         dependencias(Dec1.a("err"),tipo.a("err"));
         
         calculo(Dec1.a("id"),asignacion);
         calculo(Dec1.a("clase"),asignaClaseTipo);
-        calculo(Dec1.a("nivel"),asignacero);
+       // calculo(Dec1.a("nivel"),asignacero);
         calculo(Dec1.a("tipo"),asignacion);
-        calculo(tipo.a("TSH"),asignacion);
-        calculo(tipo.a("TPRH"),asignacion);
+      //  calculo(tipo.a("TSH"),asignacion);
+      //  calculo(tipo.a("TPRH"),asignacion);
         calculo(Dec1.a("err"),asignacion);
         calculo(Dec1.a("valor"),asignavacio);
         
@@ -1992,10 +1992,10 @@ public class EAtribucion extends Atribucion {
         Atributo identComp1 = atributoLexicoPara("Identificador", "lex", id);
         
         dependencias(Componente1.a("lex"),identComp1);
-        dependencias(Componente1.a("err"),identComp1);
+       // dependencias(Componente1.a("err"),identComp1);
         
         calculo(Componente1.a("lex"),asignacion);
-        calculo(Componente1.a("err"),esComponente);
+        //calculo(Componente1.a("err"),esComponente);
         
         return Componente1;
     }
