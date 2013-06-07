@@ -1,6 +1,12 @@
 program : pruebaCodigo {
-vars {
-		var integer x ;
+   tipos {
+		tipo float[dim1][dim2] tipoArray;		
+	}
+	vars {
+		var tipoArray array1;
+		var tipoArray array2;
+		var integer i;
+		var integer j;
 	}
 instructions {
 swap1();
