@@ -2600,25 +2600,17 @@ public class EAtribucion extends Atribucion {
        regla("LLAMADA → Call ident (Parametros)");
                
        TAtributos Llamada0 = atributosPara("Llamada","TSH","err", "cod","etq","etqh");
-       Atributo identLlamada0 = atributoLexicoPara("Identificador", "lex", ident);
-       Atributo identLlamada1 = atributoLexicoPara("Identificador", "cod", ident);
-       Atributo identLlamada2 = atributoLexicoPara("Identificador", "etq", ident);
-       Atributo identLlamada3 = atributoLexicoPara("Identificador", "etqh", ident);
+
        
        dependencias(Parametros.a("TSH"),Llamada0.a("TSH"));
        dependencias(Llamada0.a("err"),Parametros.a("err"));
-       dependencias(Llamada0.a("cod"),identLlamada1,Parametros.a("cod"),identLlamada3);
-       dependencias(Llamada0.a("etq"),identLlamada2);
-       dependencias(identLlamada3,Llamada0.a("etqh"));
+       dependencias(Llamada0.a("etq"),Parametros.a("etqh"));
+       //dependencias(Llamada0.a("cod"),Parametros.a("etqh"));
 
-       
-
+       //calculo(Llamada0.a("cod"),asignacion);
        calculo(Parametros.a("TSH"),asignacion);
        calculo(Llamada0.a("err"),asignacion);
-       //CONCATENAR DIFERENTE
-       calculo(Llamada0.a("etqh"),asignacion);
        calculo(Llamada0.a("etq"),sumauno);
-
        
        
        return Llamada0;
@@ -2628,16 +2620,27 @@ public class EAtribucion extends Atribucion {
    public TAtributos Parametros0(TAtributos Parametros1,TAtributos Parametro){
        regla("Parametros → Parametros, Parametro");
                
-       TAtributos Parametros0 = atributosPara("Parametros","TSH","err");
+       TAtributos Parametros0 = atributosPara("Parametros","TSH","err","etq","etqh");
        
        dependencias(Parametros1.a("TSH"),Parametros0.a("TSH"));
        dependencias(Parametro.a("TSH"),Parametros1.a("TSH"));     
        dependencias(Parametros0.a("err"),Parametros1.a("err"),Parametro.a("err"));
-
+       dependencias(Parametros1.a("etqh"),Parametros0.a("etqh"));
+       dependencias(Parametro.a("etqh"),Parametros1.a("etq"));
+       dependencias(Parametros0.a("etq"),Parametro.a("etq"));
+       
+       
 
        calculo(Parametros1.a("TSH"),asignacion);
        calculo(Parametro.a("TSH"),asignacion);
        calculo(Parametros0.a("err"),asignacionOR2);
+       
+       calculo(Parametros1.a("etqh"),asignacion);
+       calculo(Parametro.a("etqh"),asignacion);
+       calculo(Parametros0.a("etq"),asignacion);
+
+       
+       
        
        return Parametros0;
        
@@ -2646,13 +2649,18 @@ public class EAtribucion extends Atribucion {
    public TAtributos Parametros1(TAtributos Parametro){
        regla("Parametros →  Parametro");
                
-       TAtributos Parametros1 = atributosPara("Parametros","TSH","err");
+       TAtributos Parametros1 = atributosPara("Parametros","TSH","err","etq","etqh");
        
        dependencias(Parametro.a("TSH"),Parametros1.a("TSH"));     
        dependencias(Parametros1.a("err"),Parametro.a("err"));
+       dependencias(Parametro.a("etqh"),Parametros1.a("etqh"));     
+       dependencias(Parametros1.a("etq"),Parametro.a("etq")); 
 
        calculo(Parametro.a("TSH"),asignacion);
        calculo(Parametros1.a("err"),asignacion);
+       
+       calculo(Parametro.a("etqh"),asignacion);
+       calculo(Parametros1.a("etq"),asignacion);
        
        return Parametros1;
        
@@ -2661,15 +2669,21 @@ public class EAtribucion extends Atribucion {
    public TAtributos Parametro0(String ident,TAtributos Exp){
        regla("Parametro → ident = Exp ");
                
-       TAtributos Parametro0 = atributosPara("Parametro","TSH","err");
+       TAtributos Parametro0 = atributosPara("Parametro","TSH","err","etq","etqh");
        Atributo identComp1 = atributoLexicoPara("Identificador", "lex", ident);
        
        
        dependencias(Exp.a("TSH"),Parametro0.a("TSH"));     
        dependencias(Parametro0.a("err"),Exp.a("err"),Parametro0.a("TSH"),identComp1,Exp.a("tipo"));
-
+       dependencias(Exp.a("etqh"),Parametro0.a("etqh"));     
+       dependencias(Parametro0.a("etq"),Exp.a("etq")); 
+       
+       
        calculo(Exp.a("TSH"),asignacion);
        calculo(Parametro0.a("err"),errorParam);
+       calculo(Exp.a("etqh"),asignacion);
+       calculo(Parametro0.a("etq"),asignacion);
+       
        
        return Parametro0;
        
