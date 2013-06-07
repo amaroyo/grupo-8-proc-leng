@@ -38,6 +38,20 @@ public class TS {
 		return null;
 	}
 	
+	public String dameDir(String id) {
+		
+		Iterator<Parametros> it = TablaSimbolos.iterator();
+	    while (it.hasNext()) {
+	      Parametros element = it.next();
+	      String ident=element.getId();
+	      String tipo = it.next().getDir();
+	     if(id.equals(ident)){
+	    	 return tipo;	 
+	     }
+	    }
+		return "";
+	}
+	
 	public static boolean buscaId(String id) {
 		
 		Iterator<Parametros> it = TablaSimbolos.iterator();
