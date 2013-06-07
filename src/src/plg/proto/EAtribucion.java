@@ -619,8 +619,6 @@ class errorInsW implements SemFun{
 }
 
 
-
-
 class errorParam implements SemFun{
 
 	// dependencias(Parametro0.a("err"),Exp.a("err"),Parametro0.a("TSH"),identComp1,Exp.a("tipo"));
@@ -656,6 +654,83 @@ class errorParam implements SemFun{
     
     }
 }
+
+
+class errorIf0_While0 implements SemFun{
+
+	// dependencias(If0.a("err"),Exp.a("err"),Insts0.a("err"),Exp.a("tipo"));
+	
+    @Override
+    public Object eval(Atributo... args) {
+
+    	ArrayList<String> errores = new ArrayList<String>();
+
+		ArrayList<String> errorExp=(ArrayList<String>)args[0].valor();
+		ArrayList<String> errorInst=(ArrayList<String>)args[1].valor();
+		Tipo tipo=(Tipo) args[2].valor();
+	
+		int i=0;
+		
+		if(!errorExp.isEmpty()){
+			errores.set(i,errorExp.toString());
+			i++;
+		}
+		
+		if(!errorInst.isEmpty()){
+			errores.set(i,errorInst.toString());
+			i++;
+		}
+		
+		if(!tipo.equals("<t:Bool , tam:1>")){
+			errores.set(i, "No es tipo Bool");
+			i++;
+		}
+        return errores;
+    
+    }
+}
+
+class errorIf1 implements SemFun{
+
+	
+	//dependencias(If1.a("err"),Exp.a("err"),Exp.a("tipo"),Insts0.a("err"),Insts1.a("err"));
+    @Override
+    public Object eval(Atributo... args) {
+
+    	ArrayList<String> errores = new ArrayList<String>();
+
+		ArrayList<String> errorExp=(ArrayList<String>)args[0].valor();
+		ArrayList<String> errorInst0=(ArrayList<String>)args[2].valor();
+		ArrayList<String> errorInst1=(ArrayList<String>)args[2].valor();
+		Tipo tipo=(Tipo) args[1].valor();
+	
+		int i=0;
+		
+		if(!errorExp.isEmpty()){
+			errores.set(i,errorExp.toString());
+			i++;
+		}
+		
+		if(!errorInst0.isEmpty()){
+			errores.set(i,errorInst0.toString());
+			i++;
+		}
+		if(!errorInst1.isEmpty()){
+			errores.set(i,errorInst0.toString());
+			i++;
+		}
+		if(!tipo.equals("<t:Bool , tam:1>")){
+			errores.set(i, "No es tipo Bool");
+			i++;
+		}
+        return errores;
+    
+    
+    }
+}
+
+
+
 
 
 class estaId_OR_esReserv implements SemFun{
@@ -1193,6 +1268,8 @@ public class EAtribucion extends Atribucion {
     private static SemFun errorInsR = new errorInsR();
     private static SemFun errorInsW = new errorInsW();
     private static SemFun errorParam = new errorParam();
+    private static SemFun errorIf0_While0 = new errorIf0_While0();
+    private static SemFun errorIf1 = new errorIf1();
     
 
     
@@ -2416,7 +2493,7 @@ public class EAtribucion extends Atribucion {
        
        dependencias(Exp.a("TSH"),If0.a("TSH"));
        dependencias(Insts0.a("TSH"),Exp.a("TSH"));
-       dependencias(If0.a("err"),Insts0.a("err"));
+       dependencias(If0.a("err"),Exp.a("err"),Insts0.a("err"),Exp.a("tipo"));
        
        dependencias(If0.a("cod"),Exp.a("cod"),Insts0.a("etq"),Insts0.a("cod"));
        dependencias(Exp.a("etqh"),If0.a("etqh"));
@@ -2429,7 +2506,7 @@ public class EAtribucion extends Atribucion {
        
        calculo(Exp.a("TSH"),asignacion);
        calculo(Insts0.a("TSH"),asignacion);
-       calculo(If0.a("err"),asignacionOR2);
+       calculo(If0.a("err"),errorIf0_While0);
 
        calculo(Insts0.a("etqh"),sumauno);
 
@@ -2453,7 +2530,7 @@ public class EAtribucion extends Atribucion {
        dependencias(Exp.a("TSH"),If1.a("TSH"));
        dependencias(Insts0.a("TSH"),Exp.a("TSH"));
        dependencias(Insts1.a("TSH"),Insts0.a("TSH"));
-       dependencias(If1.a("err"),Insts0.a("err"),Insts1.a("err"));
+       dependencias(If1.a("err"),Exp.a("err"),Exp.a("tipo"),Insts0.a("err"),Insts1.a("err"));
        
        dependencias(If1.a("cod"),Exp.a("cod"),Insts0.a("etq"),Insts0.a("cod"),Insts1.a("etq"),Insts1.a("cod"));
        dependencias(Exp.a("etqh"),If1.a("etqh"));
@@ -2467,7 +2544,7 @@ public class EAtribucion extends Atribucion {
        calculo(Exp.a("TSH"),asignacion);
        calculo(Insts0.a("TSH"),asignacion);
        calculo(Insts1.a("TSH"),asignacion);
-       //// FALTA ERRRORRR
+       calculo(If1.a("err"),errorIf1);
        calculo(Insts0.a("etqh"),sumauno);
        calculo(Insts1.a("etqh"),sumauno);
        calculo(If1.a("cod"),concatenarIf2);
@@ -2507,7 +2584,6 @@ public class EAtribucion extends Atribucion {
 
        calculo(Insts0.a("etqh"),sumauno);
 
-       //CONCATENAR DIFERENTE
        calculo(While0.a("cod"),concatenarWhile1);
        calculo(While0.a("etq"),asignacion);
        calculo(Exp.a("etqh"),asignacion);
