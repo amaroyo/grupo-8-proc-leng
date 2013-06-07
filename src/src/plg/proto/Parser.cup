@@ -9,13 +9,13 @@ action code {:
 :}
 
 // DefiniciÃ³n de los terminales del lenguaje 
-terminal            String ident,letra, digito,caracter;
+terminal            String ident,letra, digito,CARACTER;
 terminal			Float numeroReal;
 terminal            Integer numeroEnt,numeroNat,numero;
-terminal            program, instructions,CONSTS, CONST, tipos, tipo, vars, var, subprograms,subprogram,
+terminal            PROGRAM, INSTRUCTIONS,CONSTS, CONST, TIPOS, TIPO, VARS, VAR, SUBPROGRAMS,SUBPROGRAM,
 				    THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE, IF,
 					BOOLEAN, INTEGER, NATURAL, FLOAT,
-					 TRUE, FALSE, in, out, Call,
+					 TRUE, FALSE, in, out, Call, OR, AND,
 					RESTA,MAYOR,MENOR,MENORIGUAL,MAYORIGUAL,IGUALIGUAL,DISTINTO,SUMA,MULT,DIV,MOD,
 					DESPIZQ,DESPDER,CHAR,INT,NAT,not,
 					DP,SWAP1,SWAP2,PABIERTO,PCERRADO,COMILLA,
@@ -25,13 +25,13 @@ terminal            program, instructions,CONSTS, CONST, tipos, tipo, vars, var,
 non terminal TAtributos Programa, Consts, Tipos, Vars,  Subprogramas, Decs, Dec,
 			PFs, PF, CS, DecsSubs, DecSub, Designador, Tipo, Componente,
 			TiposTupla, TipoBasico, Valores, Insts, Inst, InsAsig, InsR, InsW, ExpIF, ExpWHILE, LLAMADA,
-			Parametros, Parametro, ExpBool, Exp, Exp0, Exp1, Exp2, Exp3, Op0, Op1, OR, Op2, AND1, Op3,
+			Parametros, Parametro, ExpBool, Exp, Exp0, Exp1, Exp2, Exp3, Op0, Op1, Op2, Op3,
 			Op41, Op42;
 
 // Se definen las reglas sintácticas
 //===================PROGRAMA==============================
-//Programa → program : ident { Consts Tipos Vars Subprogramas instructions { Insts }}
-Programa ::= program DP ident:id LLABIERTA Consts:consts Tipos:tipos Vars:vars Subprogramas:subprogramas instructions LLABIERTA Insts:insts LLCERRADA LLCERRADA 
+//Programa → PROGRAM : ident { Consts Tipos Vars Subprogramas INSTRUCTIONS { Insts }}
+Programa ::= PROGRAM DP ident:id LLABIERTA Consts:consts Tipos:tipos Vars:vars Subprogramas:subprogramas INSTRUCTIONS LLABIERTA Insts:insts LLCERRADA LLCERRADA 
 {: RESULT= atrb.Programa( consts,tipos,vars,subprogramas,insts); :};
 
 //===================CONSTS==============================
@@ -40,18 +40,18 @@ Consts ::= CONSTS LLABIERTA Decs:decs LLCERRADA {: RESULT= atrb.Consts0(decs); :
 Consts ::= {: RESULT= atrb.Consts1(); :}; //VACIO
 
 //===================TIPOS==============================
-//Tipos → tipos { Decs }; Tipos → λ
-Tipos ::= tipos LLABIERTA Decs:decs LLCERRADA  PYC {: RESULT= atrb.Tipos0(decs); :};
+//Tipos → TIPOS { Decs }; Tipos → λ
+Tipos ::= TIPOS LLABIERTA Decs:decs LLCERRADA  PYC {: RESULT= atrb.Tipos0(decs); :};
 Tipos ::= {: RESULT= atrb.Tipos1(); :}; //VACIO
 
 //===================VARS==============================
-//Vars → vars { Decs }; Vars → λ
-Vars ::= vars LLABIERTA Decs:decs LLCERRADA  PYC {: RESULT= atrb.Vars0(decs); :};
+//Vars → VARS { Decs }; Vars → λ
+Vars ::= VARS LLABIERTA Decs:decs LLCERRADA  PYC {: RESULT= atrb.Vars0(decs); :};
 Vars ::= {: RESULT= atrb.Vars1(); :};  //VACIO 
 
 //===================SUBPROGRAMAS==============================
-//Subprogramas →  subprograms { Decs }; Subprogramas → Subprograma; Subprogramas → λ
-Subprogramas ::= subprograms LLABIERTA Decs:decs LLCERRADA PYC {: RESULT= atrb.Subprogramas0(decs); :};
+//Subprogramas →  SUBPROGRAMS { Decs }; Subprogramas → Subprograma; Subprogramas → λ
+Subprogramas ::= SUBPROGRAMS LLABIERTA Decs:decs LLCERRADA PYC {: RESULT= atrb.Subprogramas0(decs); :};
 Subprogramas ::= {: RESULT= atrb.Subprogramas1(); :};
 
 //===================DECS==============================
@@ -63,9 +63,9 @@ Decs ::= Dec:dec {: RESULT= atrb.Decs1(dec); :};
 //Dec → const TipoBasico ident = Valores; Dec → tipo Tipo ident; Dec → var Tipo ident
 //Dec → subprogram: ident (PFs) {CS}
 Dec ::= CONST TipoBasico:tipobasico ident:id IGUAL Valores:valores {: RESULT= atrb.Dec0(tipobasico,id,valores); :};
-Dec ::= tipo Tipo:tipo ident:id {: RESULT= atrb.Dec1(tipo,id); :};
-Dec ::= var Tipo:tipo ident:id {: RESULT= atrb.Dec2(tipo,id); :};
-Dec ::= subprogram DP ident:id PABIERTO PFs:pfs PCERRADO LLABIERTA CS:cs LLCERRADA {: RESULT = atrb.Dec3(id,pfs,cs); :};
+Dec ::= TIPO Tipo:tipo ident:id {: RESULT= atrb.Dec1(tipo,id); :};
+Dec ::= VAR Tipo:tipo ident:id {: RESULT= atrb.Dec2(tipo,id); :};
+Dec ::= SUBPROGRAM DP ident:id PABIERTO PFs:pfs PCERRADO LLABIERTA CS:cs LLCERRADA {: RESULT = atrb.Dec3(id,pfs,cs); :};
 
 //===================PFS==============================
 //PFs → PFs, PF | PF;
@@ -78,8 +78,8 @@ PF ::= Tipo:tipo ident:id {: RESULT= atrb.PF0(tipo,id); :};
 PF ::= Tipo:tipo MULT ident:id {: RESULT= atrb.PF1(tipo,id); :};
 
 //===================CS==============================
-//CS  → vars { DecsSubs } instructions { Insts }
-CS  ::= vars LLABIERTA DecsSubs:decssubs LLCERRADA instructions LLABIERTA Insts:insts LLCERRADA {: RESULT= atrb.CS(decssubs,insts); :};
+//CS  → VARS { DecsSubs } INSTRUCTIONS { Insts }
+CS  ::= VARS LLABIERTA DecsSubs:decssubs LLCERRADA INSTRUCTIONS LLABIERTA Insts:insts LLCERRADA {: RESULT= atrb.CS(decssubs,insts); :};
 
 //===================DECSSUBS==============================
 //DecsSubs→ DecsSubs; DecSub; DecsSubs→ DecSub; DecsSubs→ λ;
@@ -88,8 +88,8 @@ DecsSubs ::= DecSub:decsub {: RESULT= atrb.DecsSubs1(decsub); :};
 DecsSubs ::=  {: RESULT= atrb.DecsSubs2(); :};
 
 //===================DECSUB==============================
-//DecSub → var Tipo identificador
-DecSub ::= var Tipo:tipo ident:id {: RESULT= atrb.DecSub0(tipo,id); :};
+//DecSub → VAR Tipo identificador
+DecSub ::= VAR Tipo:tipo ident:id {: RESULT= atrb.DecSub0(tipo,id); :};
 
 
 //===================DESIGNADOR==============================
@@ -121,7 +121,7 @@ TipoBasico ::= BOOLEAN {: RESULT= atrb.TipoBasico0(); :};
 TipoBasico ::= INTEGER {: RESULT= atrb.TipoBasico1(); :};
 TipoBasico ::= NATURAL {: RESULT= atrb.TipoBasico2(); :};
 TipoBasico ::= FLOAT {: RESULT= atrb.TipoBasico3(); :};
-TipoBasico ::= caracter {: RESULT= atrb.TipoBasico4(); :};
+TipoBasico ::= CARACTER {: RESULT= atrb.TipoBasico4(); :};
 
 //===================VALORES==============================
 //Valores → numeroReal; Valores → numeroEnt; Valores → ’(letra)’; Valores  → ’(digito)’; Valores → true; Valores → false
@@ -197,7 +197,7 @@ Exp0 ::= Exp1:exp1 {: RESULT= atrb.Exp02(exp1); :};
 //===================EXP1==============================
 //Exp1 → Exp1 Op2 Exp2; Exp1 → Exp1 AND Exp2; Exp1 → Exp2
 Exp1 ::= Exp1:exp1 Op2:op2 Exp2:exp2 {: RESULT= atrb.Exp10(exp1,op2,exp2); :};
-Exp1 ::= Exp1:exp1 AND1 Exp2:exp2 {: RESULT= atrb.Exp11(exp1,exp2); :};
+Exp1 ::= Exp1:exp1 AND Exp2:exp2 {: RESULT= atrb.Exp11(exp1,exp2); :};
 Exp1 ::= Exp2:exp2 {: RESULT= atrb.Exp12(exp2); :};
 
 //===================EXP2==============================
