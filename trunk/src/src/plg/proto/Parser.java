@@ -1827,7 +1827,7 @@ class CUP$Parser$actions {
 		int instsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int instsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		TAtributos insts = (TAtributos)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		 RESULT= atrb.Programa( consts,tipos,vars,subprogramas,insts); 
+		 RESULT= atrb.Programa(id,consts,tipos,vars,subprogramas,insts); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("Programa",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-12)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
