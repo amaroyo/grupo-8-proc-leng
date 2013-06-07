@@ -1,11 +1,5 @@
 
 program: ejemplo{
-
-     consts {
-     
-     }          
-     
 instructions{
-  
 }
 }

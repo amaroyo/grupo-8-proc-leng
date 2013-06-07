@@ -1330,48 +1330,48 @@ public class EAtribucion extends Atribucion {
     
     //PRACTICA PLG SEGUNDO CUATRI!!!!!!
     
-    public TAtributos Programa(TAtributos Consts,TAtributos Tipos,TAtributos Vars,TAtributos Subprogramas,TAtributos Insts){
+    public TAtributos Programa(String id,TAtributos consts,TAtributos tipos,TAtributos vars,TAtributos subprogramas,TAtributos insts){
         regla("Programa → program: ident { Consts Tipos Vars Subprogramas instructions { Insts }}");
                 
         TAtributos Programa = atributosPara("Programa", "TS","err","cod","etq","etqh","TPR");
         
 
-        dependencias(Consts.a("TSH"),Programa.a("TS"));//Consts.TSH = Programa.TS
-        dependencias(Tipos.a("TSH"),Consts.a("TS"));//Tipos.TSH = Consts.TS
-        dependencias(Vars.a("TSH"),Tipos.a("TS"));//Vars.TSH = Tipos.TS
-        dependencias(Subprogramas.a("TSH"),Vars.a("TS"));//Subprogramas.TSH = Vars.TS
-        dependencias(Insts.a("TSH"),Subprogramas.a("TS"));//Insts.TSH = Subprogramas.TS         
+        dependencias(consts.a("TSH"),Programa.a("TS"));//Consts.TSH = Programa.TS
+        dependencias(tipos.a("TSH"),consts.a("TS"));//Tipos.TSH = Consts.TS
+        dependencias(vars.a("TSH"),tipos.a("TS"));//Vars.TSH = Tipos.TS
+        dependencias(subprogramas.a("TSH"),vars.a("TS"));//Subprogramas.TSH = Vars.TS
+        dependencias(insts.a("TSH"),subprogramas.a("TS"));//Insts.TSH = Subprogramas.TS         
 
-        dependencias(Consts.a("TPRH"),Programa.a("TPR"));//Consts.TPRH = Programa.TPR
-        dependencias(Tipos.a("TPRH"),Consts.a("TPRH"));//Tipos.TPRH = Consts.TPRH
-        dependencias(Vars.a("TPRH"),Tipos.a("TPRH"));//Vars.TPRH = Tipos.TPRH
-        dependencias(Subprogramas.a("TPRH"),Vars.a("TPRH"));//Subprogramas.TPRH = Vars.TPRH
-        dependencias(Programa.a("err"),Consts.a("err"),Tipos.a("err"),Vars.a("err"),Subprogramas.a("err"),Insts.a("err"));//Programa.err = Consts.err OR  Tipos.err OR Vars.err OR Subprogramas.err OR Insts.err
-        dependencias(Programa.a("cod"),Insts.a("cod"));//Prog.cod=Insts.cod || stop
+        dependencias(consts.a("TPRH"),Programa.a("TPR"));//Consts.TPRH = Programa.TPR
+        dependencias(tipos.a("TPRH"),consts.a("TPRH"));//Tipos.TPRH = Consts.TPRH
+        dependencias(vars.a("TPRH"),tipos.a("TPRH"));//Vars.TPRH = Tipos.TPRH
+        dependencias(subprogramas.a("TPRH"),vars.a("TPRH"));//Subprogramas.TPRH = Vars.TPRH
+        dependencias(Programa.a("err"),consts.a("err"),tipos.a("err"),vars.a("err"),subprogramas.a("err"),insts.a("err"));//Programa.err = Consts.err OR  Tipos.err OR Vars.err OR Subprogramas.err OR Insts.err
+        dependencias(Programa.a("cod"),insts.a("cod"));//Prog.cod=Insts.cod || stop
         
-        dependencias(Subprogramas.a("etqh"),Programa.a("etqh"));
-        dependencias(Insts.a("etqh"),Subprogramas.a("etq"));
-        dependencias(Programa.a("etq"),Insts.a("etq"));
+        dependencias(subprogramas.a("etqh"),Programa.a("etqh"));
+        dependencias(insts.a("etqh"),subprogramas.a("etq"));
+        dependencias(Programa.a("etq"),insts.a("etq"));
 
         calculo(Programa.a("TPR"),creaTS);
         calculo(Programa.a("cod"),concatenarPrograma);
         calculo(Programa.a("TPR"),creaTPR);
-        calculo(Consts.a("TSH"),asignacion);
-        calculo(Tipos.a("TSH"),asignacion);
-        calculo(Vars.a("TSH"),asignacion);
-        calculo(Subprogramas.a("TSH"),asignacion);
-        calculo(Insts.a("TSH"),asignacion);
+        calculo(consts.a("TSH"),asignacion);
+        calculo(tipos.a("TSH"),asignacion);
+        calculo(vars.a("TSH"),asignacion);
+        calculo(subprogramas.a("TSH"),asignacion);
+        calculo(insts.a("TSH"),asignacion);
         
        
-        calculo(Consts.a("TPRH"),asignacion);
-        calculo(Tipos.a("TPRH"),asignacion);
-        calculo(Vars.a("TPRH"),asignacion);
-        calculo(Subprogramas.a("TPRH"),asignacion);
+        calculo(consts.a("TPRH"),asignacion);
+        calculo(tipos.a("TPRH"),asignacion);
+        calculo(vars.a("TPRH"),asignacion);
+        calculo(subprogramas.a("TPRH"),asignacion);
         calculo(Programa.a("err"),asignacionOR5);
         
         calculo(Programa.a("etqh"),asignacero);
-        calculo(Subprogramas.a("etqh"),asignacion);
-        calculo(Insts.a("etqh"),asignacion);
+        calculo(subprogramas.a("etqh"),asignacion);
+        calculo(insts.a("etqh"),asignacion);
         calculo(Programa.a("etq"),asignacion);
 
         
