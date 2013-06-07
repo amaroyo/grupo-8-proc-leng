@@ -2136,7 +2136,7 @@ public class EAtribucion extends Atribucion {
         
     }
     
-    public TAtributos Inst4(TAtributos SWAP2){
+    public TAtributos Inst4(){
         regla("Inst → SWAP2() ");
                 
         TAtributos Inst4 = atributosPara("Inst","etqh","err","cod");
