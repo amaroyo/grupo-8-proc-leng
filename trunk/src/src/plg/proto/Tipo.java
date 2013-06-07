@@ -1,6 +1,5 @@
 package src.plg.proto;
 
-
 public class Tipo {
 	
 	protected String tip;
@@ -35,6 +34,17 @@ public class Tipo {
 
 	public String toString() {
 		return "< t : "+ tip + " , tam : " + tamano + " >";
+	}
+
+	public boolean compatibles(Tipo tipoExp) {
+		
+		//tipo = tipoBasico
+		if (this.toString().equals(tipoExp.toString())) {
+		
+			return false;
+		}
+		else return true;
+		
 	}
 
 }
