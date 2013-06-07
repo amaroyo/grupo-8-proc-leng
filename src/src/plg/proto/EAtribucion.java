@@ -1909,6 +1909,19 @@ public class EAtribucion extends Atribucion {
     }
     
     
+    public TAtributos Valores(Integer numero){
+        regla("Valores → numeroNat ");
+                
+        TAtributos Valores = atributosPara("Valores","valor","tipo");
+        Atributo numRe = atributoLexicoPara("Identificador", "lex", numero);
+        
+        dependencias(Valores.a("valor"),numRe);
+        calculo(Valores.a("valor"),asignacion);
+        calculo(Valores.a("tipo"),asignaTipoNat);
+        
+        return Valores;
+    }
+    
     public TAtributos Valores0(Float numeroReal){
         regla("Valores → numeroReal ");
                 
@@ -2103,19 +2116,21 @@ public class EAtribucion extends Atribucion {
         
     }
     
-    public TAtributos Inst3(TAtributos SWAP1){
+    public TAtributos Inst3(){
         regla("Inst → SWAP1() ");
                 
         TAtributos Inst3 = atributosPara("Inst","etqh","err","cod");
         
-        dependencias(SWAP1.a("etq"),Inst3.a("etqh"));// SWAP1().etq= Inst.etqh + 1 
-        dependencias(Inst3.a("err"),SWAP1.a("err"));//Inst.err = SWAP1.err
-        dependencias(Inst3.a("cod"),SWAP1.a("cod"));//Inst.cod=SWAP1.cod
+        ArrayList<String> codFunciones = new ArrayList<String>();
+        codFunciones.add("swap1");
+    	LAtributo swap1Cod = new LAtributo("cod", codFunciones);
+    	
+        dependencias(Inst3.a("etq"),Inst3.a("etqh"));// SWAP1().etq= Inst.etqh + 1 
+        dependencias(Inst3.a("cod"),swap1Cod);//Inst.cod=SWAP1.cod
         
-
-        calculo(SWAP1.a("etq"),sumauno);
-        calculo(Inst3.a("err"),asignacion);
+        calculo(Inst3.a("err"),errorFalso);
         calculo(Inst3.a("cod"),asignacion);
+        calculo(Inst3.a("etq"),sumauno);
         
         return Inst3;
         
@@ -2126,13 +2141,16 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Inst4 = atributosPara("Inst","etqh","err","cod");
         
-        dependencias(SWAP2.a("etq"),Inst4.a("etqh"));//SWAP2().etq= Inst.etqh + 1 
-        dependencias(Inst4.a("err"),SWAP2.a("err"));//Inst.err = SWAP2.err
-        dependencias(Inst4.a("cod"),SWAP2.a("cod"));//Inst.cod=SWAP1.cod
-
-        calculo(SWAP2.a("etq"),sumauno);
-        calculo(Inst4.a("err"),asignacion);
+        ArrayList<String> codFunciones = new ArrayList<String>();
+        codFunciones.add("swap2");
+    	LAtributo swap2Cod = new LAtributo("cod", codFunciones);
+    	
+        dependencias(Inst4.a("etq"),Inst4.a("etqh"));// SWAP1().etq= Inst.etqh + 1 
+        dependencias(Inst4.a("cod"),swap2Cod);//Inst.cod=SWAP1.cod
+        
+        calculo(Inst4.a("err"),errorFalso);
         calculo(Inst4.a("cod"),asignacion);
+        calculo(Inst4.a("etq"),sumauno);
         
         return Inst4;
         
@@ -2189,11 +2207,11 @@ public class EAtribucion extends Atribucion {
          
          TAtributos Inst7 = atributosPara("Inst", "err","cod","TSH","etq","etqh");
          
-         dependencias(LLAMADA.a("TSH"),Inst7.a("TSH"));
-         dependencias(Inst7.a("err"),LLAMADA.a("err"));
-         dependencias(Inst7.a("cod"),LLAMADA.a("cod"));
-         dependencias(LLAMADA.a("etqh"),Inst7.a("etqh"));
-         dependencias(Inst7.a("etq"),LLAMADA.a("etq"));
+         dependencias(LLAMADA.a("TSH"),Inst7.a("TSH"));//LLAMADA.TSH = Inst.TSH  
+         dependencias(Inst7.a("err"),LLAMADA.a("err"));//Inst.err = LLAMADA.err
+         dependencias(Inst7.a("cod"),LLAMADA.a("cod"));//Inst.cod=LLAMADA.cod
+         dependencias(LLAMADA.a("etqh"),Inst7.a("etqh"));//LLAMADA.etqh=Inst.etqh
+         dependencias(Inst7.a("etq"),LLAMADA.a("etq"));// Inst.etq= LLAMADA.etq
         
 
          calculo(LLAMADA.a("TSH"),asignacion);
@@ -2211,15 +2229,18 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos InsAsig = atributosPara("InsAsig","err","cod","TSH","etq","etqh");
         
-        dependencias(Exp.a("etqh"),InsAsig.a("etqh"));
-        dependencias(InsAsig.a("err"),InsAsig.a("TSH"),Designador.a("lex"),Designador.a("tipo"),Exp.a("tipo"),Exp.a("err"));
-        dependencias(InsAsig.a("etq"),Exp.a("etq"));
-        dependencias(Exp.a("etqh"),InsAsig.a("etqh"));
-        dependencias(InsAsig.a("cod"),InsAsig.a("TSH"),Designador.a("lex"));
+        dependencias(Exp.a("TSH"),InsAsig.a("TSH"));//Exp.TSH = InsAsig.TSH
+        dependencias(InsAsig.a("err"),InsAsig.a("TSH"),Designador.a("lex"),
+        		Designador.a("tipo"),Exp.a("tipo"),Exp.a("err"));//
+        dependencias(InsAsig.a("etq"),Exp.a("etq"));//Exp.etqh=InsAsig.etqh
+        dependencias(Exp.a("etqh"),InsAsig.a("etqh"));//Exp.etqh=InsAsig.etqh
+        dependencias(InsAsig.a("cod"),InsAsig.a("TSH"),Designador.a("lex"));// InsAsig.etq= Exp.etq + 1
+        																	//El +1 es por el desapila
+																			//SUMA UUNO O DOS????
   
         /// FALTA EL COD!!!
         
-        calculo(Exp.a("etqh"),asignacion);
+        calculo(Exp.a("TSH"),asignacion);
         //dependencias(InsAsig.a("err"),estaId_OR_sonCompatibles);
         calculo(InsAsig.a("etq"),sumauno);
         calculo(Exp.a("etqh"),asignacion);
