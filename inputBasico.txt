@@ -1,5 +1,7 @@
+program : pruebaCodigo {
 
-program: ejemplo{
-instructions{
+instructions {
+swap1();
+swap2();
 }
 }
