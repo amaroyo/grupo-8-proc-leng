@@ -1,0 +1,30 @@
+program : otroTest {
+	consts {
+		const boolean a=false;
+		const boolean b=false;
+	}
+	tipos {
+		tipo float[dim1][dim2] tipoArray;		
+	}
+	vars {
+		var tipoArray array1;
+		var tipoArray array2;
+		var integer i;
+		var integer j;
+	}
+	subprograms {
+		subprogram : inicializaMatriz(tipoArray* array) {
+			vars {
+				var boolean array1;	
+				var boolean array2;	
+			}
+			
+			instructions {
+				swap1();
+			}
+		}
+	}
+	instructions {
+	swap1();
+	}
+}
