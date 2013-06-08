@@ -1,4 +1,7 @@
 program : pruebaCodigo {
+   	consts {
+		const boolean a=false;
+	}
    tipos {
 		tipo float[dim1][dim2] tipoArray;		
 	}

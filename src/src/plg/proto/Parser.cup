@@ -245,7 +245,7 @@ InsAsig ::= Designador:desig IGUAL Exp:exp {: RESULT= atrb.InsAsig(desig,exp); :
 
 //===================INSR==============================
 //InsR → in (Exp)
-InsR ::= in PABIERTO Exp:exp PCERRADO {: RESULT= atrb.InsR(exp); :};
+InsR ::= in PABIERTO Designador:desig PCERRADO {: RESULT= atrb.InsR(desig); :};
 
 //===================INSW==============================
 //InsW → out (Exp)
@@ -253,8 +253,8 @@ InsW ::= out PABIERTO Exp:exp PCERRADO {: RESULT= atrb.InsW(exp); :};
 
 //===================IF================================
 //IF → if ExpBool then Insts endif; IF → if  ExpBool then Insts ELSE Insts endif  
-ExpIF ::= IF ExpBool:expbool THEN Insts:insts ENDIF {: RESULT= atrb.If0(expbool,insts); :};
-ExpIF ::= IF ExpBool:expbool THEN Insts:insts1 ELSE Insts:insts2 ENDIF {: RESULT= atrb.If1(expbool,insts1,insts2); :};
+ExpIF ::= IF Exp:exp THEN Insts:insts ENDIF {: RESULT= atrb.If0(exp,insts); :};
+ExpIF ::= IF Exp:exp THEN Insts:insts1 ELSE Insts:insts2 ENDIF {: RESULT= atrb.If1(exp,insts1,insts2); :};
 
 //===================WHILE==============================
 //WHILE → while ExpBool DO Insts endwhile
