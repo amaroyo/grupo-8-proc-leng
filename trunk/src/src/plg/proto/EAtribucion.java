@@ -1353,7 +1353,7 @@ public class EAtribucion extends Atribucion {
        // dependencias(insts.a("etqh"),subprogramas.a("etq"));
         //  dependencias(Programa.a("etq"),insts.a("etq"));
 
-        calculo(Programa.a("TPR"),creaTS);
+        calculo(Programa.a("TS"),creaTS);
         calculo(Programa.a("cod"),concatenarPrograma);
         calculo(Programa.a("TPR"),creaTPR);
        // calculo(consts.a("TSH"),asignacion);
