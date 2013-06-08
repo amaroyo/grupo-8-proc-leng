@@ -1545,8 +1545,8 @@ public class EAtribucion extends Atribucion {
         TAtributos Decs1 = atributosPara("Decs", "TS","TSH","TPRH","dir","err","etq","etqh");
         LAtributo Zero = new LAtributo("cero", 0);
       
-        dependencias(dec.a("TPRH"),Decs1.a("TPRH"));
-        dependencias(dec.a("TSH"),Decs1.a("TSH"));
+        //dependencias(dec.a("TPRH"),Decs1.a("TPRH"));
+        //dependencias(dec.a("TSH"),Decs1.a("TSH"));
         dependencias(Decs1.a("TS"),dec.a("TSH"),dec.a("id"),dec.a("clase"),dec.a("nivel"),Zero,dec.a("tipo"),dec.a("valor"));
         dependencias(Decs1.a("err"),dec.a("err"),dec.a("id"),Decs1.a("TSH"),Decs1.a("TPRH"));
         dependencias(Decs1.a("dir"),dec.a("TSH"),dec.a("id"),dec.a("clase"));
@@ -1554,8 +1554,8 @@ public class EAtribucion extends Atribucion {
        // dependencias(Decs1.a("etq"),dec.a("etq"));
         
         calculo(Decs1.a("err"),erroresDec);
-        calculo(dec.a("TPRH"),asignacion);
-        calculo(dec.a("TSH"),asignacion);
+       // calculo(dec.a("TPRH"),asignacion);
+       // calculo(dec.a("TSH"),asignacion);
         calculo(Decs1.a("dir"),tamanoDe);
         calculo(Decs1.a("TS"),anadirTS);
       //  calculo(dec.a("etqh"),asignacion);
@@ -1663,7 +1663,7 @@ public class EAtribucion extends Atribucion {
         calculo(Dec3.a("clase"),asignaClaseSubPro);
         calculo(Dec3.a("niv"),asignacero);
         calculo(Dec3.a("tipo"),asignacion);
-        calculo(Dec3.a("valor"),asignavacio);
+        //calculo(Dec3.a("valor"),asignavacio);
         calculo(Dec3.a("dir"),asignacero);
         calculo(Dec3.a("err"),asignacionOR2);
         
