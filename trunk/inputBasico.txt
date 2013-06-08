@@ -10,9 +10,13 @@ program : pruebaCodigo {
 		var tipoArray array2;
 		var integer i;
 		var integer j;
+		var character b;
+		var boolean c;
 	}
 instructions {
 swap1();
+c = false;
+b = 'a';
 swap2();
 }
 }

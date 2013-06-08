@@ -2253,16 +2253,16 @@ public class EAtribucion extends Atribucion {
                 
         TAtributos Inst0 = atributosPara("Inst", "err","cod","TSH","etq","etqh");
         
-        dependencias(insasig.a("TSH"),Inst0.a("TSH"));//insasig.TSH = Inst.TSH 
-        dependencias(insasig.a("etqh"),Inst0.a("etqh"));//insasig.etqh=Inst.etqh 
-        dependencias(Inst0.a("etq"),insasig.a("etq"));//Inst.etq= insasig.etq
+        //dependencias(insasig.a("TSH"),Inst0.a("TSH"));//insasig.TSH = Inst.TSH 
+        //dependencias(insasig.a("etqh"),Inst0.a("etqh"));//insasig.etqh=Inst.etqh 
+        //dependencias(Inst0.a("etq"),insasig.a("etq"));//Inst.etq= insasig.etq
         dependencias(Inst0.a("err"),insasig.a("err"));//Inst.err = insasig.err
         dependencias(Inst0.a("cod"),insasig.a("cod"));//Inst.cod=insasig.cod 
         
         
-        calculo(insasig.a("TSH"),asignacion);
-        calculo(insasig.a("etqh"),asignacion);
-        calculo(Inst0.a("etq"),asignacion);
+       // calculo(insasig.a("TSH"),asignacion);
+        //calculo(insasig.a("etqh"),asignacion);
+        //calculo(Inst0.a("etq"),asignacion);
         calculo(Inst0.a("err"),asignacion);
         calculo(Inst0.a("cod"),asignacion);
         
@@ -3049,14 +3049,14 @@ public TAtributos Exp21(TAtributos exp3){
      
      TAtributos Exp21 = atributosPara("Exp21","TSH","tipo","err","cod","etq","etqh");
      
-     dependencias(exp3.a("TSH"),Exp21.a("TSH"));//exp3.TSH = Exp21.TSH
+     //dependencias(exp3.a("TSH"),Exp21.a("TSH"));//exp3.TSH = Exp21.TSH
      dependencias(Exp21.a("err"),exp3.a("err"));//Exp21.err = exp3.err
      dependencias(Exp21.a("tipo"),exp3.a("tipo"));//Exp21.tipo = exp3.tipo 
      dependencias(exp3.a("etqh"),Exp21.a("etqh"));//exp3.etqh= Exp21.etqh
      dependencias(Exp21.a("etq"),exp3.a("etq"));//Exp21.etq= exp3.etq
      dependencias(Exp21.a("cod"),exp3.a("cod"));//Exp21.cod= exp3.cod
      
-     calculo(exp3.a("TSH"),asignacion);
+     //calculo(exp3.a("TSH"),asignacion);
      calculo(Exp21.a("err"),asignacion);
      calculo(Exp21.a("tipo"),asignacion);
      calculo(exp3.a("etqh"),asignacion);
