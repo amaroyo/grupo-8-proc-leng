@@ -141,7 +141,7 @@ Vars ::= {: RESULT= atrb.Vars1(); :};  //VACIO
 
 //===================SUBPROGRAMAS==============================
 //Subprogramas →  SUBPROGRAMS { Decs }; Subprogramas → Subprograma; Subprogramas → λ
-Subprogramas ::= SUBPROGRAMS LLABIERTA Decs:decs LLCERRADA PYC {: RESULT= atrb.Subprogramas0(decs); :};
+Subprogramas ::= SUBPROGRAMS LLABIERTA Decs:decs LLCERRADA {: RESULT= atrb.Subprogramas0(decs); :};
 Subprogramas ::= {: RESULT= atrb.Subprogramas1(); :};
 
 //===================DECS==============================
