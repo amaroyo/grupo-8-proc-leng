@@ -146,15 +146,15 @@ Subprogramas ::= {: RESULT= atrb.Subprogramas1(); :};
 
 //===================DECS==============================
 //Decs → Decs ; Dec; Decs → Dec
-Decs ::= Decs:decs Dec:dec PYC {: RESULT= atrb.Decs0(decs,dec); :}; 
-Decs ::= Dec:dec PYC {: RESULT= atrb.Decs1(dec); :};
+Decs ::= Decs:decs Dec:dec {: RESULT= atrb.Decs0(decs,dec); :}; 
+Decs ::= Dec:dec {: RESULT= atrb.Decs1(dec); :};
 
 //===================DEC==============================
 //Dec → const TipoBasico ident = Valores; Dec → tipo Tipo ident; Dec → var Tipo ident
 //Dec → subprogram: ident (PFs) {CS}
-Dec ::= CONST TipoBasico:tipobasico ident:id IGUAL Valores:valores {: RESULT= atrb.Dec0(tipobasico,id,valores); :};
-Dec ::= TIPO Tipo:tipo ident:id {: RESULT= atrb.Dec1(tipo,id); :};
-Dec ::= VAR Tipo:tipo ident:id {: RESULT= atrb.Dec2(tipo,id); :};
+Dec ::= CONST TipoBasico:tipobasico ident:id IGUAL Valores:valores PYC {: RESULT= atrb.Dec0(tipobasico,id,valores); :};
+Dec ::= TIPO Tipo:tipo ident:id PYC {: RESULT= atrb.Dec1(tipo,id); :};
+Dec ::= VAR Tipo:tipo ident:id PYC {: RESULT= atrb.Dec2(tipo,id); :};
 Dec ::= SUBPROGRAM DP ident:id PABIERTO PFs:pfs PCERRADO LLABIERTA CS:cs LLCERRADA {: RESULT = atrb.Dec3(id,pfs,cs); :};
 
 //===================PFS==============================
